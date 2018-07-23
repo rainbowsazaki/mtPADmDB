@@ -42,14 +42,14 @@ if ($mode eq 'image') {
   close($imageFileName); #ファイルハンドルをcloseしています。
 
 
-  print "Content-Type: text/html\n\n", 'saved.'; #JSON::PP::encode_json(\%outputData);
+  print "Content-Type: text/plain\n\n", 'saved.'; #JSON::PP::encode_json(\%outputData);
 
 } else {
 
   my $json = $q->param("POSTDATA");
 
   if ($json eq "") {
-    print "Content-Type: text/html\n\n{ error: ['データなし'] }";
+    print "Content-Type: application/jsonl\n\n{ error: ['データなし'] }";
     exit(0);
   }
 
@@ -399,7 +399,7 @@ EOS
     }
   }
 
-  print "Content-Type: text/html\n\n", JSON::PP::encode_json(\%outputData);
+  print "Content-Type: application/json\n\n", JSON::PP::encode_json(\%outputData);
 }
 
 sub save_monster_list_json {
