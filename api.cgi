@@ -58,6 +58,30 @@ if ($mode eq 'image') {
 
   my @error;
 
+  # 第１引数に与えられた値を数値型に変換して返す。
+  # 配列やハッシュのリファレンスが与えられた場合は要素すべてを変換した結果を返す。
+  sub to_number {
+    my ($target) = @_;
+    if (ref $target eq 'ARRAY') {
+      return [ map { &to_number($_) } @{$target} ];
+    } elsif (ref $target eq 'HASH') {
+      return { map { $_ => &to_number($target->{$_}) } keys %{$target} };
+    } else {
+      return $target + 0;
+    }
+  }
+
+  # ハッシュ内の任意の要素を数値型に変換する。
+  # 第１引数 対象のハッシュのリファレンス
+  # 第２引数以降 変換対象の要素のキー。
+  sub to_number_with_key {
+    my ($target_ref, @keys) = @_;
+    foreach my $key (@keys) {
+      if (!exists $target_ref->{$key}) { next; }
+      $target_ref->{$key} = &to_number($target_ref->{$key});
+    }
+  }
+
   sub check_range {
     if ($_[1] < $_[2] || $_[1] > $_[3]) {
       push @error, "${_[0]}の値が不正(${_[1]})";
@@ -86,6 +110,9 @@ if ($mode eq 'image') {
   my $ip_address = $ENV{'REMOTE_ADDR'};
   my $account_name = '';
 
+  &to_number_with_key($data, qw/ no attributes cost rate types awakens expTable maxLevel maxParam 
+    skillNo leaderSkillNo assist overLimit overLimitParam superAwakens /);
+
   &check_range('No', $data->{no}, 1, 9999);
   &check_string_length('名前', $data->{name}, 1, 50);
   &check_range('属性', $data->{attributes}[0], 0, 99);
@@ -105,6 +132,7 @@ if ($mode eq 'image') {
   &check_range('回復', $data->{maxParam}{recovery}, -99999, 99999);
 
   if ($data->{skillNo} == 0) {
+    &to_number_with_key($data->{skillNo}, qw/ baseTurn maxLevel /);
     &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
     &check_string_length('スキル詳細', $data->{skillDetails}{description}, 1, 200);
     &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 1, 199);
@@ -125,6 +153,7 @@ if ($mode eq 'image') {
   foreach my $n ($data->{superawakens}) {
     #&check_range('超覚醒', $n, 1, 99);
   }
+  &to_number_with_key($data->{evolution}, qw/ type baseNo materials /);
   &check_range('進化タイプ', $data->{evolution}{type}, 0, 99);
   if ($data->{evolution}{type} > 0 && $data->{evolution}{type} < 99) {
     &check_range('進化前', $data->{evolution}{baseNo}, 1, 9999);
