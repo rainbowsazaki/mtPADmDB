@@ -102,7 +102,7 @@ if ($mode eq 'image') {
   &check_range('最大レベル', $data->{maxLevel}, 0, 99);
   &check_range('HP', $data->{maxParam}{hp}, 0, 99999);
   &check_range('攻撃', $data->{maxParam}{attack}, 0, 99999);
-  &check_range('回復', $data->{maxParam}{recovery}, 0, 99999);
+  &check_range('回復', $data->{maxParam}{recovery}, -99999, 99999);
 
   if ($data->{skillNo} == 0) {
     &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
@@ -120,7 +120,7 @@ if ($mode eq 'image') {
   if ($data->{overLimit} == 1) {
     &check_range('限界突破時 HP', $data->{overLimitParam}{hp}, 0, 99999);
     &check_range('限界突破時 攻撃', $data->{overLimitParam}{attack}, 0, 99999);
-    &check_range('限界突破時 回復', $data->{overLimitParam}{recovery}, 0, 99999);
+    &check_range('限界突破時 回復', $data->{overLimitParam}{recovery}, -99999, 99999);
   }
   foreach my $n ($data->{superawakens}) {
     #&check_range('超覚醒', $n, 1, 99);
