@@ -15,15 +15,6 @@
 
 <div id="app">
   <div class="container">
-    <h1>みんなで作るパズドラモンスターデータベース</h1>
-    <nav aria-label="パンくずリスト">
-      <ol class="breadcrumb">
-        <li v-for="breadcrumb in breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }">
-          <router-link v-if="breadcrumb.link" :to="breadcrumb.link" >{{breadcrumb.text}}</router-link>
-          <template v-else>{{breadcrumb.text}}</template>
-        </li>
-      </ol>
-    </nav>
     <div style="position:fixed; z-index: 2;">
       <div v-for="error in errors" class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>注意!</strong>　{{error}}
@@ -38,6 +29,16 @@
         </button>
       </div>
     </div>
+    
+    <h1>みんなで作るパズドラモンスターデータベース</h1>
+    <nav aria-label="パンくずリスト">
+      <ol class="breadcrumb">
+        <li v-for="breadcrumb in breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }">
+          <router-link v-if="breadcrumb.link" :to="breadcrumb.link" >{{breadcrumb.text}}</router-link>
+          <template v-else>{{breadcrumb.text}}</template>
+        </li>
+      </ol>
+    </nav>
     <router-view></router-view>
   </div>
 </div>
