@@ -249,6 +249,9 @@ const store = new Vuex.Store({
     },
     setMessages: function (state, messages) {
       state.messages = messages;
+      setTimeout(() => {
+        state.messages = [];
+      }, 2000)
     },
     deleteError: function (state, error) {
       state.errors = state.errors.filter(n => n !== error);
