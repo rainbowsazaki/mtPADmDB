@@ -731,6 +731,8 @@ var componentMonsterEdit = {
         this.$store.commit('setMessages', []);
         if (response.data.error) {
           this.$store.commit('setErrors', response.data.error);
+        } else {
+          this.$router.push({ path:`/${this.monsterData.no}` });
         }
         if (response.data.message) {
           this.$store.commit('setMessages', response.data.message);
