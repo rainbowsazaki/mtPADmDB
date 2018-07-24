@@ -191,6 +191,13 @@ var commonData = {
 
   },
 
+  navis: [
+    { text: 'ホーム', to: '/' },
+    { text: '新規追加', to: '/edit' },
+    { text: '画像投稿', to: '/pic' },
+    { text: 'これは何？', to: '/about' },
+  ],
+
   isLoadedTableData: 0,
   monsterTable: {},
   skillTable: {},
@@ -968,5 +975,6 @@ var app = new Vue({
   computed: {
     errors: function () { return this.$store.state.errors; },
     messages: function () { return this.$store.state.messages; },
+    navis: function () { return this.$store.state.navis; }
   }
 }).$mount('#app')
