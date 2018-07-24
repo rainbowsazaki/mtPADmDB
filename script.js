@@ -541,6 +541,12 @@ var componentMonsterData = {
           this.monsterData.leaderSkillDetails = {};
           this.$store.commit('setMessages', [ '取得完了' ]);
         }
+      ).catch(
+        error => {
+          var errorMessage = `モンスターデータファイル (${error.config.url}) が ${error.response.status} ${error.response.statusText} です。`;
+          this.$store.commit('setMessages', [ ]);
+          this.$store.commit('setErrors', [ errorMessage ]);
+        }
       );
       this.$root.breadcrumbs = [
         { text: 'ホーム', link: '/' },
@@ -621,6 +627,12 @@ var componentMonsterEdit = {
           this.monsterData.skillDetails = {};
           this.monsterData.leaderSkillDetails = {};
           this.messages = [ '取得完了' ];
+        }
+      ).catch(
+        error => {
+          var errorMessage = `モンスターデータファイル (${error.config.url}) が ${error.response.status} ${error.response.statusText} です。`;
+          this.$store.commit('setMessages', [ ]);
+          this.$store.commit('setErrors', [ errorMessage ]);
         }
       );
       this.$root.breadcrumbs = [
