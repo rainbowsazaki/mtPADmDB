@@ -273,6 +273,12 @@ const store = new Vuex.Store({
         state.messages = [];
       }, 2000)
     },
+    clearErrors: function (state) {
+      store.errors = [];
+    },
+    clearMessages: function (state) {
+      state.messages = [];
+    },
     deleteError: function (state, error) {
       state.errors = state.errors.filter(n => n !== error);
     },
