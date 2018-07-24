@@ -235,15 +235,15 @@ const store = new Vuex.Store({
       }));
     },
     
-    loadMonsterData: function (state, no, callback) {
+    loadMonsterData: function (state, param) {
       this.messages = [ '初期情報取得中' ];
-      axios.get('./monsterJson/' + no + '.json').then(
+      axios.get('./monsterJson/' + param.no + '.json').then(
         response => {
           state.monsterData = response.data;
           state.monsterData.skillDetails = {};
           state.monsterData.leaderSkillDetails = {};
           state.messages = [ '取得完了' ];
-          if (callback) { callback(); }
+          if (typeof param.callback === 'function') { param.callback(); }
         }
       ).catch(
         error => {
@@ -550,7 +550,9 @@ var componentMonsterData = {
   
   methods: {
     fetchData: function () {
-      this.$store.commit('loadMonsterData', this.$route.params.no, function () { alert('a'); });
+      this.$store.commit('loadMonsterData', { 
+          no: this.$route.params.no, 
+      });
       this.$root.breadcrumbs = [
         { text: 'ホーム', link: '/' },
         { text: `No.${this.$route.params.no} ${this.monsterData.name}` },
@@ -623,7 +625,9 @@ var componentMonsterEdit = {
 
   created: function () {
     if (this.$route.params.no) {
-      this.$store.commit('loadMonsterData', this.$route.params.no, function () { alert('a'); });
+      this.$store.commit('loadMonsterData', { 
+        no: this.$route.params.no,
+      });
       this.$root.breadcrumbs = [
         { text: 'ホーム', link: '/' },
         { text: `No.${this.$route.params.no} ${this.monsterData.name}`, link: '/' + this.$route.params.no },
