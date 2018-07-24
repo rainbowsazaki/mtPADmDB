@@ -207,6 +207,10 @@ var commonData = {
   errors: []
 };
 
+const constData = {
+  title: "みんなで作るパズドラデータベース",
+};
+
 
 jQuery.fn.scrollParentShowThis = function() {
   if (this.length == 0) { return this; }
@@ -519,6 +523,32 @@ Vue.component('monsterIncrementalSearch', {
     }
   }
 });
+
+// ページ用のコンポーネントで使用する処理のミックスイン
+var mixinForPage = {
+  created: function () {
+    this.$_mixinForPage_updateTitle();
+  },
+  
+  methods: {
+    // ページタイトルの更新。
+    $_mixinForPage_updateTitle: function () {
+      if ('pageTitle' in this.$options) {
+        var pageTitle = this.$options.pageTitle;
+        if (typeof pageTitle === 'function') {
+          pageTitle = pageTitle.call(this);
+        }
+        if (pageTitle) {
+          document.title = `${pageTitle} - ${constData.title}`;
+        } else {
+          document.title = constData.title;
+        }
+      }
+    },
+  },
+};
+
+Vue.mixin(mixinForPage);
 
 
 var componentAbout = {
