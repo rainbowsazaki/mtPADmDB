@@ -236,13 +236,13 @@ const store = new Vuex.Store({
     },
     
     loadMonsterData: function (state, param) {
-      this.messages = [ '初期情報取得中' ];
+      this.commit('setMessages', [ '初期情報取得中' ]);
       axios.get('./monsterJson/' + param.no + '.json').then(
         response => {
           state.monsterData = response.data;
           state.monsterData.skillDetails = {};
           state.monsterData.leaderSkillDetails = {};
-          state.messages = [ '取得完了' ];
+          this.commit('setMessages', [ '取得完了' ]);
           if (typeof param.callback === 'function') { param.callback(); }
         }
       ).catch(
