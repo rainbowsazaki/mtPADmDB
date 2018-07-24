@@ -114,7 +114,7 @@
       <div class="col-md-6">
         <table class="table table-bordered table-sm">
           <tr class="thead-light"><th colspan="2">レベル{{monsterData.maxLevel}}（最大）時</th><th>+297</th></tr></td>
-          <tr><th>HP</th><td>{{monsterData.maxParam.hp}}</td><td>{{monsterData.maxParam.hp + 10 * 99}}</td></tr>
+          <tr><th style="width:auto;">HP</th><td style="width: 35%;">{{monsterData.maxParam.hp}}</td><td style="width:35%;">{{monsterData.maxParam.hp + 10 * 99}}</td></tr>
           <tr><th>攻撃</th><td>{{monsterData.maxParam.attack}}</td><td>{{monsterData.maxParam.attack + 5 * 99}}</td></tr>
           <tr><th>回復</th><td>{{monsterData.maxParam.recovery}}</td><td>{{monsterData.maxParam.recovery + 3 * 99}}</td></tr>
           <tr v-if="monsterData.overLimit == 1" class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th>+297</th></tr></td>
