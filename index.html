@@ -129,13 +129,13 @@
               {{skillName}}
               <span v-if="skillBaseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillBaseTurn}} 最大Lv.{{skillMaxLevel}} ターン:{{skillBaseTurn - skillMaxLevel + 1}})</span>
             </td></tr>
-            <tr><td style="font-size: 90%;">{{skillDescription}}</td></tr>
+            <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDescription}}</td></tr>
   
             <tr class="thead-light"><th>リーダースキル</th></tr>
             <tr><td>
               {{leaderSkillName}}
             </td></tr>
-            <tr><td style="font-size: 90%;">{{leaderSkillDescription}}</td></tr>
+            <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{leaderSkillDescription}}</td></tr>
           </table> 
       </div>
     </div>
