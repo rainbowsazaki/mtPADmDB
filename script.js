@@ -1004,6 +1004,11 @@ var router = new VueRouter({
   ]
 })
 
+// ナビゲーション変更時に一番上にスクロールする。
+router.afterEach((to, from) => {
+  $('html,body').scrollTop(0);
+});
+
 // ルーターのインスタンスをrootとなるVueインスタンスに渡します
 var app = new Vue({
   router: router,
