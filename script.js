@@ -234,6 +234,26 @@ const store = new Vuex.Store({
         state.leaderSkillTable = leaderSkillListResponse.data;
       }));
     },
+    
+    loadMonsterData: function (state, no, callback) {
+      this.messages = [ '初期情報取得中' ];
+      axios.get('./monsterJson/' + no + '.json').then(
+        response => {
+          state.monsterData = response.data;
+          state.monsterData.skillDetails = {};
+          state.monsterData.leaderSkillDetails = {};
+          state.messages = [ '取得完了' ];
+          if (callback) { callback(); }
+        }
+      ).catch(
+        error => {
+          var errorMessage = `モンスターデータファイル (${error.config.url}) が ${error.response.status} ${error.response.statusText} です。`;
+          this.commit('setMessages', [ ]);
+          this.commit('setErrors', [ errorMessage ]);
+        }
+      );
+    },
+
     addMonsterData: function (state, skillData) {
       Object.assign(skill.skillTable, skillData);
     },
@@ -516,8 +536,6 @@ var componentMonsterData = {
       attributeTable: commonData.attributeTable,
       evolutionTypeTable: commonData.evolutionTypeTable,
       awakenTable: commonData.awakenTable,
-
-      monsterData: commonData.monsterData
     };
   },
   created: function () {
@@ -532,22 +550,7 @@ var componentMonsterData = {
   
   methods: {
     fetchData: function () {
-
-      this.$store.commit('setMessages', [ '初期情報取得中' ]);
-      axios.get('./monsterJson/' + this.$route.params.no + '.json').then(
-        response => {
-          this.monsterData = response.data;
-          this.monsterData.skillDetails = {};
-          this.monsterData.leaderSkillDetails = {};
-          this.$store.commit('setMessages', [ '取得完了' ]);
-        }
-      ).catch(
-        error => {
-          var errorMessage = `モンスターデータファイル (${error.config.url}) が ${error.response.status} ${error.response.statusText} です。`;
-          this.$store.commit('setMessages', [ ]);
-          this.$store.commit('setErrors', [ errorMessage ]);
-        }
-      );
+      this.$store.commit('loadMonsterData', this.$route.params.no, function () { alert('a'); });
       this.$root.breadcrumbs = [
         { text: 'ホーム', link: '/' },
         { text: `No.${this.$route.params.no} ${this.monsterData.name}` },
@@ -559,6 +562,8 @@ var componentMonsterData = {
     monsterTable: function () { return this.$store.state.monsterTable; },
     skillTable: function () { return this.$store.state.skillTable; },
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
+    
+    monsterData: function () { return this.$store.state.monsterData },
 
     skillDetails: function () {
       var skillDetails = {};
@@ -613,28 +618,12 @@ var componentMonsterEdit = {
       attributeTable: commonData.attributeTable,
       evolutionTypeTable: commonData.evolutionTypeTable,
       awakenTable: commonData.awakenTable,
-
-      monsterData: commonData.monsterData,
     };
   },
 
   created: function () {
     if (this.$route.params.no) {
-      this.messages = [ '初期情報取得中' ];
-      axios.get('./monsterJson/' + this.$route.params.no + '.json').then(
-        response => {
-          this.monsterData = response.data;
-          this.monsterData.skillDetails = {};
-          this.monsterData.leaderSkillDetails = {};
-          this.messages = [ '取得完了' ];
-        }
-      ).catch(
-        error => {
-          var errorMessage = `モンスターデータファイル (${error.config.url}) が ${error.response.status} ${error.response.statusText} です。`;
-          this.$store.commit('setMessages', [ ]);
-          this.$store.commit('setErrors', [ errorMessage ]);
-        }
-      );
+      this.$store.commit('loadMonsterData', this.$route.params.no, function () { alert('a'); });
       this.$root.breadcrumbs = [
         { text: 'ホーム', link: '/' },
         { text: `No.${this.$route.params.no} ${this.monsterData.name}`, link: '/' + this.$route.params.no },
@@ -652,6 +641,8 @@ var componentMonsterEdit = {
     monsterTable: function () { return this.$store.state.monsterTable; },
     skillTable: function () { return this.$store.state.skillTable; },
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
+
+    monsterData: function () { return this.$store.state.monsterData },
 
     skillDetails: function () {
       var skillDetails = this.monsterData.skillDetails;
