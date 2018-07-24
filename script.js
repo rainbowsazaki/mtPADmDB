@@ -248,7 +248,7 @@ const store = new Vuex.Store({
       ).catch(
         error => {
           var errorMessage = `モンスターデータファイル (${error.config.url}) が ${error.response.status} ${error.response.statusText} です。`;
-          this.commit('setMessages', [ ]);
+          this.commit('clearMessages');
           this.commit('setErrors', [ errorMessage ]);
         }
       );
@@ -738,13 +738,13 @@ var componentMonsterEdit = {
   
   methods: {
     submit: function( ) {
-      this.$store.commit('setErrors', []);
+      this.$store.commit('clearMessages');
       this.$store.commit('setMessages', [ '通信中...' ]);
 
       axios.post('./api.cgi', this.monsterData)
       .then(response => {
-        this.$store.commit('setErrors', []);
-        this.$store.commit('setMessages', []);
+        this.$store.commit('clearErrors');
+        this.$store.commit('clearMessages');
         if (response.data.error) {
           this.$store.commit('setErrors', response.data.error);
         } else {
