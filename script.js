@@ -553,6 +553,7 @@ Vue.mixin(mixinForPage);
 
 var componentAbout = {
   template: '#templateAbout',
+  pageTitle: 'これは何？',
   created: function () {
     this.$root.breadcrumbs = [
       { text: 'ホーム', link: '/' },
@@ -564,6 +565,7 @@ var componentAbout = {
 
 var componentMonsterList = {
   template: '#templateMonsterList',
+  pageTitle: undefined,
   data: function () {
     return {
       
@@ -582,6 +584,9 @@ var componentMonsterList = {
 
 var componentMonsterData = {
   template: '#templateMonsterData',
+  pageTitle: function () {
+    return `No.${this.$route.params.no} ${this.monsterData.name}`;
+  },
   props: [ 'no' ],
   data: function () {
     return {
@@ -672,6 +677,13 @@ var componentMonsterData = {
 var componentMonsterEdit = {
   template: '#templateMonsterEdit',
   name: 'MonsterEdit',
+  pageTitle: function () {
+    if (this.$route.params.no) {
+        return `編集 No.${this.$route.params.no} ${this.monsterData.name}`;
+    } else {
+      return '編集';
+    }
+  },
   props: ['no'],
   data: function () {
     return {
@@ -826,6 +838,13 @@ var componentMonsterEdit = {
 
 var componentPic = {
   template: '#templatePic',
+  pageTitle: function () {
+    if (this.$route.params.no) {
+      return `画像投稿 No.${this.$route.params.no}`;
+    } else {
+      return '画像投稿';
+    }
+  },
 
   data: function () {
     return {
