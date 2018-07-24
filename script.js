@@ -521,6 +521,17 @@ Vue.component('monsterIncrementalSearch', {
 });
 
 
+var componentAbout = {
+  template: '#templateAbout',
+  created: function () {
+    this.$root.breadcrumbs = [
+      { text: 'ホーム', link: '/' },
+      { text: 'これは何？' }
+    ];
+  },
+};
+
+
 var componentMonsterList = {
   template: '#templateMonsterList',
   data: function () {
@@ -953,6 +964,10 @@ var router = new VueRouter({
       path: '/pic',
       component: componentPic,
       props: true
+    },
+    {
+      path: '/about',
+      component: componentAbout,
     },
     {
       path: '/:no',
