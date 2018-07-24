@@ -575,11 +575,17 @@ var componentMonsterData = {
   methods: {
     fetchData: function () {
       this.$store.commit('loadMonsterData', { 
-          no: this.$route.params.no, 
+          no: this.$route.params.no,
+          callback: () => {
+            this.$root.breadcrumbs = [
+              { text: 'ホーム', link: '/' },
+              { text: `No.${this.$route.params.no} ${this.monsterData.name}` },
+            ];
+          },
       });
       this.$root.breadcrumbs = [
         { text: 'ホーム', link: '/' },
-        { text: `No.${this.$route.params.no} ${this.monsterData.name}` },
+        { text: `No.${this.$route.params.no}` },
       ];
     }
   },
