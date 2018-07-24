@@ -616,6 +616,7 @@ var componentMonsterData = {
               { text: 'ホーム', link: '/' },
               { text: `No.${this.$route.params.no} ${this.monsterData.name}` },
             ];
+            this.$_mixinForPage_updateTitle();
           },
       });
       this.$root.breadcrumbs = [
