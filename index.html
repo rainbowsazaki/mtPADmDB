@@ -69,12 +69,6 @@
         <tr v-for="(data, key) in monsterTable">
           <td>{{key}}</td>
           <td><router-link :to="'/' + key">{{data.name}}</router-link></td>
-          <td><router-link :to="'/edit/' + key">編集</router-link></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td><router-link to="/edit/">追加</router-link></td>
         </tr>
       </tbody>
     </table>
