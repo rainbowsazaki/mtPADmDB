@@ -803,6 +803,16 @@ var componentPic = {
   created: function () {
     if (this.$route.params.no) {
       this.monsterNo = this.$route.params.no;
+      this.$root.breadcrumbs = [
+        { text: 'ホーム', link: '/' },
+        { text: `No.${this.$route.params.no}`, link: '/' + this.$route.params.no },
+        { text: '画像投稿' }
+      ];
+    } else {
+      this.$root.breadcrumbs = [
+        { text: 'ホーム', link: '/' },
+        { text: '画像投稿' }
+      ];
     }
   },
 
