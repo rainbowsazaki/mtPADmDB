@@ -800,6 +800,12 @@ var componentPic = {
     };
   },
 
+  created: function () {
+    if (this.$route.params.no) {
+      this.monsterNo = this.$route.params.no;
+    }
+  },
+
   methods: {
     loadLocalImage: function loadLocalImage(e) {
       // ファイル情報を取得
@@ -962,6 +968,11 @@ var router = new VueRouter({
     },
     {
       path: '/pic',
+      component: componentPic,
+      props: true
+    },
+    {
+      path: '/pic/:no',
       component: componentPic,
       props: true
     },
