@@ -540,8 +540,26 @@ var mixinForPage = {
         }
         if (pageTitle) {
           document.title = `${pageTitle} - ${constData.title}`;
+          // パンくずリスト
+          var breadcrumbs = [
+            { text: 'ホーム', link: '/' },
+          ];
+          var middleOfBreadcrumbs = this.$options.middleOfBreadcrumbs;
+          if (typeof middleOfBreadcrumbs === 'function') {
+            middleOfBreadcrumbs = middleOfBreadcrumbs.call(this);
+          }
+          if (middleOfBreadcrumbs) {
+            breadcrumbs = breadcrumbs.concat(middleOfBreadcrumbs);
+          }
+          breadcrumbs.push({ text: pageTitle });
+
+          this.$root.breadcrumbs = breadcrumbs;
         } else {
           document.title = constData.title;
+          // パンくずリスト
+          this.$root.breadcrumbs = [
+            { text: 'ホーム' },
+          ];
         }
       }
     },
