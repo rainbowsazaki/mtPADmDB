@@ -572,12 +572,6 @@ Vue.mixin(mixinForPage);
 var componentAbout = {
   template: '#templateAbout',
   pageTitle: 'これは何？',
-  created: function () {
-    this.$root.breadcrumbs = [
-      { text: 'ホーム', link: '/' },
-      { text: 'これは何？' }
-    ];
-  },
 };
 
 
@@ -588,11 +582,6 @@ var componentMonsterList = {
     return {
       
     };
-  },
-  created: function () {
-    this.$root.breadcrumbs = [
-      { text: 'ホーム' },
-    ];
   },
   computed: {
     monsterTable () { return this.$store.state.monsterTable; }
@@ -630,17 +619,9 @@ var componentMonsterData = {
       this.$store.commit('loadMonsterData', { 
           no: this.$route.params.no,
           callback: () => {
-            this.$root.breadcrumbs = [
-              { text: 'ホーム', link: '/' },
-              { text: `No.${this.$route.params.no} ${this.monsterData.name}` },
-            ];
             this.$_mixinForPage_updateTitle();
           },
       });
-      this.$root.breadcrumbs = [
-        { text: 'ホーム', link: '/' },
-        { text: `No.${this.$route.params.no}` },
-      ];
     }
   },
 
@@ -703,6 +684,13 @@ var componentMonsterEdit = {
       return '編集';
     }
   },
+  middleOfBreadcrumbs: function () {
+    if (this.$route.params.no) {
+      return { text: `No.${this.$route.params.no} ${this.monsterData.name}`, link: '/' + this.$route.params.no };
+    } else {
+      return undefined;
+    }
+  },
   props: ['no'],
   data: function () {
     return {
@@ -719,16 +707,6 @@ var componentMonsterEdit = {
       this.$store.commit('loadMonsterData', { 
         no: this.$route.params.no,
       });
-      this.$root.breadcrumbs = [
-        { text: 'ホーム', link: '/' },
-        { text: `No.${this.$route.params.no} ${this.monsterData.name}`, link: '/' + this.$route.params.no },
-        { text: '編集' }
-      ];
-    } else {
-      this.$root.breadcrumbs = [
-        { text: 'ホーム', link: '/' },
-        { text: '編集' }
-      ];
     }
   },
 
@@ -864,6 +842,13 @@ var componentPic = {
       return '画像投稿';
     }
   },
+  middleOfBreadcrumbs: function () {
+    if (this.$route.params.no) {
+      return { text: `No.${this.$route.params.no}`, link: '/' + this.$route.params.no }
+    } else {
+      return undefined;
+    }
+  },
 
   data: function () {
     return {
@@ -877,16 +862,6 @@ var componentPic = {
   created: function () {
     if (this.$route.params.no) {
       this.monsterNo = this.$route.params.no;
-      this.$root.breadcrumbs = [
-        { text: 'ホーム', link: '/' },
-        { text: `No.${this.$route.params.no}`, link: '/' + this.$route.params.no },
-        { text: '画像投稿' }
-      ];
-    } else {
-      this.$root.breadcrumbs = [
-        { text: 'ホーム', link: '/' },
-        { text: '画像投稿' }
-      ];
     }
   },
 
