@@ -569,12 +569,18 @@ var mixinForPage = {
 Vue.mixin(mixinForPage);
 
 
+/**
+ * アバウトページコンポーネント
+ */
 var componentAbout = {
   template: '#templateAbout',
   pageTitle: 'これは何？',
 };
 
 
+/**
+ * モンスター一覧ページコンポーネント
+ */
 var componentMonsterList = {
   template: '#templateMonsterList',
   pageTitle: undefined,
@@ -589,6 +595,9 @@ var componentMonsterList = {
 };
 
 
+/**
+ * モンスター情報ページコンポーネント
+ */
 var componentMonsterData = {
   template: '#templateMonsterData',
   pageTitle: function () {
@@ -674,6 +683,9 @@ var componentMonsterData = {
 };
 
 
+/**
+ * モンスター情報編集ページコンポーネント
+ */
 var componentMonsterEdit = {
   template: '#templateMonsterEdit',
   name: 'MonsterEdit',
@@ -833,6 +845,10 @@ var componentMonsterEdit = {
   }, 
 }
 
+
+/**
+ * 画像投稿ページコンポーネント
+ */
 var componentPic = {
   template: '#templatePic',
   pageTitle: function () {
