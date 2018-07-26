@@ -891,6 +891,8 @@ var componentPic = {
           alert('画像を選択してください');
           return;
       }
+
+      $(e.target).next('.custom-file-label').text($(e.target)[0].files[0].name);
   
       // FileReaderオブジェクトを使ってファイル読み込み
       var reader = new FileReader();
