@@ -397,18 +397,41 @@
 
 <!-- 画像投稿ページ -->
 <script type="text/x-template" id="templatePic">
-  <div>
-    <img :src="uploadImgSrc" />
-    No.<input type="number" v-model="monsterNo" />
-    <div class="upload">
-      <input type="file" name="file" id="file" @change="loadLocalImage">
+  <div class="row">
+    <div class="col-md-6">
+      <canvas id="canvas" style="display:none;"></canvas>
+      <div class="col-md-12">モンスター番号とモンスター情報画面の画像ファイルを選択してください。</div>
+      <div class="row">
+        <div class="col-md-4 input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">No.</span>
+          </div>
+          <input type="number" class="form-control" id="inputNo" v-model="monsterNo" />
+        </div>
+        <div class="col-md-8">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="monsterImageFile" @change="loadLocalImage">
+            <label class="custom-file-label" for="monsterImageFile">モンスター情報画像選択</label>
+          </div>
+        </div>
+      
+      </div>
+      <img :src="uploadImgSrc" style="width: 100%; height: auto;" />
     </div>
-    <canvas id="canvas"></canvas>
-    <div id="result">
-        <img :src="imageResultSrc" />
+    <div v-if="imageResultSrc" id="result" class="col-md-6">
+      <h2>切り抜き結果</h2>
+      <div>
+        <h3>モンスター画像</h3>
+        <img :src="imageResultSrc" style="width: 100%;"/>
+      </div>
+      <div>
+        <h3>アイコン画像</h3>
         <img :src="iconResultSrc" />
+      </div>
+          
+      </table>
+      <button @click="submit" class="btn btn-primary">この画像を送信する</button>
     </div>
-    <button @click="submit">送信</button>
   </div>
 </script>
 
