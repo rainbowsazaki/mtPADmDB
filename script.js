@@ -999,8 +999,10 @@ var componentPic = {
         });
         return blob;
       }
-      if (!this.iconResultSrc) { return; }
-      if (this.monsterNo == 0) { return; }
+
+      if (!this.iconResultSrc) { alert('画像が選択されていません。'); return; }
+      if (this.monsterNo == 0) { alert('モンスター番号が指定されていません。'); return; }
+      if (this.monsterNo < 1 || this.monsterNo > 9999) { alert('モンスター番号の指定が不正です。'); return; }
       
       var blobIcon = toBlob(this.iconResultSrc);
       var blobImage = toBlob(this.imageResultSrc);
