@@ -400,9 +400,12 @@
   <div class="row">
     <div class="col-md-6">
       <canvas id="canvas" style="display:none;"></canvas>
-      <div class="col-md-12">モンスター番号とモンスター情報画面の画像ファイルを選択してください。</div>
+      <div class="col-md-12">
+        <template v-if="!this.$route.params.no">モンスター番号と</template>
+        <template v-else>No. {{this.monsterNo}} のモンスターの</template>
+        モンスター情報画面の画像ファイルを選択してください。</div>
       <div class="row">
-        <div class="col-md-4 input-group">
+        <div v-if="!this.$route.params.no" class="col-md-4 input-group">
           <div class="input-group-prepend">
             <span class="input-group-text">No.</span>
           </div>
