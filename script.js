@@ -1017,7 +1017,11 @@ var componentPic = {
         headers: { 'content-type': 'multipart/form-data' },
       })
       .then(response => {
-        alert(response);
+        if (response.errors) {
+          alert(response.data.errors);
+        } else {
+          alert(response.data.success);
+        }
       });
     }
   }
