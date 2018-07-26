@@ -80,3 +80,15 @@ CREATE TABLE IF NOT EXISTS leader_skill (
 
   INSERT INTO leader_skill (no , name , description)
       VALUES (1, 'なし','');
+
+
+CREATE TABLE IF NOT EXISTS monster_image (
+  id INTEGER PRIMARY KEY,
+  no INTEGER,
+
+  createdDatetime TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')),
+  ipAddress TEXT,
+  accountName TEXT,
+  state INTEGER
+);
+

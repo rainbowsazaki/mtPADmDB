@@ -8,42 +8,110 @@ use CGI;
 use JSON::PP ();
 use DBI;
 
+use File::Copy;
 
 my $q = CGI->new();
 
 my $mode = $q->param('mode');
 
 if ($mode eq 'image') {
+
+  my @error;
+  
   my $no = $q->param('no');
 
-  my $iconFileName = $q->param('icon');
-  my $imageFileName = $q->param('image');
+  my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
+  $dbh->{sqlite_unicode} = 1;
+  $dbh->{AutoCommit} = 0;
 
-  my $buffer;
+  # 既存画像がロックされていないか確認する。
+  my $check_sql = 'SELECT COUNT(*) FROM monster_image WHERE no = ? AND state = 2';
+  my $sth = $dbh->prepare($check_sql);
+  if (!$sth) {
+    push @error, '画像情報確認エラー:' .  $dbh->errstr;
+  } else {
+    $sth->execute($no);
 
-  open(OUT, ">./monsterImages/icon_${no}.jpg");
-  binmode(OUT);
-  while(read($iconFileName,$buffer,1024))
-  {
-    print OUT $buffer;
+    my $tbl_ary_ref = $sth->fetchrow_arrayref;
+    if ($tbl_ary_ref->[0] > 0) {
+      push @error, 'このモンスターの画像はロックされています。';
+    }
   }
 
-  close(OUT);
-  close($iconFileName); #ファイルハンドルをcloseしています。
+  if (!@error) {
+    # 既存の画像を無効化
+    $dbh->do('UPDATE monster_image SET state = 0 WHERE no = ? AND state = 1', undef, $no);
 
-  open(OUT, ">./monsterImages/${no}.jpg");
-  binmode(OUT);
-  while(read($imageFileName,$buffer,1024))
-  {
-    print OUT $buffer;
+    # 今回の投稿の情報をDBに登録
+    my $ip_address = $ENV{'REMOTE_ADDR'};
+    $sth = $dbh->prepare(<<'EOS');
+INSERT INTO monster_image (
+  no, ipAddress, accountName, state
+) VALUES (
+  ?, ?, ?, ?
+);
+EOS
+
+    my $id = -1;
+    if (!$sth) {
+      push @error, '画像情報登録エラー:' .  $dbh->errstr;
+    } else {
+      my $ret = $sth->execute($no, $ip_address, '', 1);
+
+      $sth = $dbh->prepare('SELECT MAX(id) FROM monster_image;');
+      $ret = $sth->execute();
+      if ($ret) {
+        my $tbl_ary_ref = $sth->fetchrow_arrayref;
+        $id = $tbl_ary_ref->[0];
+        
+      } else {
+        push @error, 'モンスター情報登録エラー:' .  $sth->errstr;
+      }
+    }
+
+    if ($id != -1) {
+      # 画像を保存
+      my $iconFileName = $q->param('icon');
+      my $imageFileName = $q->param('image');
+
+      my $buffer;
+
+      open(OUT, ">./monsterImages/icon_${no}.jpg");
+      binmode(OUT);
+      while(read($iconFileName,$buffer,1024))
+      {
+        print OUT $buffer;
+      }
+
+      close(OUT);
+      close($iconFileName); #ファイルハンドルをcloseしています。
+
+      open(OUT, ">./monsterImages/${no}.jpg");
+      binmode(OUT);
+      while(read($imageFileName,$buffer,1024))
+      {
+        print OUT $buffer;
+      }
+
+      close(OUT);
+      close($imageFileName); #ファイルハンドルをcloseしています。
+
+      # ログとしてID付きで保存
+      copy("./monsterImages/icon_${no}.jpg","./monsterImagesLog/icon_${no}_${id}.jpg") or push @error, "error: $!";
+      copy("./monsterImages/${no}.jpg","./monsterImagesLog/${no}_${id}.jpg") or push @error, "error: $!";
+    }
   }
 
-  close(OUT);
-  close($imageFileName); #ファイルハンドルをcloseしています。
-
-
-  print "Content-Type: text/plain\n\n", 'saved.'; #JSON::PP::encode_json(\%outputData);
-
+  my %outputData;
+  if (@error) {
+    $outputData{'errors'} = \@error;
+  } else {
+    $outputData{'success'} = [ '投稿を受け付けました。ありがとうございました。' ];
+    $dbh->commit;
+  }
+  print "Content-Type: application/json\n\n", JSON::PP::encode_json(\%outputData);
+  
+  $dbh->disconnect;
 } else {
 
   my $json = $q->param("POSTDATA");
