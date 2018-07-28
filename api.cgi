@@ -519,24 +519,28 @@ sub joined_key_access {
 }
 
 
+# db から取り出した行のデータの配列から、任意のキーのものを対象としたハッシュを作成する。
+sub db_row_to_hash {
+  my ($row_array_ref, $keys_ref, @pickup_indexes) = @_;
+  if (!@pickup_indexes) {
+    @pickup_indexes = (0 .. (scalar @$keys_ref) - 1);
+  }
+  my %data;
+  for my $i (@pickup_indexes) {
+    my $key = $keys_ref->[$i];
+    my $value = $row_array_ref->[$i];
+    if ($key eq 'superAwakens') {
+      $value = JSON::PP::decode_json($value);
+    }
+    &joined_key_access(\%data, $key, $value);
+  }
+  return \%data;
+}
+
+
 sub save_monster_list_json {
   my ($dbh) = @_;
   
-  my $sth = $dbh->prepare('SELECT no, name FROM monster_data WHERE state = 1 ORDER BY no ASC;');
-  $sth->execute();
-  my %savedata;
-  while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
-    $savedata{$tbl_ary_ref->[0]} = {
-      name => $tbl_ary_ref->[1]
-    };
-    #die $tbl_ary_ref->[1];
-  }
-  
-  open(DATAFILE, "> ./listJson/monster_list.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json(\%savedata);
-  close(DATAFILE);
-
-
   my @sql_keys = qw/
     no name attributes_0 attributes_1
     cost rare types_0 types_1 types_2 
@@ -550,33 +554,34 @@ sub save_monster_list_json {
     evolution_materials_2 evolution_materials_3 evolution_materials_4
   /;
 
+  my @pickup_keys = qw/
+    no name attributes_0 attributes_1 types_0 types_1 types_2
+  /;
+  my @pickup_keys_indexes = map { my $k = $_; my ( $r ) = grep { $sql_keys[$_] eq $k } 0 .. $#sql_keys; $r } @pickup_keys;
+
   my $sql_str = 'SELECT ' . join(',', @sql_keys) . ' FROM monster_data WHERE state = 1 ORDER BY no ASC;';
-  $sth = $dbh->prepare($sql_str);
+  my $sth = $dbh->prepare($sql_str);
 
   if (!$sth) {
     die $dbh->errstr;
   } else {
-    my %savedata;
     $sth->execute();
 
+    my %savedata;
+    my %pickup_data;
     while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
-      my %monster_data;
-      
-      for my $i (0 .. $#sql_keys) {
-        my $key = $sql_keys[$i];
-        my $value = $tbl_ary_ref->[$i];
-        if ($key eq 'superAwakens') {
-          $value = JSON::PP::decode_json($value);
-        }
-        &joined_key_access(\%monster_data, $key, $value);
-      }
-      $savedata{$tbl_ary_ref->[0]} = \%monster_data;
+      $savedata{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, \@sql_keys);
+      $pickup_data{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, \@sql_keys, @pickup_keys_indexes);
     }
     open(DATAFILE, "> ./listJson/monster_data.json") or die("error :$!");
     print DATAFILE JSON::PP->new->pretty
       ->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b } )
       ->indent_length(2)
       ->encode(\%savedata);
+    close(DATAFILE);
+
+    open(DATAFILE, "> ./listJson/monster_list.json") or die("error :$!");
+    print DATAFILE JSON::PP::encode_json(\%pickup_data);
     close(DATAFILE);
   }
 }
