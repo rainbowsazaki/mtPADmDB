@@ -451,7 +451,11 @@ EOS
     $outputData{message} = [ 'モンスターデータを更新しました。' ];
     $outputData{newTableData} = {
       monster => {
-        $data->{no} => { name => $data->{name} }
+        $data->{no} => {
+          name => $data->{name},
+          attributes => $data->{attributes},
+          types => $data->{types},
+        }
       },
     };
     if ($is_update_skill_table) {
