@@ -70,18 +70,25 @@
     <table class="table">
       <thead class="thead-light">
         <tr>
-          <th>#</th>
+          <th style="text-align: right; width: 3em;">#</th>
+          <th style="width: 2em;">属性</th>
           <th>名前</th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(data, key) in monsterTable">
-          <td>{{key}}</td>
+          <td style="text-align: right;">{{key}}</td>
+          <td style="width:2em;">
+            <svg width="2em" height="1em">
+              <circle v-if="data.attributes[0] != 0" cx="0.5em" cy="0.55em" r="0.4em" stroke="rgba(0, 0, 0, 0.5)" :fill="attrColors[data.attributes[0]]" />
+              <circle v-if="data.attributes[1] != 0" cx="1.5em" cy="0.55em" r="0.4em" stroke="rgba(0, 0, 0, 0.5)" :fill="attrColors[data.attributes[1]]" />
+            </svg>
+          </td>
           <td><router-link :to="'/' + key">{{data.name}}</router-link></td>
         </tr>
       </tbody>
     </table>
+
   </div>
 </script>
 

@@ -36,6 +36,17 @@ var commonData = {
     99: "不明",
   },
 
+  attrColors: {
+    0: "rgba(0,0,0,0)",
+    1: "rgba(255, 0, 0, 1.0)",
+    2: "rgba(0, 192, 255, 1.0)",
+    3: "rgba(0, 224, 0, 1.0)",
+    4: "rgba(255, 255, 0, 1.0)",
+    5: "rgba(192, 0, 192, 1.0)",
+
+    99: "rgba(192, 192, 192, 1.0)",
+  },
+
   evolutionTypeTable: {
     0: "進化なし",
     1: "通常進化",
@@ -590,7 +601,8 @@ var componentMonsterList = {
     };
   },
   computed: {
-    monsterTable () { return this.$store.state.monsterTable; }
+    monsterTable () { return this.$store.state.monsterTable; },
+    attrColors () { return this.$store.state.attrColors; },
   },
 };
 
