@@ -207,7 +207,7 @@ EOS
   &check_range('回復', $data->{maxParam}{recovery}, -99999, 99999);
 
   if ($data->{skillNo} == 0) {
-    &to_number_with_key($data->{skillNo}, qw/ baseTurn maxLevel /);
+    &to_number_with_key($data->{skillDetails}, qw/ baseTurn maxLevel /);
     &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
     &check_string_length('スキル詳細', $data->{skillDetails}{description}, 1, 200);
     &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 1, 199);
