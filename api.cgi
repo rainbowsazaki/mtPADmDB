@@ -493,6 +493,71 @@ sub save_monster_list_json {
   open(DATAFILE, "> ./listJson/monster_list.json") or die("error :$!");
   print DATAFILE JSON::PP::encode_json(\%savedata);
   close(DATAFILE);
+
+
+  my @sql_keys = qw/
+    no name attributes_0 attributes_1
+    cost rare types_0 types_1 types_2 
+    awakens_0 awakens_1 awakens_2 awakens_3 awakens_4
+    awakens_5 awakens_6 awakens_7 awakens_8
+    expTable maxlevel maxParam_hp maxParam_attack maxParam_recovery
+    skill leaderSkill
+    assist overLimit overLimitParam_hp overLimitParam_attack
+    overLimitParam_recovery superAwakens
+    evolution_type evolution_baseNo evolution_materials_0 evolution_materials_1
+    evolution_materials_2 evolution_materials_3 evolution_materials_4
+  /;
+
+  my $sql_str = 'SELECT ' . join(',', @sql_keys) . ' FROM monster_data WHERE state = 1 ORDER BY no ASC;';
+  $sth = $dbh->prepare($sql_str);
+
+  if (!$sth) {
+    die $dbh->errstr;
+  } else {
+    my %savedata;
+    $sth->execute();
+
+    while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
+      my %monster_data;
+      
+      for my $i (0 .. $#sql_keys) {
+        my $key = $sql_keys[$i];
+        my $value = $tbl_ary_ref->[$i];
+        if ($key eq 'superAwakens') {
+          $value = JSON::PP::decode_json($value);
+        }
+
+        my @splited_keys = split '_', $key;
+        my @types = map { ($_ =~ /^[0-9]+$/) ? 0 : 1 } @splited_keys;
+        my $target = \%monster_data;
+
+        for my $j (0 .. $#splited_keys - 1) {        
+          my $v = @splited_keys[$j];
+
+          my $insert_ref = ($types[$j + 1] == 0) ? [] : {};
+          if ($types[$j] == 0) {
+            if (!exists $target->[$v]) { $target->[$v] = $insert_ref; }
+            $target = $target->[$v];
+          } elsif ($types[$j] == 1) {
+            if (!exists $target->{$v}) { $target->{$v} = $insert_ref; }
+            $target = $target->{$v};
+          }
+        }
+        if ($types[$#splited_keys] == 0) {
+          $target->[$splited_keys[$#splited_keys]] = $value;
+        } else {
+          $target->{$splited_keys[$#splited_keys]} = $value;  
+        }
+      }
+      $savedata{$tbl_ary_ref->[0]} = \%monster_data;
+    }
+    open(DATAFILE, "> ./listJson/monster_data.json") or die("error :$!");
+    print DATAFILE JSON::PP->new->pretty
+      ->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b } )
+      ->indent_length(2)
+      ->encode(\%savedata);
+    close(DATAFILE);
+  }
 }
 
 
