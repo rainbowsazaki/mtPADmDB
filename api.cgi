@@ -477,6 +477,48 @@ EOS
   print "Content-Type: application/json\n\n", JSON::PP::encode_json(\%outputData);
 }
 
+
+# キー or 添字の階層を _ でつないだキーを指定してハッシュ・配列の階層にアクセスする処理。
+sub joined_key_access {
+  my ($ref, $key, $value) = @_;
+  my $is_set = ($#_ >= 2);
+
+  my @splited_keys = split '_', $key;
+  my @types = map { ($_ =~ /^[0-9]+$/) ? 0 : 1 } @splited_keys;
+  my $target = $ref;
+
+  for my $j (0 .. $#splited_keys - 1) {        
+    my $v = @splited_keys[$j];
+
+    my $insert_ref = ($types[$j + 1] == 0) ? [] : {};
+    if ($types[$j] == 0) {
+      if (!exists $target->[$v]) {
+        if ($is_set) { $target->[$v] = $insert_ref; }
+        else { return undef; }
+      }
+      $target = $target->[$v];
+    } elsif ($types[$j] == 1) {
+      if (!exists $target->{$v}) {
+        if ($is_set) { $target->{$v} = $insert_ref; }
+        else { return undef; }
+      }
+      $target = $target->{$v};
+    }
+  }
+
+  my $ret_val;
+  if ($types[$#splited_keys] == 0) {
+    $ret_val = $target->[$splited_keys[$#splited_keys]];
+    if ($#_ >= 2) { $target->[$splited_keys[$#splited_keys]] = $value; }
+  } else {
+    $ret_val = $target->{$splited_keys[$#splited_keys]};
+    if ($#_ >= 2) { $target->{$splited_keys[$#splited_keys]} = $value; }
+  }
+
+  return $ret_val;
+}
+
+
 sub save_monster_list_json {
   my ($dbh) = @_;
   
@@ -526,28 +568,7 @@ sub save_monster_list_json {
         if ($key eq 'superAwakens') {
           $value = JSON::PP::decode_json($value);
         }
-
-        my @splited_keys = split '_', $key;
-        my @types = map { ($_ =~ /^[0-9]+$/) ? 0 : 1 } @splited_keys;
-        my $target = \%monster_data;
-
-        for my $j (0 .. $#splited_keys - 1) {        
-          my $v = @splited_keys[$j];
-
-          my $insert_ref = ($types[$j + 1] == 0) ? [] : {};
-          if ($types[$j] == 0) {
-            if (!exists $target->[$v]) { $target->[$v] = $insert_ref; }
-            $target = $target->[$v];
-          } elsif ($types[$j] == 1) {
-            if (!exists $target->{$v}) { $target->{$v} = $insert_ref; }
-            $target = $target->{$v};
-          }
-        }
-        if ($types[$#splited_keys] == 0) {
-          $target->[$splited_keys[$#splited_keys]] = $value;
-        } else {
-          $target->{$splited_keys[$#splited_keys]} = $value;  
-        }
+        &joined_key_access(\%monster_data, $key, $value);
       }
       $savedata{$tbl_ary_ref->[0]} = \%monster_data;
     }
