@@ -14,6 +14,13 @@ my $q = CGI->new();
 
 my $mode = $q->param('mode');
 
+if ($mode eq 'updateList') {
+  my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
+  $dbh->{sqlite_unicode} = 1;
+  &save_monster_list_json($dbh);
+  die 'success.';
+}
+
 if ($mode eq 'image') {
 
   my @error;
