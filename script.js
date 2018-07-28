@@ -584,6 +584,7 @@ Vue.mixin(mixinForPage);
  * アバウトページコンポーネント
  */
 var componentAbout = {
+  name: 'pageAbout',
   template: '#templateAbout',
   pageTitle: 'これは何？',
 };
@@ -593,6 +594,7 @@ var componentAbout = {
  * モンスター一覧ページコンポーネント
  */
 var componentMonsterList = {
+  name: 'pageMonsterList',
   template: '#templateMonsterList',
   pageTitle: undefined,
   data: function () {
@@ -611,6 +613,7 @@ var componentMonsterList = {
  * モンスター情報ページコンポーネント
  */
 var componentMonsterData = {
+  name: 'pageMonsterData',
   template: '#templateMonsterData',
   pageTitle: function () {
     return `No.${this.$route.params.no} ${this.monsterData.name}`;
@@ -699,8 +702,8 @@ var componentMonsterData = {
  * モンスター情報編集ページコンポーネント
  */
 var componentMonsterEdit = {
+  name: 'pageMonsterEdit',
   template: '#templateMonsterEdit',
-  name: 'MonsterEdit',
   pageTitle: function () {
     if (this.$route.params.no) {
         return `編集 No.${this.$route.params.no} ${this.monsterData.name}`;
@@ -862,6 +865,7 @@ var componentMonsterEdit = {
  * 画像投稿ページコンポーネント
  */
 var componentPic = {
+  name: 'pagePic',
   template: '#templatePic',
   pageTitle: function () {
     if (this.$route.params.no) {
