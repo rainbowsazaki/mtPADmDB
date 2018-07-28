@@ -1033,6 +1033,16 @@ var componentPic = {
           alert(response.data.errors);
         } else {
           alert(response.data.success);
+          if (this.$route.params.no) {
+            this.$router.push({ path:`/${this.$route.params.no}` });
+          } else {
+            this.monsterNo = 0;
+            this.uploadImgSrc = '';
+            this.iconResultSrc = '';
+            this.imageResultSrc = '';
+            $('#monsterImageFile').next('.custom-file-label').text('モンスター情報画像選択');
+            $('html,body').scrollTop(0);
+          }
         }
       });
     }
