@@ -412,6 +412,65 @@ EOS
               $data->{comment}, $ip_address, $account_name, 1
             );
             if ($ret) {
+              # 限界突破情報
+              my $is_update_over_limit = 0;
+              my %over_limit_check_data;
+
+              # 同一内容のデータが存在しているか確認す。。
+              sub check_same_table_data {
+                my ($table_name, %check_data) = @_;
+                my @check_keys = keys %check_data;
+                my @check_values = map { $check_data{$_} } @check_keys;
+                my $check_sql = "SELECT COUNT(*) FROM ${table_name} WHERE " .
+                  join(' AND ', map { "$_ = ?" } @check_keys) . ';';
+                my $sth = $dbh->prepare($check_sql);
+                if (!$sth) { die $dbh->errstr; }
+                $sth->execute(@check_values);
+                my $tbl_ary_ref = $sth->fetchrow_arrayref;
+                return ($tbl_ary_ref->[0] > 0);
+              }
+
+              # テーブルに指定された内容のデータを追加する。
+              sub insert_table_data {
+                my ($table_name, %insert_data) = @_;
+
+                my @insert_keys = keys %insert_data;
+                my @insert_values = map { $insert_data{$_} } @insert_keys;
+
+                my $update_sql = "INSERT INTO ${table_name} (" . join(', ', @insert_keys) .
+                  ') VALUES (' .  join(', ', map { '?' } @insert_values) . ');';
+                my $sth = $dbh->prepare($update_sql);
+                if (!$sth) { die $dbh->errstr; }
+                $sth->execute(@insert_values);
+              }
+
+              # 情報変更確認
+              if ($data->{overLimit} == 1) {
+                %over_limit_check_data = (
+                  monsterNo => $data->{no},
+                  param_hp => $data->{overLimitParam}{hp},
+                  param_attack => $data->{overLimitParam}{attack},
+                  param_recovery => $data->{overLimitParam}{recovery},
+                  superAwakens => JSON::PP::encode_json($data->{superAwakens}),
+                  state => 1
+                );
+                $is_update_over_limit = !&check_same_table_data('over_limit', %over_limit_check_data);
+              }
+              
+              # 変更があればデータ更新
+              if ($is_update_over_limit) {
+                $dbh->do('UPDATE over_limit SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
+
+                my %over_limit_update_data = (   
+                  %over_limit_check_data,
+                  comment => $data->{comment},
+                  ipAddress => $ip_address,
+                  accountName => $account_name,
+                );
+
+                &insert_table_data('over_limit', %over_limit_update_data);
+              }
+
               # モンスターデータのJSON保存
 
               delete $data->{skillDetails};
