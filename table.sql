@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS monster_data (
 );
 
 
-CREATE TABLE IF NOT EXISTS overLimit (
+CREATE TABLE IF NOT EXISTS over_limit (
   id INTEGER PRIMARY KEY,
   monsterNo INTEGER,
   param_hp INTEGER,
