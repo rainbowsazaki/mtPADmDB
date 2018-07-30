@@ -223,6 +223,13 @@ sub mode_update_monster_data {
   my $ip_address = $ENV{'REMOTE_ADDR'};
   my $account_name = '';
 
+  my %common_insert_data = (
+    comment => $data->{comment},
+    ipAddress => $ip_address,
+    accountName => $account_name
+  );
+
+
   &to_number_with_key($data, qw/ no attributes cost rate types awakens expTable maxLevel maxParam 
     skill leaderSkill assist overLimit overLimitParam superAwakens /);
 
@@ -291,6 +298,11 @@ sub mode_update_monster_data {
       my $sth;
       my $new_no = -1;
       # 同一内容のスキルが登録されてないか確認
+      my %skill_check_data = map {
+        $_ => $data->{skillDetails}{$_}
+      } qw/ name description baseTurn maxLevel /;
+      $skill_check_data{state} = 1;
+      
       $sth = $dbh->prepare('SELECT no FROM skill WHERE name = ? AND description = ? AND baseTurn = ? AND maxLevel = ?');
       if ($sth->execute($data->{skillDetails}{name}, $data->{skillDetails}{description}, $data->{skillDetails}{baseTurn}, $data->{skillDetails}{maxLevel})) {
         my $tbl_ary_ref = $sth->fetchrow_arrayref;
@@ -307,13 +319,12 @@ sub mode_update_monster_data {
         $sth->execute();
         my $tbl_ary_ref = $sth->fetchrow_arrayref;
         $new_no = $tbl_ary_ref->[0] + 1;
-
-        $sth = $dbh->prepare('INSERT INTO skill(no, name, description, baseTurn, maxLevel, comment, ipAddress, accountName, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);');
-        if ($sth->execute($new_no, $data->{skillDetails}{name}, $data->{skillDetails}{description}, $data->{skillDetails}{baseTurn}, $data->{skillDetails}{maxLevel}, $data->{comment}, $ip_address, $account_name, 1)) {
+        
+        if (&insert_table_data($dbh, 'skill', %skill_check_data, %common_insert_data, no => $new_no)) {
           $data->{skill} = $new_no;
           $is_update_skill_table = 1;
         } else {
-          push @error, 'スキル登録エラー:' . $sth->errstr;
+          push @error, 'スキル登録エラー';
         }
       }
     } else {
@@ -369,12 +380,6 @@ sub mode_update_monster_data {
     if (@error) {
     
     } else {
-      my %common_insert_data = (
-          comment => $data->{comment},
-          ipAddress => $ip_address,
-          accountName => $account_name
-      );
-
 
       my %monster_check_data;
       for my $key (@monster_data_keys) {
