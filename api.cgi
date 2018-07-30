@@ -186,7 +186,7 @@ EOS
   my $account_name = '';
 
   &to_number_with_key($data, qw/ no attributes cost rate types awakens expTable maxLevel maxParam 
-    skillNo leaderSkillNo assist overLimit overLimitParam superAwakens /);
+    skill leaderSkill assist overLimit overLimitParam superAwakens /);
 
   &check_range('No', $data->{no}, 1, 9999);
   &check_string_length('名前', $data->{name}, 1, 50);
@@ -206,14 +206,14 @@ EOS
   &check_range('攻撃', $data->{maxParam}{attack}, 0, 99999);
   &check_range('回復', $data->{maxParam}{recovery}, -99999, 99999);
 
-  if ($data->{skillNo} == 0) {
+  if ($data->{skill} == 0) {
     &to_number_with_key($data->{skillDetails}, qw/ baseTurn maxLevel /);
     &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
     &check_string_length('スキル詳細', $data->{skillDetails}{description}, 1, 200);
     &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 1, 199);
     &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 1, 99);
   }
-  if ($data->{leaderSkillNo} == 0) {
+  if ($data->{leaderSkill} == 0) {
     &check_string_length('リーダースキル名', $data->{leaderSkillDetails}{name}, 1, 50);
     &check_string_length('リーダースキル詳細', $data->{leaderSkillDetails}{description}, 1, 200);
 
@@ -249,7 +249,7 @@ EOS
     $dbh->{AutoCommit} = 0;
 
     # スキル
-    if ($data->{skillNo} == 0) {
+    if ($data->{skill} == 0) {
       my $sth;
       my $new_no = -1;
       # 同一内容のスキルが登録されてないか確認
@@ -262,7 +262,7 @@ EOS
       }
 
       if ($new_no != -1) {
-        $data->{skillNo} = $new_no;
+        $data->{skill} = $new_no;
       } else {
         # 新たに登録するスキルに割り振る番号を求める
         $sth = $dbh->prepare("SELECT MAX(no), name FROM skill");
@@ -272,7 +272,7 @@ EOS
 
         $sth = $dbh->prepare('INSERT INTO skill(no, name, description, baseTurn, maxLevel, comment, ipAddress, accountName, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);');
         if ($sth->execute($new_no, $data->{skillDetails}{name}, $data->{skillDetails}{description}, $data->{skillDetails}{baseTurn}, $data->{skillDetails}{maxLevel}, $data->{comment}, $ip_address, $account_name, 1)) {
-          $data->{skillNo} = $new_no;
+          $data->{skill} = $new_no;
           $is_update_skill_table = 1;
         } else {
           push @error, 'スキル登録エラー:' . $sth->errstr;
@@ -281,7 +281,7 @@ EOS
     } else {
       # 指定された番号のスキルが有るか確認
       my $sth = $dbh->prepare("select count(*) FROM skill WHERE id = ?");
-      $sth->execute($data->{skillNo});
+      $sth->execute($data->{skill});
       my $tbl_ary_ref = $sth->fetchrow_arrayref;
       if ($tbl_ary_ref->[0] == 0) {
         push @error, 'スキル番号指定が不正';
@@ -289,7 +289,7 @@ EOS
     }
 
     #リーダースキル
-    if ($data->{leaderSkillNo} == 0) {
+    if ($data->{leaderSkill} == 0) {
       my $sth;
       my $new_no = -1;
 
@@ -302,7 +302,7 @@ EOS
         }
       }
       if ($new_no != -1) {
-        $data->{leaderSkillNo} = $new_no;
+        $data->{leaderSkill} = $new_no;
       } else {
         # 新たに登録するスキルに割り振る番号を求める
         $sth = $dbh->prepare("SELECT MAX(no) FROM leader_skill");
@@ -312,7 +312,7 @@ EOS
 
         $sth = $dbh->prepare('INSERT INTO leader_skill(no, name, description, comment, ipAddress, accountName, state ) VALUES (?, ?, ?, ?, ?, ?, ?);');
         if ($sth->execute($new_no, $data->{leaderSkillDetails}{name}, $data->{leaderSkillDetails}{description}, $data->{comment}, $ip_address, $account_name, 1)) {
-          $data->{leaderSkillNo} = $new_no;
+          $data->{leaderSkill} = $new_no;
           $is_update_leader_skill_table = 1;
         } else {
           push @error, 'リーダースキル登録エラー:' . $sth->errstr;
@@ -321,7 +321,7 @@ EOS
     } else {
       # 指定された番号のリーダースキルがあるか確認
       my $sth = $dbh->prepare("select count(*) FROM leader_skill WHERE id = ?");
-      $sth->execute($data->{leaderSkillNo});
+      $sth->execute($data->{leaderSkill});
       my $tbl_ary_ref = $sth->fetchrow_arrayref;
       if ($tbl_ary_ref->[0] == 0) {
         push @error, 'リーダースキル番号指定が不正';
@@ -499,7 +499,7 @@ EOS
     };
     if ($is_update_skill_table) {
       $outputData{newTableData}{skillDetails} = {
-        $data->{skillNo} => {
+        $data->{skill} => {
           name => $data->{skillDetails}{name},
           description => $data->{skillDetails}{description},
           baseTurn => $data->{skillDetails}{baseTurn},
@@ -509,7 +509,7 @@ EOS
     }
     if ($is_update_leader_skill_table) {
       $outputData{newTableData}{leaderSkillDetails} = {
-        $data->{leaderSkillNo} => {
+        $data->{leaderSkill} => {
           name => $data->{leaderSkillDetails}{name},
           description => $data->{leaderSkillDetails}{description}
         }

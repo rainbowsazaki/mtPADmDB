@@ -306,7 +306,7 @@
         
         <div class="col-md-6">
           <div class="form-group">
-            <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skillNo = $event;" v-model="skillName" :skill-table="skillTable"></skill-incremental-input> 
+            <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillName" :skill-table="skillTable"></skill-incremental-input> 
           </div>
         </div>
         <div class="col-md-3">
@@ -333,7 +333,7 @@
 
       <div class="form-group">
         <label for="formReaderSkillName">リーダースキル</label>
-        <skill-incremental-input placeholder="リーダースキル名" @select-no="monsterData.leaderSkillNo = $event;" v-model="leaderSkillName" :skill-table="leaderSkillTable"></skill-incremental-input>
+        <skill-incremental-input placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillName" :skill-table="leaderSkillTable"></skill-incremental-input>
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="leaderSkillDescription"></textarea>
       </div>
 

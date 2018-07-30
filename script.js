@@ -140,14 +140,14 @@ var commonData = {
       attack: 0,
       recovery: 0
     },
-    skillNo: 0,
+    skill: 0,
     skillDetails: {
       name: '',
       description: '',
       baseTurn: 0,
       maxLevel: 0
     },
-    leaderSkillNo: 0,
+    leaderSkill: 0,
     leaderSkillDetails: {
       name: '',
       description: ''
@@ -262,6 +262,16 @@ const store = new Vuex.Store({
       axios.get('./monsterJson/' + param.no + '.json').then(
         response => {
           state.monsterData = response.data;
+          // 古いモンスターデータJSONとの互換性保持。（いずれ消す）
+          if (!('skill' in state.monsterData)) {
+            state.monsterData.skill = state.monsterData.skillNo;
+            delete state.monsterData.skillNo;
+          }
+          if (!('leaderSkill' in state.monsterData)) {
+            state.monsterData.leaderSkill = state.monsterData.leaderSkillNo;
+            delete state.monsterData.leaderSkillNo
+          }
+          
           state.monsterData.skillDetails = {};
           state.monsterData.leaderSkillDetails = {};
           this.commit('setMessages', [ '取得完了' ]);
@@ -658,8 +668,8 @@ var componentMonsterData = {
 
     skillDetails: function () {
       var skillDetails = {};
-      if (this.monsterData.skillNo != 0) { 
-        var target = this.skillTable[this.monsterData.skillNo];
+      if (this.monsterData.skill != 0) { 
+        var target = this.skillTable[this.monsterData.skill];
         if (target) {
           skillDetails = target;
         }
@@ -680,8 +690,8 @@ var componentMonsterData = {
     },
     leaderSkillDetails: function () {
       var leaderSkillDetails = {};
-      if (this.monsterData.leaderSkillNo != 0) {
-        var target = this.leaderSkillTable[this.monsterData.leaderSkillNo];
+      if (this.monsterData.leaderSkill != 0) {
+        var target = this.leaderSkillTable[this.monsterData.leaderSkill];
         if (target) {
           leaderSkillDetails = target;
         }
@@ -746,8 +756,8 @@ var componentMonsterEdit = {
 
     skillDetails: function () {
       var skillDetails = this.monsterData.skillDetails;
-      if (this.monsterData.skillNo != 0) { 
-        var target = this.skillTable[this.monsterData.skillNo];
+      if (this.monsterData.skill != 0) { 
+        var target = this.skillTable[this.monsterData.skill];
         if (target) {
           skillDetails = target;
           this.monsterData.skillDetails.name = skillDetails.name;
@@ -764,7 +774,7 @@ var componentMonsterEdit = {
       },
       set: function (newValue) {
         this.monsterData.skillDetails.name = newValue;
-        this.monsterData.skillNo = 0;
+        this.monsterData.skill = 0;
       }
     },
     skillDescription: {
@@ -773,7 +783,7 @@ var componentMonsterEdit = {
       },
       set: function (newValue) {
         this.monsterData.skillDetails.description = newValue;
-        this.monsterData.skillNo = 0;
+        this.monsterData.skill = 0;
       }
     },
     skillBaseTurn: {
@@ -782,7 +792,7 @@ var componentMonsterEdit = {
       },
       set: function (newValue) {
         this.monsterData.skillDetails.baseTurn = newValue;
-        this.monsterData.skillNo = 0;
+        this.monsterData.skill = 0;
       }
     },
     skillMaxLevel: {
@@ -791,13 +801,13 @@ var componentMonsterEdit = {
       },
       set: function (newValue) {
         this.monsterData.skillDetails.maxLevel = newValue;
-        this.monsterData.skillNo = 0;
+        this.monsterData.skill = 0;
       }
     },
     leaderSkillDetails: function () {
       var leaderSkillDetails = this.monsterData.leaderSkillDetails;
-      if (this.monsterData.leaderSkillNo != 0) {
-        var target = this.leaderSkillTable[this.monsterData.leaderSkillNo];
+      if (this.monsterData.leaderSkill != 0) {
+        var target = this.leaderSkillTable[this.monsterData.leaderSkill];
         if (target) {
           leaderSkillDetails = target;
           this.monsterData.leaderSkillDetails.name = leaderSkillDetails.name;
@@ -812,7 +822,7 @@ var componentMonsterEdit = {
       },
       set: function (newValue) {
         this.monsterData.leaderSkillDetails.name = newValue;
-        this.monsterData.leaderSkillNo = 0;
+        this.monsterData.leaderSkill = 0;
       }
     },
     leaderSkillDescription: {
@@ -821,7 +831,7 @@ var componentMonsterEdit = {
       },
       set: function (newValue) {
         this.monsterData.leaderSkillDetails.description = newValue;
-        this.monsterData.leaderSkillNo = 0;
+        this.monsterData.leaderSkill = 0;
       }
     },
   },
