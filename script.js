@@ -286,14 +286,14 @@ const store = new Vuex.Store({
       );
     },
 
-    addMonsterData: function (state, skillData) {
-      Object.assign(skill.skillTable, skillData);
+    addMonsterData: function (state, monsterData) {
+      Object.assign(state.monsterTable, monsterData);
     },
     addSkillData: function (state, skillData) {
-      Object.assign(skill.skillTable, skillData);
+      Object.assign(state.skillTable, skillData);
     },
     addLeaderSkillData: function (state, leaderSkillData) {
-      Object.assign(skill.skillTable, leaderSkillData);
+      Object.assign(state.leaderSkillTable, leaderSkillData);
     },
 
     setErrors: function (state, errors) {
