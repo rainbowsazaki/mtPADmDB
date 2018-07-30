@@ -312,9 +312,7 @@ sub mode_update_monster_data {
         $data->{skill} = $new_no;
       } else {
         # 新たに登録するスキルに割り振る番号を求める
-        $sth = $dbh->prepare("SELECT MAX(no), name FROM skill");
-        $sth->execute();
-        my $tbl_ary_ref = $sth->fetchrow_arrayref;
+        my $tbl_ary_ref = &get_one_row_data($dbh, 'skill', [ 'MAX(no)' ]);
         $new_no = $tbl_ary_ref->[0] + 1;
         
         if (&insert_table_data($dbh, 'skill', %skill_check_data, %common_insert_data, no => $new_no)) {
@@ -350,9 +348,7 @@ sub mode_update_monster_data {
         $data->{leaderSkill} = $new_no;
       } else {
         # 新たに登録するスキルに割り振る番号を求める
-        $sth = $dbh->prepare("SELECT MAX(no) FROM leader_skill");
-        $sth->execute();
-        my $tbl_ary_ref = $sth->fetchrow_arrayref;
+        my $tbl_ary_ref = &get_one_row_data($dbh, 'leader_skill', [ 'MAX(no)' ]);
         my $new_no = $tbl_ary_ref->[0] + 1;
 
         if (&insert_table_data($dbh, 'leader_skill', %leader_skill_check_data, %common_insert_data, no => $new_no)) {
