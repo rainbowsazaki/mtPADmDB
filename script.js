@@ -858,11 +858,11 @@ var componentMonsterEdit = {
           if (newTableData.monster) {
             this.$store.commit('addMonsterData', newTableData.monster);
           }
-          if (newTableData.skill) {
-            this.$store.commit('addSkillData', newTableData.skill);
+          if (newTableData.skillDetails) {
+            this.$store.commit('addSkillData', newTableData.skillDetails);
           }
-          if (newTableData.leaderSkill) {
-            this.$store.commit('addLeaderSkillData', newTableData.leaderSkill);
+          if (newTableData.leaderSkillDetails) {
+            this.$store.commit('addLeaderSkillData', newTableData.leaderSkillDetails);
           }
         }
       })
