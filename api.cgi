@@ -29,14 +29,31 @@ my $q = CGI->new();
 
 my $mode = $q->param('mode');
 
-if ($mode eq 'updateList') {
+my %modes = (
+  'updateList' => \&mode_update_list,
+  'image' => \&mode_image,
+);
+
+if (exists $modes{$mode}) {
+  $modes{$mode}->($q);
+} else {
+  &mode_update_monster_data($q);
+}
+
+
+# モンスター一覧更新モード
+sub mode_update_list {
+  my ($q) = @_;
   my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
   $dbh->{sqlite_unicode} = 1;
   &save_monster_list_json($dbh);
   die 'success.';
 }
 
-if ($mode eq 'image') {
+
+# 画像受信モード
+sub mode_image {
+  my ($q) = @_;
 
   my @error;
   
@@ -134,7 +151,13 @@ EOS
   print "Content-Type: application/json\n\n", JSON::PP::encode_json(\%outputData);
   
   $dbh->disconnect;
-} else {
+  
+}
+
+
+# モンスター情報更新モード
+sub mode_update_monster_data {
+  my ($q) = @_;
 
   my $json = $q->param("POSTDATA");
 
