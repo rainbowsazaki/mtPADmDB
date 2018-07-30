@@ -303,12 +303,9 @@ sub mode_update_monster_data {
       } qw/ name description baseTurn maxLevel /;
       $skill_check_data{state} = 1;
       
-      $sth = $dbh->prepare('SELECT no FROM skill WHERE name = ? AND description = ? AND baseTurn = ? AND maxLevel = ?');
-      if ($sth->execute($data->{skillDetails}{name}, $data->{skillDetails}{description}, $data->{skillDetails}{baseTurn}, $data->{skillDetails}{maxLevel})) {
-        my $tbl_ary_ref = $sth->fetchrow_arrayref;
-        if ($tbl_ary_ref) {
-          $new_no = $tbl_ary_ref->[0];
-        }
+      my $tbl_ary_ref = &get_one_row_data($dbh, 'skill', [ 'no' ], %skill_check_data);
+      if ($tbl_ary_ref) {
+        $new_no = $tbl_ary_ref->[0];
       }
 
       if ($new_no != -1) {
@@ -344,12 +341,10 @@ sub mode_update_monster_data {
         $_ => $data->{leaderSkillDetails}{$_}
       } qw/ name description /;
       $leader_skill_check_data{state} = 1;
-      $sth = $dbh->prepare('SELECT no FROM leader_skill WHERE name = ? AND description = ?');
-      if ($sth->execute($data->{leaderSkillDetails}{name}, $data->{leaderSkillDetails}{description})) {
-        my $tbl_ary_ref = $sth->fetchrow_arrayref;
-        if ($tbl_ary_ref) {
-          $new_no = $tbl_ary_ref->[0];
-        }
+
+      my $tbl_ary_ref = &get_one_row_data($dbh, 'leader_skill', [ 'no' ], %leader_skill_check_data);
+      if ($tbl_ary_ref) {
+        $new_no = $tbl_ary_ref->[0];
       }
       if ($new_no != -1) {
         $data->{leaderSkill} = $new_no;
