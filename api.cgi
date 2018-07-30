@@ -345,189 +345,140 @@ EOS
         evolution_materials_2 evolution_materials_3 evolution_materials_4
       /;
 
-      my @sql_values =(
-        $data->{no}, $data->{name}, $data->{attributes}[0], $data->{attributes}[1],
-        $data->{cost}, $data->{rare}, $data->{types}[0], $data->{types}[1], $data->{types}[2],
-        $data->{awakens}[0], $data->{awakens}[1], $data->{awakens}[2], $data->{awakens}[3], $data->{awakens}[4], 
-        $data->{awakens}[5], $data->{awakens}[6], $data->{awakens}[7], $data->{awakens}[8], 
-        $data->{expTable}, $data->{maxLevel}, $data->{maxParam}{hp}, $data->{maxParam}{attack}, $data->{maxParam}{recovery},
-        $data->{skillNo}, $data->{leaderSkillNo},
-        $data->{assist}, $data->{overLimit}, $data->{overLimitParam}{hp}, $data->{overLimitParam}{attack},
-        $data->{overLimitParam}{recovery}, JSON::PP::encode_json($data->{superAwakens}),
-        $data->{evolution}{type}, $data->{evolution}{baseNo}, $data->{evolution}{materials}[0], $data->{evolution}{materials}[1], 
-        $data->{evolution}{materials}[2], $data->{evolution}{materials}[3], $data->{evolution}{materials}[4], 
-      );
-
-      my $column_count = @sql_keys;
-
-      my $check_sql = 'SELECT COUNT(*) FROM monster_data WHERE ';
-      foreach my $key (@sql_keys) {
-        $check_sql .= "${key} = ? AND ";
-      }
-      $check_sql .= 'state = 1';
-      my $sth = $dbh->prepare($check_sql);
-      if (!$sth) {
-          push @error, 'モンスター情報確認エラー:' .  $dbh->errstr;
-      } else {
-
-        $sth->execute(@sql_values);
-        my $tbl_ary_ref = $sth->fetchrow_arrayref;
-        if ($tbl_ary_ref->[0] > 0) {
-          push @error, '同一内容で登録されています';
-        } else {
-
-          $dbh->do('UPDATE monster_data SET state = 0 WHERE no = ? AND state = 1', undef, $data->{no});
-
-          $sth = $dbh->prepare(<<'EOS');
-  INSERT INTO monster_data (
-    no, name, attributes_0, attributes_1, cost, rare, types_0, types_1, types_2, 
-    awakens_0, awakens_1, awakens_2, awakens_3, awakens_4, awakens_5, awakens_6, awakens_7, awakens_8,
-    expTable, maxlevel, maxParam_hp, maxParam_attack, maxParam_recovery, skill, leaderSkill,
-    assist, overLimit, overLimitParam_hp, overLimitParam_attack, overLimitParam_recovery, superAwakens,
-    evolution_type, evolution_baseNo, evolution_materials_0, evolution_materials_1, evolution_materials_2, evolution_materials_3, evolution_materials_4,
-    comment, ipAddress, accountName, state
-  ) VALUES (
-    ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-    ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-    ?, ?, ?, ?, ?, ?, ?, 
-    ?, ?, ?, ?, ?, ?, 
-    ?, ?, ?, ?, ?, ?, ?,
-    ?, ?, ?, ?
-  )
-EOS
-          if (!$sth) {
-            push @error, 'モンスター情報登録エラー:' .  $dbh->errstr;
-          } else {
-            my $ret = $sth->execute(
-              $data->{no}, $data->{name}, $data->{attributes}[0], $data->{attributes}[1],
-              $data->{cost}, $data->{rare}, $data->{types}[0], $data->{types}[1], $data->{types}[2],
-              $data->{awakens}[0], $data->{awakens}[1], $data->{awakens}[2], $data->{awakens}[3], $data->{awakens}[4], 
-              $data->{awakens}[5], $data->{awakens}[6], $data->{awakens}[7], $data->{awakens}[8], 
-              $data->{expTable}, $data->{maxLevel}, $data->{maxParam}{hp}, $data->{maxParam}{attack}, $data->{maxParam}{recovery},
-              $data->{skillNo}, $data->{leaderSkillNo},
-              $data->{assist}, $data->{overLimit}, $data->{overLimitParam}{hp}, $data->{overLimitParam}{attack},
-              $data->{overLimitParam}{recovery}, JSON::PP::encode_json($data->{superAwakens}),
-              $data->{evolution}{type}, $data->{evolution}{baseNo}, $data->{evolution}{materials}[0], $data->{evolution}{materials}[1], 
-              $data->{evolution}{materials}[2], $data->{evolution}{materials}[3], $data->{evolution}{materials}[4], 
-              $data->{comment}, $ip_address, $account_name, 1
-            );
-            if ($ret) {
-              # 限界突破情報
-              my $is_update_over_limit = 0;
-              my %over_limit_check_data;
-
-              # 同一内容のデータが存在しているか確認す。。
-              sub check_same_table_data {
-                my ($table_name, %check_data) = @_;
-                my @check_keys = keys %check_data;
-                my @check_values = map { $check_data{$_} } @check_keys;
-                my $check_sql = "SELECT COUNT(*) FROM ${table_name} WHERE " .
-                  join(' AND ', map { "$_ = ?" } @check_keys) . ';';
-                my $sth = $dbh->prepare($check_sql);
-                if (!$sth) { die $dbh->errstr; }
-                $sth->execute(@check_values);
-                my $tbl_ary_ref = $sth->fetchrow_arrayref;
-                return ($tbl_ary_ref->[0] > 0);
-              }
-
-              # テーブルに指定された内容のデータを追加する。
-              sub insert_table_data {
-                my ($table_name, %insert_data) = @_;
-
-                my @insert_keys = keys %insert_data;
-                my @insert_values = map { $insert_data{$_} } @insert_keys;
-
-                my $update_sql = "INSERT INTO ${table_name} (" . join(', ', @insert_keys) .
-                  ') VALUES (' .  join(', ', map { '?' } @insert_values) . ');';
-                my $sth = $dbh->prepare($update_sql);
-                if (!$sth) { die $dbh->errstr; }
-                $sth->execute(@insert_values);
-              }
-
-              # 情報変更確認
-              if ($data->{overLimit} == 1) {
-                %over_limit_check_data = (
-                  monsterNo => $data->{no},
-                  param_hp => $data->{overLimitParam}{hp},
-                  param_attack => $data->{overLimitParam}{attack},
-                  param_recovery => $data->{overLimitParam}{recovery},
-                  superAwakens => JSON::PP::encode_json($data->{superAwakens}),
-                  state => 1
-                );
-                $is_update_over_limit = !&check_same_table_data('over_limit', %over_limit_check_data);
-              }
-              
-              # 変更があればデータ更新
-              if ($is_update_over_limit) {
-                $dbh->do('UPDATE over_limit SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
-
-                my %over_limit_update_data = (   
-                  %over_limit_check_data,
-                  comment => $data->{comment},
-                  ipAddress => $ip_address,
-                  accountName => $account_name,
-                );
-
-                &insert_table_data('over_limit', %over_limit_update_data);
-              }
-
-              # 進化情報
-              my $is_update_evolution = 0;
-              my %evolution_check_data;
-
-              # 既存のデータが同一か確認
-              if ($data->{evolution}{type} != 0 && $data->{evolution}{type} != 99) {
-                %evolution_check_data = (
-                  monsterNo => $data->{no},
-                  type => $data->{evolution}{type},
-                  baseNo => $data->{evolution}{baseNo},
-                  materials_0 => $data->{evolution}{materials}[0],
-                  materials_1 => $data->{evolution}{materials}[1],
-                  materials_2 => $data->{evolution}{materials}[2],
-                  materials_3 => $data->{evolution}{materials}[3],
-                  materials_4 => $data->{evolution}{materials}[4],
-                  state => 1
-                );
-                $is_update_evolution = !&check_same_table_data('evolution', %evolution_check_data);
-              }
-
-              # 変更があればデータ更新
-              if ($is_update_evolution) {
-                $dbh->do('UPDATE evolution SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
-
-                &insert_table_data('evolution', %evolution_check_data, (
-                  comment => $data->{comment},
-                  ipAddress => $ip_address,
-                  accountName => $account_name
-                ));
-              }
-
-              # モンスターデータのJSON保存
-
-              delete $data->{skillDetails};
-              delete $data->{leaderSkillDetails};
-
-              my $fileNo = $data->{no};
-              open(DATAFILE, "> ./monsterJson/${fileNo}.json") or die("error :$!");
-              print DATAFILE JSON::PP::encode_json($data);
-              close(DATAFILE);
-
-              &save_monster_list_json($dbh);
-              if ($is_update_skill_table) {
-                &save_skill_list_json($dbh);
-              }
-              if ($is_update_leader_skill_table) {
-                &save_leader_skill_list_json($dbh);
-              }
-
-              $dbh->commit;
-
-              
-            } else {
-              push @error, 'モンスター情報登録エラー:' .  $sth->errstr;
-            }
-          }
+      my %monster_check_data;
+      for my $key (@sql_keys) {
+        my $value = &joined_key_access($data, $key);
+        if ($key eq 'superAwakens') {
+          $value = JSON::PP::encode_json($value);
         }
+        $monster_check_data{$key} = $value;
+      }
+      $monster_check_data{state} = 1;
+      
+      # 同一内容のデータが存在しているか確認する。
+      my $is_update_monster_data = !&check_same_table_data('monster_data', %monster_check_data);
+      
+      if (!$is_update_monster_data) {
+        push @error, '同一内容で登録されています';
+      } else {
+        $dbh->do('UPDATE monster_data SET state = 0 WHERE no = ? AND state = 1', undef, $data->{no});
+
+        # 変更があればデータ更新。
+        &insert_table_data('monster_data', %monster_check_data, (
+          comment => $data->{comment},
+          ipAddress => $ip_address,
+          accountName => $account_name
+        ));
+
+        # 限界突破情報
+        my $is_update_over_limit = 0;
+        my %over_limit_check_data;
+
+        # 同一内容のデータが存在しているか確認す。。
+        sub check_same_table_data {
+          my ($table_name, %check_data) = @_;
+          my @check_keys = keys %check_data;
+          my @check_values = map { $check_data{$_} } @check_keys;
+          my $check_sql = "SELECT COUNT(*) FROM ${table_name} WHERE " .
+            join(' AND ', map { "$_ = ?" } @check_keys) . ';';
+          my $sth = $dbh->prepare($check_sql);
+          if (!$sth) { die $dbh->errstr; }
+          $sth->execute(@check_values);
+          my $tbl_ary_ref = $sth->fetchrow_arrayref;
+          return ($tbl_ary_ref->[0] > 0);
+        }
+
+        # テーブルに指定された内容のデータを追加する。
+        sub insert_table_data {
+          my ($table_name, %insert_data) = @_;
+
+          my @insert_keys = keys %insert_data;
+          my @insert_values = map { $insert_data{$_} } @insert_keys;
+
+          my $update_sql = "INSERT INTO ${table_name} (" . join(', ', @insert_keys) .
+            ') VALUES (' .  join(', ', map { '?' } @insert_values) . ');';
+          my $sth = $dbh->prepare($update_sql);
+          if (!$sth) { die $dbh->errstr; }
+          $sth->execute(@insert_values);
+        }
+
+        # 情報変更確認
+        if ($data->{overLimit} == 1) {
+          %over_limit_check_data = (
+            monsterNo => $data->{no},
+            param_hp => $data->{overLimitParam}{hp},
+            param_attack => $data->{overLimitParam}{attack},
+            param_recovery => $data->{overLimitParam}{recovery},
+            superAwakens => JSON::PP::encode_json($data->{superAwakens}),
+            state => 1
+          );
+          $is_update_over_limit = !&check_same_table_data('over_limit', %over_limit_check_data);
+        }
+        
+        # 変更があればデータ更新
+        if ($is_update_over_limit) {
+          $dbh->do('UPDATE over_limit SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
+
+          my %over_limit_update_data = (   
+            %over_limit_check_data,
+            comment => $data->{comment},
+            ipAddress => $ip_address,
+            accountName => $account_name,
+          );
+
+          &insert_table_data('over_limit', %over_limit_update_data);
+        }
+
+        # 進化情報
+        my $is_update_evolution = 0;
+        my %evolution_check_data;
+
+        # 既存のデータが同一か確認
+        if ($data->{evolution}{type} != 0 && $data->{evolution}{type} != 99) {
+          %evolution_check_data = (
+            monsterNo => $data->{no},
+            type => $data->{evolution}{type},
+            baseNo => $data->{evolution}{baseNo},
+            materials_0 => $data->{evolution}{materials}[0],
+            materials_1 => $data->{evolution}{materials}[1],
+            materials_2 => $data->{evolution}{materials}[2],
+            materials_3 => $data->{evolution}{materials}[3],
+            materials_4 => $data->{evolution}{materials}[4],
+            state => 1
+          );
+          $is_update_evolution = !&check_same_table_data('evolution', %evolution_check_data);
+        }
+
+        # 変更があればデータ更新
+        if ($is_update_evolution) {
+          $dbh->do('UPDATE evolution SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
+
+          &insert_table_data('evolution', %evolution_check_data, (
+            comment => $data->{comment},
+            ipAddress => $ip_address,
+            accountName => $account_name
+          ));
+        }
+
+        # モンスターデータのJSON保存
+
+        delete $data->{skillDetails};
+        delete $data->{leaderSkillDetails};
+
+        my $fileNo = $data->{no};
+        open(DATAFILE, "> ./monsterJson/${fileNo}.json") or die("error :$!");
+        print DATAFILE JSON::PP::encode_json($data);
+        close(DATAFILE);
+
+        &save_monster_list_json($dbh);
+        if ($is_update_skill_table) {
+          &save_skill_list_json($dbh);
+        }
+        if ($is_update_leader_skill_table) {
+          &save_leader_skill_list_json($dbh);
+        }
+
+        $dbh->commit;
       }
     }
     $dbh->disconnect;
