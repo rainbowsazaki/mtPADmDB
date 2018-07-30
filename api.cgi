@@ -331,6 +331,11 @@ EOS
     if (@error) {
     
     } else {
+      my %common_insert_data = (
+          comment => $data->{comment},
+          ipAddress => $ip_address,
+          accountName => $account_name
+      );
 
       my @sql_keys = qw/
         no name attributes_0 attributes_1
@@ -364,11 +369,7 @@ EOS
         $dbh->do('UPDATE monster_data SET state = 0 WHERE no = ? AND state = 1', undef, $data->{no});
 
         # 変更があればデータ更新。
-        &insert_table_data('monster_data', %monster_check_data, (
-          comment => $data->{comment},
-          ipAddress => $ip_address,
-          accountName => $account_name
-        ));
+        &insert_table_data('monster_data', %monster_check_data, %common_insert_data);
 
         # 限界突破情報
         my $is_update_over_limit = 0;
@@ -419,14 +420,7 @@ EOS
         if ($is_update_over_limit) {
           $dbh->do('UPDATE over_limit SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
 
-          my %over_limit_update_data = (   
-            %over_limit_check_data,
-            comment => $data->{comment},
-            ipAddress => $ip_address,
-            accountName => $account_name,
-          );
-
-          &insert_table_data('over_limit', %over_limit_update_data);
+          &insert_table_data('over_limit', %over_limit_check_data, %common_insert_data);
         }
 
         # 進化情報
@@ -453,11 +447,7 @@ EOS
         if ($is_update_evolution) {
           $dbh->do('UPDATE evolution SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
 
-          &insert_table_data('evolution', %evolution_check_data, (
-            comment => $data->{comment},
-            ipAddress => $ip_address,
-            accountName => $account_name
-          ));
+          &insert_table_data('evolution', %evolution_check_data, %common_insert_data);
         }
 
         # モンスターデータのJSON保存
