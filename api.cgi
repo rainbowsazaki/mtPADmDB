@@ -654,42 +654,38 @@ sub save_monster_list_json {
 }
 
 
+sub table_to_hash {
+  my ($dbh, $table_name, $column_names_ref) = @_;
+
+  my $sql_str = 'SELECT ' . join(',', @$column_names_ref) . " FROM ${table_name} WHERE state = 1 ORDER BY no ASC;";
+  my $sth = $dbh->prepare($sql_str);
+  if (!$sth) { die $dbh->errstr; }
+  $sth->execute();
+  my %data;
+  while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
+    $data{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, $column_names_ref);
+  }
+  return \%data;
+}
+
 sub save_skill_list_json {
   my ($dbh) = @_;
-  
-  my $sth = $dbh->prepare('SELECT no, name, description, baseTurn, maxLevel FROM skill WHERE state = 1 ORDER BY no ASC;');
-  $sth->execute();
-  my %savedata;
-  while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
-    $savedata{$tbl_ary_ref->[0]} = {
-      name => $tbl_ary_ref->[1],
-      description => $tbl_ary_ref->[2],
-      baseTurn => $tbl_ary_ref->[3],
-      maxLevel => $tbl_ary_ref->[4]
-    };
-  }
-  
+  my @keys = qw/ no name description baseTurn maxLevel /;
+  my $data = table_to_hash($dbh, 'skill', \@keys);
+
   open(DATAFILE, "> ./listJson/skill_list.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json(\%savedata);
+  print DATAFILE JSON::PP::encode_json($data);
   close(DATAFILE);
 }
 
 
 sub save_leader_skill_list_json {
   my ($dbh) = @_;
-  
-  my $sth = $dbh->prepare('SELECT no, name, description FROM leader_skill WHERE state = 1 ORDER BY no ASC;');
-  $sth->execute();
-  my %savedata;
-  while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
-    $savedata{$tbl_ary_ref->[0]} = {
-      name => $tbl_ary_ref->[1],
-      description => $tbl_ary_ref->[2]
-    };
-  }
-  
+  my @keys = qw/ no name description /;
+  my $data = table_to_hash($dbh, 'leader_skill', \@keys);
+
   open(DATAFILE, "> ./listJson/leader_skill_list.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json(\%savedata);
+  print DATAFILE JSON::PP::encode_json($data);
   close(DATAFILE);
 }
 
