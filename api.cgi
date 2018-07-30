@@ -471,6 +471,37 @@ EOS
                 &insert_table_data('over_limit', %over_limit_update_data);
               }
 
+              # 進化情報
+              my $is_update_evolution = 0;
+              my %evolution_check_data;
+
+              # 既存のデータが同一か確認
+              if ($data->{evolution}{type} != 0 && $data->{evolution}{type} != 99) {
+                %evolution_check_data = (
+                  monsterNo => $data->{no},
+                  type => $data->{evolution}{type},
+                  baseNo => $data->{evolution}{baseNo},
+                  materials_0 => $data->{evolution}{materials}[0],
+                  materials_1 => $data->{evolution}{materials}[1],
+                  materials_2 => $data->{evolution}{materials}[2],
+                  materials_3 => $data->{evolution}{materials}[3],
+                  materials_4 => $data->{evolution}{materials}[4],
+                  state => 1
+                );
+                $is_update_evolution = !&check_same_table_data('evolution', %evolution_check_data);
+              }
+
+              # 変更があればデータ更新
+              if ($is_update_evolution) {
+                $dbh->do('UPDATE evolution SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
+
+                &insert_table_data('evolution', %evolution_check_data, (
+                  comment => $data->{comment},
+                  ipAddress => $ip_address,
+                  accountName => $account_name
+                ));
+              }
+
               # モンスターデータのJSON保存
 
               delete $data->{skillDetails};
