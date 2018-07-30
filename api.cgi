@@ -343,6 +343,10 @@ sub mode_update_monster_data {
       my $new_no = -1;
 
       # 同一内容のスキルが登録されてないか確認
+      my %leader_skill_check_data = map {
+        $_ => $data->{leaderSkillDetails}{$_}
+      } qw/ name description /;
+      $leader_skill_check_data{state} = 1;
       $sth = $dbh->prepare('SELECT no FROM leader_skill WHERE name = ? AND description = ?');
       if ($sth->execute($data->{leaderSkillDetails}{name}, $data->{leaderSkillDetails}{description})) {
         my $tbl_ary_ref = $sth->fetchrow_arrayref;
@@ -359,12 +363,11 @@ sub mode_update_monster_data {
         my $tbl_ary_ref = $sth->fetchrow_arrayref;
         my $new_no = $tbl_ary_ref->[0] + 1;
 
-        $sth = $dbh->prepare('INSERT INTO leader_skill(no, name, description, comment, ipAddress, accountName, state ) VALUES (?, ?, ?, ?, ?, ?, ?);');
-        if ($sth->execute($new_no, $data->{leaderSkillDetails}{name}, $data->{leaderSkillDetails}{description}, $data->{comment}, $ip_address, $account_name, 1)) {
+        if (&insert_table_data($dbh, 'leader_skill', %leader_skill_check_data, %common_insert_data, no => $new_no)) {
           $data->{leaderSkill} = $new_no;
           $is_update_leader_skill_table = 1;
         } else {
-          push @error, 'リーダースキル登録エラー:' . $sth->errstr;
+          push @error, 'リーダースキル登録エラー';
         }
       }
     } else {
