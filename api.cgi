@@ -402,17 +402,24 @@ sub mode_update_monster_data {
         my $is_update_over_limit = 0;
         my %over_limit_check_data;
 
-        # 同一内容のデータが存在しているか確認す。。
-        sub check_same_table_data {
-          my ($dbh, $table_name, %check_data) = @_;
+        # 指定条件を満たす１行の指定項目を取得する。
+        sub get_one_row_data {
+          my ($dbh, $table_name, $column_names_ref, %check_data) = @_;
           my @check_keys = keys %check_data;
           my @check_values = map { $check_data{$_} } @check_keys;
-          my $check_sql = "SELECT COUNT(*) FROM ${table_name} WHERE " .
+          my $check_sql = "SELECT " . join(', ', @$column_names_ref) . " FROM ${table_name} WHERE " .
             join(' AND ', map { "$_ = ?" } @check_keys) . ';';
           my $sth = $dbh->prepare($check_sql);
           if (!$sth) { die $dbh->errstr; }
           $sth->execute(@check_values);
-          my $tbl_ary_ref = $sth->fetchrow_arrayref;
+          return $sth->fetchrow_arrayref;
+        }
+
+        # 同一内容のデータが存在しているか確認す。。
+        sub check_same_table_data {
+          my ($dbh, $table_name, %check_data) = @_;
+          my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, [ 'COUNT(*)' ], %check_data);
+          if (!$tbl_ary_ref) { return undef; }
           return ($tbl_ary_ref->[0] > 0);
         }
 
