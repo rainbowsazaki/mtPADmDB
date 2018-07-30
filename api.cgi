@@ -366,9 +366,8 @@ EOS
       if (!$is_update_monster_data) {
         push @error, '同一内容で登録されています';
       } else {
-        $dbh->do('UPDATE monster_data SET state = 0 WHERE no = ? AND state = 1', undef, $data->{no});
-
         # 変更があればデータ更新。
+        &update_disable_state('monster_data', (no => $data->{no}, state => 1));
         &insert_table_data('monster_data', %monster_check_data, %common_insert_data);
 
         # 限界突破情報
@@ -403,6 +402,17 @@ EOS
           $sth->execute(@insert_values);
         }
 
+        # テーブル内の指定条件を満たすレコードの state を 0 にする。
+        sub update_disable_state {
+          my ($table_name, %target_data) = @_;
+          my @target_keys = keys %target_data;
+          my @target_values = map { $target_data{$_} } @target_keys;
+
+          my $update_sql = "UPDATE  ${table_name} SET state= 0 WHERE " .
+            join(' AND ', map { "$_ = ?" } @target_keys) . ';';
+          $dbh->do($update_sql, undef, @target_values);
+        }
+
         # 情報変更確認
         if ($data->{overLimit} == 1) {
           %over_limit_check_data = (
@@ -418,8 +428,7 @@ EOS
         
         # 変更があればデータ更新
         if ($is_update_over_limit) {
-          $dbh->do('UPDATE over_limit SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
-
+          &update_disable_state('over_limit', (monsterNo => $data->{no}, state => 1));
           &insert_table_data('over_limit', %over_limit_check_data, %common_insert_data);
         }
 
@@ -445,8 +454,7 @@ EOS
 
         # 変更があればデータ更新
         if ($is_update_evolution) {
-          $dbh->do('UPDATE evolution SET state = 0 WHERE monster_no = ? AND state = 1', undef, $data->{no});
-
+          &update_disable_state('evolution', (monsterNo => $data->{no}, state => 1));
           &insert_table_data('evolution', %evolution_check_data, %common_insert_data);
         }
 
