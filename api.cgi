@@ -402,10 +402,12 @@ sub mode_update_monster_data {
           my ($dbh, $table_name, $column_names_ref, %check_data) = @_;
           my @check_keys = keys %check_data;
           my @check_values = map { $check_data{$_} } @check_keys;
-          my $check_sql = "SELECT " . join(', ', @$column_names_ref) . " FROM ${table_name} WHERE " .
-            join(' AND ', map { "$_ = ?" } @check_keys) . ';';
+          my $check_sql = "SELECT " . join(', ', @$column_names_ref) . " FROM ${table_name}";
+          if (%check_data) {
+            $check_sql .= " WHERE " . join(' AND ', map { "$_ = ?" } @check_keys);
+          }
           my $sth = $dbh->prepare($check_sql);
-          if (!$sth) { die $dbh->errstr; }
+          if (!$sth) { die $check_sql . ":\n" . $dbh->errstr; }
           $sth->execute(@check_values);
           return $sth->fetchrow_arrayref;
         }
