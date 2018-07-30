@@ -424,8 +424,15 @@ sub mode_update_monster_data {
           my $update_sql = "INSERT INTO ${table_name} (" . join(', ', @insert_keys) .
             ') VALUES (' .  join(', ', map { '?' } @insert_values) . ');';
           my $sth = $dbh->prepare($update_sql);
-          if (!$sth) { die $dbh->errstr; }
-          $sth->execute(@insert_values);
+          if (!$sth) {
+            die $dbh->errstr;
+            return 0;
+          }
+          if (!$sth->execute(@insert_values)) {
+            die $sth->errstr;
+            return 0;
+          }
+          return 1;
         }
 
         # テーブル内の指定条件を満たすレコードの state を 0 にする。
