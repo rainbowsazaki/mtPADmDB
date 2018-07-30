@@ -361,14 +361,14 @@ EOS
       $monster_check_data{state} = 1;
       
       # 同一内容のデータが存在しているか確認する。
-      my $is_update_monster_data = !&check_same_table_data('monster_data', %monster_check_data);
+      my $is_update_monster_data = !&check_same_table_data($dbh, 'monster_data', %monster_check_data);
       
       if (!$is_update_monster_data) {
         push @error, '同一内容で登録されています';
       } else {
         # 変更があればデータ更新。
-        &update_disable_state('monster_data', (no => $data->{no}, state => 1));
-        &insert_table_data('monster_data', %monster_check_data, %common_insert_data);
+        &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
+        &insert_table_data($dbh, 'monster_data', %monster_check_data, %common_insert_data);
 
         # 限界突破情報
         my $is_update_over_limit = 0;
@@ -376,7 +376,7 @@ EOS
 
         # 同一内容のデータが存在しているか確認す。。
         sub check_same_table_data {
-          my ($table_name, %check_data) = @_;
+          my ($dbh, $table_name, %check_data) = @_;
           my @check_keys = keys %check_data;
           my @check_values = map { $check_data{$_} } @check_keys;
           my $check_sql = "SELECT COUNT(*) FROM ${table_name} WHERE " .
@@ -390,7 +390,7 @@ EOS
 
         # テーブルに指定された内容のデータを追加する。
         sub insert_table_data {
-          my ($table_name, %insert_data) = @_;
+          my ($dbh, $table_name, %insert_data) = @_;
 
           my @insert_keys = keys %insert_data;
           my @insert_values = map { $insert_data{$_} } @insert_keys;
@@ -404,7 +404,7 @@ EOS
 
         # テーブル内の指定条件を満たすレコードの state を 0 にする。
         sub update_disable_state {
-          my ($table_name, %target_data) = @_;
+          my ($dbh, $table_name, %target_data) = @_;
           my @target_keys = keys %target_data;
           my @target_values = map { $target_data{$_} } @target_keys;
 
@@ -423,13 +423,13 @@ EOS
             superAwakens => JSON::PP::encode_json($data->{superAwakens}),
             state => 1
           );
-          $is_update_over_limit = !&check_same_table_data('over_limit', %over_limit_check_data);
+          $is_update_over_limit = !&check_same_table_data($dbh, 'over_limit', %over_limit_check_data);
         }
         
         # 変更があればデータ更新
         if ($is_update_over_limit) {
-          &update_disable_state('over_limit', (monsterNo => $data->{no}, state => 1));
-          &insert_table_data('over_limit', %over_limit_check_data, %common_insert_data);
+          &update_disable_state($dbh, 'over_limit', (monsterNo => $data->{no}, state => 1));
+          &insert_table_data($dbh, 'over_limit', %over_limit_check_data, %common_insert_data);
         }
 
         # 進化情報
@@ -449,13 +449,13 @@ EOS
             materials_4 => $data->{evolution}{materials}[4],
             state => 1
           );
-          $is_update_evolution = !&check_same_table_data('evolution', %evolution_check_data);
+          $is_update_evolution = !&check_same_table_data($dbh, 'evolution', %evolution_check_data);
         }
 
         # 変更があればデータ更新
         if ($is_update_evolution) {
-          &update_disable_state('evolution', (monsterNo => $data->{no}, state => 1));
-          &insert_table_data('evolution', %evolution_check_data, %common_insert_data);
+          &update_disable_state($dbh, 'evolution', (monsterNo => $data->{no}, state => 1));
+          &insert_table_data($dbh, 'evolution', %evolution_check_data, %common_insert_data);
         }
 
         # モンスターデータのJSON保存
