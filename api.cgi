@@ -342,7 +342,7 @@ EOS
         cost rare types_0 types_1 types_2 
         awakens_0 awakens_1 awakens_2 awakens_3 awakens_4
         awakens_5 awakens_6 awakens_7 awakens_8
-        expTable maxlevel maxParam_hp maxParam_attack maxParam_recovery
+        expTable maxLevel maxParam_hp maxParam_attack maxParam_recovery
         skill leaderSkill
         assist overLimit overLimitParam_hp overLimitParam_attack
         overLimitParam_recovery superAwakens
@@ -589,7 +589,7 @@ sub save_monster_list_json {
     cost rare types_0 types_1 types_2 
     awakens_0 awakens_1 awakens_2 awakens_3 awakens_4
     awakens_5 awakens_6 awakens_7 awakens_8
-    expTable maxlevel maxParam_hp maxParam_attack maxParam_recovery
+    expTable maxLevel maxParam_hp maxParam_attack maxParam_recovery
     skill leaderSkill
     assist overLimit overLimitParam_hp overLimitParam_attack
     overLimitParam_recovery superAwakens
