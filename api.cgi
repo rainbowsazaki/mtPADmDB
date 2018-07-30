@@ -497,6 +497,8 @@ sub mode_update_monster_data {
         }
 
         # モンスターデータのJSON保存
+        my $skillDetails = $data->{skillDetails};
+        my $leaderSkillDetails = $data->{leaderSkillDetails};
 
         delete $data->{skillDetails};
         delete $data->{leaderSkillDetails};
@@ -505,6 +507,9 @@ sub mode_update_monster_data {
         open(DATAFILE, "> ./monsterJson/${fileNo}.json") or die("error :$!");
         print DATAFILE JSON::PP::encode_json($data);
         close(DATAFILE);
+
+        $data->{skillDetails} = $skillDetails;
+        $data->{leaderSkillDetails} = $leaderSkillDetails;
 
         &save_monster_list_json($dbh);
         if ($is_update_skill_table) {
