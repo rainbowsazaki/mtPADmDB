@@ -612,7 +612,7 @@ sub db_row_to_hash {
   for my $i (@pickup_indexes) {
     my $key = $keys_ref->[$i];
     my $value = $row_array_ref->[$i];
-    if ($key eq 'superAwakens') {
+    if ($key eq 'superAwakens' && $value) {
       $value = JSON::PP::decode_json($value);
     }
     &joined_key_access(\%data, $key, $value);
