@@ -592,10 +592,10 @@ sub joined_key_access {
   my $ret_val;
   if ($types[$#splited_keys] == 0) {
     $ret_val = $target->[$splited_keys[$#splited_keys]];
-    if ($#_ >= 2) { $target->[$splited_keys[$#splited_keys]] = $value; }
+    if ($is_set) { $target->[$splited_keys[$#splited_keys]] = $value; }
   } else {
     $ret_val = $target->{$splited_keys[$#splited_keys]};
-    if ($#_ >= 2) { $target->{$splited_keys[$#splited_keys]} = $value; }
+    if ($is_set) { $target->{$splited_keys[$#splited_keys]} = $value; }
   }
 
   return $ret_val;
