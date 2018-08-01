@@ -261,19 +261,22 @@ const store = new Vuex.Store({
       this.commit('setMessages', [ '初期情報取得中' ]);
       axios.get('./monsterJson/' + param.no + '.json').then(
         response => {
-          state.monsterData = response.data;
           // 古いモンスターデータJSONとの互換性保持。（いずれ消す）
-          if (!('skill' in state.monsterData)) {
-            state.monsterData.skill = state.monsterData.skillNo;
-            delete state.monsterData.skillNo;
+          if (!('skill' in response.data)) {
+            response.data.skill = response.data.skillNo;
+            delete response.data.skillNo;
           }
-          if (!('leaderSkill' in state.monsterData)) {
-            state.monsterData.leaderSkill = state.monsterData.leaderSkillNo;
-            delete state.monsterData.leaderSkillNo
+          if (!('leaderSkill' in response.data)) {
+            response.data.leaderSkill = response.data.leaderSkillNo;
+            delete response.data.leaderSkillNo
           }
+          }
+
+          response.data.skillDetails = {};
+          response.data.leaderSkillDetails = {};
+
+          state.monsterData = response.data;
           
-          state.monsterData.skillDetails = {};
-          state.monsterData.leaderSkillDetails = {};
           this.commit('setMessages', [ '取得完了' ]);
           if (typeof param.callback === 'function') { param.callback(); }
         }
