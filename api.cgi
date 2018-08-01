@@ -10,19 +10,6 @@ use DBI;
 
 use File::Copy;
 
-my @monster_data_keys = qw/
-  no name attributes_0 attributes_1
-  cost rare types_0 types_1 types_2 
-  awakens_0 awakens_1 awakens_2 awakens_3 awakens_4
-  awakens_5 awakens_6 awakens_7 awakens_8
-  expTable maxLevel maxParam_hp maxParam_attack maxParam_recovery
-  skill leaderSkill
-  assist overLimit overLimitParam_hp overLimitParam_attack
-  overLimitParam_recovery superAwakens
-  evolutionType evolution_baseNo evolution_materials_0 evolution_materials_1
-  evolution_materials_2 evolution_materials_3 evolution_materials_4
-/;
-
 my %monster_data_db_info = (
   'monster_data' => [
     'no',
@@ -419,29 +406,23 @@ sub mode_update_monster_data {
     
     } else {
 
-      my %monster_check_data;
-      for my $key (@monster_data_keys) {
-        my $value = &joined_key_access($data, $key);
-        if ($key eq 'superAwakens') {
-          $value = JSON::PP::encode_json($value);
-        }
-        $monster_check_data{$key} = $value;
-      }
-      $monster_check_data{state} = 1;
+      my $monster_check_data_ref;
+      $monster_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'monster_data'});
+      $monster_check_data_ref->{state} = 1;
       
       # 同一内容のデータが存在しているか確認する。
-      my $is_update_monster_data = !&check_same_table_data($dbh, 'monster_data', %monster_check_data);
+      my $is_update_monster_data = !&check_same_table_data($dbh, 'monster_data', %$monster_check_data_ref);
       
       if (!$is_update_monster_data) {
         push @error, '同一内容で登録されています';
       } else {
         # 変更があればデータ更新。
         &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
-        &insert_table_data($dbh, 'monster_data', %monster_check_data, %common_insert_data);
+        &insert_table_data($dbh, 'monster_data', %$monster_check_data_ref, %common_insert_data);
 
         # 限界突破情報
         my $is_update_over_limit = 0;
-        my %over_limit_check_data;
+        my $over_limit_check_data_ref;
 
         # 指定条件を満たす１行の指定項目を取得する。
         sub get_one_row_data {
@@ -498,49 +479,54 @@ sub mode_update_monster_data {
           $dbh->do($update_sql, undef, @target_values);
         }
 
+        # ハッシュデータをDBに格納するためのハッシュデータに変更する。
+        sub hash_to_table_data {
+          my ($db_tale_info, $data) = @_;
+          my %ret;
+          for my $key (@$db_tale_info) {
+            my ($hash_key, $db_column_name);
+            $hash_key = $db_column_name = $key;
+            if (ref $key eq 'ARRAY') {
+              $hash_key = $key->[0];
+              $db_column_name = $key->[1];
+            }
+            my $value = &joined_key_access($data, $hash_key);
+            if ($hash_key eq 'superAwakens') {
+              $value = JSON::PP::encode_json($value);
+            }
+            $ret{$db_column_name} = $value;
+          }
+          return \%ret;
+        }
+
         # 情報変更確認
         if ($data->{overLimit} == 1) {
-          %over_limit_check_data = (
-            monsterNo => $data->{no},
-            param_hp => $data->{overLimitParam}{hp},
-            param_attack => $data->{overLimitParam}{attack},
-            param_recovery => $data->{overLimitParam}{recovery},
-            superAwakens => JSON::PP::encode_json($data->{superAwakens}),
-            state => 1
-          );
-          $is_update_over_limit = !&check_same_table_data($dbh, 'over_limit', %over_limit_check_data);
+          $over_limit_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'over_limit'});
+          $over_limit_check_data_ref->{state} = 1;
+          $is_update_over_limit = !&check_same_table_data($dbh, 'over_limit', %$over_limit_check_data_ref);
         }
         
         # 変更があればデータ更新
         if ($is_update_over_limit) {
           &update_disable_state($dbh, 'over_limit', (monsterNo => $data->{no}, state => 1));
-          &insert_table_data($dbh, 'over_limit', %over_limit_check_data, %common_insert_data);
+          &insert_table_data($dbh, 'over_limit', %$over_limit_check_data_ref, %common_insert_data);
         }
 
         # 進化情報
         my $is_update_evolution = 0;
-        my %evolution_check_data;
+        my $evolution_check_data_ref;
 
         # 既存のデータが同一か確認
         if ($data->{evolutionType} != 0 && $data->{evolutionType} != 99) {
-          %evolution_check_data = (
-            monsterNo => $data->{no},
-            type => $data->{evolutionType},
-            baseNo => $data->{evolution}{baseNo},
-            materials_0 => $data->{evolution}{materials}[0],
-            materials_1 => $data->{evolution}{materials}[1],
-            materials_2 => $data->{evolution}{materials}[2],
-            materials_3 => $data->{evolution}{materials}[3],
-            materials_4 => $data->{evolution}{materials}[4],
-            state => 1
-          );
-          $is_update_evolution = !&check_same_table_data($dbh, 'evolution', %evolution_check_data);
+          $evolution_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'evolution'});
+          $evolution_check_data_ref->{state} = 1;
+          $is_update_evolution = !&check_same_table_data($dbh, 'evolution', %$evolution_check_data_ref);
         }
 
         # 変更があればデータ更新
         if ($is_update_evolution) {
           &update_disable_state($dbh, 'evolution', (monsterNo => $data->{no}, state => 1));
-          &insert_table_data($dbh, 'evolution', %evolution_check_data, %common_insert_data);
+          &insert_table_data($dbh, 'evolution', %$evolution_check_data_ref, %common_insert_data);
         }
 
         # モンスターデータのJSON保存
