@@ -23,6 +23,56 @@ my @monster_data_keys = qw/
   evolution_materials_2 evolution_materials_3 evolution_materials_4
 /;
 
+my %monster_data_db_info = (
+  'monster_data' => [
+    'no',
+    'name',
+    'attributes_0',
+    'attributes_1',
+    'cost',
+    'rare',
+    'types_0',
+    'types_1',
+    'types_2',
+    'awakens_0',
+    'awakens_1',
+    'awakens_2',
+    'awakens_3',
+    'awakens_4',
+    'awakens_5',
+    'awakens_6',
+    'awakens_7',
+    'awakens_8',
+    'expTable',
+    'maxLevel',
+    'maxParam_hp',
+    'maxParam_attack',
+    'maxParam_recovery',
+    'skill',
+    'leaderSkill',
+    'assist',
+    'overLimit',
+    'evolutionType',
+  ], 
+  'over_limit' => [
+    [ 'no', 'monsterNo'],
+    [ 'overLimitParam_hp', 'param_hp' ],
+    [ 'overLimitParam_attack', 'param_attack' ],
+    [ 'overLimitParam_recovery', 'param_recovery' ],
+    [ 'superAwakens', 'superAwakens' ],
+  ],
+  'evolution' => [
+    [ 'no', 'monsterNo'],
+    [ 'evolutionType', 'type' ],
+    [ 'evolution_baseNo', 'baseNo' ],
+    [ 'evolution_materials_0', 'materials_0' ],
+    [ 'evolution_materials_1', 'materials_1' ],
+    [ 'evolution_materials_2', 'materials_2' ],
+    [ 'evolution_materials_3', 'materials_3' ],
+    [ 'evolution_materials_4', 'materials_4' ],
+  ]
+);
+
 my @monster_data_pickup_keys = qw/ no name attributes_0 attributes_1 types_0 types_1 types_2 /;
 
 my $q = CGI->new();
@@ -623,34 +673,45 @@ sub db_row_to_hash {
 
 sub save_monster_list_json {
   my ($dbh) = @_;
-  
-  my @pickup_keys_indexes = map { my $k = $_; my ( $r ) = grep { $monster_data_keys[$_] eq $k } 0 .. $#monster_data_keys; $r } @monster_data_pickup_keys;
 
-  my $sql_str = 'SELECT ' . join(',', @monster_data_keys) . ' FROM monster_data WHERE state = 1 ORDER BY no ASC;';
-  my $sth = $dbh->prepare($sql_str);
+  my %data;
+  # 関連するすべてのテーブルの情報を取得し、モンスター番号をキーとして結合する。
+  for my $table_name (keys %monster_data_db_info) {
+    my $hashs = &table_to_hash($dbh, $table_name, $monster_data_db_info{$table_name});
 
-  if (!$sth) {
-    die $dbh->errstr;
-  } else {
-    $sth->execute();
-
-    my %savedata;
-    my %pickup_data;
-    while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
-      $savedata{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, \@monster_data_keys);
-      $pickup_data{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, \@monster_data_keys, @pickup_keys_indexes);
+    for my $key (keys %$hashs) {
+      if (exists $data{$key}) {
+        $data{$key} = { %{$data{$key}}, %{$hashs->{$key}} };
+      } else {
+        $data{$key} = $hashs->{$key};
+      }
     }
-    open(DATAFILE, "> ./listJson/monster_data.json") or die("error :$!");
-    print DATAFILE JSON::PP->new->pretty
-      ->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b } )
-      ->indent_length(2)
-      ->encode(\%savedata);
-    close(DATAFILE);
-
-    open(DATAFILE, "> ./listJson/monster_list.json") or die("error :$!");
-    print DATAFILE JSON::PP::encode_json(\%pickup_data);
-    close(DATAFILE);
   }
+
+  # JSON化してファイルに保存。
+  open(DATAFILE, "> ./listJson/monster_data.json") or die("error :$!");
+  print DATAFILE JSON::PP->new->pretty
+    ->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b } )
+    ->indent_length(2)
+    ->encode(\%data);
+  close(DATAFILE);
+
+  # ピックアップ版用のデータを抜き出したものを作成する。
+  my %pickup_data = map {
+    my $target_ref = $data{$_};
+      my %temp;
+      for (@monster_data_pickup_keys) {
+        &joined_key_access(\%temp, $_,
+          &joined_key_access($target_ref, $_)
+        )
+      }
+      $_ => \%temp;
+  } keys %data;
+
+  # JSON化してファイルに保存。
+  open(DATAFILE, "> ./listJson/monster_list.json") or die("error :$!");
+  print DATAFILE JSON::PP::encode_json(\%pickup_data);
+  close(DATAFILE);
 }
 
 
