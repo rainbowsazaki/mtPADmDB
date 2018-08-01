@@ -160,8 +160,8 @@ var commonData = {
       recovery: 0
     },
     superAwakens: [],
+    evolutionType: 0,
     evolution: {
-      type: 0,
       baseNo: 0,
       materials: [
         0, 0, 0, 0, 0
@@ -192,8 +192,8 @@ var commonData = {
       recovery: 181
     },
     superAwakens: [],
+    evolutionType: 2,
     evolution: {
-      type: 2,
       baseNo:1674,
       materials: [
         148, 148, 1294, 1294, 247
@@ -270,6 +270,9 @@ const store = new Vuex.Store({
             response.data.leaderSkill = response.data.leaderSkillNo;
             delete response.data.leaderSkillNo
           }
+          if (!('evolutionType' in response.data)) {
+            response.data.evolutionType = response.data.evolution.type;
+            delete response.data.evolution.type;
           }
 
           response.data.skillDetails = {};

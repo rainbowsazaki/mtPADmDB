@@ -177,10 +177,10 @@
         </table>
       </div>
     </div>
-    <div v-if="monsterData.evolution.type !== 0">
+    <div v-if="monsterData.evolutionType !== 0">
       <table class="table table-bordered table-sm">
         <tr class="thead-light"><th>このモンスターへの進化形式</th></tr>
-        <tr><td>{{evolutionTypeTable[monsterData.evolution.type]}}</td></tr>
+        <tr><td>{{evolutionTypeTable[monsterData.evolutionType]}}</td></tr>
         <tr class="thead-light"><th>進化前モンスター</th></tr>
         <tr><td><router-link :to="`/${monsterData.evolution.baseNo}`">No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}</router-link></td></tr>
         <tr class="thead-light"><th>進化素材</th></tr>
@@ -382,12 +382,12 @@
       </div>
       <div class="form-row">
         <div class="col-md-4">
-          <select class="custom-select" id="evolutionType" v-model="monsterData.evolution.type">
+          <select class="custom-select" id="evolutionType" v-model="monsterData.evolutionType">
             <option v-for="(type, key) in evolutionTypeTable" :value="key" :key="key" v-once>{{type}}</option>
           </select>
         </div>
       </div>
-      <div v-if="monsterData.evolution.type != 0">
+      <div v-if="monsterData.evolutionType != 0">
         <div class="form-row">
           <label for="">進化前キャラ</label>
         </div>

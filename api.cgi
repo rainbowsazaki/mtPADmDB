@@ -19,7 +19,7 @@ my @monster_data_keys = qw/
   skill leaderSkill
   assist overLimit overLimitParam_hp overLimitParam_attack
   overLimitParam_recovery superAwakens
-  evolution_type evolution_baseNo evolution_materials_0 evolution_materials_1
+  evolutionType evolution_baseNo evolution_materials_0 evolution_materials_1
   evolution_materials_2 evolution_materials_3 evolution_materials_4
 /;
 
@@ -231,7 +231,7 @@ sub mode_update_monster_data {
 
 
   &to_number_with_key($data, qw/ no attributes cost rate types awakens expTable maxLevel maxParam 
-    skill leaderSkill assist overLimit overLimitParam superAwakens /);
+    skill leaderSkill assist overLimit overLimitParam superAwakens evolutionType /);
 
   &check_range('No', $data->{no}, 1, 9999);
   &check_string_length('名前', $data->{name}, 1, 50);
@@ -273,9 +273,9 @@ sub mode_update_monster_data {
   foreach my $n ($data->{superawakens}) {
     #&check_range('超覚醒', $n, 1, 99);
   }
-  &to_number_with_key($data->{evolution}, qw/ type baseNo materials /);
-  &check_range('進化タイプ', $data->{evolution}{type}, 0, 99);
-  if ($data->{evolution}{type} > 0 && $data->{evolution}{type} < 99) {
+  &to_number_with_key($data->{evolution}, qw/ baseNo materials /);
+  &check_range('進化タイプ', $data->{evolutionType}, 0, 99);
+  if ($data->{evolutionType} > 0 && $data->{evolutionType} < 99) {
     &check_range('進化前', $data->{evolution}{baseNo}, 1, 9999);
     foreach my $i (0..4) {
       &check_range('進化素材${i}', $data->{evolution}{materials}[$i], 0, 9999);
@@ -472,10 +472,10 @@ sub mode_update_monster_data {
         my %evolution_check_data;
 
         # 既存のデータが同一か確認
-        if ($data->{evolution}{type} != 0 && $data->{evolution}{type} != 99) {
+        if ($data->{evolutionType} != 0 && $data->{evolutionType} != 99) {
           %evolution_check_data = (
             monsterNo => $data->{no},
-            type => $data->{evolution}{type},
+            type => $data->{evolutionType},
             baseNo => $data->{evolution}{baseNo},
             materials_0 => $data->{evolution}{materials}[0],
             materials_1 => $data->{evolution}{materials}[1],

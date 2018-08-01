@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS monster_data (
   overLimitParam_attack INTEGER,
   overLimitParam_recovery INTEGER,
   superAwakens TEXT,
-  evolution_type INTEGER,
+  evolutionType INTEGER,
   evolution_baseNo INTEGER,
   evolution_materials_0 INTEGER,
   evolution_materials_1 INTEGER,
