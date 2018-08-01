@@ -657,13 +657,26 @@ sub save_monster_list_json {
 sub table_to_hash {
   my ($dbh, $table_name, $column_names_ref) = @_;
 
-  my $sql_str = 'SELECT ' . join(',', @$column_names_ref) . " FROM ${table_name} WHERE state = 1 ORDER BY no ASC;";
+  my ($base_table_name) = $table_name =~ /^\s*(\S+)/;
+  
+  my @hash_keys;
+  my @db_column_names;
+  for my $column_name (@$column_names_ref) {
+      if (ref $column_name eq 'ARRAY') {
+        push @hash_keys, $column_name->[0];
+        push @db_column_names, $column_name->[1];
+      } else {
+        push @hash_keys, $column_name;
+        push @db_column_names, $column_name;
+      }
+  }
+  my $sql_str = 'SELECT ' . join(',', @db_column_names) . " FROM ${table_name} WHERE ${base_table_name}.state = 1;";
   my $sth = $dbh->prepare($sql_str);
-  if (!$sth) { die $dbh->errstr; }
+  if (!$sth) { die "$sql_str :\n " . $dbh->errstr; }
   $sth->execute();
   my %data;
   while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
-    $data{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, $column_names_ref);
+    $data{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, \@hash_keys);
   }
   return \%data;
 }
