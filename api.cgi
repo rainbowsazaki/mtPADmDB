@@ -409,20 +409,37 @@ sub mode_update_monster_data {
       my $monster_check_data_ref;
       $monster_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'monster_data'});
       $monster_check_data_ref->{state} = 1;
-      
       # 同一内容のデータが存在しているか確認する。
       my $is_update_monster_data = !&check_same_table_data($dbh, 'monster_data', %$monster_check_data_ref);
       
-      if (!$is_update_monster_data) {
+      # 限界突破情報
+      my $is_update_over_limit = 0;
+      my $over_limit_check_data_ref;
+      # 情報変更確認
+      if ($data->{overLimit} == 1) {
+        $over_limit_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'over_limit'});
+        $over_limit_check_data_ref->{state} = 1;
+        $is_update_over_limit = !&check_same_table_data($dbh, 'over_limit', %$over_limit_check_data_ref);
+      }
+
+      # 進化情報
+      my $is_update_evolution = 0;
+      my $evolution_check_data_ref;
+      # 既存のデータが同一か確認
+      if ($data->{evolutionType} != 0 && $data->{evolutionType} != 99) {
+        $evolution_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'evolution'});
+        $evolution_check_data_ref->{state} = 1;
+        $is_update_evolution = !&check_same_table_data($dbh, 'evolution', %$evolution_check_data_ref);
+      }
+
+      if (!($is_update_monster_data || $is_update_over_limit || $is_update_evolution)) {
         push @error, '同一内容で登録されています';
       } else {
         # 変更があればデータ更新。
-        &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
-        &insert_table_data($dbh, 'monster_data', %$monster_check_data_ref, %common_insert_data);
-
-        # 限界突破情報
-        my $is_update_over_limit = 0;
-        my $over_limit_check_data_ref;
+        if ($is_update_monster_data) {
+          &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
+          &insert_table_data($dbh, 'monster_data', %$monster_check_data_ref, %common_insert_data);
+        }
 
         # 指定条件を満たす１行の指定項目を取得する。
         sub get_one_row_data {
@@ -498,29 +515,11 @@ sub mode_update_monster_data {
           }
           return \%ret;
         }
-
-        # 情報変更確認
-        if ($data->{overLimit} == 1) {
-          $over_limit_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'over_limit'});
-          $over_limit_check_data_ref->{state} = 1;
-          $is_update_over_limit = !&check_same_table_data($dbh, 'over_limit', %$over_limit_check_data_ref);
-        }
         
         # 変更があればデータ更新
         if ($is_update_over_limit) {
           &update_disable_state($dbh, 'over_limit', (monsterNo => $data->{no}, state => 1));
           &insert_table_data($dbh, 'over_limit', %$over_limit_check_data_ref, %common_insert_data);
-        }
-
-        # 進化情報
-        my $is_update_evolution = 0;
-        my $evolution_check_data_ref;
-
-        # 既存のデータが同一か確認
-        if ($data->{evolutionType} != 0 && $data->{evolutionType} != 99) {
-          $evolution_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'evolution'});
-          $evolution_check_data_ref->{state} = 1;
-          $is_update_evolution = !&check_same_table_data($dbh, 'evolution', %$evolution_check_data_ref);
         }
 
         # 変更があればデータ更新
