@@ -441,81 +441,6 @@ sub mode_update_monster_data {
           &insert_table_data($dbh, 'monster_data', %$monster_check_data_ref, %common_insert_data);
         }
 
-        # 指定条件を満たす１行の指定項目を取得する。
-        sub get_one_row_data {
-          my ($dbh, $table_name, $column_names_ref, %check_data) = @_;
-          my @check_keys = keys %check_data;
-          my @check_values = map { $check_data{$_} } @check_keys;
-          my $check_sql = "SELECT " . join(', ', @$column_names_ref) . " FROM ${table_name}";
-          if (%check_data) {
-            $check_sql .= " WHERE " . join(' AND ', map { "$_ = ?" } @check_keys);
-          }
-          my $sth = $dbh->prepare($check_sql);
-          if (!$sth) { die $check_sql . ":\n" . $dbh->errstr; }
-          $sth->execute(@check_values);
-          return $sth->fetchrow_arrayref;
-        }
-
-        # 同一内容のデータが存在しているか確認す。。
-        sub check_same_table_data {
-          my ($dbh, $table_name, %check_data) = @_;
-          my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, [ 'COUNT(*)' ], %check_data);
-          if (!$tbl_ary_ref) { return undef; }
-          return ($tbl_ary_ref->[0] > 0);
-        }
-
-        # テーブルに指定された内容のデータを追加する。
-        sub insert_table_data {
-          my ($dbh, $table_name, %insert_data) = @_;
-
-          my @insert_keys = keys %insert_data;
-          my @insert_values = map { $insert_data{$_} } @insert_keys;
-
-          my $update_sql = "INSERT INTO ${table_name} (" . join(', ', @insert_keys) .
-            ') VALUES (' .  join(', ', map { '?' } @insert_values) . ');';
-          my $sth = $dbh->prepare($update_sql);
-          if (!$sth) {
-            die $dbh->errstr;
-            return 0;
-          }
-          if (!$sth->execute(@insert_values)) {
-            die $sth->errstr;
-            return 0;
-          }
-          return 1;
-        }
-
-        # テーブル内の指定条件を満たすレコードの state を 0 にする。
-        sub update_disable_state {
-          my ($dbh, $table_name, %target_data) = @_;
-          my @target_keys = keys %target_data;
-          my @target_values = map { $target_data{$_} } @target_keys;
-
-          my $update_sql = "UPDATE  ${table_name} SET state= 0 WHERE " .
-            join(' AND ', map { "$_ = ?" } @target_keys) . ';';
-          $dbh->do($update_sql, undef, @target_values);
-        }
-
-        # ハッシュデータをDBに格納するためのハッシュデータに変更する。
-        sub hash_to_table_data {
-          my ($data, $db_tale_info) = @_;
-          my %ret;
-          for my $key (@$db_tale_info) {
-            my ($hash_key, $db_column_name);
-            $hash_key = $db_column_name = $key;
-            if (ref $key eq 'ARRAY') {
-              $hash_key = $key->[0];
-              $db_column_name = $key->[1];
-            }
-            my $value = &joined_key_access($data, $hash_key);
-            if ($hash_key eq 'superAwakens') {
-              $value = JSON::PP::encode_json($value);
-            }
-            $ret{$db_column_name} = $value;
-          }
-          return \%ret;
-        }
-        
         # 変更があればデータ更新
         if ($is_update_over_limit) {
           &update_disable_state($dbh, 'over_limit', (monsterNo => $data->{no}, state => 1));
@@ -636,6 +561,80 @@ sub joined_key_access {
   return $ret_val;
 }
 
+# 指定条件を満たす１行の指定項目を取得する。
+sub get_one_row_data {
+  my ($dbh, $table_name, $column_names_ref, %check_data) = @_;
+  my @check_keys = keys %check_data;
+  my @check_values = map { $check_data{$_} } @check_keys;
+  my $check_sql = "SELECT " . join(', ', @$column_names_ref) . " FROM ${table_name}";
+  if (%check_data) {
+    $check_sql .= " WHERE " . join(' AND ', map { "$_ = ?" } @check_keys);
+  }
+  my $sth = $dbh->prepare($check_sql);
+  if (!$sth) { die $check_sql . ":\n" . $dbh->errstr; }
+  $sth->execute(@check_values);
+  return $sth->fetchrow_arrayref;
+}
+
+# 同一内容のデータが存在しているか確認する。
+sub check_same_table_data {
+  my ($dbh, $table_name, %check_data) = @_;
+  my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, [ 'COUNT(*)' ], %check_data);
+  if (!$tbl_ary_ref) { return undef; }
+  return ($tbl_ary_ref->[0] > 0);
+}
+
+# テーブルに指定された内容のデータを追加する。
+sub insert_table_data {
+  my ($dbh, $table_name, %insert_data) = @_;
+
+  my @insert_keys = keys %insert_data;
+  my @insert_values = map { $insert_data{$_} } @insert_keys;
+
+  my $update_sql = "INSERT INTO ${table_name} (" . join(', ', @insert_keys) .
+    ') VALUES (' .  join(', ', map { '?' } @insert_values) . ');';
+  my $sth = $dbh->prepare($update_sql);
+  if (!$sth) {
+    die $dbh->errstr;
+    return 0;
+  }
+  if (!$sth->execute(@insert_values)) {
+    die $sth->errstr;
+    return 0;
+  }
+  return 1;
+}
+
+# テーブル内の指定条件を満たすレコードの state を 0 にする。
+sub update_disable_state {
+  my ($dbh, $table_name, %target_data) = @_;
+  my @target_keys = keys %target_data;
+  my @target_values = map { $target_data{$_} } @target_keys;
+
+  my $update_sql = "UPDATE  ${table_name} SET state= 0 WHERE " .
+    join(' AND ', map { "$_ = ?" } @target_keys) . ';';
+  $dbh->do($update_sql, undef, @target_values);
+}
+
+# ハッシュデータをDBに格納するためのハッシュデータに変更する。
+sub hash_to_table_data {
+  my ($data, $db_tale_info) = @_;
+  my %ret;
+  for my $key (@$db_tale_info) {
+    my ($hash_key, $db_column_name);
+    $hash_key = $db_column_name = $key;
+    if (ref $key eq 'ARRAY') {
+      $hash_key = $key->[0];
+      $db_column_name = $key->[1];
+    }
+    my $value = &joined_key_access($data, $hash_key);
+    if ($hash_key eq 'superAwakens') {
+      $value = JSON::PP::encode_json($value);
+    }
+    $ret{$db_column_name} = $value;
+  }
+  return \%ret;
+}
 
 # db から取り出した行のデータの配列から、任意のキーのものを対象としたハッシュを作成する。
 sub db_row_to_hash {
