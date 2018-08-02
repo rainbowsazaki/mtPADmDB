@@ -481,7 +481,7 @@ sub mode_update_monster_data {
 
         # ハッシュデータをDBに格納するためのハッシュデータに変更する。
         sub hash_to_table_data {
-          my ($db_tale_info, $data) = @_;
+          my ($data, $db_tale_info) = @_;
           my %ret;
           for my $key (@$db_tale_info) {
             my ($hash_key, $db_column_name);
