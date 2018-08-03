@@ -702,6 +702,8 @@ var componentMonsterData = {
   
   methods: {
     fetchData: function () {
+      this.$store.state.monsterData = constData.monsterClearData;
+      this.$_mixinForPage_updateTitle();
       this.$store.commit('loadMonsterData', { 
           no: this.$route.params.no,
           callback: () => {
