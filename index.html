@@ -115,8 +115,8 @@
             <th>コスト</th><th>レア</th><th>アシスト</th>
           </tr>
           <tr>
-            <td>{{monsterData.cost}}</td>
-            <td>{{monsterData.rare}}</td>
+            <td class="text-right">{{monsterData.cost}}</td>
+            <td class="text-right">{{monsterData.rare}}</td>
             <td>{{booleanTable[monsterData.assist]}}</td>
           </tr>
           
@@ -124,8 +124,8 @@
             <th>最大レベル</th><th>必要経験値</th><th>限界突破</th>
           </tr>
           <tr>
-            <td>{{monsterData.maxLevel}}</td>
-            <td>{{monsterData.expTable}}</td>
+            <td class="text-right">{{monsterData.maxLevel}}</td>
+            <td class="text-right">{{monsterData.expTable}}</td>
             <td>{{booleanTable[monsterData.overLimit]}}</td>
           </tr>
           <tr class="thead-light"><th colspan="3">覚醒</th></tr>
@@ -139,13 +139,13 @@
       <div class="col-md-6">
         <table class="table table-bordered table-sm">
           <tr class="thead-light"><th colspan="2">レベル{{monsterData.maxLevel}}（最大）時</th><th>+297</th></tr></td>
-          <tr><th style="width:auto;">HP</th><td style="width: 35%;">{{monsterData.maxParam.hp}}</td><td style="width:35%;">{{monsterData.maxParam.hp + 10 * 99}}</td></tr>
-          <tr><th>攻撃</th><td>{{monsterData.maxParam.attack}}</td><td>{{monsterData.maxParam.attack + 5 * 99}}</td></tr>
-          <tr><th>回復</th><td>{{monsterData.maxParam.recovery}}</td><td>{{monsterData.maxParam.recovery + 3 * 99}}</td></tr>
+          <tr><th style="width:auto;">HP</th><td style="width: 35%;" class="text-right">{{monsterData.maxParam.hp}}</td><td style="width:35%;" class="text-right">{{monsterData.maxParam.hp + 10 * 99}}</td></tr>
+          <tr><th>攻撃</th><td class="text-right">{{monsterData.maxParam.attack}}</td><td class="text-right">{{monsterData.maxParam.attack + 5 * 99}}</td></tr>
+          <tr><th>回復</th><td class="text-right">{{monsterData.maxParam.recovery}}</td><td class="text-right">{{monsterData.maxParam.recovery + 3 * 99}}</td></tr>
           <tr v-if="monsterData.overLimit == 1" class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th>+297</th></tr></td>
-          <tr v-if="monsterData.overLimit == 1"><th>HP</th><td>{{monsterData.overLimitParam.hp}}</td><td>{{monsterData.overLimitParam.hp + 10 * 99}}</td></tr>
-          <tr v-if="monsterData.overLimit == 1"><th>攻撃</th><td>{{monsterData.overLimitParam.attack}}</td><td>{{monsterData.overLimitParam.attack + 5 * 99}}</td></tr>
-          <tr v-if="monsterData.overLimit == 1"><th>回復</th><td>{{monsterData.overLimitParam.recovery}}</td><td>{{monsterData.overLimitParam.recovery + 3 * 99}}</td></tr>
+          <tr v-if="monsterData.overLimit == 1"><th>HP</th><td class="text-right">{{monsterData.overLimitParam.hp}}</td><td class="text-right">{{monsterData.overLimitParam.hp + 10 * 99}}</td></tr>
+          <tr v-if="monsterData.overLimit == 1"><th>攻撃</th><td class="text-right">{{monsterData.overLimitParam.attack}}</td><td class="text-right">{{monsterData.overLimitParam.attack + 5 * 99}}</td></tr>
+          <tr v-if="monsterData.overLimit == 1"><th>回復</th><td class="text-right">{{monsterData.overLimitParam.recovery}}</td><td class="text-right">{{monsterData.overLimitParam.recovery + 3 * 99}}</td></tr>
         </table>
 
         <table class="table table-bordered table-sm">
