@@ -151,16 +151,16 @@
         <table class="table table-bordered table-sm">
             <tr class="thead-light"><th>スキル</th></tr>
             <tr><td>
-              {{skillName}}
-              <span v-if="skillBaseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillBaseTurn}} 最大Lv.{{skillMaxLevel}} ターン:{{skillBaseTurn - skillMaxLevel + 1}})</span>
+              {{skillDetails.name}}
+              <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillDetails.baseTurn}} 最大Lv.{{skillDetails.maxLevel}} ターン:{{skillDetails.baseTurn - skillDetails.maxLevel + 1}})</span>
             </td></tr>
-            <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDescription}}</td></tr>
+            <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDetails.description}}</td></tr>
   
             <tr class="thead-light"><th>リーダースキル</th></tr>
             <tr><td>
-              {{leaderSkillName}}
+              {{leaderSkillDetails.name}}
             </td></tr>
-            <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{leaderSkillDescription}}</td></tr>
+            <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{leaderSkillDetails.description}}</td></tr>
           </table> 
       </div>
     </div>

@@ -730,18 +730,6 @@ var componentMonsterData = {
       }
       return skillDetails;
     },
-    skillName: function () {
-      return this.skillDetails.name || '';
-    },
-    skillDescription: function () {
-        return this.skillDetails.description;
-    },
-    skillBaseTurn: function () {
-      return this.skillDetails.baseTurn;
-    },
-    skillMaxLevel: function () {
-      return this.skillDetails.maxLevel;
-    },
     leaderSkillDetails: function () {
       var leaderSkillDetails = {};
       if (this.monsterData.leaderSkill != 0) {
@@ -751,12 +739,6 @@ var componentMonsterData = {
         }
       }
       return leaderSkillDetails;
-    },
-    leaderSkillName: function () {
-      return this.leaderSkillDetails.name || '';
-    },
-    leaderSkillDescription: function () {
-      return this.leaderSkillDetails.description;
     },
   },
 };
