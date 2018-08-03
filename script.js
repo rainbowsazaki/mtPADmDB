@@ -815,18 +815,11 @@ var componentMonsterEdit = {
     monsterData: function () { return this.$store.state.monsterData },
 
     skillDetails: function () {
-      var skillDetails = this.monsterData.skillDetails;
-      if (this.monsterData.skill != 0) { 
-        var target = this.skillTable[this.monsterData.skill];
-        if (target) {
-          skillDetails = target;
-          this.monsterData.skillDetails.name = skillDetails.name;
-          this.monsterData.skillDetails.description = skillDetails.description;
-          this.monsterData.skillDetails.baseTurn = skillDetails.baseTurn;
-          this.monsterData.skillDetails.maxLevel = skillDetails.maxLevel;
-        }
+      if (this.monsterData.skill != 0) {
+        this.setSkillNo(this.monsterData.skill);
+        this.monsterData.skill = 0;
       }
-      return skillDetails;
+      return this.monsterData.skillDetails;
     },
     skillName: {
       get: function () {
@@ -865,16 +858,11 @@ var componentMonsterEdit = {
       }
     },
     leaderSkillDetails: function () {
-      var leaderSkillDetails = this.monsterData.leaderSkillDetails;
       if (this.monsterData.leaderSkill != 0) {
-        var target = this.leaderSkillTable[this.monsterData.leaderSkill];
-        if (target) {
-          leaderSkillDetails = target;
-          this.monsterData.leaderSkillDetails.name = leaderSkillDetails.name;
-          this.monsterData.leaderSkillDetails.description = leaderSkillDetails.description;
-        }
+        this.setLeaderSkillNo(this.monsterData.leaderSkill);
+        this.monsterData.leaderSkill = 0;
       }
-      return leaderSkillDetails;
+      return this.monsterData.leaderSkillDetails;
     },
     leaderSkillName: {
       get: function () {
@@ -897,6 +885,12 @@ var componentMonsterEdit = {
   },
   
   methods: {
+    setSkillNo: function (no) {
+      this.monsterData.skillDetails = $.extend(true, {}, this.skillTable[no]);
+    },
+    setLeaderSkillNo: function (no) {
+      this.monsterData.leaderSkillDetails = $.extend(true, {}, this.leaderSkillTable[no]);
+    },
     submit: function( ) {
       this.$store.commit('clearMessages');
       this.$store.commit('setMessages', [ '通信中...' ]);
