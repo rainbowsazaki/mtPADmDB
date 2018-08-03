@@ -220,6 +220,52 @@ var commonData = {
 
 const constData = {
   title: "みんなで作るパズドラデータベース",
+
+  /** モンスター情報の空データ */
+  monsterClearData: {
+    no: 0,
+    name:"",
+    attributes: [ 99, 0 ],
+    cost: 0,
+    rare: 0,
+    types: [ 99, 0, 0],
+    awakens: [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+    expTable:0,
+    maxLevel:0,
+    maxParam: {
+      hp: 0,
+      attack: 0,
+      recovery: 0
+    },
+    skill: 0,
+    skillDetails: {
+      name: '',
+      description: '',
+      baseTurn: 0,
+      maxLevel: 0
+    },
+    leaderSkill: 0,
+    leaderSkillDetails: {
+      name: '',
+      description: ''
+    },
+    assist: 9,
+    overLimit: 9,
+    overLimitParam: {
+      hp:0,
+      attack:0,
+      recovery: 0
+    },
+    superAwakens: [],
+    evolutionType: 99,
+    evolution: {
+      baseNo: 0,
+      materials: [
+        0, 0, 0, 0, 0
+      ]
+    },
+    comment: ''
+  },
 };
 
 
@@ -746,6 +792,7 @@ var componentMonsterEdit = {
   },
 
   created: function () {
+    this.$store.state.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
     if (this.$route.params.no) {
       this.$store.commit('loadMonsterData', { 
         no: this.$route.params.no,
