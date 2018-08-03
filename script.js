@@ -790,14 +790,19 @@ var componentMonsterEdit = {
       attributeTable: commonData.attributeTable,
       evolutionTypeTable: commonData.evolutionTypeTable,
       awakenTable: commonData.awakenTable,
+
+      monsterData: {},
     };
   },
 
   created: function () {
-    this.$store.state.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
+    this.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
     if (this.$route.params.no) {
       this.$store.commit('loadMonsterData', { 
         no: this.$route.params.no,
+        callback: () => {
+          this.monsterData = $.extend(true, {}, this.$store.state.monsterData);
+        }
       });
     }
   },
