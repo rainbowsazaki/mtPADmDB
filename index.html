@@ -306,7 +306,7 @@
         
         <div class="col-md-6">
           <div class="form-group">
-            <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillName" :skill-table="skillTable"></skill-incremental-input> 
+            <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillDetails.name" :skill-table="skillTable"></skill-incremental-input> 
           </div>
         </div>
         <div class="col-md-3">
@@ -315,7 +315,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">SLv1時ターン</span>
             </div>
-            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillBaseTurn">
+            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.baseTurn">
           </div>
         </div>
         <div class="col-md-3">
@@ -323,18 +323,18 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">最大SLv</span>
               </div>
-            <input type="number" class="form-control" id="inputMonsterName" v-model="skillMaxLevel">
+            <input type="number" class="form-control" id="inputMonsterName" v-model="skillDetails.maxLevel">
           </div>
         </div>
       </div>
       <div class="form-group">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="skillDescription"></textarea>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="skillDetails.description"></textarea>
       </div>
 
       <div class="form-group">
         <label for="formReaderSkillName">リーダースキル</label>
-        <skill-incremental-input placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillName" :skill-table="leaderSkillTable"></skill-incremental-input>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="leaderSkillDescription"></textarea>
+        <skill-incremental-input placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillDetails.name" :skill-table="leaderSkillTable"></skill-incremental-input>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="leaderSkillDetails.description"></textarea>
       </div>
 
       <div class="form-group">

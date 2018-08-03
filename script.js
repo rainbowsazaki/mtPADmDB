@@ -821,66 +821,12 @@ var componentMonsterEdit = {
       }
       return this.monsterData.skillDetails;
     },
-    skillName: {
-      get: function () {
-        return this.skillDetails.name;
-      },
-      set: function (newValue) {
-        this.monsterData.skillDetails.name = newValue;
-        this.monsterData.skill = 0;
-      }
-    },
-    skillDescription: {
-      get: function () {
-        return this.skillDetails.description;
-      },
-      set: function (newValue) {
-        this.monsterData.skillDetails.description = newValue;
-        this.monsterData.skill = 0;
-      }
-    },
-    skillBaseTurn: {
-      get: function () {
-        return this.skillDetails.baseTurn;
-      },
-      set: function (newValue) {
-        this.monsterData.skillDetails.baseTurn = newValue;
-        this.monsterData.skill = 0;
-      }
-    },
-    skillMaxLevel: {
-      get: function () {
-        return this.skillDetails.maxLevel;
-      },
-      set: function (newValue) {
-        this.monsterData.skillDetails.maxLevel = newValue;
-        this.monsterData.skill = 0;
-      }
-    },
     leaderSkillDetails: function () {
       if (this.monsterData.leaderSkill != 0) {
         this.setLeaderSkillNo(this.monsterData.leaderSkill);
         this.monsterData.leaderSkill = 0;
       }
       return this.monsterData.leaderSkillDetails;
-    },
-    leaderSkillName: {
-      get: function () {
-        return this.leaderSkillDetails.name;
-      },
-      set: function (newValue) {
-        this.monsterData.leaderSkillDetails.name = newValue;
-        this.monsterData.leaderSkill = 0;
-      }
-    },
-    leaderSkillDescription: {
-      get: function () {
-        return this.leaderSkillDetails.description;
-      },
-      set: function (newValue) {
-        this.monsterData.leaderSkillDetails.description = newValue;
-        this.monsterData.leaderSkill = 0;
-      }
     },
   },
   
