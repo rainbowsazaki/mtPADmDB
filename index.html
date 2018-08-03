@@ -191,6 +191,12 @@
         </td></tr>
       </table>
     </div>
+    <div v-if="monsterData.comment">
+      <table class="table table-bordered table-sm">
+        <tr class="thead-light"><th>編集コメント</th></tr>
+        <tr><td>{{monsterData.comment}}</td></tr>
+      </table>
+    </div>
     <router-link :to="'/edit/' + $route.params.no">編集する</router-link>
     <router-link :to="'/pic/' + $route.params.no">モンスター画像投稿</router-link>
   </div>
@@ -397,6 +403,15 @@
         </div>
         <monster-incremental-search v-for="n in 5" v-model="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :key="n"></monster-incremental-search>
       </div>
+      <div class="form-group">
+        <div class="form-row">
+          <label for="">編集コメント（編集理由などを書いてください。 例：パラメータの更新）（任意）</label>
+        </div>
+        <div class="form-row">
+          <textarea class="form-control" id="commentTextarea" rows="3" v-model="monsterData.comment"></textarea>
+        </div>
+      </div>
+  
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>

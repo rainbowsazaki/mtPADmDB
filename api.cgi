@@ -466,6 +466,9 @@ sub mode_update_monster_data {
             );
           }
         }
+        &joined_key_access(\%to_json_data, 'comment',
+          &joined_key_access($data, 'comment')
+        );
 
         my $fileNo = $to_json_data{no};
         open(DATAFILE, "> ./monsterJson/${fileNo}.json") or die("error :$!");

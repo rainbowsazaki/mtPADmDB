@@ -321,10 +321,8 @@ const store = new Vuex.Store({
             delete response.data.evolution.type;
           }
 
-          response.data.skillDetails = {};
-          response.data.leaderSkillDetails = {};
-
-          state.monsterData = response.data;
+          var data = $.extend(true, {}, commonData.monsterClearData, response.data);
+          state.monsterData = data;
           
           this.commit('setMessages', [ '取得完了' ]);
           if (typeof param.callback === 'function') { param.callback(); }
