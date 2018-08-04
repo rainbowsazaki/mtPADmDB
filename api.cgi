@@ -289,8 +289,8 @@ sub mode_update_monster_data {
     &to_number_with_key($data->{skillDetails}, qw/ baseTurn maxLevel /);
     &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
     &check_string_length('スキル詳細', $data->{skillDetails}{description}, 1, 200);
-    &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 1, 199);
-    &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 1, 99);
+    &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 0, 199);
+    &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 0, 99);
   }
   if ($data->{leaderSkill} == 0) {
     &check_string_length('リーダースキル名', $data->{leaderSkillDetails}{name}, 1, 50);
