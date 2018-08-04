@@ -115,8 +115,10 @@
             <th>コスト</th><th>レア</th><th>アシスト</th>
           </tr>
           <tr>
-            <td class="text-right">{{monsterData.cost}}</td>
-            <td class="text-right">{{monsterData.rare}}</td>
+            <td v-if="monsterData.cost" class="text-right">{{monsterData.cost }}</td>
+            <td v-else>不明</td>
+            <td v-if="monsterData.rare" class="text-right">{{monsterData.rare}}</td>
+            <td v-else>不明</td>
             <td>{{booleanTable[monsterData.assist]}}</td>
           </tr>
           
@@ -124,20 +126,24 @@
             <th>最大レベル</th><th>必要経験値</th><th>限界突破</th>
           </tr>
           <tr>
-            <td class="text-right">{{monsterData.maxLevel}}</td>
-            <td class="text-right">{{monsterData.expTable}}</td>
+            <td v-if="monsterData.maxLevel" class="text-right">{{monsterData.maxLevel}}</td>
+            <td v-else>不明</td>
+            <td v-if="monsterData.expTable" class="text-right">{{monsterData.expTable}}</td>
+            <td v-else>不明</td>
             <td>{{booleanTable[monsterData.overLimit]}}</td>
           </tr>
           <tr class="thead-light"><th colspan="3">覚醒</th></tr>
           <tr><td colspan="3">
-            <ul style="list-style: none; padding: 0px; display: flex;">
-                <li v-for="awaken in monsterData.awakens" v-if="awaken !== 0" ><img :src="'./kakusei/' + awaken + '.png'" width="24" height="24" :title="awakenTable[awaken]"></li>
-              </ul>
+              <span v-if="monsterData.awakens[0] === 0">なし</span>
+              <span v-else-if="monsterData.awakens[0] === 99">不明</span>
+              <ul v-else style="list-style: none; padding: 0px; display: flex;">
+              <li v-for="awaken in monsterData.awakens" v-if="awaken !== 0" ><img :src="'./kakusei/' + awaken + '.png'" width="24" height="24" :title="awakenTable[awaken]"></li>
+            </ul>
           </td></tr>
         </table>
       </div>
       <div class="col-md-6">
-        <table class="table table-bordered table-sm">
+        <table v-if="monsterData.maxParam.hp != 0 || monsterData.maxParam.attack != 0 || monsterData.maxParam.recovery != 0" class="table table-bordered table-sm">
           <tr class="thead-light"><th colspan="2">レベル{{monsterData.maxLevel}}（最大）時</th><th>+297</th></tr></td>
           <tr><th style="width:auto;">HP</th><td style="width: 35%;" class="text-right">{{monsterData.maxParam.hp}}</td><td style="width:35%;" class="text-right">{{monsterData.maxParam.hp + 10 * 99}}</td></tr>
           <tr><th>攻撃</th><td class="text-right">{{monsterData.maxParam.attack}}</td><td class="text-right">{{monsterData.maxParam.attack + 5 * 99}}</td></tr>
@@ -147,12 +153,15 @@
           <tr v-if="monsterData.overLimit == 1"><th>攻撃</th><td class="text-right">{{monsterData.overLimitParam.attack}}</td><td class="text-right">{{monsterData.overLimitParam.attack + 5 * 99}}</td></tr>
           <tr v-if="monsterData.overLimit == 1"><th>回復</th><td class="text-right">{{monsterData.overLimitParam.recovery}}</td><td class="text-right">{{monsterData.overLimitParam.recovery + 3 * 99}}</td></tr>
         </table>
+        <table v-else class="table table-bordered table-sm">
+          <tr class="thead-light"><th>最大パラメータ不明</th></tr>
+        </table>
 
         <table class="table table-bordered table-sm">
             <tr class="thead-light"><th>スキル</th></tr>
             <tr><td>
               {{skillDetails.name}}
-              <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillDetails.baseTurn}} 最大Lv.{{skillDetails.maxLevel}} ターン:{{skillDetails.baseTurn - skillDetails.maxLevel + 1}})</span>
+              <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillDetails.baseTurn}} 最大Lv.<span v-if="skillDetails.maxLevel">{{skillDetails.maxLevel}} ターン:{{skillDetails.baseTurn - skillDetails.maxLevel + 1}}</span><span v-else>不明</span>)</span>
             </td></tr>
             <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDetails.description}}</td></tr>
   
@@ -181,14 +190,20 @@
       <table class="table table-bordered table-sm">
         <tr class="thead-light"><th>このモンスターへの進化形式</th></tr>
         <tr><td>{{evolutionTypeTable[monsterData.evolutionType]}}</td></tr>
+        <template v-if="monsterData.evolutionType !== 99">
         <tr class="thead-light"><th>進化前モンスター</th></tr>
-        <tr><td><router-link :to="`/${monsterData.evolution.baseNo}`">No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}</router-link></td></tr>
+        <tr><td>
+          <router-link v-if="monsterData.evolution.baseNo" :to="`/${monsterData.evolution.baseNo}`">No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}</router-link>
+          <span v-else>不明</span>
+        </td></tr>
         <tr class="thead-light"><th>進化素材</th></tr>
         <tr><td>
-          <ul style="width: 100%; list-style: none; padding: 0px; display:flex; justify-content: space-around;">
+          <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; padding: 0px; display:flex; justify-content: space-around;">
             <li v-for="material in monsterData.evolution.materials" v-if="material !== 0" style="flex: 1;"><router-link :to="`/${material}`">No. {{material}} {{monsterTable[material] && monsterTable[material].name}}</router-link></li>
           </ul>
+          <span v-else>不明</span>
         </td></tr>
+        </template>
       </table>
     </div>
     <div v-if="monsterData.comment">
