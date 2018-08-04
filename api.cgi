@@ -11,7 +11,7 @@ use DBI;
 use File::Copy;
 
 my %monster_data_db_info = (
-  'monster_data' => [
+  'monster_base_data' => [
     'no',
     'name',
     'attributes_0',
@@ -405,52 +405,61 @@ sub mode_update_monster_data {
     if (@error) {
     
     } else {
+      # 各テーブルの同データ確認・登録
 
-      my $monster_check_data_ref;
-      $monster_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'monster_data'});
+      # 基本情報
+      my $monster_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'monster_base_data'});
       $monster_check_data_ref->{state} = 1;
-      # 同一内容のデータが存在しているか確認する。
-      my $is_update_monster_data = !&check_same_table_data($dbh, 'monster_data', %$monster_check_data_ref);
+      my $monster_base_data_id = &get_one_row_data($dbh, 'monster_base_data', [ 'id' ], %$monster_check_data_ref);
+      if (!$monster_base_data_id) {
+        &insert_table_data($dbh, 'monster_base_data', %$monster_check_data_ref, %common_insert_data);
+        $monster_base_data_id = &get_one_row_data($dbh, 'monster_base_data', [ 'id' ], %$monster_check_data_ref);
+      }
+      $monster_base_data_id = $monster_base_data_id->[0];
       
       # 限界突破情報
-      my $is_update_over_limit = 0;
-      my $over_limit_check_data_ref;
-      # 情報変更確認
+      my $over_limit_id = 0;
       if ($data->{overLimit} == 1) {
-        $over_limit_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'over_limit'});
+        my $over_limit_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'over_limit'});
         $over_limit_check_data_ref->{state} = 1;
-        $is_update_over_limit = !&check_same_table_data($dbh, 'over_limit', %$over_limit_check_data_ref);
+        $over_limit_id = &get_one_row_data($dbh, 'over_limit', [ 'id' ], %$over_limit_check_data_ref);
+        if (!$over_limit_id) {
+          &insert_table_data($dbh, 'over_limit', %$over_limit_check_data_ref, %common_insert_data);
+          $over_limit_id = &get_one_row_data($dbh, 'over_limit', [ 'id' ], %$over_limit_check_data_ref);
+        }
+        $over_limit_id = $over_limit_id->[0];
       }
 
       # 進化情報
-      my $is_update_evolution = 0;
-      my $evolution_check_data_ref;
-      # 既存のデータが同一か確認
+      my $evolution_id = 0;
       if ($data->{evolutionType} != 0 && $data->{evolutionType} != 99) {
-        $evolution_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'evolution'});
+        my $evolution_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'evolution'});
         $evolution_check_data_ref->{state} = 1;
-        $is_update_evolution = !&check_same_table_data($dbh, 'evolution', %$evolution_check_data_ref);
+        $evolution_id = &get_one_row_data($dbh, 'evolution', [ 'id' ], %$evolution_check_data_ref);
+        if (!$evolution_id) {
+          &insert_table_data($dbh, 'evolution', %$evolution_check_data_ref, %common_insert_data);          
+          $evolution_id = &get_one_row_data($dbh, 'evolution', [ 'id' ], %$evolution_check_data_ref);
+        }
+        $evolution_id = $evolution_id->[0];
       }
 
-      if (!($is_update_monster_data || $is_update_over_limit || $is_update_evolution)) {
+      my %monster_data_table_data = (
+        no => $data->{no},
+        monster_base_data => $monster_base_data_id,
+        over_limit => $over_limit_id,
+        evolution => $evolution_id,
+        state => 1
+      );
+
+      my $is_update = !&check_same_table_data($dbh, 'monster_data', %monster_data_table_data);
+
+      if (!$is_update) {
         push @error, '同一内容で登録されています';
       } else {
         # 変更があればデータ更新。
-        if ($is_update_monster_data) {
+        if ($monster_base_data_id) {
           &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
-          &insert_table_data($dbh, 'monster_data', %$monster_check_data_ref, %common_insert_data);
-        }
-
-        # 変更があればデータ更新
-        if ($is_update_over_limit) {
-          &update_disable_state($dbh, 'over_limit', (monsterNo => $data->{no}, state => 1));
-          &insert_table_data($dbh, 'over_limit', %$over_limit_check_data_ref, %common_insert_data);
-        }
-
-        # 変更があればデータ更新
-        if ($is_update_evolution) {
-          &update_disable_state($dbh, 'evolution', (monsterNo => $data->{no}, state => 1));
-          &insert_table_data($dbh, 'evolution', %$evolution_check_data_ref, %common_insert_data);
+          &insert_table_data($dbh, 'monster_data', %monster_data_table_data, %common_insert_data);
         }
 
         # モンスターデータのJSON保存
@@ -665,31 +674,44 @@ sub db_row_to_hash {
 sub save_monster_list_json {
   my ($dbh) = @_;
 
-  my %data;
-  # 関連するすべてのテーブルの情報を取得し、モンスター番号をキーとして結合する。
-  for my $table_name (keys %monster_data_db_info) {
-    my $hashs = &table_to_hash($dbh, $table_name, $monster_data_db_info{$table_name});
-
-    for my $key (keys %$hashs) {
-      if (exists $data{$key}) {
-        $data{$key} = { %{$data{$key}}, %{$hashs->{$key}} };
+  my @column_infos;
+  my %used_keys;    # 複数回登場するキーは最初のもののみを使用するための確認用ハッシュ。
+  # keys を使うと monster_base_data.no が戦闘にならない可能性があるのでテーブル名を明示する。
+  for my $table_name ('monster_base_data', 'over_limit', 'evolution') {
+    for my $column (@{$monster_data_db_info{$table_name}}) {
+      my ($hash_key, $db_column);
+      if (ref $column eq 'ARRAY') {
+        $hash_key = $column->[0];
+        $db_column = "${table_name}.$column->[1]";
       } else {
-        $data{$key} = $hashs->{$key};
+        $hash_key = $column;
+        $db_column = "${table_name}.$column";
+      }
+      if (!exists $used_keys{$hash_key}) {
+        push @column_infos, [$hash_key, $db_column];
+        $used_keys{$hash_key} = 1;
       }
     }
   }
+
+  my $data_ref = &table_to_hash($dbh, "
+  monster_data
+    LEFT JOIN monster_base_data ON monster_data.monster_base_data = monster_base_data.id
+    LEFT JOIN over_limit ON monster_data.over_limit = over_limit.id
+    LEFT JOIN evolution ON monster_data.evolution = evolution.id
+  ", \@column_infos);
 
   # JSON化してファイルに保存。
   open(DATAFILE, "> ./listJson/monster_data.json") or die("error :$!");
   print DATAFILE JSON::PP->new->pretty
     ->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b } )
     ->indent_length(2)
-    ->encode(\%data);
+    ->encode($data_ref);
   close(DATAFILE);
 
   # ピックアップ版用のデータを抜き出したものを作成する。
   my %pickup_data = map {
-    my $target_ref = $data{$_};
+    my $target_ref = $data_ref->{$_};
       my %temp;
       for (@monster_data_pickup_keys) {
         &joined_key_access(\%temp, $_,
@@ -697,7 +719,7 @@ sub save_monster_list_json {
         )
       }
       $_ => \%temp;
-  } keys %data;
+  } keys %$data_ref;
 
   # JSON化してファイルに保存。
   open(DATAFILE, "> ./listJson/monster_list.json") or die("error :$!");

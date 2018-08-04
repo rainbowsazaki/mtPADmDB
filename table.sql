@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS monster_data (
+CREATE TABLE IF NOT EXISTS monster_base_data (
   id INTEGER PRIMARY KEY,
   no INTEGER,
   name TEXT,
@@ -71,6 +71,19 @@ CREATE TABLE IF NOT EXISTS evolution (
   state INTEGER
 );
 
+CREATE TABLE IF NOT EXISTS monster_data (
+  id INTEGER PRIMARY KEY,
+  no INTEGER,
+  monster_base_data INTEGER,
+  over_limit INTEGER,
+  evolution INTEGER,
+  comment TEXT,
+
+	createdDatetime TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')),
+  ipAddress TEXT,
+  accountName TEXT,
+  state INTEGER
+);
 
 CREATE TABLE IF NOT EXISTS skill (
   id INTEGER PRIMARY KEY,
