@@ -229,7 +229,7 @@ const constData = {
     cost: 0,
     rare: 0,
     types: [ 99, 0, 0],
-    awakens: [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+    awakens: [ 99, 0, 0, 0, 0, 0, 0, 0, 0 ],
     expTable:0,
     maxLevel:0,
     maxParam: {
