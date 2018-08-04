@@ -427,13 +427,10 @@
         <template v-else>No. {{this.monsterNo}} のモンスターの</template>
         モンスター情報画面の画像ファイルを選択してください。</div>
       <div class="row">
-        <div v-if="!this.$route.params.no" class="col-md-4 input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">No.</span>
+          <div v-if="!this.$route.params.no" class="col-md-12">
+            <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable"></monster-incremental-search>
           </div>
-          <input type="number" class="form-control" id="inputNo" v-model="monsterNo" />
-        </div>
-        <div class="col-md-8">
+        <div class="col-md-12">
           <div class="custom-file">
             <input type="file" class="custom-file-input" id="monsterImageFile" @change="loadLocalImage">
             <label class="custom-file-label" for="monsterImageFile">モンスター情報画像選択</label>

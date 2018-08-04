@@ -1042,6 +1042,10 @@ var componentPic = {
         }
       });
     }
+  },
+
+  computed: {
+    monsterTable: function () { return this.$store.state.monsterTable; },
   }
 }
 
