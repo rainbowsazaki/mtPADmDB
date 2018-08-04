@@ -777,11 +777,13 @@ var componentMonsterEdit = {
 
   created: function () {
     this.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
+    this.$_mixinForPage_updateTitle();
     if (this.$route.params.no) {
       this.$store.commit('loadMonsterData', { 
         no: this.$route.params.no,
         callback: () => {
           this.monsterData = $.extend(true, {}, this.$store.state.monsterData);
+          this.$_mixinForPage_updateTitle();
         }
       });
     }
