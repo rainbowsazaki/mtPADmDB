@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS monster_base_data (
   id INTEGER PRIMARY KEY,
-  no INTEGER,
   name TEXT,
   attributes_0 INTEGER,
   attributes_1 INTEGER,
@@ -28,34 +27,20 @@ CREATE TABLE IF NOT EXISTS monster_base_data (
   assist INTEGER,
   overLimit INTEGER,
   evolutionType INTEGER,
-  comment TEXT,
-
-	createdDatetime TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')),
-  ipAddress TEXT,
-  accountName TEXT,
-  state INTEGER
 );
 
 
 CREATE TABLE IF NOT EXISTS over_limit (
   id INTEGER PRIMARY KEY,
-  monsterNo INTEGER,
   param_hp INTEGER,
   param_attack INTEGER,
   param_recovery INTEGER,
   superAwakens TEXT,
-  comment TEXT,
-
-	createdDatetime TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')),
-  ipAddress TEXT,
-  accountName TEXT,
-  state INTEGER
 );
 
 
 CREATE TABLE IF NOT EXISTS evolution (
   id INTEGER PRIMARY KEY,
-  monsterNo INTEGER,
   type INTEGER,
   baseNo INTEGER,
   materials_0 INTEGER,
@@ -63,12 +48,6 @@ CREATE TABLE IF NOT EXISTS evolution (
   materials_2 INTEGER,
   materials_3 INTEGER,
   materials_4 INTEGER,
-  comment TEXT,
-
-	createdDatetime TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')),
-  ipAddress TEXT,
-  accountName TEXT,
-  state INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS monster_data (

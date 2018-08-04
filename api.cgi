@@ -12,7 +12,6 @@ use File::Copy;
 
 my %monster_data_db_info = (
   'monster_base_data' => [
-    'no',
     'name',
     'attributes_0',
     'attributes_1',
@@ -42,14 +41,12 @@ my %monster_data_db_info = (
     'evolutionType',
   ], 
   'over_limit' => [
-    [ 'no', 'monsterNo'],
     [ 'overLimitParam_hp', 'param_hp' ],
     [ 'overLimitParam_attack', 'param_attack' ],
     [ 'overLimitParam_recovery', 'param_recovery' ],
     [ 'superAwakens', 'superAwakens' ],
   ],
   'evolution' => [
-    [ 'no', 'monsterNo'],
     [ 'evolutionType', 'type' ],
     [ 'evolution_baseNo', 'baseNo' ],
     [ 'evolution_materials_0', 'materials_0' ],
@@ -409,10 +406,9 @@ sub mode_update_monster_data {
 
       # 基本情報
       my $monster_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'monster_base_data'});
-      $monster_check_data_ref->{state} = 1;
       my $monster_base_data_id = &get_one_row_data($dbh, 'monster_base_data', [ 'id' ], %$monster_check_data_ref);
       if (!$monster_base_data_id) {
-        &insert_table_data($dbh, 'monster_base_data', %$monster_check_data_ref, %common_insert_data);
+        &insert_table_data($dbh, 'monster_base_data', %$monster_check_data_ref);
         $monster_base_data_id = &get_one_row_data($dbh, 'monster_base_data', [ 'id' ], %$monster_check_data_ref);
       }
       $monster_base_data_id = $monster_base_data_id->[0];
@@ -421,10 +417,9 @@ sub mode_update_monster_data {
       my $over_limit_id = 0;
       if ($data->{overLimit} == 1) {
         my $over_limit_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'over_limit'});
-        $over_limit_check_data_ref->{state} = 1;
         $over_limit_id = &get_one_row_data($dbh, 'over_limit', [ 'id' ], %$over_limit_check_data_ref);
         if (!$over_limit_id) {
-          &insert_table_data($dbh, 'over_limit', %$over_limit_check_data_ref, %common_insert_data);
+          &insert_table_data($dbh, 'over_limit', %$over_limit_check_data_ref);
           $over_limit_id = &get_one_row_data($dbh, 'over_limit', [ 'id' ], %$over_limit_check_data_ref);
         }
         $over_limit_id = $over_limit_id->[0];
@@ -434,10 +429,9 @@ sub mode_update_monster_data {
       my $evolution_id = 0;
       if ($data->{evolutionType} != 0 && $data->{evolutionType} != 99) {
         my $evolution_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'evolution'});
-        $evolution_check_data_ref->{state} = 1;
         $evolution_id = &get_one_row_data($dbh, 'evolution', [ 'id' ], %$evolution_check_data_ref);
         if (!$evolution_id) {
-          &insert_table_data($dbh, 'evolution', %$evolution_check_data_ref, %common_insert_data);          
+          &insert_table_data($dbh, 'evolution', %$evolution_check_data_ref);          
           $evolution_id = &get_one_row_data($dbh, 'evolution', [ 'id' ], %$evolution_check_data_ref);
         }
         $evolution_id = $evolution_id->[0];
@@ -475,10 +469,12 @@ sub mode_update_monster_data {
             );
           }
         }
-        &joined_key_access(\%to_json_data, 'comment',
-          &joined_key_access($data, 'comment')
-        );
-
+        for my $json_append_key ( 'no', 'comment' ) {
+          &joined_key_access(\%to_json_data, $json_append_key,
+            &joined_key_access($data, $json_append_key)
+          );
+        }
+        
         my $fileNo = $to_json_data{no};
         open(DATAFILE, "> ./monsterJson/${fileNo}.json") or die("error :$!");
         print DATAFILE JSON::PP::encode_json(\%to_json_data);
@@ -674,10 +670,11 @@ sub db_row_to_hash {
 sub save_monster_list_json {
   my ($dbh) = @_;
 
-  my @column_infos;
+  # データを格納してる各テーブルにモンスター番号が存在しないのと、
+  # 先頭のキーがハッシュのキーとして使用されるのでモンスター番号を予め指定しておく。
+  my @column_infos = ([ 'no', 'monster_data.no' ]);
   my %used_keys;    # 複数回登場するキーは最初のもののみを使用するための確認用ハッシュ。
-  # keys を使うと monster_base_data.no が戦闘にならない可能性があるのでテーブル名を明示する。
-  for my $table_name ('monster_base_data', 'over_limit', 'evolution') {
+  for my $table_name (keys %monster_data_db_info) {
     for my $column (@{$monster_data_db_info{$table_name}}) {
       my ($hash_key, $db_column);
       if (ref $column eq 'ARRAY') {
