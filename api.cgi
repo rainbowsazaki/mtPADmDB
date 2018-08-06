@@ -229,6 +229,17 @@ sub mode_update_monster_data {
     }
   }
 
+  # ハッシュ内の任意の要素の全角英数字ピリオドスペースを半角に変換する。
+  # 第１引数 対象のハッシュのリファレンス
+  # 第２引数以降 変換対象の要素のキー。
+  sub to_hankaku_with_key {
+    my ($target_ref, @keys) = @_;
+    foreach my $key (@keys) {
+      if (!exists $target_ref->{$key}) { next; }
+      $target_ref->{$key} =~ tr/０-９Ａ-Ｚａ-ｚ．　/0-9A-Za-z. /;
+    }
+  }
+  
   sub check_range {
     if ($_[1] < $_[2] || $_[1] > $_[3]) {
       push @error, "${_[0]}の値が不正(${_[1]})";
@@ -267,6 +278,8 @@ sub mode_update_monster_data {
   &to_number_with_key($data, qw/ no attributes cost rate types awakens expTable maxLevel maxParam 
     skill leaderSkill assist overLimit overLimitParam superAwakens evolutionType /);
 
+  &to_hankaku_with_key($data, qw/ name /);
+  
   &check_range('No', $data->{no}, 1, 9999);
   &check_string_length('名前', $data->{name}, 1, 50);
   &check_range('属性', $data->{attributes}[0], 0, 99);
@@ -287,12 +300,14 @@ sub mode_update_monster_data {
 
   if ($data->{skill} == 0) {
     &to_number_with_key($data->{skillDetails}, qw/ baseTurn maxLevel /);
+    &to_hankaku_with_key($data->{skillDetails}, qw/ name description /);
     &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
     &check_string_length('スキル詳細', $data->{skillDetails}{description}, 1, 200);
     &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 0, 199);
     &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 0, 99);
   }
   if ($data->{leaderSkill} == 0) {
+    &to_hankaku_with_key($data->{leaderSkillDetails}, qw/ name description /);
     &check_string_length('リーダースキル名', $data->{leaderSkillDetails}{name}, 1, 50);
     &check_string_length('リーダースキル詳細', $data->{leaderSkillDetails}{description}, 1, 200);
 
