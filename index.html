@@ -218,215 +218,240 @@
 
 </script>
 
-<!-- 1モンスター情報編集ページ -->
+<!-- モンスター情報編集ページ -->
 <script type="text/x-template" id="templateMonsterEdit">
   <div>
     <form onsubmit="return false;" @submit="submit">
-
-      <div class="form-row">
-        <div class="col-md-3">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">No.</span>
+      <table class="table table-bordered table-sm">
+        <tr>
+          <td colspan="12">
+              <div class="form-row">
+            <div class="col-md-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">No.</span>
+                </div>
+                <input type="number" class="form-control" id="inputNo" v-model="monsterData.no">
+              </div>
             </div>
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.no">
-          </div>
-        </div>
-        <div class="form-group col-md-9">
-          <input type="text" class="form-control" id="inputMonsterName" placeholder="モンスター名" v-model="monsterData.name">
-        </div>
-      </div>
-      <div>
-        <label for="selectType1">タイプ</label>
-        <div class="form-row">
-          <div class="col-md-4" v-for="n in 3">
+            <div class="form-group col-md-8">
+              <input type="text" class="form-control" id="inputMonsterName" placeholder="モンスター名" v-model="monsterData.name">
+            </div>
+            <div>
+          </td>
+        </tr>
+        <tr class="thead-light"><th colspan="12">タイプ</th></tr>
+        <tr>
+          <td v-for="n in 3" colspan="4">
             <select class="custom-select" :id="'selectType' + n" v-model="monsterData.types[n - 1]">
               <option v-for="(type, key) in typeTable" :value="key" :key="key" v-once>{{type}}</option>
             </select>
-          </div>
-        </div>
-      </div>
-      <div class="form-row">
-          <div class="col-md-3">
-            <label for="selectType1">属性</label>
-            <select class="custom-select" id="selectType1" v-model="monsterData.attributes[0]">
-              <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label for="selectType1">複属性</label>
-            <select class="custom-select" id="selectType2" v-model="monsterData.attributes[1]">
-              <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
-            </select>
-          </div>
-            
-          <div class="col-md-3">
-            <label for="selectType1">コスト</label>
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.cost">
-          </div>
-          <div class="col-md-3">
-            <label for="selectType1">レアリティ
-            </label>
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.rare">
-          </div>
-      </div>
-
-      <div>
-        <label for="selectType1">覚醒</label>
-        <div v-for="n in 9"　class="form-row" :key="n">
-          <pd-select v-model="monsterData.awakens[n - 1]">
-            <pd-option v-for="(awaken, key) in awakenTable" :value="key" :key="key" v-once><img :src="(key == 0 || key == 99) ? '' : `./kakusei/${key}.png`" width="24" height="24" /> {{awaken}}</pd-option>
-          </pd-select>
-        </div>
-      </div>
-      
-      <div class="form-row">
-          <div class="col-md-4">
-            <label for="selectType1">最大レベル</label>
+          </td>
+        </tr>
+        <tr class="thead-light">
+          <th colspan="3">属性</th>
+          <th colspan="3">複属性</th>
+          <th colspan="3">コスト</th>
+          <th colspan="3">レア</th>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <select class="custom-select" id="selectType1" v-model="monsterData.attributes[0]">
+                  <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
+                </select></td>
+            <td colspan="3">
+                <select class="custom-select" id="selectType2" v-model="monsterData.attributes[1]">
+                  <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
+                </select></td>
+            <td colspan="3">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.cost">
+            </td>
+            <td colspan="3">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.rare">
+            </td>
+        </tr>
+        <tr class="thead-light">
+          <th colspan="4">最大レベル</th>
+          <th colspan="4">最大レベルに必要な経験値</th>
+          <th colspan="4">アシスト</th>
+        </tr>
+        <tr>
+          <td colspan="4">
             <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxLevel">
-          </div>
-      
-          <div class="col-md-4">
-            <label for="selectType1">最大レベルに必要な経験値</label>
+          </td>
+          <td colspan="4">
             <input type="number" class="form-control" id="inputNo" v-model="monsterData.expTable">
-          </div>
-          <div class="col-md-4">
-            <label for="selectType1">アシスト</label>
+          </td>
+          <td colspan="4">
             <select class="custom-select" id="selectAssist" v-model="monsterData.assist">
               <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{type}}</option>
             </select>
-          </div>
-      </div>
-      
-      <div class="form-row">
-        レベル最大時
-      </div>
-      <div class="form-group row">
-        <label for="inputEmail" class="col-md-2 col-form-label">HP</label>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.hp">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="inputEmail" class="col-md-2 col-form-label">攻撃</label>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.attack">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="inputEmail" class="col-md-2 col-form-label">回復</label>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.recovery">
-        </div>
-      </div>
-
-      <div class="form-row">
-        スキル
-      </div>
-      <div class="form-row">
-        
-        <div class="col-md-6">
-          <div class="form-group">
-            <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillDetails.name" :skill-table="skillTable"></skill-incremental-input> 
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="input-group">
-            <label for="selectType1"></label>
-            <div class="input-group-prepend">
-              <span class="input-group-text">SLv1時ターン</span>
-            </div>
+          </td>
+        </tr>
+        <tr class="thead-light">
+          <th colspan="12">覚醒</th>
+        </tr>
+        <tr v-for="n in 9" :key="n">
+          <td colspan="12">
+            <pd-select v-model="monsterData.awakens[n - 1]">
+              <pd-option v-for="(awaken, key) in awakenTable" :value="key" :key="key" v-once><img :src="(key == 0 || key == 99) ? '' : `./kakusei/${key}.png`" width="24" height="24" /> {{awaken}}</pd-option>
+            </pd-select>
+          </td>
+        </tr>
+        <tr class="thead-light">
+          <th colspan="12">レベル最大時パラメータ</th>
+        </tr>
+        <tr>
+          <th colspan="4">HP</th>
+          <td colspan="8">
+            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.hp">
+          </td>
+        </tr>
+        <tr>
+          <th colspan="4">攻撃</th>
+          <td colspan="8">
+            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.attack">
+          </td>
+        </tr>
+        <tr>
+          <th colspan="4">回復</th>
+          <td colspan="8">
+            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.recovery">
+          </td>
+        </tr>
+        <tr class="thead-light">
+          <th colspan="12">スキル</th>
+        </tr>
+        <tr>
+          <th colspan="8">名称</th>
+          <th colspan="2">SLv1時ターン</th>
+          <th colspan="2">最大SLv</th>
+        </tr>
+        <tr>
+          <td colspan="8">
+            <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillDetails.name" :skill-table="skillTable"></skill-incremental-input>
+          </td>
+          <td colspan="2">
             <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.baseTurn">
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">最大SLv</span>
-              </div>
-            <input type="number" class="form-control" id="inputMonsterName" v-model="skillDetails.maxLevel">
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="skillDetails.description"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="formReaderSkillName">リーダースキル</label>
-        <skill-incremental-input placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillDetails.name" :skill-table="leaderSkillTable"></skill-incremental-input>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="leaderSkillDetails.description"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="formOverLimit">限界突破</label>
-        <select class="custom-select" id="selectOverLimit" v-model="monsterData.overLimit">
-          <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{type}}</option>
-        </select>
-      </div>
-      <div v-if="monsterData.overLimit == 1" class="form-row">
-        限界突破時パラメータ
-      </div>
-      <div v-if="monsterData.overLimit == 1" class="form-group row">
-        <label for="formOverLimitHp" class="col-md-2 col-form-label">HP</label>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="formOverLimitHp" v-model="monsterData.overLimitParam.hp">
-        </div>
-      </div>
-      <div v-if="monsterData.overLimit == 1" class="form-group row">
-        <label for="formOverLimitAttack" class="col-md-2 col-form-label">攻撃</label>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="formOverLimitattack" v-model="monsterData.overLimitParam.attack">
-        </div>
-      </div>
-      <div v-if="monsterData.overLimit == 1" class="form-group row">
-        <label for="formOverLimitRecovery" class="col-md-2 col-form-label">回復</label>
-        <div class="col-md-4">
-          <input type="number" class="form-control" id="formOverLimitRecovery" v-model="monsterData.overLimitParam.recovery">
-        </div>
-      </div>
-
-      <div v-if="monsterData.overLimit == 1" class="form-group">
-        <div class="row"><div class="col">超覚醒</div></div>
-        <div class="row">
-          <div v-for="(awaken, key) in awakenTable" v-if="key != 0" class="col-md-3 form-check" :key="key">
-            <input class="form-check-input" type="checkbox" :value="key" v-model="monsterData.superAwakens" :id="'superAwaken' + key">
-            <label class="form-check-label" :for="'superAwaken' + key">
-              <img v-if="key != 99" :src="'./kakusei/' + key + '.png'" width="24" height="24" />{{awaken}}
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <label for="">進化形式</label>
-      </div>
-      <div class="form-row">
-        <div class="col-md-4">
-          <select class="custom-select" id="evolutionType" v-model="monsterData.evolutionType">
-            <option v-for="(type, key) in evolutionTypeTable" :value="key" :key="key" v-once>{{type}}</option>
-          </select>
-        </div>
-      </div>
-      <div v-if="monsterData.evolutionType != 0">
-        <div class="form-row">
-          <label for="">進化前キャラ</label>
-        </div>
-        <monster-incremental-search v-model="monsterData.evolution.baseNo" :monster-table="monsterTable"></monster-incremental-search>
-        <div class="form-row">
-          <label for="">素材</label>
-        </div>
-        <monster-incremental-search v-for="n in 5" v-model="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :key="n"></monster-incremental-search>
-      </div>
-      <div class="form-group">
-        <div class="form-row">
-          <label for="">編集コメント（編集理由などを書いてください。 例：パラメータの更新）（任意）</label>
-        </div>
-        <div class="form-row">
-          <textarea class="form-control" id="commentTextarea" rows="3" v-model="monsterData.comment"></textarea>
-        </div>
-      </div>
-  
+          </td>
+          <td colspan="2">
+            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.maxLevel">
+          </td>
+        </tr>
+        <tr>
+          <th colspan="12">説明</th>
+        </tr>
+        <tr>
+          <td colspan="12">
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="skillDetails.description"></textarea>
+          </td>
+        </tr>
+        <tr class="thead-light">
+          <th colspan="12">リーダースキル</th>
+        </tr>
+        <tr>
+          <th colspan="12">名称</th>
+        </tr>
+        <tr>
+          <td colspan="12">
+            <skill-incremental-input placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillDetails.name" :skill-table="leaderSkillTable"></skill-incremental-input>
+          </td>
+        </tr>
+        <tr class="">
+          <th colspan="12">説明</th>
+        </tr>
+        <tr>
+          <td colspan="12">
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="leaderSkillDetails.description"></textarea>
+          </td>
+        </tr>
+        <tr class="thead-light">
+          <th colspan="12">限界突破</th>
+        </tr>
+        <tr>
+          <td colspan="12">
+            <select class="custom-select" id="selectOverLimit" v-model="monsterData.overLimit">
+              <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{type}}</option>
+            </select>
+          </td>
+        </tr>
+        <template v-if="monsterData.overLimit == 1">
+          <tr class="thead-light">
+            <th colspan="12">限界突破時パラメータ</th>
+          </tr>
+          <tr>
+            <th colspan="4">HP</th>
+            <td colspan="8">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.hp">
+            </td>
+          </tr>
+          <tr>
+            <th colspan="4">攻撃</th>
+            <td colspan="8">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.attack">
+            </td>
+          </tr>
+          <tr>
+            <th colspan="4">回復</th>
+            <td colspan="8">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.recovery">
+            </td>
+          </tr>
+          <tr class="thead-light">
+            <th colspan="12">超覚醒</th>
+          </tr>
+          <tr>
+            <td colspan="12">
+              <span v-for="(awaken, key) in awakenTable" v-if="key != 0" class="col-md-3 form-check" style="display:inline-block;" :key="key">
+                <input class="form-check-input" type="checkbox" :value="key" v-model="monsterData.superAwakens" :id="'superAwaken' + key">
+                <label class="form-check-label" :for="'superAwaken' + key">
+                  <img v-if="key != 99" :src="'./kakusei/' + key + '.png'" width="24" height="24" />{{awaken}}
+                </label>
+              </span>
+            </td>
+          </tr>
+        </template>
+        <tr class="thead-light">
+          <th colspan="12">進化形式</th>
+        </tr>
+        <tr>
+          <td colspan="12"> 
+            <select class="custom-select" id="evolutionType" v-model="monsterData.evolutionType">
+              <option v-for="(type, key) in evolutionTypeTable" :value="key" :key="key" v-once>{{type}}</option>
+            </select>
+          </td>
+        </tr>
+        <template v-if="monsterData.evolutionType != 0 && monsterData.evolutionType != 99">
+          <tr class="thead-light">
+            <th colspan="12">進化前キャラ</th>
+          </tr>
+          <tr>
+            <td colspan="12">
+              <monster-incremental-search v-model="monsterData.evolution.baseNo" :monster-table="monsterTable"></monster-incremental-search>
+            </td>
+          </tr>
+          <tr class="thead-light">
+            <th colspan="12">素材</th>
+          </tr>
+          <tr v-for="n in 5">
+            <td colspan="12">
+              <monster-incremental-search v-model="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :key="n"></monster-incremental-search>
+            </td>
+          </tr>
+        </template>
+        <tr class="thead-light">
+          <th colspan="12">編集コメント（任意）</th>
+        </tr>
+        <tr>
+          <td colspan="12">
+            編集理由などを書いてください。（例：パラメータの更新）
+            <textarea class="form-control" id="commentTextarea" rows="3" v-model="monsterData.comment"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;"></td>
+        </tr>    
+      </table>  
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
