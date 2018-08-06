@@ -861,14 +861,14 @@ var componentPic = {
   template: '#templatePic',
   pageTitle: function () {
     if (this.$route.params.no) {
-      return `画像投稿 No.${this.$route.params.no}`;
+      return `画像投稿 No.${this.$route.params.no} ${this.selectMonsterName}`;
     } else {
       return '画像投稿';
     }
   },
   middleOfBreadcrumbs: function () {
     if (this.$route.params.no) {
-      return { text: `No.${this.$route.params.no}`, link: '/' + this.$route.params.no }
+      return { text: `No.${this.$route.params.no} ${this.selectMonsterName}`, link: '/' + this.$route.params.no }
     } else {
       return undefined;
     }
@@ -1046,6 +1046,9 @@ var componentPic = {
 
   computed: {
     monsterTable: function () { return this.$store.state.monsterTable; },
+    selectMonsterName: function () {
+      return (this.monsterTable[this.$route.params.no] || {}).name || '';
+    }
   }
 }
 
