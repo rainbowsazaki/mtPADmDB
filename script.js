@@ -776,16 +776,12 @@ var componentMonsterEdit = {
   },
 
   created: function () {
-    this.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
-    this.$_mixinForPage_updateTitle();
-    if (this.$route.params.no) {
-      this.$store.commit('loadMonsterData', { 
-        no: this.$route.params.no,
-        callback: () => {
-          this.monsterData = $.extend(true, {}, this.$store.state.monsterData);
-          this.$_mixinForPage_updateTitle();
-        }
-      });
+    this.fetchData();
+  },
+
+  watch: {
+    "$route.params.no": function () {
+      this.fetchData();
     }
   },
 
@@ -813,6 +809,19 @@ var componentMonsterEdit = {
   },
   
   methods: {
+    fetchData: function () {
+      this.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
+      this.$_mixinForPage_updateTitle();
+      if (this.$route.params.no) {
+        this.$store.commit('loadMonsterData', { 
+          no: this.$route.params.no,
+          callback: () => {
+            this.monsterData = $.extend(true, {}, this.$store.state.monsterData);
+            this.$_mixinForPage_updateTitle();
+          }
+        });
+      }
+    },
     setSkillNo: function (no) {
       this.monsterData.skillDetails = $.extend(true, {}, this.skillTable[no]);
     },
@@ -884,12 +893,24 @@ var componentPic = {
   },
 
   created: function () {
-    if (this.$route.params.no) {
-      this.monsterNo = this.$route.params.no;
+    this.udpateMonsterNo();
+  },
+
+  watch: {
+    "$route.params.no": function () {
+      this.udpateMonsterNo();
     }
   },
 
   methods: {
+    udpateMonsterNo: function () {
+      if (this.$route.params.no) {
+        this.monsterNo = this.$route.params.no;
+      } else {
+        this.monsterNo = '';
+      }
+      this.$_mixinForPage_updateTitle();
+    },
     loadLocalImage: function loadLocalImage(e) {
       // ファイル情報を取得
       var fileData = e.target.files[0];
