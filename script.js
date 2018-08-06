@@ -440,7 +440,7 @@ Vue.component('pdOption', {
 Vue.component('skillIncrementalInput', {
   template: `
 <div class="dropdown show">
-  <input :value="value" @input="$emit('input', $event.target.value); showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" onfocus="$('.dropdown-toggle').dropdown();">
+  <input :value="value" @input="$emit('input', $event.target.value); showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" onfocus="$('.dropdown-toggle').dropdown();" required minLength="1" maxLength="50">
   <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
     <a v-for="(value, key) in filteredSkillTable" class="dropdown-item" @click="$emit('select-no', key)" href="javascript:void(0)">
       {{value.name}}<br>
