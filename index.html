@@ -185,8 +185,8 @@
         <table class="table table-bordered table-sm">
           <tr class="thead-light"><th>超覚醒</th></tr>
           <tr><td>
-              <ul>
-                <li v-for="superAwaken in monsterData.superAwakens"><img :src="'./kakusei/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken]">{{awakenTable[superAwaken]}}</li>
+              <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
+                <li v-for="superAwaken in monsterData.superAwakens" class="slash-join"><img :src="'./kakusei/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken]">{{awakenTable[superAwaken]}}</li>
               </ul>
           </td></tr>
         </table>
