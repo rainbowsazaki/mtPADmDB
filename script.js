@@ -711,7 +711,10 @@ var componentMonsterData = {
             this.$_mixinForPage_updateTitle();
           },
       });
-    }
+    },
+    hasImage: function (no) {
+      return (no in this.$store.state.imageTable);
+    },
   },
 
   computed: {

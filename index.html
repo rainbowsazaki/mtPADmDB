@@ -102,7 +102,7 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <img v-if="monsterData.no" :src="`./monsterImages/${monsterData.no}.jpg`" style="width: 320px; height: auto; display: block; margin: 0 auto;" onerror="var p = './monsterImages/notFound.jpg'; if (this.src!=p) { this.src = p; }" />
+        <img v-if="monsterData.no" :src="'./monsterImages/' + (hasImage(monsterData.no) ? monsterData.no : 'notFound') + '.jpg'" style="width: 320px; height: auto; display: block; margin: 0 auto;" onerror="var p = './monsterImages/notFound.jpg'; if (this.src!=p) { this.src = p; }" />
         <table class="table table-bordered table-sm">
           <tr class="thead-light">
             <th colspan="2">タイプ</th><th>属性</th>
