@@ -214,6 +214,9 @@ sub mode_update_monster_data {
     } elsif (ref $target eq 'HASH') {
       return { map { $_ => &to_number($target->{$_}) } keys %{$target} };
     } else {
+      if (!defined $target || $target eq '') {
+        return undef;
+      }
       return $target + 0;
     }
   }
@@ -241,8 +244,16 @@ sub mode_update_monster_data {
   }
   
   sub check_range {
-    if ($_[1] < $_[2] || $_[1] > $_[3]) {
-      push @error, "${_[0]}の値が不正(${_[1]})";
+    my ($name, $value, $min, $max, $is_not_null) = @_;
+    if ($is_not_null == undef) { $is_not_null = 1; }
+
+    if ($value == undef) {
+      if ($is_not_null) { return 1; }
+      push @error, "${name} の値が入力されていません。";
+      return 0;
+    }
+    if ($value < $min || $value > $max) {
+      push @error, "${name} の値が不正(${value})";
       return 0;
     }
     return 1;
@@ -284,27 +295,27 @@ sub mode_update_monster_data {
   &check_string_length('名前', $data->{name}, 1, 50);
   &check_range('属性', $data->{attributes}[0], 0, 99);
   &check_range('複属性', $data->{attributes}[1], 0, 99);
-  &check_range('コスト', $data->{cost}, 0, 999);
-  &check_range('レアリティ', $data->{rare}, 0, 99);
+  &check_range('コスト', $data->{cost}, 1, 999, 0);
+  &check_range('レアリティ', $data->{rare}, 1, 99, 0);
   foreach my $i (0..3) {
     &check_range('タイプ${i}', $data->{types}[$i], 0, 99);
   }
   foreach my $i (0..9) {
     &check_range('覚醒${i}', $data->{awakens}[$i], 0, 99);
   }
-  &check_range('経験値テーブル', $data->{expTable}, 0, 999999999);
-  &check_range('最大レベル', $data->{maxLevel}, 0, 99);
-  &check_range('HP', $data->{maxParam}{hp}, 0, 99999);
-  &check_range('攻撃', $data->{maxParam}{attack}, 0, 99999);
-  &check_range('回復', $data->{maxParam}{recovery}, -99999, 99999);
+  &check_range('経験値テーブル', $data->{expTable}, 0, 999999999, 0);
+  &check_range('最大レベル', $data->{maxLevel}, 0, 99, 0);
+  &check_range('HP', $data->{maxParam}{hp}, 0, 99999, 0);
+  &check_range('攻撃', $data->{maxParam}{attack}, 0, 99999, 0);
+  &check_range('回復', $data->{maxParam}{recovery}, -99999, 99999, 0);
 
   if ($data->{skill} == 0) {
     &to_number_with_key($data->{skillDetails}, qw/ baseTurn maxLevel /);
     &to_hankaku_with_key($data->{skillDetails}, qw/ name description /);
     &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
     &check_string_length('スキル詳細', $data->{skillDetails}{description}, 1, 200);
-    &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 0, 199);
-    &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 0, 99);
+    &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 1, 199, 0);
+    &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 1, 99, 0);
   }
   if ($data->{leaderSkill} == 0) {
     &to_hankaku_with_key($data->{leaderSkillDetails}, qw/ name description /);
@@ -315,9 +326,9 @@ sub mode_update_monster_data {
   &check_range('アシスト', $data->{assist}, 0, 9);
   &check_range('限界突破', $data->{overLimit}, 0, 9);
   if ($data->{overLimit} == 1) {
-    &check_range('限界突破時 HP', $data->{overLimitParam}{hp}, 0, 99999);
-    &check_range('限界突破時 攻撃', $data->{overLimitParam}{attack}, 0, 99999);
-    &check_range('限界突破時 回復', $data->{overLimitParam}{recovery}, -99999, 99999);
+    &check_range('限界突破時 HP', $data->{overLimitParam}{hp}, 0, 99999, 0);
+    &check_range('限界突破時 攻撃', $data->{overLimitParam}{attack}, 0, 99999, 0);
+    &check_range('限界突破時 回復', $data->{overLimitParam}{recovery}, -99999, 99999, 0);
   }
   foreach my $n ($data->{superawakens}) {
     #&check_range('超覚醒', $n, 1, 99);
@@ -325,9 +336,9 @@ sub mode_update_monster_data {
   &to_number_with_key($data->{evolution}, qw/ baseNo materials /);
   &check_range('進化タイプ', $data->{evolutionType}, 0, 99);
   if ($data->{evolutionType} > 0 && $data->{evolutionType} < 99) {
-    &check_range('進化前', $data->{evolution}{baseNo}, 1, 9999);
+    &check_range('進化前', $data->{evolution}{baseNo}, 1, 9999, 0);
     foreach my $i (0..4) {
-      &check_range('進化素材${i}', $data->{evolution}{materials}[$i], 0, 9999);
+      &check_range('進化素材${i}', $data->{evolution}{materials}[$i], 1, 9999, 0);
     }
   }
   &check_string_length('コメント', $data->{comment}, 0, 1000);
@@ -591,11 +602,25 @@ sub joined_key_access {
 # 指定条件を満たす１行の指定項目を取得する。
 sub get_one_row_data {
   my ($dbh, $table_name, $column_names_ref, %check_data) = @_;
-  my @check_keys = keys %check_data;
-  my @check_values = map { $check_data{$_} } @check_keys;
+  my @check_keys;
+  my @check_values;
+
+  for my $key (keys %check_data) {
+    my $value = $check_data{$key};
+    if (!defined $value) {
+      $key = "${key} IS NULL";
+      push @check_keys, $key;
+    } else {
+      $key = "${key} = ?";
+      
+      push @check_keys, $key;
+      push @check_values, $value;
+    }
+  }
+
   my $check_sql = "SELECT " . join(', ', @$column_names_ref) . " FROM ${table_name}";
   if (%check_data) {
-    $check_sql .= " WHERE " . join(' AND ', map { "$_ = ?" } @check_keys);
+    $check_sql .= " WHERE " . join(' AND ', @check_keys);
   }
   my $sth = $dbh->prepare($check_sql);
   if (!$sth) { die $check_sql . ":\n" . $dbh->errstr; }
