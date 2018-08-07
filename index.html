@@ -136,7 +136,7 @@
           <tr><td colspan="3">
               <span v-if="monsterData.awakens[0] === 0">なし</span>
               <span v-else-if="monsterData.awakens[0] === 99">不明</span>
-              <ul v-else style="list-style: none; padding: 0px; display: flex;">
+              <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex;">
               <li v-for="awaken in monsterData.awakens" v-if="awaken !== 0" style="width: 11.11%; text-align: center;"><img :src="'./kakusei/' + awaken + '.png'" width="24" height="24" :title="awakenTable[awaken]"></li>
             </ul>
           </td></tr>
@@ -201,7 +201,7 @@
         </td></tr>
         <tr class="thead-light"><th>進化素材</th></tr>
         <tr><td>
-          <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; padding: 0px; display:flex; justify-content: space-around;">
+          <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex; justify-content: space-around;">
             <li v-for="material in monsterData.evolution.materials" v-if="material !== 0" style="flex: 1;">
               <router-link :to="`/${material}`">
                 <img :src="getIconPath(material)" style="width: 32px; height: 32px;">
