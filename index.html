@@ -8,7 +8,13 @@
 <meta name="author" content="">
 <title>タイトル</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-
+<style>
+  .slash-join +.slash-join::before {
+    display: inline-block;
+    padding: 0 0.4rem;
+    content: "/";
+}
+</style>
 </head>
 
 <body style="padding-top: 4.5rem;">
@@ -108,8 +114,8 @@
             <th colspan="2">タイプ</th><th>属性</th>
           </tr>
           <tr>
-            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0">{{typeTable[type]}} </span></td>
-            <td><span v-for="attr in monsterData.attributes" v-if="attr !== 0">{{attributeTable[attr]}} </span></td>
+            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join">{{typeTable[type]}}</span></td>
+            <td><span v-for="attr in monsterData.attributes" v-if="attr !== 0" class="slash-join">{{attributeTable[attr]}}</span></td>
           </tr>
           <tr class="thead-light">
             <th>コスト</th><th>レア</th><th>アシスト</th>
