@@ -715,6 +715,13 @@ var componentMonsterData = {
     hasImage: function (no) {
       return (no in this.$store.state.imageTable);
     },
+    getIconPath: function (no) {
+      if (this.hasImage(no)) {
+        return `./monsterImages/icon_${no}.jpg`;
+      } else {
+        return undefined;
+      }
+    },
   },
 
   computed: {

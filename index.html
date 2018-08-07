@@ -193,13 +193,21 @@
         <template v-if="monsterData.evolutionType !== 99">
         <tr class="thead-light"><th>進化前モンスター</th></tr>
         <tr><td>
-          <router-link v-if="monsterData.evolution.baseNo" :to="`/${monsterData.evolution.baseNo}`">No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}</router-link>
+          <router-link v-if="monsterData.evolution.baseNo" :to="`/${monsterData.evolution.baseNo}`">
+            <img :src="getIconPath(monsterData.evolution.baseNo)" style="width: 32px; height: 32px;">
+            No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}
+          </router-link>
           <span v-else>不明</span>
         </td></tr>
         <tr class="thead-light"><th>進化素材</th></tr>
         <tr><td>
           <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; padding: 0px; display:flex; justify-content: space-around;">
-            <li v-for="material in monsterData.evolution.materials" v-if="material !== 0" style="flex: 1;"><router-link :to="`/${material}`">No. {{material}} {{monsterTable[material] && monsterTable[material].name}}</router-link></li>
+            <li v-for="material in monsterData.evolution.materials" v-if="material !== 0" style="flex: 1;">
+              <router-link :to="`/${material}`">
+                <img :src="getIconPath(material)" style="width: 32px; height: 32px;">
+                No. {{material}} {{monsterTable[material] && monsterTable[material].name}}
+              </router-link>
+            </li>
           </ul>
           <span v-else>不明</span>
         </td></tr>
