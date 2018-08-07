@@ -830,6 +830,7 @@ var componentMonsterEdit = {
           no: this.$route.params.no,
           callback: () => {
             this.monsterData = $.extend(true, {}, this.$store.state.monsterData);
+            this.monsterData.comment = '';
             this.$_mixinForPage_updateTitle();
           }
         });
