@@ -172,6 +172,9 @@ EOS
       # ログとしてID付きで保存
       copy("./monsterImages/icon_${no}.jpg","./monsterImagesLog/icon_${no}_${id}.jpg") or push @error, "error: $!";
       copy("./monsterImages/${no}.jpg","./monsterImagesLog/${no}_${id}.jpg") or push @error, "error: $!";
+
+      # 投稿画像情報の一覧を作成する。
+      &save_image_list_json($dbh);
     }
   }
 
@@ -815,5 +818,18 @@ sub save_leader_skill_list_json {
   close(DATAFILE);
 }
 
+
+sub save_image_list_json {
+  my ($dbh) = @_;
+  my @keys = (
+    [ '', 'no' ],
+    'id'
+  );
+  my $data = table_to_hash($dbh, 'monster_image', \@keys);
+
+  open(DATAFILE, "> ./listJson/image_list.json") or die("error :$!");
+  print DATAFILE JSON::PP::encode_json($data);
+  close(DATAFILE);
+}
 
 __END__
