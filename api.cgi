@@ -701,7 +701,9 @@ sub db_row_to_hash {
     if ($key eq 'superAwakens' && $value) {
       $value = JSON::PP::decode_json($value);
     }
-    &joined_key_access(\%data, $key, $value);
+    if ($key) {
+      &joined_key_access(\%data, $key, $value);
+    }
   }
   return \%data;
 }
