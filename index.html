@@ -143,7 +143,7 @@
         </table>
       </div>
       <div class="col-md-6">
-        <table v-if="monsterData.maxParam.hp != 0 || monsterData.maxParam.attack != 0 || monsterData.maxParam.recovery != 0" class="table table-bordered table-sm">
+        <table v-if="monsterData.maxParam.hp != undefined || monsterData.maxParam.attack != undefined || monsterData.maxParam.recovery != undefined" class="table table-bordered table-sm">
           <tr class="thead-light"><th colspan="2">レベル{{monsterData.maxLevel}}（最大）時</th><th>+297</th></tr></td>
           <tr><th style="width:auto;">HP</th><td style="width: 35%;" class="text-right">{{monsterData.maxParam.hp}}</td><td style="width:35%;" class="text-right">{{monsterData.maxParam.hp + 10 * 99}}</td></tr>
           <tr><th>攻撃</th><td class="text-right">{{monsterData.maxParam.attack}}</td><td class="text-right">{{monsterData.maxParam.attack + 5 * 99}}</td></tr>
@@ -264,10 +264,10 @@
                   <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.cost" required min="0" max="999">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.cost" min="1" max="999">
             </td>
             <td colspan="3">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.rare" required min="0" max="99">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.rare" min="1" max="99">
             </td>
         </tr>
         <tr class="thead-light">
@@ -277,10 +277,10 @@
         </tr>
         <tr>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxLevel" required min="0" max="99">
+            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxLevel" min="1" max="99">
           </td>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.expTable" required min="0" max="999999999">
+            <input type="number" class="form-control" id="inputNo" v-model="monsterData.expTable" min="0" max="999999999">
           </td>
           <td colspan="4">
             <select class="custom-select" id="selectAssist" v-model="monsterData.assist">
@@ -304,19 +304,19 @@
         <tr>
           <th colspan="4">HP</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.hp" required min="0" max="99999">
+            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.hp" min="1" max="99999">
           </td>
         </tr>
         <tr>
           <th colspan="4">攻撃</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.attack" required min="0" max="99999">
+            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.attack" min="1" max="99999">
           </td>
         </tr>
         <tr>
           <th colspan="4">回復</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.recovery" required min="-9999" max="99999">
+            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.recovery" min="-9999" max="99999">
           </td>
         </tr>
         <tr class="thead-light">
@@ -332,10 +332,10 @@
             <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillDetails.name" :skill-table="skillTable"></skill-incremental-input>
           </td>
           <td colspan="2">
-            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.baseTurn" required min="0" max="199">
+            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.baseTurn" min="1" max="199">
           </td>
           <td colspan="2">
-            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.maxLevel" required min="0" max="99">
+            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.maxLevel" min="1" max="99">
           </td>
         </tr>
         <tr>
@@ -382,19 +382,19 @@
           <tr>
             <th colspan="4">HP</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.hp" required min="0" max="99999">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.hp" min="1" max="99999">
             </td>
           </tr>
           <tr>
             <th colspan="4">攻撃</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.attack" required min="0" max="99999">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.attack" min="1" max="99999">
             </td>
           </tr>
           <tr>
             <th colspan="4">回復</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.recovery" required min="-9999" max="99999">
+              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.recovery" min="-9999" max="99999">
             </td>
           </tr>
           <tr class="thead-light">

@@ -226,23 +226,23 @@ const constData = {
     no: 0,
     name:"",
     attributes: [ 99, 0 ],
-    cost: 0,
-    rare: 0,
+    cost: undefined,
+    rare: undefined,
     types: [ 99, 0, 0],
     awakens: [ 99, 0, 0, 0, 0, 0, 0, 0, 0 ],
-    expTable:0,
-    maxLevel:0,
+    expTable: undefined,
+    maxLevel: undefined,
     maxParam: {
-      hp: 0,
-      attack: 0,
-      recovery: 0
+      hp: undefined,
+      attack: undefined,
+      recovery: undefined
     },
     skill: 0,
     skillDetails: {
       name: '',
       description: '',
-      baseTurn: 0,
-      maxLevel: 0
+      baseTurn: undefined,
+      maxLevel: undefined
     },
     leaderSkill: 0,
     leaderSkillDetails: {
@@ -252,16 +252,16 @@ const constData = {
     assist: 9,
     overLimit: 9,
     overLimitParam: {
-      hp:0,
-      attack:0,
-      recovery: 0
+      hp: undefined,
+      attack: undefined,
+      recovery: undefined
     },
     superAwakens: [],
     evolutionType: 99,
     evolution: {
-      baseNo: 0,
+      baseNo: undefined,
       materials: [
-        0, 0, 0, 0, 0
+        undefined, undefined, undefined, undefined, undefined
       ]
     },
     comment: ''
