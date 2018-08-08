@@ -87,11 +87,13 @@
       <tbody>
         <tr v-for="(data, key) in monsterTable">
           <td style="text-align: right;">{{key}}</td>
-          <td style="width:2em;">
-            <svg width="2em" height="1em">
-              <circle v-if="data.attributes[0] != 0" cx="0.5em" cy="0.55em" r="0.4em" stroke="rgba(0, 0, 0, 0.5)" :fill="attrColors[data.attributes[0]]" />
-              <circle v-if="data.attributes[1] != 0" cx="1.5em" cy="0.55em" r="0.4em" stroke="rgba(0, 0, 0, 0.5)" :fill="attrColors[data.attributes[1]]" />
-            </svg>
+          <td style="width:4em;">
+            <template v-for="attr in data.attributes">
+              <img v-if="attr != 0 && attr != 99" style="width: 1em; height: 1em;" :src="`./image/attribute/${attr}.png`">
+              <svg v-if="attr == 99" width="1em" height="1em">
+                <circle cx="0.5em" cy="0.55em" r="0.4em" stroke="rgba(0, 0, 0, 0.5)" :fill="attrColors[attr]" />
+              </svg>
+            </template>
           </td>
           <td><router-link :to="'/' + key">{{data.name}}</router-link></td>
         </tr>
