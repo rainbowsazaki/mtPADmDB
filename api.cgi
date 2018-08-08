@@ -479,11 +479,9 @@ sub mode_update_monster_data {
       if (!$is_update) {
         push @error, '同一内容で登録されています';
       } else {
-        # 変更があればデータ更新。
-        if ($monster_base_data_id) {
-          &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
-          &insert_table_data($dbh, 'monster_data', %monster_data_table_data, %common_insert_data);
-        }
+        # データ更新。
+        &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
+        &insert_table_data($dbh, 'monster_data', %monster_data_table_data, %common_insert_data);
 
         # モンスターデータのJSON保存
         my %to_json_data;
