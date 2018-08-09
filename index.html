@@ -50,7 +50,6 @@
       </div>
     </div>
     
-    <h1>みんなで作るパズドラモンスターデータベース</h1>
     <nav aria-label="パンくずリスト">
       <ol class="breadcrumb">
         <li v-for="breadcrumb in breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }">
@@ -76,6 +75,8 @@
 <!-- モンスター一覧ページ -->
 <script type="text/x-template" id="templateMonsterList">
   <div>
+    <h1>みんなで作るパズドラモンスターデータベース</h1>
+
     <pagination :page="page" :pageCount="pageCount" />
 
     <table class="table">
