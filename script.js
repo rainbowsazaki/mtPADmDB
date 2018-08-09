@@ -599,6 +599,74 @@ Vue.component('monsterIncrementalSearch', {
   }
 });
 
+
+/**
+ * ページ送りのコンポーネント
+ */
+Vue.component('pagination', {
+  template: `
+<nav">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" :class="{ disabled: page <= 1 }">
+      <router-link class="page-link" :to="'?page=' + (page - 1)" append aria-label="前">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">前</span>
+      </router-link>
+    </li>
+    
+    <li v-for="n in paginationNos" :class="{ 'page-item': 1, 'active': n == page }">
+      <router-link v-if="n != page" class="page-link" :to="'?page=' + n" append>{{n}}</router-link>
+      <span v-else class="page-link">{{n}}</span>
+    </li>
+
+    <li class="page-item" :class="{ disabled: page >= pageCount }">
+      <router-link class="page-link" :to="'?page=' + (page + 1)" append aria-label="次">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">次</span>
+      </router-link>
+    </li>
+  </ul>
+</nav>
+  `,
+
+  props: {
+    'page': Number,
+    'pageCount': Number,
+    'itemCount': {
+      type: Number,
+      default: 5
+    }
+  },
+  data: function () {
+    return {
+    }
+  },
+
+  computed: {
+    itemCountReal() { return Math.min(this.itemCount, this.pageCount); },
+    itemCountHarf () { return (this.itemCountReal / 2) | 0; },
+    paginationStart () {
+      return (this.page > this.pageCount - this.itemCountHarf)
+        ? this.pageCount - this.itemCountReal + 1
+        : Math.max(1, this.page - this.itemCountHarf);
+    },
+    paginationEnd () {
+      return (this.page <= this.itemCountHarf)
+        ? this.itemCountReal
+        : Math.min(this.pageCount, this.page + this.itemCountHarf);
+    },
+
+    paginationNos () {
+      var array = [];
+      for (var i = this.paginationStart; i <= this.paginationEnd; i++) {
+        array.push(i);
+      }
+      return array;
+    },
+  }
+});
+
+
 // ページ用のコンポーネントで使用する処理のミックスイン
 var mixinForPage = {
   created: function () {
@@ -663,12 +731,26 @@ var componentMonsterList = {
   pageTitle: undefined,
   data: function () {
     return {
-      
+      inPageCount: 20,
     };
   },
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
     attrColors () { return this.$store.state.attrColors; },
+
+    pageCount() { return ((this.monsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+    page () { return (this.$route.query.page * 1) || 1; },
+
+    monsterTableArray: function() {
+      var array = [];
+      for (var key in this.monsterTable) {
+        array.push(this.monsterTable[key]);
+      }
+      return array;
+    },
+    monsterTableInPage () {
+      return this.monsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
+    }
   },
 };
 

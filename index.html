@@ -76,6 +76,8 @@
 <!-- モンスター一覧ページ -->
 <script type="text/x-template" id="templateMonsterList">
   <div>
+    <pagination :page="page" :pageCount="pageCount" />
+
     <table class="table">
       <thead class="thead-light">
         <tr>
@@ -85,8 +87,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(data, key) in monsterTable">
-          <td style="text-align: right;">{{key}}</td>
+        <tr v-for="data in monsterTableInPage">
+          <td style="text-align: right;">{{data.no}}</td>
           <td style="width:4em;">
             <template v-for="attr in data.attributes">
               <img v-if="attr != 0 && attr != 99" style="width: 1em; height: 1em;" :src="`./image/attribute/${attr}.png`">
@@ -95,10 +97,12 @@
               </svg>
             </template>
           </td>
-          <td><router-link :to="'/' + key">{{data.name}}</router-link></td>
+          <td><router-link :to="'/' + data.no">{{data.name}}</router-link></td>
         </tr>
       </tbody>
     </table>
+
+    <pagination :page="page" :pageCount="pageCount" />
 
   </div>
 </script>
