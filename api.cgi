@@ -349,6 +349,7 @@ sub mode_update_monster_data {
   &check_string_length('コメント', $data->{comment}, 0, 1000);
 
 
+  my $is_update_monster_data = 0;
   my $is_update_skill_table = 0;
   my $is_update_leader_skill_table = 0;
 
@@ -361,27 +362,39 @@ sub mode_update_monster_data {
     # スキル
     if ($data->{skill} == 0) {
       my $sth;
-      my $new_no = -1;
-      # 同一内容のスキルが登録されてないか確認
+
       my %skill_check_data = map {
         $_ => $data->{skillDetails}{$_}
       } qw/ name description baseTurn maxLevel /;
       $skill_check_data{state} = 1;
       
-      my $tbl_ary_ref = &get_one_row_data($dbh, 'skill', [ 'no' ], %skill_check_data);
+      # 同じ名前のスキルが無いか確認する。
+      my @get_columns = qw/ no name description baseTurn maxLevel /;
+      my $tbl_ary_ref = &get_one_row_data($dbh, 'skill', \@get_columns, ( name => $data->{skillDetails}{name}, state => 1 ) );
       if ($tbl_ary_ref) {
-        $new_no = $tbl_ary_ref->[0];
-      }
-
-      if ($new_no != -1) {
-        $data->{skill} = $new_no;
+        my $skill_no = $tbl_ary_ref->[0];
+        # 同一内容か確認
+        my $is_equal = 1;
+        for my $i (1 .. $#get_columns) {
+          if ($tbl_ary_ref->[$i] ne $data->{skillDetails}{$get_columns[$i]}) {
+            $is_equal = 0;
+            last;
+          }
+        }
+        # 異なる場合は更新する。
+        if (!$is_equal) {  
+          &update_disable_state($dbh, 'skill', (no => $skill_no, state => 1));
+          &insert_table_data($dbh, 'skill', %skill_check_data, %common_insert_data, no => $skill_no);
+          $is_update_skill_table = 1;
+        }
+        $data->{skill} = $skill_no;
       } else {
         # 新たに登録するスキルに割り振る番号を求める
         my $tbl_ary_ref = &get_one_row_data($dbh, 'skill', [ 'MAX(no)' ]);
-        $new_no = $tbl_ary_ref->[0] + 1;
+        my $skill_no = $tbl_ary_ref->[0] + 1;
         
-        if (&insert_table_data($dbh, 'skill', %skill_check_data, %common_insert_data, no => $new_no)) {
-          $data->{skill} = $new_no;
+        if (&insert_table_data($dbh, 'skill', %skill_check_data, %common_insert_data, no => $skill_no)) {
+          $data->{skill} = $skill_no;
           $is_update_skill_table = 1;
         } else {
           push @error, 'スキル登録エラー';
@@ -397,27 +410,39 @@ sub mode_update_monster_data {
     #リーダースキル
     if ($data->{leaderSkill} == 0) {
       my $sth;
-      my $new_no = -1;
 
-      # 同一内容のスキルが登録されてないか確認
       my %leader_skill_check_data = map {
         $_ => $data->{leaderSkillDetails}{$_}
       } qw/ name description /;
       $leader_skill_check_data{state} = 1;
 
-      my $tbl_ary_ref = &get_one_row_data($dbh, 'leader_skill', [ 'no' ], %leader_skill_check_data);
+      # 同じ名前のスキルが無いか確認する。
+      my @get_columns = qw/ no name description /;
+      my $tbl_ary_ref = &get_one_row_data($dbh, 'leader_skill', \@get_columns, ( name => $data->{leaderSkillDetails}{name}, state => 1 ) );
       if ($tbl_ary_ref) {
-        $new_no = $tbl_ary_ref->[0];
-      }
-      if ($new_no != -1) {
-        $data->{leaderSkill} = $new_no;
+        my $leader_skill_no = $tbl_ary_ref->[0];
+        # 同一内容か確認
+        my $is_equal = 1;
+        for my $i (1 .. $#get_columns) {
+          if ($tbl_ary_ref->[$i] ne $data->{leaderSkillDetails}{$get_columns[$i]}) {
+            $is_equal = 0;
+            last;
+          }
+        }
+        # 異なる場合は更新する。
+        if (!$is_equal) {  
+          &update_disable_state($dbh, 'leader_skill', (no => $leader_skill_no, state => 1));
+          &insert_table_data($dbh, 'leader_skill', %leader_skill_check_data, %common_insert_data, no => $leader_skill_no);
+          $is_update_leader_skill_table = 1;
+        }
+        $data->{leaderSkill} = $leader_skill_no;
       } else {
         # 新たに登録するスキルに割り振る番号を求める
         my $tbl_ary_ref = &get_one_row_data($dbh, 'leader_skill', [ 'MAX(no)' ]);
-        my $new_no = $tbl_ary_ref->[0] + 1;
+        my $leader_skill_no = $tbl_ary_ref->[0] + 1;
 
-        if (&insert_table_data($dbh, 'leader_skill', %leader_skill_check_data, %common_insert_data, no => $new_no)) {
-          $data->{leaderSkill} = $new_no;
+        if (&insert_table_data($dbh, 'leader_skill', %leader_skill_check_data, %common_insert_data, no => $leader_skill_no)) {
+          $data->{leaderSkill} = $leader_skill_no;
           $is_update_leader_skill_table = 1;
         } else {
           push @error, 'リーダースキル登録エラー';
@@ -476,40 +501,42 @@ sub mode_update_monster_data {
         state => 1
       );
 
-      my $is_update = !&check_same_table_data($dbh, 'monster_data', %monster_data_table_data);
+      $is_update_monster_data = !&check_same_table_data($dbh, 'monster_data', %monster_data_table_data);
 
-      if (!$is_update) {
+      if (!($is_update_monster_data || $is_update_skill_table || $is_update_leader_skill_table)) {
         push @error, '同一内容で登録されています';
       } else {
         # データ更新。
-        &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
-        &insert_table_data($dbh, 'monster_data', %monster_data_table_data, %common_insert_data);
+        if ($is_update_monster_data) {
+          &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
+          &insert_table_data($dbh, 'monster_data', %monster_data_table_data, %common_insert_data);
 
-        # モンスターデータのJSON保存
-        my %to_json_data;
-        for my $column_names_ref (values %monster_data_db_info) {
-          for (@$column_names_ref) {
-            my $key = $_;
-            if (ref $key eq 'ARRAY') {
-              $key = $key->[0];
+          # モンスターデータのJSON保存
+          my %to_json_data;
+          for my $column_names_ref (values %monster_data_db_info) {
+            for (@$column_names_ref) {
+              my $key = $_;
+              if (ref $key eq 'ARRAY') {
+                $key = $key->[0];
+              }
+              &joined_key_access(\%to_json_data, $key,
+                &joined_key_access($data, $key)
+              );
             }
-            &joined_key_access(\%to_json_data, $key,
-              &joined_key_access($data, $key)
+          }
+          for my $json_append_key ( 'no', 'comment' ) {
+            &joined_key_access(\%to_json_data, $json_append_key,
+              &joined_key_access($data, $json_append_key)
             );
           }
-        }
-        for my $json_append_key ( 'no', 'comment' ) {
-          &joined_key_access(\%to_json_data, $json_append_key,
-            &joined_key_access($data, $json_append_key)
-          );
-        }
-        
-        my $fileNo = $to_json_data{no};
-        open(DATAFILE, "> ./monsterJson/${fileNo}.json") or die("error :$!");
-        print DATAFILE JSON::PP::encode_json(\%to_json_data);
-        close(DATAFILE);
+          
+          my $fileNo = $to_json_data{no};
+          open(DATAFILE, "> ./monsterJson/${fileNo}.json") or die("error :$!");
+          print DATAFILE JSON::PP::encode_json(\%to_json_data);
+          close(DATAFILE);
 
-        &save_monster_list_json($dbh);
+          &save_monster_list_json($dbh);
+        }
         if ($is_update_skill_table) {
           &save_skill_list_json($dbh);
         }
