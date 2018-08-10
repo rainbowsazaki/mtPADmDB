@@ -556,15 +556,19 @@ sub mode_update_monster_data {
     $outputData{error} = \@error;
   } else {
     $outputData{message} = [ 'モンスターデータを更新しました。' ];
-    $outputData{newTableData} = {
-      monster => {
-        $data->{no} => {
-          name => $data->{name},
-          attributes => $data->{attributes},
-          types => $data->{types},
-        }
-      },
-    };
+    $outputData{newTableData} = {};
+
+    if ($is_update_monster_data) {
+      my %pickup_monster;
+
+      for (@monster_data_pickup_keys) {
+        &joined_key_access(\%pickup_monster, $_,
+          &joined_key_access($data, $_)
+        )
+      }
+      $outputData{newTableData}{monster} = { $data->{no} => \%pickup_monster };
+    }
+
     if ($is_update_skill_table) {
       $outputData{newTableData}{skillDetails} = {
         $data->{skill} => {
