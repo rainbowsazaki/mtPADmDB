@@ -156,6 +156,20 @@
               <li v-for="awaken in monsterData.awakens" v-if="awaken !== 0" style="width: 11.11%; text-align: center;"><img :src="'./image/awaken/' + awaken + '.png'" width="24" height="24" :title="awakenTable[awaken]"></li>
             </ul>
           </td></tr>
+          <template>
+            <tr class="thead-light"><th colspan="3">振れる潜在キラー</th></tr>
+            <tr>
+              <td colspan="3">
+                <span v-if="monsterData.types[0] == 99">不明</span>
+                <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
+                  <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" class="slash-join">
+                    {{typeTable[senzaiKillerType].name}}キラー
+                  </li>
+                </ul>
+                <span v-else>振れる潜在キラーはありません。</span>
+              </td>
+            </tr>
+          </template> 
         </table>
       </div>
       <div class="col-md-6">

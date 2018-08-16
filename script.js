@@ -834,6 +834,16 @@ var componentMonsterData = {
       }
       return leaderSkillDetails;
     },
+
+    senzaiKillerNos: function () {
+      var killerNoSet = new Set();
+      for (var type of this.monsterData.types) {
+        for (var killerNo of this.typeTable[type].senzaiKiller) {
+          killerNoSet.add(killerNo);
+        }
+      }
+      return Array.from(killerNoSet).sort(((a, b) => a - b ));
+    }
   },
 };
 
