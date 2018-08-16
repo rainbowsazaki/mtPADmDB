@@ -153,7 +153,7 @@
               <span v-if="monsterData.awakens[0] === 0">なし</span>
               <span v-else-if="monsterData.awakens[0] === 99">不明</span>
               <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex;">
-              <li v-for="awaken in monsterData.awakens" v-if="awaken !== 0" style="width: 11.11%; text-align: center;"><img :src="'./image/awaken/' + awaken + '.png'" width="24" height="24" :title="awakenTable[awaken]"></li>
+              <li v-for="awaken in monsterData.awakens" v-if="awaken !== 0" style="width: 11.11%; text-align: center;"><img :src="'./image/awaken/' + awaken + '.png'" width="24" height="24" :title="awakenTable[awaken].name"></li>
             </ul>
           </td></tr>
           <template>
@@ -210,7 +210,7 @@
           <tr class="thead-light"><th>超覚醒</th></tr>
           <tr><td>
               <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
-                <li v-for="superAwaken in monsterData.superAwakens" class="slash-join"><img :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken]">{{awakenTable[superAwaken]}}</li>
+                <li v-for="superAwaken in monsterData.superAwakens" class="slash-join"><img :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name">{{awakenTable[superAwaken].name}}</li>
               </ul>
           </td></tr>
         </table>
@@ -332,7 +332,7 @@
         <tr v-for="n in 9" :key="n">
           <td colspan="12">
             <pd-select v-model="monsterData.awakens[n - 1]">
-              <pd-option v-for="(awaken, key) in awakenTable" :value="key" :key="key" v-once><img :src="(key == 0 || key == 99) ? '' : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken}}</pd-option>
+              <pd-option v-for="(awaken, key) in awakenTable" :value="key" :key="key" v-once><img :src="(key == 0 || key == 99) ? '' : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken.name}}</pd-option>
             </pd-select>
           </td>
         </tr>
@@ -443,7 +443,7 @@
               <span v-for="(awaken, key) in awakenTable" v-if="key != 0" class="col-md-3 form-check" style="display:inline-block;" :key="key">
                 <input class="form-check-input" type="checkbox" :value="key" v-model="monsterData.superAwakens" :id="'superAwaken' + key">
                 <label class="form-check-label" :for="'superAwaken' + key">
-                  <img v-if="key != 99" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken}}
+                  <img v-if="key != 99" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken.name}}
                 </label>
               </span>
             </td>
