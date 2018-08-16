@@ -124,7 +124,7 @@
             <th colspan="2">タイプ</th><th>属性</th>
           </tr>
           <tr>
-            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join"><img :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type]}}</span></td>
+            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join"><img :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></td>
             <td><span v-for="attr in monsterData.attributes" v-if="attr !== 0" class="slash-join">{{attributeTable[attr]}}</span></td>
           </tr>
           <tr class="thead-light">
@@ -268,7 +268,7 @@
         <tr>
           <td v-for="n in 3" colspan="4">
             <select class="custom-select" :id="'selectType' + n" v-model="monsterData.types[n - 1]">
-              <option v-for="(type, key) in typeTable" :value="key" :key="key" v-once>{{type}}</option>
+              <option v-for="(type, key) in typeTable" :value="key" :key="key" v-once>{{type.name}}</option>
             </select>
           </td>
         </tr>
