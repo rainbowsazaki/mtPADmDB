@@ -924,8 +924,12 @@ var componentMonsterEdit = {
         this.$store.commit('loadMonsterData', { 
           no: this.$route.params.no,
           callback: () => {
-            this.monsterData = $.extend(true, {}, this.$store.state.monsterData);
-            this.monsterData.comment = '';
+            var m = $.extend(true, {}, this.$store.state.monsterData);
+            m.leaderSkillDetails = $.extend(true, m.leaderSkillDetails, this.leaderSkillTable[m.skill]);
+            m.skillDetails = $.extend(true, m.skillDetails, this.skillTable[m.leaderSkill]);
+            m.comment = '';
+
+            this.monsterData = m;
             this.$_mixinForPage_updateTitle();
           }
         });
