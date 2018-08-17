@@ -93,11 +93,11 @@ CREATE TABLE IF NOT EXISTS leader_skill (
 );
 
 
-  INSERT INTO skill (no , name , description, baseTurn, maxLevel)
-    VALUES (1, 'なし','', 0, 0);
+  INSERT INTO skill (no , name , description, baseTurn, maxLevel, state)
+    VALUES (1, 'なし','', 0, 0, 1);
 
-  INSERT INTO leader_skill (no , name , description)
-      VALUES (1, 'なし','');
+  INSERT INTO leader_skill (no , name , description, state)
+      VALUES (1, 'なし','', 1);
 
 
 CREATE TABLE IF NOT EXISTS monster_image (
