@@ -459,6 +459,8 @@ Vue.component('skillIncrementalInput', {
 
   computed: {
     filteredSkillTable: function () {
+      // 文字が入力されていない場合は表示しない。
+      if (this.value.length < 1) { return {}; }
       var obj = {};
       for (var key in this.skillTable) {
         var value = this.skillTable[key];
@@ -509,6 +511,8 @@ Vue.component('monsterIncrementalInput', {
   },
   computed: {
     filteredMonsterTable: function () {
+      // 文字が入力されていない場合は表示しない。
+      if (this.filter.length < 1) { return {}; }
       var obj = {};
       for (var key in this.monsterTable) {
         var value = this.monsterTable[key];
