@@ -2,8 +2,8 @@
 var commonData = {
 
   booleanTable: {
-    0: "○",
-    1: "×",
+    0: "×",
+    1: "○",
 
     9: "不明",
   },
