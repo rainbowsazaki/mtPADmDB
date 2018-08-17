@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS monster_base_data (
   leaderSkill INTEGER,
   assist INTEGER,
   overLimit INTEGER,
-  evolutionType INTEGER,
+  evolutionType INTEGER
 );
 
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS over_limit (
   param_hp INTEGER,
   param_attack INTEGER,
   param_recovery INTEGER,
-  superAwakens TEXT,
+  superAwakens TEXT
 );
 
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS evolution (
   materials_1 INTEGER,
   materials_2 INTEGER,
   materials_3 INTEGER,
-  materials_4 INTEGER,
+  materials_4 INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS monster_data (
