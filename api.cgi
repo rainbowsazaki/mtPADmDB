@@ -57,6 +57,41 @@ my %monster_data_db_info = (
   ]
 );
 
+# モンスター情報の JSON を出力する際の項目のソート順。
+my %json_sort_ranks = (
+  no => 0,
+  name => 10,
+  attributes => 20,
+  cost => 30,
+  rare => 40,
+  types => 50,
+  awakens => 60,
+  expTable => 70,
+  maxLevel => 80,
+  maxParam => 90,
+  skill => 100,
+  leaderSkill => 110,
+  assist => 120,
+  overLimit => 130,
+  overLimitParam => 140,
+  superAwakens => 150,
+  evolutionType => 160,
+  evolution => 170,
+  comment => 180,
+
+  hp => 0,
+  attack => 10,
+  recovery => 20,
+
+  description => 0,
+  baseTurn => 10,
+  #maxLevel は 80 で定義済み
+
+  baseNo => 0,
+  materials => 10,
+);
+
+
 my @monster_data_pickup_keys = qw/ no name attributes_0 attributes_1 types_0 types_1 types_2 /;
 
 my $q = CGI->new();
@@ -777,7 +812,10 @@ sub save_monster_list_json {
   # JSON化してファイルに保存。
   open(DATAFILE, "> ./listJson/monster_data.json") or die("error :$!");
   print DATAFILE JSON::PP->new->pretty
-    ->sort_by(sub { $JSON::PP::a cmp $JSON::PP::b } )
+    ->sort_by(sub { 
+      ($json_sort_ranks{$JSON::PP::a} - $json_sort_ranks{$JSON::PP::b}) ||
+      ($JSON::PP::a - $JSON::PP::b)
+    } )
     ->indent_length(2)
     ->encode($data_ref);
   close(DATAFILE);
