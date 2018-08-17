@@ -898,7 +898,7 @@ var componentMonsterEdit = {
     skillTable: function () { return this.$store.state.skillTable; },
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
 
-    monsterData: function () { return this.$store.state.monsterData },
+//    monsterData: function () { return this.$store.state.monsterData },
 
     skillDetails: function () {
       if (this.monsterData.skill != 0) {
