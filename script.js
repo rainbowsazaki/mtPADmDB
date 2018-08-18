@@ -128,82 +128,7 @@ var commonData = {
     99: { name: "不明", description: '' },
   },
 
-  monsterData: {
-    no: undefined,
-    name:"",
-    attributes: [ 0, 0 ],
-    cost: 0,
-    rare: 0,
-    types: [ 0, 0, 0],
-    awakens: [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-    expTable:0,
-    maxLevel:0,
-    maxParam: {
-      hp: 0,
-      attack: 0,
-      recovery: 0
-    },
-    skill: 0,
-    skillDetails: {
-      name: '',
-      description: '',
-      baseTurn: 0,
-      maxLevel: 0
-    },
-    leaderSkill: 0,
-    leaderSkillDetails: {
-      name: '',
-      description: ''
-    },
-    assist: 0,
-    overLimit: 0,
-    overLimitParam: {
-      hp:0,
-      attack:0,
-      recovery: 0
-    },
-    superAwakens: [],
-    evolutionType: 0,
-    evolution: {
-      baseNo: 0,
-      materials: [
-        0, 0, 0, 0, 0
-      ]
-    }
-  },
-  monsterData_: {
-    no:3764,
-    name:"刻水の時女神・スクルド",
-    attributes: [ 2, 0 ],
-    cost: 50,
-    rare: 8,
-    types: [ 1, 6, 0],
-    awakens: [ 27, 26, 7, 28, 7, 29, 45, 43, 43 ],
-    expTable:4000000,
-    maxLevel:99,
-    maxParam: {
-    },
-    skill: {
-    },
-    leaderSkill: {
-    },
-    assist: 1,
-    overLimit: 9,
-    overLimitParam: {
-      hp:5375,
-      attack:2011,
-      recovery: 181
-    },
-    superAwakens: [],
-    evolutionType: 2,
-    evolution: {
-      baseNo:1674,
-      materials: [
-        148, 148, 1294, 1294, 247
-      ]
-    },
-
-  },
+  monsterData: {},
 
   navis: [
     { text: 'ホーム', to: '/' },
@@ -212,7 +137,6 @@ var commonData = {
     { text: 'これは何？', to: '/about' },
   ],
 
-  isLoadedTableData: 0,
   monsterTable: {},
   skillTable: {},
   leaderSkillTable: {},
