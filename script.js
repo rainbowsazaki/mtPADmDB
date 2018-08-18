@@ -1082,6 +1082,15 @@ var componentPic = {
                 break;
               }
             }
+            // 上端位置取得
+            var imgTop = 0;
+            data = ctx.getImageData(1, 0, 8, img.height);
+            for (var i = 0; i < img.height; i++) {
+              if (checkWaku(data.data, data.width * 4 * i + 4, [152, 114, 64])) {
+                imgTop = i;
+                break;
+              }
+            }
             // 左端・横幅取得
             var marginLeft = 0;
             var imgWidth = img.width;
@@ -1119,8 +1128,15 @@ var componentPic = {
             var imageWidth = 540;
             var imageHeight = 405;
             
+            // モンスター画像の縦の中心を求める
+            var monsterAreaTop = imgTop + 144 / 640 * img.width;
+            var monsterAreaBottom = imgHeight - 354 / 640 * img.width;
+            var monsterAreaMiddleRate = 0.624;
+            var monsterAreaMiddleOffset = imgWidth * 0.07;
+            var monsterAreaMiddle = (monsterAreaTop * monsterAreaMiddleRate + monsterAreaBottom * (1 - monsterAreaMiddleRate) - monsterAreaMiddleOffset) | 0;
+
             srcX = marginLeft + (imageSrcScale[0] * imgWidth + 0.5) | 0;
-            srcY = (imgHeight - imageSrcScale[1] * imgWidth + 0.5) | 0;
+            srcY = monsterAreaMiddle - srcHeight / 2;
             srcWidth = (imageSrcScale[2] * imgWidth + 0.5)| 0;
             srcHeight = (imageSrcScale[3] * imgWidth + 0.5)| 0;
             // Canvasの準備
