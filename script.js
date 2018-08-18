@@ -1145,7 +1145,7 @@ var componentPic = {
             ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, imageWidth, imageHeight);
 
             // canvasを画像に変換
-            var data = canvas.toDataURL('image/jpeg', 0.7);
+            var data = canvas.toDataURL('image/jpeg', 0.85);
             this.imageResultSrc = data;
 
             canvas.width = canvas.height = 0;
