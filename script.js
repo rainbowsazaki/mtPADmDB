@@ -1094,6 +1094,7 @@ var componentPic = {
               }
             }
 
+            // アイコン画像取得
             var srcX = marginLeft + (iconSrcScale[0] * imgWidth) | 0;
             var srcY = (imgHeight - iconSrcScale[1] * imgWidth) | 0;
             var srcWidth = (iconSrcScale[2] * imgWidth )| 0;
@@ -1104,10 +1105,17 @@ var componentPic = {
             canvas.height = iconHeight;
             ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
 
+            // 一番上が黒くなかったら位置を微調整
+            data = ctx.getImageData(0, 0, 32, 8);
+            if (data.data[4 * 8 + 0] > 200 || data.data[4 * 8 + 1] > 200 || data.data[4 * 8 + 2] > 200) {
+              ctx.drawImage(img, srcX, srcY - (640 * 5 / imgWidth), srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
+            }
+
             // canvasを画像に変換
             var data = canvas.toDataURL('image/jpeg', 0.7);
             this.iconResultSrc = data;
 
+            // モンスター画像取得
             var imageWidth = 540;
             var imageHeight = 405;
             
