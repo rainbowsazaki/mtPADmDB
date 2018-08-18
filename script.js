@@ -3,13 +3,6 @@ var commonData = {
 
   monsterData: {},
 
-  navis: [
-    { text: 'ホーム', to: '/' },
-    { text: '新規追加', to: '/edit' },
-    { text: '画像投稿', to: '/pic' },
-    { text: 'これは何？', to: '/about' },
-  ],
-
   monsterTable: {},
   skillTable: {},
   leaderSkillTable: {},
@@ -21,6 +14,14 @@ var commonData = {
 
 const constData = {
   title: "みんなで作るパズドラデータベース",
+
+  /** ナビゲーションメニュー用データ */
+  navis: [
+    { text: 'ホーム', to: '/' },
+    { text: '新規追加', to: '/edit' },
+    { text: '画像投稿', to: '/pic' },
+    { text: 'これは何？', to: '/about' },
+  ],
 
   /** モンスター情報の空データ */
   monsterClearData: {
@@ -1201,6 +1202,6 @@ var app = new Vue({
   computed: {
     errors: function () { return this.$store.state.errors; },
     messages: function () { return this.$store.state.messages; },
-    navis: function () { return this.$store.state.navis; }
+    navis: function () { return constData.navis; }
   }
 }).$mount('#app')
