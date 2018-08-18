@@ -1,6 +1,73 @@
 
 var commonData = {
 
+  monsterData: {},
+
+  navis: [
+    { text: 'ホーム', to: '/' },
+    { text: '新規追加', to: '/edit' },
+    { text: '画像投稿', to: '/pic' },
+    { text: 'これは何？', to: '/about' },
+  ],
+
+  monsterTable: {},
+  skillTable: {},
+  leaderSkillTable: {},
+  imageTable: {},
+
+  messages: [],
+  errors: []
+};
+
+const constData = {
+  title: "みんなで作るパズドラデータベース",
+
+  /** モンスター情報の空データ */
+  monsterClearData: {
+    no: 0,
+    name:"",
+    attributes: [ 99, 0 ],
+    cost: undefined,
+    rare: undefined,
+    types: [ 99, 0, 0],
+    awakens: [ 99, 0, 0, 0, 0, 0, 0, 0, 0 ],
+    expTable: undefined,
+    maxLevel: undefined,
+    maxParam: {
+      hp: undefined,
+      attack: undefined,
+      recovery: undefined
+    },
+    skill: 0,
+    skillDetails: {
+      name: '',
+      description: '',
+      baseTurn: undefined,
+      maxLevel: undefined
+    },
+    leaderSkill: 0,
+    leaderSkillDetails: {
+      name: '',
+      description: ''
+    },
+    assist: 9,
+    overLimit: 9,
+    overLimitParam: {
+      hp: undefined,
+      attack: undefined,
+      recovery: undefined
+    },
+    superAwakens: [],
+    evolutionType: 99,
+    evolution: {
+      baseNo: undefined,
+      materials: [
+        undefined, undefined, undefined, undefined, undefined
+      ]
+    },
+    comment: ''
+  },
+
   booleanTable: {
     0: "×",
     1: "○",
@@ -128,72 +195,6 @@ var commonData = {
     99: { name: "不明", description: '' },
   },
 
-  monsterData: {},
-
-  navis: [
-    { text: 'ホーム', to: '/' },
-    { text: '新規追加', to: '/edit' },
-    { text: '画像投稿', to: '/pic' },
-    { text: 'これは何？', to: '/about' },
-  ],
-
-  monsterTable: {},
-  skillTable: {},
-  leaderSkillTable: {},
-  imageTable: {},
-
-  messages: [],
-  errors: []
-};
-
-const constData = {
-  title: "みんなで作るパズドラデータベース",
-
-  /** モンスター情報の空データ */
-  monsterClearData: {
-    no: 0,
-    name:"",
-    attributes: [ 99, 0 ],
-    cost: undefined,
-    rare: undefined,
-    types: [ 99, 0, 0],
-    awakens: [ 99, 0, 0, 0, 0, 0, 0, 0, 0 ],
-    expTable: undefined,
-    maxLevel: undefined,
-    maxParam: {
-      hp: undefined,
-      attack: undefined,
-      recovery: undefined
-    },
-    skill: 0,
-    skillDetails: {
-      name: '',
-      description: '',
-      baseTurn: undefined,
-      maxLevel: undefined
-    },
-    leaderSkill: 0,
-    leaderSkillDetails: {
-      name: '',
-      description: ''
-    },
-    assist: 9,
-    overLimit: 9,
-    overLimitParam: {
-      hp: undefined,
-      attack: undefined,
-      recovery: undefined
-    },
-    superAwakens: [],
-    evolutionType: 99,
-    evolution: {
-      baseNo: undefined,
-      materials: [
-        undefined, undefined, undefined, undefined, undefined
-      ]
-    },
-    comment: ''
-  },
 };
 
 
@@ -666,7 +667,7 @@ var componentMonsterList = {
   },
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
-    attrColors () { return this.$store.state.attrColors; },
+    attrColors () { return constData.attrColors; },
 
     pageCount() { return ((this.monsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     page () { return (this.$route.query.page * 1) || 1; },
@@ -697,11 +698,11 @@ var componentMonsterData = {
   props: [ 'no' ],
   data: function () {
     return {
-      booleanTable: commonData.booleanTable,
-      typeTable: commonData.typeTable,
-      attributeTable: commonData.attributeTable,
-      evolutionTypeTable: commonData.evolutionTypeTable,
-      awakenTable: commonData.awakenTable,
+      booleanTable: constData.booleanTable,
+      typeTable: constData.typeTable,
+      attributeTable: constData.attributeTable,
+      evolutionTypeTable: constData.evolutionTypeTable,
+      awakenTable: constData.awakenTable,
     };
   },
   created: function () {
@@ -801,11 +802,11 @@ var componentMonsterEdit = {
   props: ['no'],
   data: function () {
     return {
-      booleanTable: commonData.booleanTable,
-      typeTable: commonData.typeTable,
-      attributeTable: commonData.attributeTable,
-      evolutionTypeTable: commonData.evolutionTypeTable,
-      awakenTable: commonData.awakenTable,
+      booleanTable: constData.booleanTable,
+      typeTable: constData.typeTable,
+      attributeTable: constData.attributeTable,
+      evolutionTypeTable: constData.evolutionTypeTable,
+      awakenTable: constData.awakenTable,
 
       monsterData: {},
     };
