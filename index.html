@@ -124,7 +124,7 @@
             <th colspan="2">タイプ</th><th>属性</th>
           </tr>
           <tr>
-            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join"><img :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></td>
+            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join"><img v-if="type != 99" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></td>
             <td>
               <span v-if="monsterData.attributes[0] == 99">不明</span>
               <img  v-for="attr in monsterData.attributes" v-if="attr != 0 && attr != 99" style="width: 1.1em; height: 1.1em;" :src="`./image/attribute/${attr}.png`">
