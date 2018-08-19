@@ -518,11 +518,13 @@ sub mode_update_monster_data {
 
       # 進化情報
       my $evolution_id = 0;
+      my $is_update_evolution_table = 0;
       if ($data->{evolutionType} != 0 && $data->{evolutionType} != 99) {
         my $evolution_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'evolution'});
         $evolution_id = &get_one_row_data($dbh, 'evolution', [ 'id' ], %$evolution_check_data_ref);
         if (!$evolution_id) {
           &insert_table_data($dbh, 'evolution', %$evolution_check_data_ref);          
+          $is_update_evolution_table = 1;
           $evolution_id = &get_one_row_data($dbh, 'evolution', [ 'id' ], %$evolution_check_data_ref);
         }
         $evolution_id = $evolution_id->[0];
@@ -577,6 +579,9 @@ sub mode_update_monster_data {
         }
         if ($is_update_leader_skill_table) {
           &save_leader_skill_list_json($dbh);
+        }
+        if ($is_update_evolution_table) {
+          &save_evolution_list_json($dbh);
         }
 
         $dbh->commit;
@@ -909,6 +914,38 @@ sub save_leader_skill_list_json {
   close(DATAFILE);
 }
 
+# 進化前のモンスター番号キーとして進化情報の配列を格納したJSONを保存する。
+sub save_evolution_list_json {
+  my ($dbh) = @_;
+  my @column_infos = (
+    [ 'no', 'monster_data.no'],
+    [ 'type', 'evolution.type' ],
+    [ 'baseNo', 'evolution.baseNo' ],
+    [ 'materials_0', 'evolution.materials_0' ],
+    [ 'materials_1', 'evolution.materials_1' ],
+    [ 'materials_2', 'evolution.materials_2' ],
+    [ 'materials_3', 'evolution.materials_3' ],
+    [ 'materials_4', 'evolution.materials_4' ],
+  );
+  my $data_ref = &table_to_hash($dbh, "
+    evolution 
+      LEFT JOIN monster_data ON monster_data.evolution = evolution.id
+  ", \@column_infos, { 'monster_data.state' => 1 });
+
+  # 取得したデータは進化後のモンスター番号がキーとなっているので、
+  # 進化前をキーとして情報の配列を持つハッシュを作成する。
+  my %to_evolution_hash;
+  for my $data (values %$data_ref) {
+    if (!exists $to_evolution_hash{$data->{baseNo}}) {
+      $to_evolution_hash{$data->{baseNo}} = [];
+    }
+    push @{$to_evolution_hash{$data->{baseNo}}}, $data;
+  }
+
+  open(DATAFILE, "> ./listJson/evolution_list.json") or die("error :$!");
+  print DATAFILE JSON::PP::encode_json(\%to_evolution_hash);
+  close(DATAFILE);
+}
 
 sub save_image_list_json {
   my ($dbh) = @_;
