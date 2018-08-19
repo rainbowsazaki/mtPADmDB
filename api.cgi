@@ -819,7 +819,7 @@ sub save_monster_list_json {
     LEFT JOIN monster_base_data ON monster_data.monster_base_data = monster_base_data.id
     LEFT JOIN over_limit ON monster_data.over_limit = over_limit.id
     LEFT JOIN evolution ON monster_data.evolution = evolution.id
-  ", \@column_infos);
+  ", \@column_infos, { 'monster_data.state' => 1 });
 
   # JSON化してファイルに保存。
   open(DATAFILE, "> ./listJson/monster_data.json") or die("error :$!");
@@ -850,11 +850,12 @@ sub save_monster_list_json {
   close(DATAFILE);
 }
 
-
+# テーブルの情報を取得し、先頭の項目の値キーとして、指定項目をハッシュにしたものを格納したハッシュを作成する。
+# $column_names_ref は取得項目名を格納した配列。
+# 取得項目名の指定は、ハッシュ上のキー名とデータベース上の項目名の2つを格納した配列。
+# ハッシュ上とデータベース上での名前が同じ場合は配列ではなく文字列での指定も可能。
 sub table_to_hash {
-  my ($dbh, $table_name, $column_names_ref) = @_;
-
-  my ($base_table_name) = $table_name =~ /^\s*(\S+)/;
+  my ($dbh, $table_name, $column_names_ref, $where) = @_;
   
   my @hash_keys;
   my @db_column_names;
@@ -867,10 +868,19 @@ sub table_to_hash {
         push @db_column_names, $column_name;
       }
   }
-  my $sql_str = 'SELECT ' . join(',', @db_column_names) . " FROM ${table_name} WHERE ${base_table_name}.state = 1;";
+
+  my $where_values_ref = [];
+  my $sql_str = 'SELECT ' . join(',', @db_column_names) . " FROM ${table_name}";  
+  if ($where) {
+    my $where_strings_ref;
+    ($where_strings_ref, $where_values_ref) = &create_where_sql_and_value($where);
+    my $where_string = join ' AND ', @$where_strings_ref;
+    if ($where_string) { $sql_str .= " WHERE ${where_string}"; }
+  }
+
   my $sth = $dbh->prepare($sql_str);
   if (!$sth) { die "$sql_str :\n " . $dbh->errstr; }
-  $sth->execute();
+  $sth->execute(@$where_values_ref);
   my %data;
   while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
     $data{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, \@hash_keys);
@@ -881,7 +891,7 @@ sub table_to_hash {
 sub save_skill_list_json {
   my ($dbh) = @_;
   my @keys = qw/ no name description baseTurn maxLevel /;
-  my $data = table_to_hash($dbh, 'skill', \@keys);
+  my $data = table_to_hash($dbh, 'skill', \@keys, { state => 1 });
 
   open(DATAFILE, "> ./listJson/skill_list.json") or die("error :$!");
   print DATAFILE JSON::PP::encode_json($data);
@@ -892,7 +902,7 @@ sub save_skill_list_json {
 sub save_leader_skill_list_json {
   my ($dbh) = @_;
   my @keys = qw/ no name description /;
-  my $data = table_to_hash($dbh, 'leader_skill', \@keys);
+  my $data = table_to_hash($dbh, 'leader_skill', \@keys, { state => 1 });
 
   open(DATAFILE, "> ./listJson/leader_skill_list.json") or die("error :$!");
   print DATAFILE JSON::PP::encode_json($data);
@@ -906,7 +916,7 @@ sub save_image_list_json {
     [ '', 'no' ],
     'id'
   );
-  my $data = table_to_hash($dbh, 'monster_image', \@keys);
+  my $data = table_to_hash($dbh, 'monster_image', \@keys, { state => 1 });
 
   open(DATAFILE, "> ./listJson/image_list.json") or die("error :$!");
   print DATAFILE JSON::PP::encode_json($data);
