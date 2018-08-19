@@ -37,6 +37,17 @@ foreach my $dir_name (@dir_names) {
   }
 }
 
+# 空のオブジェクトの JSON を作成する
+my @json_names = qw/ evolution_list.json image_list.json leader_skill_list.json monster_data.json monster_list.json skill_list.json /;
+foreach my $json_name (@json_names) {
+  my $path = "./listJson/${json_name}";
+  if (open(DATAFILE, "> ${path}")) {
+    print DATAFILE '{}';
+    close(DATAFILE);
+  } else {
+    &addError("json file '${path}' is can't crate.");
+  }
+}
 
 my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
 $dbh->{sqlite_unicode} = 1;
