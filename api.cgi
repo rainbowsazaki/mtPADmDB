@@ -668,32 +668,44 @@ sub joined_key_access {
   return $ret_val;
 }
 
-# 指定条件を満たす１行の指定項目を取得する。
-sub get_one_row_data {
-  my ($dbh, $table_name, $column_names_ref, %check_data) = @_;
-  my @check_keys;
-  my @check_values;
+# ハッシュのデータをもとに where 句で使用する文字列と置き換え値の配列
+sub create_where_sql_and_value {
+  my ($where_hash_ref) = @_;
 
-  for my $key (keys %check_data) {
-    my $value = $check_data{$key};
+  my @where_strings;
+  my @where_values;
+
+  for my $key (keys %$where_hash_ref) {
+    my $value = $where_hash_ref->{$key};
     if (!defined $value) {
       $key = "${key} IS NULL";
-      push @check_keys, $key;
+      push @where_strings, $key;
     } else {
       $key = "${key} = ?";
       
-      push @check_keys, $key;
-      push @check_values, $value;
+      push @where_strings, $key;
+      push @where_values, $value;
     }
   }
 
+  return (\@where_strings, \@where_values);
+}
+
+# 指定条件を満たす１行の指定項目を取得する。
+sub get_one_row_data {
+  my ($dbh, $table_name, $column_names_ref, %where_data) = @_;
+
+  my $where_values_ref = [];
+  
   my $check_sql = "SELECT " . join(', ', @$column_names_ref) . " FROM ${table_name}";
-  if (%check_data) {
-    $check_sql .= " WHERE " . join(' AND ', @check_keys);
+  if (%where_data) {
+    my $where_strings_ref;
+    ($where_strings_ref, $where_values_ref) = &create_where_sql_and_value(\%where_data);
+    $check_sql .= " WHERE " . join(' AND ', @$where_strings_ref);
   }
   my $sth = $dbh->prepare($check_sql);
   if (!$sth) { die $check_sql . ":\n" . $dbh->errstr; }
-  $sth->execute(@check_values);
+  $sth->execute(@$where_values_ref);
   return $sth->fetchrow_arrayref;
 }
 
