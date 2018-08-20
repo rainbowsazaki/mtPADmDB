@@ -684,6 +684,19 @@ var componentMonsterList = {
       return this.monsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
     }
   },
+
+  methods: {
+    hasImage: function (no) {
+      return (no in this.$store.state.imageTable);
+    },
+    getIconPath: function (no) {
+      if (this.hasImage(no)) {
+        return `./monsterImages/icon_${no}.jpg`;
+      } else {
+        return undefined;
+      }
+    },
+  },
 };
 
 
