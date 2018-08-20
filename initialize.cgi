@@ -33,7 +33,7 @@ foreach my $dir_name (@dir_names) {
       &addError("create dir '${dir_name}' is error. : ${!}");
     }
   } else {
-    &addError("dir '${dir_name}' is exist.");
+    &addSuccess("dir '${dir_name}' is exist.");
   }
 }
 
