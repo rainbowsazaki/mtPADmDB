@@ -49,7 +49,7 @@ foreach my $json_name (@json_names) {
   }
 }
 
-my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
+my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
 $dbh->{sqlite_unicode} = 1;
 $dbh->{AutoCommit} = 0;
 
