@@ -37,15 +37,20 @@ foreach my $dir_name (@dir_names) {
   }
 }
 
-# 空のオブジェクトの JSON を作成する
+# 必要な JSON ファイルがない場合は空のオブジェクトの JSON を作成する
 my @json_names = qw/ evolution_list.json image_list.json leader_skill_list.json monster_data.json monster_list.json skill_list.json /;
 foreach my $json_name (@json_names) {
   my $path = "./listJson/${json_name}";
-  if (open(DATAFILE, "> ${path}")) {
-    print DATAFILE '{}';
-    close(DATAFILE);
+  if (-e $path) {
+    &addSuccess("json file '${path}' is exist.");
   } else {
-    &addError("json file '${path}' is can't crate.");
+    if (open(DATAFILE, "> ${path}")) {
+      print DATAFILE '{}';
+      close(DATAFILE);
+      &addSuccess("json file '${path}' is created.");
+    } else {
+      &addError("json file '${path}' is can't create.");
+    }
   }
 }
 
