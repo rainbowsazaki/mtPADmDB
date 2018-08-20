@@ -54,32 +54,40 @@ foreach my $json_name (@json_names) {
   }
 }
 
-my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
-$dbh->{sqlite_unicode} = 1;
-$dbh->{AutoCommit} = 0;
+my $db_path = './db/monster.db';
+if (-e $db_path) {
+  &addSuccess('DB file is exist.');
+} else {
 
-open( IN, "< table.sql" );
-local $/ = undef;
-my $sql = <IN>;
-close(IN);
+  my $dbh = DBI->connect("dbi:SQLite:dbname=${db_path}");
+  $dbh->{sqlite_unicode} = 1;
+  $dbh->{AutoCommit} = 0;
 
-my @sqls = split /;/, $sql;
+  open( IN, "< table.sql" );
+  local $/ = undef;
+  my $sql = <IN>;
+  close(IN);
 
-my $sql_error = 0;
+  my @sqls = split /;/, $sql;
 
-foreach my $sql_one (@sqls) {
-  my $sth = $dbh->prepare( $sql_one );
+  my $sql_error = 0;
 
-  if (!$sth->execute()) {
+  foreach my $sql_one (@sqls) {
+    my $sth = $dbh->prepare( $sql_one );
 
-    &addError($sth->errstr);
-    $sql_error = 1;
+    if (!$sth) { die $sql_one; }
+
+    if (!$sth->execute()) {
+
+      &addError($sth->errstr);
+      $sql_error = 1;
+    }
   }
-}
-  
-if ($sql_error == 0) {
-  &addSuccess('Create DB is success.');
-  $dbh->commit;
+    
+  if ($sql_error == 0) {
+    &addSuccess('Create DB is success.');
+    $dbh->commit;
+  }
 }
 
 my $json = JSON::PP->new->pretty;
