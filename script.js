@@ -1043,7 +1043,7 @@ var componentPic = {
             // 一番上が黒くなかったら位置を微調整
             data = ctx.getImageData(0, 0, 32, 8);
             if (data.data[4 * 8 + 0] > 200 || data.data[4 * 8 + 1] > 200 || data.data[4 * 8 + 2] > 200) {
-              ctx.drawImage(img, srcX, srcY - (640 * 4 / imgWidth), srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
+              ctx.drawImage(img, srcX, srcY - (640 * 3 / imgWidth), srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
             }
 
             // canvasを画像に変換
