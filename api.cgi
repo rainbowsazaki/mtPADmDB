@@ -113,7 +113,7 @@ if (exists $modes{$mode}) {
 # モンスター一覧更新モード
 sub mode_update_list {
   my ($q) = @_;
-  my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
+  my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
   $dbh->{sqlite_unicode} = 1;
   &save_monster_list_json($dbh, { is_create_monster_json => 1 });
   die 'success.';
@@ -128,7 +128,7 @@ sub mode_image {
   
   my $no = $q->param('no');
 
-  my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
+  my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
   $dbh->{sqlite_unicode} = 1;
   $dbh->{AutoCommit} = 0;
 
@@ -390,7 +390,7 @@ sub mode_update_monster_data {
 
   if (@error) {
   } else {
-    my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
+    my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
     $dbh->{sqlite_unicode} = 1;
     $dbh->{AutoCommit} = 0;
 
