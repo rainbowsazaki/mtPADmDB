@@ -115,7 +115,7 @@ sub mode_update_list {
   my ($q) = @_;
   my $dbh = DBI->connect("dbi:SQLite:dbname=monster.db");
   $dbh->{sqlite_unicode} = 1;
-  &save_monster_list_json($dbh);
+  &save_monster_list_json($dbh, { is_create_monster_json => 1 });
   die 'success.';
 }
 
@@ -795,9 +795,12 @@ sub db_row_to_hash {
 }
 
 
+# 全モンスターの情報を格納したJSONとそのダイジェスト版を作成する。
+# option
+#   is_create_monster_json - 真値を指定するとモンスター個別の JSON ファイルの再作成も行う。
 sub save_monster_list_json {
-  my ($dbh) = @_;
-
+  my ($dbh, $option) = @_;
+  $option ||= {};
   # データを格納してる各テーブルにモンスター番号が存在しないのと、
   # 先頭のキーがハッシュのキーとして使用されるのでモンスター番号を予め指定しておく。
   my @column_infos = ([ 'no', 'monster_data.no' ]);
@@ -818,6 +821,9 @@ sub save_monster_list_json {
       }
     }
   }
+  if ($option->{is_create_monster_json}) {
+    push @column_infos, [ 'comment', 'monster_data.comment' ];
+  }
 
   my $data_ref = &table_to_hash($dbh, "
   monster_data
@@ -826,9 +832,21 @@ sub save_monster_list_json {
     LEFT JOIN evolution ON monster_data.evolution = evolution.id
   ", \@column_infos, { 'monster_data.state' => 1 });
 
+
+  my $json_pp = JSON::PP->new;
+
+  if ($option->{is_create_monster_json}) {
+    for my $key (keys %$data_ref) {
+      open(DATAFILE, "> ./monsterJson/${key}.json") or die("error :$!");
+      print DATAFILE $json_pp->encode($data_ref->{$key});
+      close(DATAFILE);
+      delete $data_ref->{$key}{comment};
+    }
+  }
+
   # JSON化してファイルに保存。
   open(DATAFILE, "> ./listJson/monster_data.json") or die("error :$!");
-  print DATAFILE JSON::PP->new->pretty
+  print DATAFILE $json_pp->pretty
     ->sort_by(sub { 
       ($json_sort_ranks{$JSON::PP::a} - $json_sort_ranks{$JSON::PP::b}) ||
       ($JSON::PP::a - $JSON::PP::b)
