@@ -110,11 +110,18 @@ if (exists $modes{$mode}) {
 }
 
 
+# モンスター情報のデータベースに接続する dbh を作成する。
+sub create_monster_db_dbh {
+  my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
+  $dbh->{sqlite_unicode} = 1;
+  $dbh->{AutoCommit} = 0;
+  return $dbh;
+}
+
 # モンスター一覧更新モード
 sub mode_update_list {
   my ($q) = @_;
-  my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
-  $dbh->{sqlite_unicode} = 1;
+  my $dbh = &create_monster_db_dbh();
   &save_monster_list_json($dbh, { is_create_monster_json => 1 });
   die 'success.';
 }
@@ -128,9 +135,7 @@ sub mode_image {
   
   my $no = $q->param('no');
 
-  my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
-  $dbh->{sqlite_unicode} = 1;
-  $dbh->{AutoCommit} = 0;
+  my $dbh = &create_monster_db_dbh();
 
   # 既存画像がロックされていないか確認する。
   my $check_sql = 'SELECT COUNT(*) FROM monster_image WHERE no = ? AND state = 2';
@@ -390,9 +395,7 @@ sub mode_update_monster_data {
 
   if (@error) {
   } else {
-    my $dbh = DBI->connect("dbi:SQLite:dbname=./db/monster.db");
-    $dbh->{sqlite_unicode} = 1;
-    $dbh->{AutoCommit} = 0;
+    my $dbh = &create_monster_db_dbh();
 
     # スキル
     if ($data->{skill} == 0) {
