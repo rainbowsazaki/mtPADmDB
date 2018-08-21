@@ -798,6 +798,14 @@ var componentMonsterData = {
         }
       }
       return Array.from(killerNoSet).sort(((a, b) => a - b ));
+    },
+
+    /** プラスが振れるキャラクターかどうかを返す。 */
+    canAddPlus: function () {
+      // 素材系のタイプの場合はプラス合成不可と判断する。
+      // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
+      var type = this.monsterData.types[0];
+      return !((type >= 9 && type <= 12) || type == 99);
     }
   },
 };
