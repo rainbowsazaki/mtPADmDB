@@ -140,7 +140,7 @@
           <tr>
             <td v-if="monsterData.maxLevel" class="text-right">{{monsterData.maxLevel}}</td>
             <td v-else>不明</td>
-            <td v-if="monsterData.expTable" class="text-right">{{monsterData.expTable}}</td>
+            <td v-if="monsterData.expTable != null" class="text-right">{{monsterData.expTable}}</td>
             <td v-else>不明</td>
             <td>{{booleanTable[monsterData.overLimit]}}</td>
           </tr>
