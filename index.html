@@ -384,12 +384,13 @@
           <th colspan="12">スキル</th>
         </tr>
         <tr>
-          <th colspan="8">名称</th>
+          <th colspan="6">名称</th>
           <th colspan="2">SLv1時ターン</th>
           <th colspan="2">最大SLv</th>
+          <th colspan="2">最短ターン</th>
         </tr>
         <tr>
-          <td colspan="8">
+          <td colspan="6">
             <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillDetails.name" :skill-table="skillTable"></skill-incremental-input>
           </td>
           <td colspan="2">
@@ -398,6 +399,7 @@
           <td colspan="2">
             <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.maxLevel" min="1" max="99">
           </td>
+          <td colspan="2">{{(minimumSkillTurn) ? minimumSkillTurn : '-' }}</td>
         </tr>
         <tr>
           <th colspan="12">説明</th>

@@ -882,6 +882,13 @@ var componentMonsterEdit = {
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
 
 //    monsterData: function () { return this.$store.state.monsterData },
+    /** スキルレベル最大時の（最短の）スキルターン */
+    minimumSkillTurn: function () {
+      if (!this.skillDetails.baseTurn || !this.skillDetails.maxLevel) { return NaN; }
+      var turn = this.skillDetails.baseTurn - this.skillDetails.maxLevel + 1;
+      if (turn < 0) { return NaN; }
+      return turn;
+    },
 
     skillDetails: function () {
       if (this.monsterData.skill != 0) {
