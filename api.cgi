@@ -123,6 +123,10 @@ sub mode_update_list {
   my ($q) = @_;
   my $dbh = &create_monster_db_dbh();
   &save_monster_list_json($dbh, { is_create_monster_json => 1 });
+  &save_skill_list_json($dbh);
+  &save_leader_skill_list_json($dbh);
+  &save_image_list_json($dbh);
+  &save_evolution_list_json($dbh);
   die 'success.';
 }
 
