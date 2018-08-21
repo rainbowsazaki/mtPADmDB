@@ -861,6 +861,8 @@ var componentMonsterEdit = {
       awakenTable: constData.awakenTable,
 
       monsterData: {},
+      /** 送信済みかどうか。 */
+      isSubmitted: false,
     };
   },
 
@@ -923,15 +925,26 @@ var componentMonsterEdit = {
       this.monsterData.leaderSkillDetails = $.extend(true, {}, this.leaderSkillTable[no]);
     },
     submit: function( ) {
+      // 多重送信防止処理
+      if (this.isSubmitted) { return; }
+      this.isSubmitted = true;
+      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように１０秒後に復帰させる。
+      var timeoutId = setTimeout(() => { this.isSubmitted = false; }, 10000);
+
       this.$store.commit('clearMessages');
       this.$store.commit('setMessages', [ '通信中...' ]);
 
       axios.post('./api.cgi', this.monsterData)
       .then(response => {
+        // レスポンス来なかったときの復帰処理を止める。
+        clearTimeout(timeoutId);
+
         this.$store.commit('clearErrors');
         this.$store.commit('clearMessages');
         if (response.data.error) {
           this.$store.commit('setErrors', response.data.error);
+          // 再度送信可能にする。
+          this.isSubmitted = false;
         } else {
           this.$router.push({ path:`/${this.monsterData.no}` });
         }
