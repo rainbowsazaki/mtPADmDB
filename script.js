@@ -941,7 +941,7 @@ var componentPic = {
 
   data: function () {
     return {
-      monsterNo: 0,
+      monsterNo: undefined,
       uploadImgSrc: '',
       imageResultSrc: '',
       iconResultSrc: '',
