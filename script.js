@@ -996,6 +996,8 @@ var componentPic = {
       uploadImgSrc: '',
       imageResultSrc: '',
       iconResultSrc: '',
+      /** 送信済みかどうか */
+      isSubmitted: false,
     };
   },
 
@@ -1164,6 +1166,12 @@ var componentPic = {
       if (this.monsterNo == 0) { alert('モンスター番号が指定されていません。'); return; }
       if (this.monsterNo < 1 || this.monsterNo > 9999) { alert('モンスター番号の指定が不正です。'); return; }
       
+      // 多重送信防止処理
+      if (this.isSubmitted) { return; }
+      this.isSubmitted = true;
+      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように１０秒後に復帰させる。
+      var timeoutId = setTimeout(() => { this.isSubmitted = false; }, 10000);
+      
       var blobIcon = toBlob(this.iconResultSrc);
       var blobImage = toBlob(this.imageResultSrc);
 
@@ -1177,8 +1185,13 @@ var componentPic = {
         headers: { 'content-type': 'multipart/form-data' },
       })
       .then(response => {
+        // レスポンス来なかったときの復帰処理を止める。
+        clearTimeout(timeoutId);
+        
         if (response.errors) {
           alert(response.data.errors);
+          // 再度送信可能にする。
+          this.isSubmitted = false;
         } else {
           alert(response.data.success);
           if (this.$route.params.no) {
@@ -1190,6 +1203,8 @@ var componentPic = {
             this.imageResultSrc = '';
             $('#monsterImageFile').next('.custom-file-label').text('モンスター情報画像選択');
             $('html,body').scrollTop(0);
+            // 再度送信可能にする。
+            this.isSubmitted = false;
           }
         }
       });

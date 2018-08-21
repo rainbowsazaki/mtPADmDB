@@ -553,7 +553,7 @@
       </div>
           
       </table>
-      <button @click="submit" class="btn btn-primary">この画像を送信する</button>
+      <button @click="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' : 'この画像を送信する'}}</button>
     </div>
   </div>
 </script>
