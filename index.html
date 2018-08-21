@@ -240,6 +240,31 @@
         </template>
       </table>
     </div>
+    <div v-if="evolutionTable[monsterData.no]">
+      <h4>このモンスターからの進化</h4>
+      <table v-for="evolution in evolutionTable[monsterData.no]" class="table table-bordered table-sm">
+        <tr class="thead-light"><th>{{evolutionTypeTable[evolution.type]}}</th></tr>
+        <tr><td>
+          <router-link v-if="evolution.no" :to="`/${evolution.no}`">
+            <img :src="getIconPath(evolution.no)" style="width: 32px; height: 32px;">
+            No. {{evolution.no}} {{monsterTable[evolution.no] && monsterTable[evolution.no].name}}
+          </router-link>
+          <span v-else>不明</span>
+        </td></tr>
+        <tr class="thead-light"><th>進化素材</th></tr>
+        <tr><td>
+          <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex; justify-content: space-around;">
+            <li v-for="material in evolution.materials" v-if="material" style="flex: 1;">
+              <router-link :to="`/${material}`">
+                <img :src="getIconPath(material)" style="width: 32px; height: 32px;">
+                No. {{material}} {{monsterTable[material] && monsterTable[material].name}}
+              </router-link>
+            </li>
+          </ul>
+          <span v-else>不明</span>
+        </td></tr>
+      </table>
+    </div>
     <div v-if="monsterData.comment">
       <table class="table table-bordered table-sm">
         <tr class="thead-light"><th>編集コメント</th></tr>

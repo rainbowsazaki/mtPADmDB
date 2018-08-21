@@ -7,6 +7,7 @@ var commonData = {
   skillTable: {},
   leaderSkillTable: {},
   imageTable: {},
+  evolutionTable: {},
 
   messages: [],
   errors: []
@@ -227,11 +228,19 @@ const store = new Vuex.Store({
         axios.get('./listJson/skill_list.json'),
         axios.get('./listJson/leader_skill_list.json'),
         axios.get('./listJson/image_list.json'),
-      ]).then( axios.spread( (monsterListResponse, skillListResponse, leaderSkillListResponse, imageListResponse) => {
+        axios.get('./listJson/evolution_list.json',)
+      ]).then( axios.spread( (
+        monsterListResponse,
+        skillListResponse,
+        leaderSkillListResponse,
+        imageListResponse,
+        evolutionListResponse
+      ) => {
         state.monsterTable = monsterListResponse.data;
         state.skillTable = skillListResponse.data;
         state.leaderSkillTable = leaderSkillListResponse.data;
         state.imageTable = imageListResponse.data;
+        state.evolutionTable = evolutionListResponse.data;
       }));
     },
     
@@ -756,7 +765,8 @@ var componentMonsterData = {
     monsterTable: function () { return this.$store.state.monsterTable; },
     skillTable: function () { return this.$store.state.skillTable; },
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
-    
+    evolutionTable: function () { return this.$store.state.evolutionTable; },
+
     monsterData: function () { return this.$store.state.monsterData },
 
     skillDetails: function () {
