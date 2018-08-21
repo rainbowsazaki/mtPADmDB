@@ -759,6 +759,17 @@ var componentMonsterData = {
         return undefined;
       }
     },
+
+    /** パラメータをプラス換算に変換する。 */
+    culcPlusCountParam: function (param) {
+      var obj = {
+        hp: param.hp / 10,
+        attack: param.attack / 5,
+        recovery: param.recovery / 3,
+      };
+      obj.total = obj.hp + obj.attack + obj.recovery;
+      return obj;
+    },
   },
 
   computed: {
@@ -806,7 +817,16 @@ var componentMonsterData = {
       // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
       var type = this.monsterData.types[0];
       return !((type >= 9 && type <= 12) || type == 99);
-    }
+    },
+
+    /** 最大レベル時のパラメータのプラス換算値 */
+    plusCountParam: function () {
+      return this.culcPlusCountParam(this.monsterData.maxParam);
+    },
+    /** 限界突破時のパラメータのプラス換算値 */
+    plusCountOverlimitParam: function () {
+      return this.culcPlusCountParam(this.monsterData.overLimitParam);
+    },
   },
 };
 
