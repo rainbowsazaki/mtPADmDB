@@ -1197,7 +1197,7 @@ var componentPic = {
           if (this.$route.params.no) {
             this.$router.push({ path:`/${this.$route.params.no}` });
           } else {
-            this.monsterNo = 0;
+            this.monsterNo = null;
             this.uploadImgSrc = '';
             this.iconResultSrc = '';
             this.imageResultSrc = '';
