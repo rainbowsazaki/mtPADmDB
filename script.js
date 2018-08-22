@@ -200,6 +200,7 @@ const constData = {
 };
 
 axios.interceptors.request.use(function (config) {
+  config.headers['X-Requested-With'] = 'XMLHttpRequest';
   config.headers['Cache-Control'] = "no-cache";
   config.headers['Expires'] = '-1';
 

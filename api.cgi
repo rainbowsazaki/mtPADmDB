@@ -10,6 +10,14 @@ use DBI;
 
 use File::Copy;
 
+# ローカルでの動作でなく x-requested-with が指定されていない場合は CSRF 対策として弾く。
+if (!$ENV{'HTTP_X_REQUESTED_WITH'} &&
+    $ENV{'HTTP_HOST'} ne 'localhost' && $ENV{'HTTP_HOST'} ne '127.0.0.1'
+) {
+  print "Status: 400 Bad Request\n\n";
+  exit;
+}
+
 my %monster_data_db_info = (
   'monster_base_data' => [
     'name',
