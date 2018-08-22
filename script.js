@@ -257,20 +257,6 @@ const store = new Vuex.Store({
       this.commit('setMessages', [ '初期情報取得中' ]);
       axios.get('./monsterJson/' + param.no + '.json').then(
         response => {
-          // 古いモンスターデータJSONとの互換性保持。（いずれ消す）
-          if (!('skill' in response.data)) {
-            response.data.skill = response.data.skillNo;
-            delete response.data.skillNo;
-          }
-          if (!('leaderSkill' in response.data)) {
-            response.data.leaderSkill = response.data.leaderSkillNo;
-            delete response.data.leaderSkillNo
-          }
-          if (!('evolutionType' in response.data)) {
-            response.data.evolutionType = response.data.evolution.type;
-            delete response.data.evolution.type;
-          }
-
           var data = $.extend(true, {}, commonData.monsterClearData, response.data);
           state.monsterData = data;
           
