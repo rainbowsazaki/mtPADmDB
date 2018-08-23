@@ -9,6 +9,9 @@ var commonData = {
   imageTable: {},
   evolutionTable: {},
 
+  /** commonData のJSONを最後に読み込んだ時間 */
+  lastLoadCommonDataTime: 0,
+
   messages: [],
   errors: []
 };
@@ -232,6 +235,10 @@ const store = new Vuex.Store({
   state: commonData,
   mutations: {
     fetchCommonData: function (state) {
+      // 最後に読み込んだ時間から 5分以上経過していた場合に読み込みを実効する。
+      var nowMs = (new Date()).getTime();
+      if (state.lastLoadCommonDataTime + 5 * 60 * 1000 > nowMs) { return; }
+
       axios.all([
         axios.get('./listJson/monster_list.json'),
         axios.get('./listJson/skill_list.json'),
@@ -251,6 +258,8 @@ const store = new Vuex.Store({
         state.imageTable = imageListResponse.data;
         state.evolutionTable = evolutionListResponse.data;
       }));
+
+      state.lastLoadCommonDataTime = nowMs;
     },
     
     loadMonsterData: function (state, param) {
@@ -670,6 +679,11 @@ var componentMonsterList = {
       inPageCount: 20,
     };
   },
+
+  created: function () {
+    this.$store.commit('fetchCommonData');
+  },
+
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
     attrColors () { return constData.attrColors; },
@@ -743,6 +757,7 @@ var componentMonsterData = {
             this.$_mixinForPage_updateTitle();
           },
       });
+      this.$store.commit('fetchCommonData');
     },
     hasImage: function (no) {
       return (no in this.$store.state.imageTable);
@@ -919,6 +934,7 @@ var componentMonsterEdit = {
           }
         });
       }
+      this.$store.commit('fetchCommonData');
     },
     setSkillNo: function (no) {
       this.monsterData.skillDetails = $.extend(true, {}, this.skillTable[no]);
