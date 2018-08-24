@@ -916,6 +916,9 @@ sub table_to_hash {
 # $column_names_ref は取得項目名を格納した配列。
 # 取得項目名の指定は、ハッシュ上のキー名とデータベース上の項目名の2つを格納した配列。
 # ハッシュ上とデータベース上での名前が同じ場合は配列ではなく文字列での指定も可能。
+# option
+#   order - SQL文の order by 句 の指定。文字列もしくは文字列の配列で指定する。
+#           項目名と、必要に応じて ASC or DESC を１つの文字列で指定する。
 sub table_to_array {
   my ($dbh, $table_name, $column_names_ref, $where, $option) = @_;
 
@@ -938,6 +941,12 @@ sub table_to_array {
     ($where_strings_ref, $where_values_ref) = &create_where_sql_and_value($where);
     my $where_string = join ' AND ', @$where_strings_ref;
     if ($where_string) { $sql_str .= " WHERE ${where_string}"; }
+  }
+
+  if ($option->{order}) {
+    my $orders = $option->{order};
+    if (ref $orders eq '') { $orders = [ $orders ]; }
+    $sql_str .= ' ORDER BY ' . join ', ', @$orders;
   }
 
   my $sth = $dbh->prepare($sql_str);
