@@ -888,13 +888,37 @@ sub save_monster_list_json {
   close(DATAFILE);
 }
 
-# テーブルの情報を取得し、先頭の項目の値キーとして、指定項目をハッシュにしたものを格納したハッシュを作成する。
+
+# テーブルの情報を取得し、先頭の項目の値をキーとして、指定項目をハッシュにしたものを格納したハッシュを作成する。
 # $column_names_ref は取得項目名を格納した配列。
 # 取得項目名の指定は、ハッシュ上のキー名とデータベース上の項目名の2つを格納した配列。
 # ハッシュ上とデータベース上での名前が同じ場合は配列ではなく文字列での指定も可能。
+# option
+#   remove_key_column - 真値だとキーに使用した項目を列情報のハッシュの中から削除する。
 sub table_to_hash {
-  my ($dbh, $table_name, $column_names_ref, $where) = @_;
-  
+  my ($dbh, $table_name, $column_names_ref, $where, $option) = @_;
+  my $a = &table_to_array(@_);
+
+  my $key_column_name = $column_names_ref->[0];
+  if (ref $key_column_name eq 'ARRAY') { $key_column_name = $key_column_name->[0] };
+
+  my %data;
+  for my $d (@$a) {
+    my $key = $d->{$key_column_name};
+    if ($option->{remove_key_column}) { delete $d->{$key_column_name}; }
+    $data{$key} = $d;
+  }
+  return \%data;
+}
+
+
+# テーブルの情報を取得し、指定項目を配列にしたものを格納したハッシュを作成する。
+# $column_names_ref は取得項目名を格納した配列。
+# 取得項目名の指定は、ハッシュ上のキー名とデータベース上の項目名の2つを格納した配列。
+# ハッシュ上とデータベース上での名前が同じ場合は配列ではなく文字列での指定も可能。
+sub table_to_array {
+  my ($dbh, $table_name, $column_names_ref, $where, $option) = @_;
+
   my @hash_keys;
   my @db_column_names;
   for my $column_name (@$column_names_ref) {
@@ -919,11 +943,12 @@ sub table_to_hash {
   my $sth = $dbh->prepare($sql_str);
   if (!$sth) { die "$sql_str :\n " . $dbh->errstr; }
   $sth->execute(@$where_values_ref);
-  my %data;
+
+  my @data;
   while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
-    $data{$tbl_ary_ref->[0]} = &db_row_to_hash($tbl_ary_ref, \@hash_keys);
+    push @data, &db_row_to_hash($tbl_ary_ref, \@hash_keys);
   }
-  return \%data;
+  return \@data;
 }
 
 sub save_skill_list_json {
@@ -983,10 +1008,10 @@ sub save_evolution_list_json {
 sub save_image_list_json {
   my ($dbh) = @_;
   my @keys = (
-    [ '', 'no' ],
+    [ 'no', 'no' ],
     'id'
   );
-  my $data = table_to_hash($dbh, 'monster_image', \@keys, { state => 1 });
+  my $data = table_to_hash($dbh, 'monster_image', \@keys, { state => 1 }, { remove_key_column => 1});
 
   open(DATAFILE, "> ./listJson/image_list.json") or die("error :$!");
   print DATAFILE JSON::PP::encode_json($data);
