@@ -118,6 +118,7 @@ my %modes = (
   'updateList' => \&mode_update_list,
   'image' => \&mode_image,
   'monsterHistory' => \&mode_monster_history,
+  'monsterHistoryDetails' => \&mode_monster_history_details,
 );
 
 if (exists $modes{$mode}) {
@@ -267,6 +268,25 @@ sub mode_monster_history {
   ], { 'no' => $monster_no }, { order => 'createdDatetime DESC' });
 
   print "Content-Type: application/json\n\n", JSON::PP::encode_json($data_ref);
+  $dbh->disconnect;
+}
+
+
+# モンスター情報の過去の記録を取得する。
+# パラメータ
+#   id - 取得対象の記録のID。
+sub mode_monster_history_details {
+  my ($q) = @_;
+  my $id = $q->param('id');
+  
+  my $dbh = &create_monster_db_dbh();
+  my @column_infos = @{&create_monster_data_column_infos()};
+  push @column_infos, [ 'comment', 'monster_data.comment' ], [ 'datetime', 'monster_data.createdDatetime' ];
+
+  my $data_ref = &table_to_array($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.id' => $id }, { limit => 1 });
+  # データが取得できなかった場合は空情報を返す。
+  if (length @$data_ref == 0 || !$data_ref->[0]) { $data_ref = [ {} ]; }
+  print "Content-Type: application/json\n\n", JSON::PP::encode_json($data_ref->[0]);
   $dbh->disconnect;
 }
 
