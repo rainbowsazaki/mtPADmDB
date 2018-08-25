@@ -263,8 +263,22 @@ const store = new Vuex.Store({
     },
     
     loadMonsterData: function (state, param) {
+      var path, option;
+      if (param.historyId) {
+        path = './api.cgi';
+        option = {
+          params: {
+            mode: 'monsterHistoryDetails',
+            id: param.historyId
+          }
+        };
+      } else {
+        path = `./monsterJson/${param.no}.json`;
+        option = undefined;
+      }
+
       this.commit('setMessages', [ '初期情報取得中' ]);
-      axios.get('./monsterJson/' + param.no + '.json').then(
+      axios.get(path, option).then(
         response => {
           var data = $.extend(true, {}, commonData.monsterClearData, response.data);
           state.monsterData = data;
@@ -725,7 +739,9 @@ var componentMonsterData = {
   name: 'pageMonsterData',
   template: '#templateMonsterData',
   pageTitle: function () {
-    return `No.${this.$route.params.no} ${this.monsterData.name}`;
+    var str = `No.${this.$route.params.no || this.monsterData.no} ${this.monsterData.name}`;
+    if (this.isHistory) { str += ` (${this.monsterData.datetime})`}
+    return str;
   },
   props: [ 'no' ],
   data: function () {
@@ -735,6 +751,11 @@ var componentMonsterData = {
       attributeTable: constData.attributeTable,
       evolutionTypeTable: constData.evolutionTypeTable,
       awakenTable: constData.awakenTable,
+
+      /** 履歴情報の読み込み中かどうか。 */
+      isLoadingHistory: false,
+      /** 履歴情報 */
+      histories: undefined,
     };
   },
   created: function () {
@@ -742,7 +763,7 @@ var componentMonsterData = {
   },
 
   watch: {
-    "$route.params.no": function () {
+    "$route": function () {
       this.fetchData();
     }
   },
@@ -750,13 +771,23 @@ var componentMonsterData = {
   methods: {
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
+      this.histories = undefined;
+      this.isLoadingHistory = false;
+
+      var param = {
+        callback: () => {
+          this.$_mixinForPage_updateTitle();
+        },
+      }
+
+      if (this.isHistory) {
+        param.historyId = this.$route.params.id;
+      } else {
+        param.no = this.$route.params.no;
+      }
+
       this.$_mixinForPage_updateTitle();
-      this.$store.commit('loadMonsterData', { 
-          no: this.$route.params.no,
-          callback: () => {
-            this.$_mixinForPage_updateTitle();
-          },
-      });
+      this.$store.commit('loadMonsterData', param);
       this.$store.commit('fetchCommonData');
     },
     hasImage: function (no) {
@@ -780,6 +811,30 @@ var componentMonsterData = {
       obj.total = obj.hp + obj.attack + obj.recovery;
       return obj;
     },
+    
+    /** 履歴リストを取得する。 */
+    loadHistories: function () {
+      this.isLoadingHistory = true;
+      axios.get('./api.cgi', {
+        params: { mode: 'monsterHistory', no: this.monsterData.no }
+      })
+      .then(response => {
+        this.histories = response.data;
+      });
+    },
+
+    /** 指定された履歴情報が今有効なデータかどうかを取得する。 */
+    isActiveHistory: function (history) {
+      return history.state == 1;
+    },
+    /** 指定された履歴情報が現在表示している */
+    isShowHistory: function (history) {
+      if (this.isHistory) {
+        return history.id == this.$route.params.id;
+      } else {
+        return this.isActiveHistory(history);
+      }
+    }
   },
 
   computed: {
@@ -836,6 +891,10 @@ var componentMonsterData = {
     /** 限界突破時のパラメータのプラス換算値 */
     plusCountOverlimitParam: function () {
       return this.culcPlusCountParam(this.monsterData.overLimitParam);
+    },
+    /** 編集履歴の表示かどうか。 */
+    isHistory: function () {
+      return (this.$route.name == 'history');
     },
   },
 };
@@ -1272,6 +1331,13 @@ var router = new VueRouter({
     {
       path: '/about',
       component: componentAbout,
+    },
+
+    {
+      path: '/history/:id',
+      name: 'history',
+      component: componentMonsterData,
+      props: true
     },
     {
       path: '/:no',

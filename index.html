@@ -104,6 +104,9 @@
 <!-- モンスター情報ページ -->
 <script type="text/x-template" id="templateMonsterData">
   <div>
+    <div v-if="isHistory" class="alert alert-primary" role="alert">
+        {{monsterData.datetime}} 時点のデータです
+    </div>
     <div class="row">
       <div class="col-12">
         <h2>No. {{monsterData.no}} {{monsterData.name}}</h2>
@@ -275,8 +278,24 @@
     </div>
     <router-link :to="'/edit/' + $route.params.no" class="btn btn-primary">編集する</router-link>
     <router-link :to="'/pic/' + $route.params.no" class="btn btn-primary">モンスター画像投稿</router-link>
-  </div>
 
+    <div>
+      <h4>編集履歴</h4>
+      <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
+        {{isLoadingHistory ? '読み込み中…' : '編集履歴を確認する'}}
+      </button>
+      <ul v-if="histories">
+        <li v-for="history in histories">
+          <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="`/history/${history.id}`">
+            {{history.datetime}} - 
+            <span v-if="history.comment">{{history.comment}}</span>
+            <span v-else style="opacity: 0.6;">（コメントなし）</span>
+          </component>
+          <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 </script>
 
 <!-- モンスター情報編集ページ -->
