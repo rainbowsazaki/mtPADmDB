@@ -65,6 +65,14 @@ my %monster_data_db_info = (
   ]
 );
 
+# モンスター情報の各種テーブルをまとめた状態で取得するためのテーブル名指定。
+my $monster_data_all_joined_table_name = "
+  monster_data
+    LEFT JOIN monster_base_data ON monster_data.monster_base_data = monster_base_data.id
+    LEFT JOIN over_limit ON monster_data.over_limit = over_limit.id
+    LEFT JOIN evolution ON monster_data.evolution = evolution.id
+";
+
 # モンスター情報の JSON を出力する際の項目のソート順。
 my %json_sort_ranks = (
   no => 0,
@@ -829,12 +837,8 @@ sub db_row_to_hash {
 }
 
 
-# 全モンスターの情報を格納したJSONとそのダイジェスト版を作成する。
-# option
-#   is_create_monster_json - 真値を指定するとモンスター個別の JSON ファイルの再作成も行う。
-sub save_monster_list_json {
-  my ($dbh, $option) = @_;
-  $option ||= {};
+# モンスター情報一覧に必要なすべての情報の取得用配列を作成する。
+sub create_monster_data_column_infos {
   # データを格納してる各テーブルにモンスター番号が存在しないのと、
   # 先頭のキーがハッシュのキーとして使用されるのでモンスター番号を予め指定しておく。
   my @column_infos = ([ 'no', 'monster_data.no' ]);
@@ -855,17 +859,23 @@ sub save_monster_list_json {
       }
     }
   }
+
+  return \@column_infos;
+}
+
+
+# 全モンスターの情報を格納したJSONとそのダイジェスト版を作成する。
+# option
+#   is_create_monster_json - 真値を指定するとモンスター個別の JSON ファイルの再作成も行う。
+sub save_monster_list_json {
+  my ($dbh, $option) = @_;
+  $option ||= {};
+  my @column_infos = @{&create_monster_data_column_infos()};
   if ($option->{is_create_monster_json}) {
     push @column_infos, [ 'comment', 'monster_data.comment' ];
   }
 
-  my $data_ref = &table_to_hash($dbh, "
-  monster_data
-    LEFT JOIN monster_base_data ON monster_data.monster_base_data = monster_base_data.id
-    LEFT JOIN over_limit ON monster_data.over_limit = over_limit.id
-    LEFT JOIN evolution ON monster_data.evolution = evolution.id
-  ", \@column_infos, { 'monster_data.state' => 1 });
-
+  my $data_ref = &table_to_hash($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.state' => 1 });
 
   my $json_pp = JSON::PP->new;
 
