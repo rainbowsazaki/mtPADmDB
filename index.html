@@ -276,8 +276,8 @@
         <tr><td>{{monsterData.comment}}</td></tr>
       </table>
     </div>
-    <router-link :to="'/edit/' + $route.params.no" class="btn btn-primary">編集する</router-link>
-    <router-link :to="'/pic/' + $route.params.no" class="btn btn-primary">モンスター画像投稿</router-link>
+    <router-link :to="`/${monsterData.no}/edit`" class="btn btn-primary">編集する</router-link>
+    <router-link :to="`/${monsterData.no}/pic`" class="btn btn-primary">モンスター画像投稿</router-link>
 
     <div>
       <h4>編集履歴</h4>

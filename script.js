@@ -1314,7 +1314,7 @@ var router = new VueRouter({
       props: true
     },
     {
-      path: '/edit/:no',
+      path: '/:no/edit/',
       component: componentMonsterEdit,
       props: true
     },
@@ -1324,7 +1324,7 @@ var router = new VueRouter({
       props: true
     },
     {
-      path: '/pic/:no',
+      path: '/:no/pic',
       component: componentPic,
       props: true
     },
