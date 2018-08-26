@@ -907,6 +907,7 @@ var componentMonsterEdit = {
   name: 'pageMonsterEdit',
   template: '#templateMonsterEdit',
   pageTitle: function () {
+    if (this.isHistory) { return '履歴をもとに編集'; }
     if (this.$route.params.no) {
         return `編集 No.${this.$route.params.no} ${this.monsterData.name}`;
     } else {
@@ -914,8 +915,16 @@ var componentMonsterEdit = {
     }
   },
   middleOfBreadcrumbs: function () {
-    if (this.$route.params.no) {
-      return { text: `No.${this.$route.params.no} ${this.monsterData.name}`, link: '/' + this.$route.params.no };
+    if (this.isHistory) {
+      return {
+        text: `No.${this.monsterData.no} ${this.monsterData.name} (${this.monsterData.datetime})`,
+        link: `/history/${this.$route.params.id}`,
+      };
+    } else if (this.$route.params.no) {
+      return {
+        text: `No.${this.$route.params.no} ${this.monsterData.name}`,
+        link: `/${this.$route.params.no}`,
+      };
     } else {
       return undefined;
     }
@@ -973,25 +982,36 @@ var componentMonsterEdit = {
       }
       return this.monsterData.leaderSkillDetails;
     },
+
+    /** 編集履歴を元データとした編集かどうか。 */
+    isHistory: function () {
+      return (this.$route.name == 'historyEdit');
+    },
   },
   
   methods: {
     fetchData: function () {
       this.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
       this.$_mixinForPage_updateTitle();
-      if (this.$route.params.no) {
-        this.$store.commit('loadMonsterData', { 
-          no: this.$route.params.no,
-          callback: () => {
-            var m = $.extend(true, {}, this.$store.state.monsterData);
-            m.leaderSkillDetails = $.extend(true, m.leaderSkillDetails, this.leaderSkillTable[m.skill]);
-            m.skillDetails = $.extend(true, m.skillDetails, this.skillTable[m.leaderSkill]);
-            m.comment = '';
 
-            this.monsterData = m;
-            this.$_mixinForPage_updateTitle();
-          }
-        });
+      var commitParam = undefined;
+      if (this.isHistory) {
+        commitParam = { historyId: this.$route.params.id };
+      }
+      if (this.$route.params.no) {
+        commitParam = { no: this.$route.params.no };
+      }
+      if (commitParam) {
+        commitParam.callback = () => {
+          var m = $.extend(true, {}, this.$store.state.monsterData);
+          m.leaderSkillDetails = $.extend(true, m.leaderSkillDetails, this.leaderSkillTable[m.skill]);
+          m.skillDetails = $.extend(true, m.skillDetails, this.skillTable[m.leaderSkill]);
+          m.comment = '';
+
+          this.monsterData = m;
+          this.$_mixinForPage_updateTitle();
+        };
+        this.$store.commit('loadMonsterData', commitParam);
       }
       this.$store.commit('fetchCommonData');
     },
@@ -1339,6 +1359,13 @@ var router = new VueRouter({
       component: componentMonsterData,
       props: true
     },
+    {
+      path: '/history/:id/edit/',
+      name: 'historyEdit',
+      component: componentMonsterEdit,
+      props: true
+    },
+    
     {
       path: '/:no',
       component: componentMonsterData,
