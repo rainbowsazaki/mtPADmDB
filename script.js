@@ -507,7 +507,7 @@ Vue.component('monsterIncrementalSearch', {
       </div>
       <input :id="id" type="number" class="form-control"  
       :value="value"
-      @input="updateValue($event.target.value);">
+      @input="updateValue($event.target.value);" min="1" max="9999">
     </div>
   </div>
   <div class="col-md-8">
