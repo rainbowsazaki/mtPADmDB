@@ -113,7 +113,7 @@
         <h2>No. {{monsterData.no}} {{monsterData.name}}</h2>
       </div>
     </div>
-    <div v-if="!isHistory"><tweet-button :hashtags="`mtPADmDB_${monsterData.no}`"/></div>
+    <div v-if="!isHistory"><tweet-button v-if="monsterData.no" :hashtags="`mtPADmDB_${monsterData.no}`"/></div>
     <div class="row">
       <div class="col-md-6">
         <img v-if="monsterData.no" :src="'./monsterImages/' + (hasImage(monsterData.no) ? monsterData.no : 'notFound') + '.jpg'" style="width: 320px; height: auto; display: block; margin: 0 auto;" />
