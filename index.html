@@ -76,6 +76,7 @@
 <script type="text/x-template" id="templateMonsterList">
   <div>
     <h1>みんなで作るパズドラモンスターデータベース</h1>
+    <div><tweet-button /></div>
 
     <pagination :page="page" :pageCount="pageCount" />
 
@@ -112,6 +113,7 @@
         <h2>No. {{monsterData.no}} {{monsterData.name}}</h2>
       </div>
     </div>
+    <div v-if="!isHistory"><tweet-button /></div>
     <div class="row">
       <div class="col-md-6">
         <img v-if="monsterData.no" :src="'./monsterImages/' + (hasImage(monsterData.no) ? monsterData.no : 'notFound') + '.jpg'" style="width: 320px; height: auto; display: block; margin: 0 auto;" />
@@ -588,6 +590,8 @@
 <script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/vuex@3.0.1/dist/vuex.js"></script>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <script src="./script.js"></script>
 

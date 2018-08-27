@@ -626,6 +626,45 @@ Vue.component('pagination', {
 });
 
 
+/** ツイートボタン表示のコンポーネント */
+Vue.component('tweetButton', {
+  template: `<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>`,
+  data: function () {
+    return {
+      id: 'tweetButton' + (Math.random() * 1000000).toFixed(0),
+    };
+  },
+  mounted: function () {
+    this.createButton();
+  },
+  watch: {
+    "$route": function () {
+      this.createButton();
+    }
+  },
+  methods: {
+    createButton: function () {
+      if(typeof twttr === "undefined") {
+        setTimeout(() => { this.createButton(); }, 100);
+        return;
+      }
+      
+      var targetId = 'tweetButtonPlace';
+      var jq = $(`#${this.id}`);
+      if (!jq.length) { return; }
+      jq.empty();
+      twttr.widgets.createShareButton(
+        location.href,
+        document.getElementById(this.id),
+        {
+          hashtags: 'mtPADmDB',
+        }
+      );
+    }
+  }
+});
+
+
 // ページ用のコンポーネントで使用する処理のミックスイン
 var mixinForPage = {
   created: function () {
@@ -1389,6 +1428,7 @@ var app = new Vue({
   created: function () {
     this.$store.commit('fetchCommonData');
   },
+  
   computed: {
     errors: function () { return this.$store.state.errors; },
     messages: function () { return this.$store.state.messages; },
