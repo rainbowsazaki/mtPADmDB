@@ -281,6 +281,7 @@ const store = new Vuex.Store({
       axios.get(path, option).then(
         response => {
           var data = $.extend(true, {}, commonData.monsterClearData, response.data);
+          if (!data.superAwakens) { data.superAwakens = []; }
           state.monsterData = data;
           
           this.commit('setMessages', [ '取得完了' ]);
