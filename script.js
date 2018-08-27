@@ -629,6 +629,9 @@ Vue.component('pagination', {
 /** ツイートボタン表示のコンポーネント */
 Vue.component('tweetButton', {
   template: `<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>`,
+  props: {
+    'hashtags': String,
+  },
   data: function () {
     return {
       id: 'tweetButton' + (Math.random() * 1000000).toFixed(0),
@@ -648,6 +651,8 @@ Vue.component('tweetButton', {
         setTimeout(() => { this.createButton(); }, 100);
         return;
       }
+      var hashtags = 'mtPADmDB';
+      if (this.hashtags) { hashtags += ',' + this.hashtags; }
       
       var targetId = 'tweetButtonPlace';
       var jq = $(`#${this.id}`);
@@ -657,7 +662,7 @@ Vue.component('tweetButton', {
         location.href,
         document.getElementById(this.id),
         {
-          hashtags: 'mtPADmDB',
+          hashtags: hashtags,
         }
       );
     }
