@@ -439,7 +439,7 @@ Vue.component('skillIncrementalInput', {
 Vue.component('monsterIncrementalInput', {
   template: `
 <div class="dropdown show">
-  <input v-model="filter" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
+  <input v-model="filter" placeholder="モンスター名で検索" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
   <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
     <a v-for="(value, key) in filteredMonsterTable" class="dropdown-item" @click="updateValue(key)" href="javascript:void(0)">
       {{value.name}}
