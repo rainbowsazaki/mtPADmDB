@@ -400,7 +400,7 @@ Vue.component('pdOption', {
 Vue.component('skillIncrementalInput', {
   template: `
 <div class="dropdown show">
-  <input :value="value" @input="$emit('input', $event.target.value); showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" onfocus="$('.dropdown-toggle').dropdown();" required minLength="1" maxLength="50">
+  <input :value="value" :id="id" @input="$emit('input', $event.target.value); showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" onfocus="$('.dropdown-toggle').dropdown();" required minLength="1" maxLength="50">
   <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
     <a v-for="(value, key) in filteredSkillTable" class="dropdown-item" @click="$emit('select-no', key)" href="javascript:void(0)">
       {{value.name}}<br>
@@ -409,7 +409,7 @@ Vue.component('skillIncrementalInput', {
   </div>
 </div>
   `,
-  props: [ 'value', 'skillTable', 'placeholder' ],
+  props: [ 'id', 'value', 'skillTable', 'placeholder' ],
 
   computed: {
     filteredSkillTable: function () {
@@ -505,7 +505,7 @@ Vue.component('monsterIncrementalSearch', {
       <div class="input-group-prepend">
         <span class="input-group-text">No.</span>
       </div>
-      <input type="number" class="form-control"  
+      <input :id="id" type="number" class="form-control"  
       :value="value"
       @input="updateValue($event.target.value);">
     </div>
@@ -518,7 +518,7 @@ Vue.component('monsterIncrementalSearch', {
   </div>
 </div>
   `,
-  props: [ 'value', 'monsterTable' ],
+  props: [ 'id', 'value', 'monsterTable' ],
   data: function () {
     return {
       filter: ""
