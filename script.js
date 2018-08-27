@@ -1076,6 +1076,10 @@ var componentMonsterEdit = {
       this.$store.commit('clearMessages');
       this.$store.commit('setMessages', [ '通信中...' ]);
 
+      // データの整形
+      // 超覚醒を昇順ソート
+      this.monsterData.superAwakens.sort((a, b) => a - b);
+
       axios.post('./api.cgi', this.monsterData)
       .then(response => {
         // レスポンス来なかったときの復帰処理を止める。
