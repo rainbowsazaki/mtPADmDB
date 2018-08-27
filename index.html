@@ -339,18 +339,18 @@
         </tr>
         <tr>
             <td colspan="3">
-                <select class="custom-select" id="selectType1" v-model="monsterData.attributes[0]">
+                <select class="custom-select" id="selectAttribute0" v-model="monsterData.attributes[0]">
                   <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
-                <select class="custom-select" id="selectType2" v-model="monsterData.attributes[1]">
+                <select class="custom-select" id="selectAttribute1" v-model="monsterData.attributes[1]">
                   <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.cost" min="1" max="999">
+              <input type="number" class="form-control" id="inputCost" v-model="monsterData.cost" min="1" max="999">
             </td>
             <td colspan="3">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.rare" min="1" max="99">
+              <input type="number" class="form-control" id="inputRare" v-model="monsterData.rare" min="1" max="99">
             </td>
         </tr>
         <tr class="thead-light">
@@ -360,10 +360,10 @@
         </tr>
         <tr>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxLevel" min="1" max="99">
+            <input type="number" class="form-control" id="inputMaxLevel" v-model="monsterData.maxLevel" min="1" max="99">
           </td>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.expTable" min="0" max="999999999">
+            <input type="number" class="form-control" id="inputExpTable" v-model="monsterData.expTable" min="0" max="999999999">
           </td>
           <td colspan="4">
             <select class="custom-select" id="selectAssist" v-model="monsterData.assist">
@@ -376,7 +376,7 @@
         </tr>
         <tr v-for="n in 9" :key="n">
           <td colspan="12">
-            <pd-select v-model="monsterData.awakens[n - 1]">
+            <pd-select v-model="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
               <pd-option v-for="(awaken, key) in awakenTable" :value="key" :key="key" v-once><img :src="(key == 0 || key == 99) ? '' : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken.name}}</pd-option>
             </pd-select>
           </td>
@@ -387,19 +387,19 @@
         <tr>
           <th colspan="4">HP</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.hp" min="1" max="99999">
+            <input type="number" class="form-control" id="inputMaxHp" v-model="monsterData.maxParam.hp" min="1" max="99999">
           </td>
         </tr>
         <tr>
           <th colspan="4">攻撃</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.attack" min="1" max="99999">
+            <input type="number" class="form-control" id="inputMaxAttack" v-model="monsterData.maxParam.attack" min="1" max="99999">
           </td>
         </tr>
         <tr>
           <th colspan="4">回復</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputNo" v-model="monsterData.maxParam.recovery" min="-9999" max="99999">
+            <input type="number" class="form-control" id="inputMaxRecovery" v-model="monsterData.maxParam.recovery" min="-9999" max="99999">
           </td>
         </tr>
         <tr class="thead-light">
@@ -413,13 +413,13 @@
         </tr>
         <tr>
           <td colspan="6">
-            <skill-incremental-input placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillDetails.name" :skill-table="skillTable"></skill-incremental-input>
+            <skill-incremental-input id="inputSkillName" placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillDetails.name" :skill-table="skillTable"></skill-incremental-input>
           </td>
           <td colspan="2">
-            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.baseTurn" min="1" max="199">
+            <input type="number" class="form-control" id="inputSkillBaseTurn" v-model="skillDetails.baseTurn" min="1" max="199">
           </td>
           <td colspan="2">
-            <input type="number" class="form-control" id="inputSkillTurn" v-model="skillDetails.maxLevel" min="1" max="99">
+            <input type="number" class="form-control" id="inputSkillMaxLevel" v-model="skillDetails.maxLevel" min="1" max="99">
           </td>
           <td colspan="2">{{(minimumSkillTurn) ? minimumSkillTurn : '-' }}</td>
         </tr>
@@ -428,7 +428,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="skillDetails.description" maxLength="200"></textarea>
+            <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="skillDetails.description" maxLength="200"></textarea>
           </td>
         </tr>
         <tr class="thead-light">
@@ -439,7 +439,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <skill-incremental-input placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillDetails.name" :skill-table="leaderSkillTable"></skill-incremental-input>
+            <skill-incremental-input id="inputLeaderSkillname" placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillDetails.name" :skill-table="leaderSkillTable"></skill-incremental-input>
           </td>
         </tr>
         <tr class="">
@@ -447,7 +447,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" v-model="leaderSkillDetails.description" maxLength="200"></textarea>
+            <textarea class="form-control" id="textareaLeaderSkillDescription" rows="2" v-model="leaderSkillDetails.description" maxLength="200"></textarea>
           </td>
         </tr>
         <tr class="thead-light">
@@ -467,19 +467,19 @@
           <tr>
             <th colspan="4">HP</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.hp" min="1" max="99999">
+              <input type="number" class="form-control" id="inputOverLimitHp" v-model="monsterData.overLimitParam.hp" min="1" max="99999">
             </td>
           </tr>
           <tr>
             <th colspan="4">攻撃</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.attack" min="1" max="99999">
+              <input type="number" class="form-control" id="inputOverLimitAttack" v-model="monsterData.overLimitParam.attack" min="1" max="99999">
             </td>
           </tr>
           <tr>
             <th colspan="4">回復</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputNo" v-model="monsterData.overLimitParam.recovery" min="-9999" max="99999">
+              <input type="number" class="form-control" id="inputOverLimitRecovery" v-model="monsterData.overLimitParam.recovery" min="-9999" max="99999">
             </td>
           </tr>
           <tr class="thead-light">
@@ -512,7 +512,7 @@
           </tr>
           <tr>
             <td colspan="12">
-              <monster-incremental-search v-model="monsterData.evolution.baseNo" :monster-table="monsterTable"></monster-incremental-search>
+              <monster-incremental-search id="inputEvolutionBaseNo" v-model="monsterData.evolution.baseNo" :monster-table="monsterTable"></monster-incremental-search>
             </td>
           </tr>
           <tr class="thead-light">
@@ -520,7 +520,7 @@
           </tr>
           <tr v-for="n in 5">
             <td colspan="12">
-              <monster-incremental-search v-model="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :key="n"></monster-incremental-search>
+              <monster-incremental-search :id="`inputEvolutionMaterial${n}`" v-model="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :key="n"></monster-incremental-search>
             </td>
           </tr>
         </template>
@@ -530,7 +530,7 @@
         <tr>
           <td colspan="12">
             編集理由などを書いてください。（例：パラメータの更新）
-            <textarea class="form-control" id="commentTextarea" rows="3" v-model="monsterData.comment" minLength="0" maxLength="1000"></textarea>
+            <textarea class="form-control" id="textareaComment" rows="3" v-model="monsterData.comment" minLength="0" maxLength="1000"></textarea>
           </td>
         </tr>
         <tr>
