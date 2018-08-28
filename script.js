@@ -1015,17 +1015,60 @@ var componentMonsterEdit = {
 
     skillDetails: function () {
       if (this.monsterData.skill != 0) {
-        this.setSkillNo(this.monsterData.skill);
-        this.monsterData.skill = 0;
+        this.monsterData.skillDetails = $.extend(true, {}, this.skillTable[this.monsterData.skill]);
       }
       return this.monsterData.skillDetails;
     },
+
+    skillName: {
+      get: function () { return this.skillDetails.name; },
+      set: function (value) {
+        this.skillDetails.name = value; 
+        this.monsterData.skill = 0;
+      }
+    },
+    skillBaseTurn: {
+      get: function () { return this.skillDetails.baseTurn; },
+      set: function (value) {
+        this.skillDetails.baseTurn = value; 
+        this.monsterData.skill = 0;
+      }
+    },
+    skillMaxLevel: {
+      get: function () { return this.skillDetails.maxLevel; },
+      set: function (value) {
+        this.skillDetails.maxLevel = value; 
+        this.monsterData.skill = 0;
+      }
+    },
+    skillDescription: {
+      get: function () { return this.skillDetails.description; },
+      set: function (value) {
+        this.skillDetails.description = value; 
+        this.monsterData.skill = 0;
+      }
+    },
+
     leaderSkillDetails: function () {
       if (this.monsterData.leaderSkill != 0) {
-        this.setLeaderSkillNo(this.monsterData.leaderSkill);
-        this.monsterData.leaderSkill = 0;
+        this.monsterData.leaderSkillDetails = $.extend(true, {}, this.leaderSkillTable[this.monsterData.leaderSkill]);
       }
       return this.monsterData.leaderSkillDetails;
+    },
+
+    leaderSkillName: {
+      get: function () { return this.leaderSkillDetails.name; },
+      set: function (value) {
+        this.leaderSkillDetails.name = value;
+        this.monsterData.leaderSkill = 0;
+      }
+    },
+    leaderSkillDescription: {
+      get: function () { return this.leaderSkillDetails.description; },
+      set: function (value) {
+        this.leaderSkillDetails.description = value;
+        this.monsterData.leaderSkill = 0;
+      }
     },
 
     /** 編集履歴を元データとした編集かどうか。 */
@@ -1059,12 +1102,6 @@ var componentMonsterEdit = {
         this.$store.commit('loadMonsterData', commitParam);
       }
       this.$store.commit('fetchCommonData');
-    },
-    setSkillNo: function (no) {
-      this.monsterData.skillDetails = $.extend(true, {}, this.skillTable[no]);
-    },
-    setLeaderSkillNo: function (no) {
-      this.monsterData.leaderSkillDetails = $.extend(true, {}, this.leaderSkillTable[no]);
     },
     submit: function( ) {
       // 多重送信防止処理
