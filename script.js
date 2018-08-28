@@ -202,6 +202,9 @@ const constData = {
 
 };
 
+/** 本番環境でのみ gtag を実行する関数 */
+var gtagProductionOnly = (document.domain == 'localhost') ? function () {} : gtag;
+
 axios.interceptors.request.use(function (config) {
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
   config.headers['Cache-Control'] = "no-cache";
@@ -1475,7 +1478,25 @@ var app = new Vue({
   created: function () {
     this.$store.commit('fetchCommonData');
   },
-  
+  mounted: function () {
+    this.sendGa();
+  },
+  watch: {
+    '$route': function () {
+      this.sendGa();
+    }
+  },
+  methods: {
+    /** Google Analytics のページビュートラッキングを送信する。 */
+    sendGa: function () {
+      // タイトルを変更させるために少しあとに実行する。
+      setTimeout(() => {
+        gtagProductionOnly('config', 'UA-124771141-1', {
+          'page_location': location.href,
+        });
+      }, 1);
+    }
+  },
   computed: {
     errors: function () { return this.$store.state.errors; },
     messages: function () { return this.$store.state.messages; },
