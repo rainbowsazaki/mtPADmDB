@@ -1132,6 +1132,15 @@ var componentMonsterEdit = {
           // 再度送信可能にする。
           this.isSubmitted = false;
         } else {
+          // Google Analiticsにイベントを送信。
+          var action = 'monsterDataPost';
+          if (this.$route.params.no) { action = 'monsterDataUpdate'; }      // 現在のデータを元した編集の場合
+          if (this.isHistory) { action = 'monsterDataUpdateFromHistory'; }  // 編集履歴をもとにした編集の場合
+          gtagProductionOnly('event', action, {
+            'event_category': 'monsterData',
+            'event_label': `No.${this.monsterData.no}`
+          });
+
           this.$router.push({ path:`/${this.monsterData.no}` });
         }
         if (response.data.message) {
@@ -1379,6 +1388,16 @@ var componentPic = {
           // 再度送信可能にする。
           this.isSubmitted = false;
         } else {
+          // Google Analiticsにイベントを送信。
+          var action = 'monsterImagePost';
+          if (this.monsterNo in this.$store.state.imageTable) {
+            action = 'monsterImageUpdate'; // すでに画像投稿のあるモンスターに対して上書き投稿した場合。
+          }
+          gtagProductionOnly('event', action, {
+            'event_category': 'monsterImage',
+            'event_label': `No.${this.monsterNo}`
+          });
+
           alert(response.data.success);
           if (this.$route.params.no) {
             this.$router.push({ path:`/${this.$route.params.no}` });
