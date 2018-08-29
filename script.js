@@ -32,23 +32,23 @@ const constData = {
     no: 0,
     name:"",
     attributes: [ 99, 0 ],
-    cost: undefined,
-    rare: undefined,
+    cost: null,
+    rare: null,
     types: [ 99, 0, 0],
     awakens: [ 99, 0, 0, 0, 0, 0, 0, 0, 0 ],
-    expTable: undefined,
-    maxLevel: undefined,
+    expTable: null,
+    maxLevel: null,
     maxParam: {
-      hp: undefined,
-      attack: undefined,
-      recovery: undefined
+      hp: null,
+      attack: null,
+      recovery: null
     },
     skill: 0,
     skillDetails: {
       name: '',
       description: '',
-      baseTurn: undefined,
-      maxLevel: undefined
+      baseTurn: null,
+      maxLevel: null
     },
     leaderSkill: 0,
     leaderSkillDetails: {
@@ -58,16 +58,16 @@ const constData = {
     assist: 9,
     overLimit: 9,
     overLimitParam: {
-      hp: undefined,
-      attack: undefined,
-      recovery: undefined
+      hp: null,
+      attack: null,
+      recovery: null
     },
     superAwakens: [],
     evolutionType: 99,
     evolution: {
-      baseNo: undefined,
+      baseNo: null,
       materials: [
-        undefined, undefined, undefined, undefined, undefined
+        null, null, null, null, null
       ]
     },
     comment: ''
@@ -735,7 +735,7 @@ var componentAbout = {
 var componentMonsterList = {
   name: 'pageMonsterList',
   template: '#templateMonsterList',
-  pageTitle: undefined,
+  pageTitle: null,
   data: function () {
     return {
       inPageCount: 20,
@@ -803,7 +803,7 @@ var componentMonsterData = {
       /** 履歴情報の読み込み中かどうか。 */
       isLoadingHistory: false,
       /** 履歴情報 */
-      histories: undefined,
+      histories: null,
     };
   },
   created: function () {
@@ -819,7 +819,7 @@ var componentMonsterData = {
   methods: {
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
-      this.histories = undefined;
+      this.histories = null;
       this.isLoadingHistory = false;
 
       var param = {
@@ -1187,7 +1187,7 @@ var componentPic = {
 
   data: function () {
     return {
-      monsterNo: undefined,
+      monsterNo: null,
       uploadImgSrc: '',
       imageResultSrc: '',
       iconResultSrc: '',
