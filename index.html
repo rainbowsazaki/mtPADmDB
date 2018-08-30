@@ -233,7 +233,7 @@
         <tr class="thead-light"><th>進化前モンスター</th></tr>
         <tr><td>
           <router-link v-if="monsterData.evolution.baseNo" :to="`/${monsterData.evolution.baseNo}`">
-            <img :src="getIconPath(monsterData.evolution.baseNo)" style="width: 32px; height: 32px;">
+            <monster-icon :no="monsterData.evolution.baseNo" :monsterTable="monsterTable" :imageTable="imageTable" width="32px" height="32px" />
             No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}
           </router-link>
           <span v-else>不明</span>
@@ -243,7 +243,7 @@
           <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex; justify-content: space-around;">
             <li v-for="material in monsterData.evolution.materials" v-if="material" style="flex: 1;">
               <router-link :to="`/${material}`">
-                <img :src="getIconPath(material)" style="width: 32px; height: 32px;">
+                <monster-icon :no="material" :monsterTable="monsterTable" :imageTable="imageTable" width="32px" height="32px" />
                 No. {{material}} {{monsterTable[material] && monsterTable[material].name}}
               </router-link>
             </li>
@@ -259,7 +259,7 @@
         <tr class="thead-light"><th>{{evolutionTypeTable[evolution.type]}}</th></tr>
         <tr><td>
           <router-link v-if="evolution.no" :to="`/${evolution.no}`">
-            <img :src="getIconPath(evolution.no)" style="width: 32px; height: 32px;">
+            <monster-icon :no="evolution.no" :monsterTable="monsterTable" :imageTable="imageTable" width="32px" height="32px" />
             No. {{evolution.no}} {{monsterTable[evolution.no] && monsterTable[evolution.no].name}}
           </router-link>
           <span v-else>不明</span>
@@ -269,7 +269,7 @@
           <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex; justify-content: space-around;">
             <li v-for="material in evolution.materials" v-if="material" style="flex: 1;">
               <router-link :to="`/${material}`">
-                <img :src="getIconPath(material)" style="width: 32px; height: 32px;">
+                <monster-icon :no="material" :monsterTable="monsterTable" :imageTable="imageTable" width="32px" height="32px" />
                 No. {{material}} {{monsterTable[material] && monsterTable[material].name}}
               </router-link>
             </li>

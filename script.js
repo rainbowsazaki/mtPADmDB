@@ -857,14 +857,7 @@ var componentMonsterData = {
     hasImage: function (no) {
       return (no in this.$store.state.imageTable);
     },
-    getIconPath: function (no) {
-      if (this.hasImage(no)) {
-        return `./monsterImages/icon_${no}.jpg`;
-      } else {
-        return undefined;
-      }
-    },
-
+    
     /** パラメータをプラス換算に変換する。 */
     culcPlusCountParam: function (param) {
       var obj = {
@@ -906,7 +899,7 @@ var componentMonsterData = {
     skillTable: function () { return this.$store.state.skillTable; },
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
     evolutionTable: function () { return this.$store.state.evolutionTable; },
-
+    imageTable: function () { return this.$store.state.imageTable; },
     monsterData: function () { return this.$store.state.monsterData },
 
     skillDetails: function () {
