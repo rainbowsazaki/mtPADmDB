@@ -505,6 +505,7 @@ Vue.component('monsterIncrementalSearch', {
 <div class="form-row">
   <div class="col-md-4">
     <div class="input-group">
+      <monster-icon v-if="imageTable" :no="value" :monsterTable="monsterTable" :imageTable="imageTable" width="38px" height="38px" />
       <div class="input-group-prepend">
         <span class="input-group-text">No.</span>
       </div>
@@ -521,7 +522,7 @@ Vue.component('monsterIncrementalSearch', {
   </div>
 </div>
   `,
-  props: [ 'id', 'value', 'monsterTable' ],
+  props: [ 'id', 'value', 'monsterTable', 'imageTable' ],
   data: function () {
     return {
       filter: ""
@@ -1015,6 +1016,7 @@ var componentMonsterEdit = {
     monsterTable: function () { return this.$store.state.monsterTable; },
     skillTable: function () { return this.$store.state.skillTable; },
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
+    imageTable: function () { return this.$store.state.imageTable; },
 
 //    monsterData: function () { return this.$store.state.monsterData },
     /** スキルレベル最大時の（最短の）スキルターン */
@@ -1427,6 +1429,7 @@ var componentPic = {
 
   computed: {
     monsterTable: function () { return this.$store.state.monsterTable; },
+    imageTable: function () { return this.$store.state.imageTable; },
     selectMonsterName: function () {
       return (this.monsterTable[this.$route.params.no] || {}).name || '';
     }

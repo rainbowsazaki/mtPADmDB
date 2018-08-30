@@ -528,7 +528,7 @@
           </tr>
           <tr>
             <td colspan="12">
-              <monster-incremental-search id="inputEvolutionBaseNo" v-model="monsterData.evolution.baseNo" :monster-table="monsterTable"></monster-incremental-search>
+              <monster-incremental-search id="inputEvolutionBaseNo" v-model="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
             </td>
           </tr>
           <tr class="thead-light">
@@ -536,7 +536,7 @@
           </tr>
           <tr v-for="n in 5">
             <td colspan="12">
-              <monster-incremental-search :id="`inputEvolutionMaterial${n}`" v-model="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :key="n"></monster-incremental-search>
+              <monster-incremental-search :id="`inputEvolutionMaterial${n}`" v-model="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :image-table="imageTable" :key="n"></monster-incremental-search>
             </td>
           </tr>
         </template>
@@ -569,7 +569,7 @@
         モンスター情報画面の画像ファイルを選択してください。</div>
       <div class="row">
           <div v-if="!this.$route.params.no" class="col-md-12">
-            <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable"></monster-incremental-search>
+            <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-search>
           </div>
         <div class="col-md-12">
           <div class="custom-file">
