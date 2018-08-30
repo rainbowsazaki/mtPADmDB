@@ -319,19 +319,19 @@
       <table class="table table-bordered table-sm">
         <tr>
           <td colspan="12">
-              <div class="form-row">
-            <div class="col-md-4">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">No.</span>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">No.</span>
+                  </div>
+                  <input type="number" class="form-control" id="inputNo" v-model="monsterData.no" required min="1" max="9999">
                 </div>
-                <input type="number" class="form-control" id="inputNo" v-model="monsterData.no" required min="1" max="9999">
+              </div>
+              <div class="form-group col-md-8">
+                <input type="text" class="form-control" id="inputMonsterName" placeholder="モンスター名" v-model="monsterData.name" required minLength="1" maxLength="50">
               </div>
             </div>
-            <div class="form-group col-md-8">
-              <input type="text" class="form-control" id="inputMonsterName" placeholder="モンスター名" v-model="monsterData.name" required minLength="1" maxLength="50">
-            </div>
-            <div>
           </td>
         </tr>
         <tr class="thead-light"><th colspan="12">タイプ</th></tr>
