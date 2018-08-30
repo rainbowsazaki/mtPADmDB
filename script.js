@@ -630,6 +630,28 @@ Vue.component('pagination', {
 });
 
 
+/** モンスターアイコンを表示するコンポーネント。 */
+Vue.component('monsterIcon', {
+  template: `
+  <img v-if="hasImage" :src="iconPath" :style="{width: width, height: height }" />
+  <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom;" :style="{ width: width, height: height }"> 
+    <img v-if="hasAttr0" style="position:absolute; left:  4%; top:    4%; width: 22%; height: 22%;" :src="attrPath0" />
+    <img v-if="hasAttr1" style="position:absolute; right: 4%; bottom: 4%; width: 22%; height: 22%;" :src="attrPath1" />
+  </div>
+  `,
+  props: [ 'no', 'monsterTable', 'imageTable', 'width', 'height' ],
+  
+  computed: {
+    hasImage: function () { return !!this.imageTable[this.no]; },
+    attributes: function () { return (this.monsterTable[this.no] || {}).attributes || [] },
+    hasAttr0: function () { var attr = this.attributes[0]; return (attr && attr != 0 && attr != 99); },
+    hasAttr1: function () { var attr = this.attributes[1]; return (attr && attr != 0 && attr != 99); },
+    iconPath: function () { return `./monsterImages/icon_${this.no}.jpg`; },
+    attrPath0: function () { return `./image/attribute/${this.attributes[0]}.png`; },
+    attrPath1: function () { return `./image/attribute/${this.attributes[1]}.png`; },
+  }
+})
+
 /** ツイートボタン表示のコンポーネント */
 Vue.component('tweetButton', {
   template: `<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>`,
@@ -748,6 +770,7 @@ var componentMonsterList = {
 
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
+    imageTable() { return this.$store.state.imageTable; },
     attrColors () { return constData.attrColors; },
 
     pageCount() { return ((this.monsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
@@ -768,13 +791,6 @@ var componentMonsterList = {
   methods: {
     hasImage: function (no) {
       return (no in this.$store.state.imageTable);
-    },
-    getIconPath: function (no) {
-      if (this.hasImage(no)) {
-        return `./monsterImages/icon_${no}.jpg`;
-      } else {
-        return undefined;
-      }
     },
   },
 };

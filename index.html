@@ -94,13 +94,8 @@
     <div class="row">
       <div v-for="data in monsterTableInPage" class="col-md-6" style="padding-bottom: 2px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
         <router-link :to="'/' + data.no">
-          <div style="display: inline-block; width: 3em; height: 3em; background-color: #ccc; position:relative;">
-            <img :src="getIconPath(data.no)" style="width: 3em; height: 3em;" />
-            <template v-if="!hasImage(data.no)" >
-              <img v-if="data.attributes[0] != 0 && data.attributes[0] != 99" style="position:absolute; left:0.05em; top:0.05em; width: 0.7em; height: 0.7em;" :src="`./image/attribute/${data.attributes[0]}.png`">
-              <img v-if="data.attributes[1] != 0 && data.attributes[1] != 99" style="position:absolute; left:2.15em; top:2.15em; width: 0.7em; height: 0.7em;" :src="`./image/attribute/${data.attributes[1]}.png`">
-            </template>
-          </div><div style="display: inline-block; padding-left: 4px; vertical-align:bottom; height: 3em;">
+          <monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em"
+          /><div style="display: inline-block; padding-left: 4px; vertical-align:bottom; height: 3em;">
             <span style="font-size: 80%;">No.{{data.no}}</span><br>
             {{data.name}}
           </div>
