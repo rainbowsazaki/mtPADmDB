@@ -634,8 +634,8 @@ Vue.component('pagination', {
 /** モンスターアイコンを表示するコンポーネント。 */
 Vue.component('monsterIcon', {
   template: `
-  <img v-if="hasImage" :src="iconPath" :style="{width: width, height: height }" />
-  <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom;" :style="{ width: width, height: height }"> 
+  <img v-if="hasImage" :src="iconPath" style="border-radius: 6%;" :style="{width: width, height: height }" />
+  <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom; border: 1px solid #bbb; border-radius: 6%;" :style="{ width: width, height: height }"> 
     <img v-if="hasAttr0" style="position:absolute; left:  4%; top:    4%; width: 22%; height: 22%;" :src="attrPath0" />
     <img v-if="hasAttr1" style="position:absolute; right: 4%; bottom: 4%; width: 22%; height: 22%;" :src="attrPath1" />
   </div>
