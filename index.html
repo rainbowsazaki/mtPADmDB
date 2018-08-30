@@ -361,7 +361,12 @@
               <input type="number" class="form-control" id="inputCost" v-model="monsterData.cost" min="1" max="999">
             </td>
             <td colspan="3">
-              <input type="number" class="form-control" id="inputRare" v-model="monsterData.rare" min="1" max="99">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="padding: 0.375rem; font-size: 80%;">★</span>
+                </div>
+                <input type="number" class="form-control" id="inputRare" v-model="monsterData.rare" min="1" max="99">
+              </div>
             </td>
         </tr>
         <tr class="thead-light">
@@ -371,7 +376,12 @@
         </tr>
         <tr>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputMaxLevel" v-model="monsterData.maxLevel" min="1" max="99">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Lv.</span>
+              </div>
+              <input type="number" class="form-control" id="inputMaxLevel" v-model="monsterData.maxLevel" min="1" max="99">
+            </div>
           </td>
           <td colspan="4">
             <input type="number" class="form-control" id="inputExpTable" v-model="monsterData.expTable" min="0" max="999999999">
