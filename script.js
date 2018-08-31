@@ -29,7 +29,7 @@ const constData = {
 
   /** モンスター情報の空データ */
   monsterClearData: {
-    no: 0,
+    no: null,
     name:"",
     attributes: [ 99, 0 ],
     cost: null,
