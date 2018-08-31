@@ -22,7 +22,7 @@ const constData = {
   /** ナビゲーションメニュー用データ */
   navis: [
     { text: 'ホーム', to: '/' },
-    { text: '新規追加', to: '/edit' },
+    { text: '新規登録', to: '/edit' },
     { text: '画像投稿', to: '/pic' },
     { text: 'これは何？', to: '/about' },
   ],
@@ -969,7 +969,7 @@ var componentMonsterEdit = {
     if (this.$route.params.no) {
         return `編集 No.${this.$route.params.no} ${this.monsterData.name}`;
     } else {
-      return '編集';
+      return '新規登録';
     }
   },
   middleOfBreadcrumbs: function () {
