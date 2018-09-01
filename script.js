@@ -1332,8 +1332,8 @@ var componentPic = {
             var imageHeight = 405;
             
             // モンスター画像の縦の中心を求める
-            var monsterAreaTop = imgTop + 144 / 640 * img.width;
-            var monsterAreaBottom = imgHeight - 354 / 640 * img.width;
+            var monsterAreaTop = imgTop + 144 / 640 * imgWidth;
+            var monsterAreaBottom = imgHeight - 354 / 640 * imgWidth;
             var monsterAreaMiddleRate = 0.624;
             var monsterAreaMiddleOffset = imgWidth * 0.07;
             var monsterAreaMiddle = (monsterAreaTop * monsterAreaMiddleRate + monsterAreaBottom * (1 - monsterAreaMiddleRate) - monsterAreaMiddleOffset) | 0;
