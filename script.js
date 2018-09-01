@@ -1351,6 +1351,18 @@ var componentPic = {
             var data = canvas.toDataURL('image/jpeg', 0.85);
             this.imageResultSrc = data;
 
+            // モンスター番号＆モンスター名の領域を切り抜く。
+            var nameAreaHeight = 76 / 640 * imgWidth;
+            var nameAreaTop = monsterAreaTop + 8 / 640 * imgWidth;;
+            srcX = marginLeft + (0.15 * imgWidth + 0.5) | 0;
+            srcWidth = (0.7 * imgWidth + 0.5)| 0;
+            // Canvasの準備
+            canvas.width = srcWidth;
+            canvas.height = nameAreaHeight;
+            ctx.drawImage(img, srcX, nameAreaTop, srcWidth, nameAreaHeight, 0, 0, srcWidth, nameAreaHeight);
+            // canvasを画像に変換
+            this.uploadImgSrc = canvas.toDataURL('image/png');
+
             canvas.width = canvas.height = 0;
           }
           
