@@ -1253,7 +1253,6 @@ var componentPic = {
           var imageSrcScale = [ 50 / 640, (1136 - 795 + 480) / 640, 540 / 640, 405 / 640 ];
           var canvas = document.getElementById('canvas');
           var ctx = canvas.getContext('2d');
-          this.uploadImgSrc = reader.result;
 
           // Canvas上に画像を表示
           var img = new Image();
