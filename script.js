@@ -445,12 +445,17 @@ Vue.component('monsterIncrementalInput', {
   <input v-model="filter" placeholder="モンスター名で検索" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
   <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
     <a v-for="(value, key) in filteredMonsterTable" class="dropdown-item" @click="updateValue(key)" href="javascript:void(0)">
+      <monster-icon v-if="imageTable" :no="value.no" :monsterTable="monsterTable" :imageTable="imageTable" width="1.6em" height="1.6em" />
       {{value.name}}
     </a>
   </div>
 </div>
   `,
-  props: [ 'value', 'monsterTable' ],
+  props: {
+    'value': Number,
+    'monsterTable': Object,
+    'imageTable': Object
+  },
   data: function () {
     return {
       filter: ""
@@ -517,7 +522,7 @@ Vue.component('monsterIncrementalSearch', {
   <div class="col-md-8">
       <monster-incremental-input 
       :value="value"
-      @input="updateValue($event);" :monster-table="monsterTable"></monster-incremental-input>
+      @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
     </div>
   </div>
 </div>
