@@ -1311,17 +1311,21 @@ var componentPic = {
             var srcWidth = (iconSrcScale[2] * imgWidth )| 0;
             var srcHeight = srcWidth + 1;
 
+            // アイコン上端の黒い線の位置を探す。
+            srcY += 1; // 上にずらして確認していくので、最初は5sサイズの上端ラインの１段下から始める。
+            // アイコン左上の主属性の上辺りを確認する。
+            data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - 19, 1, 20);
+            for (var i = 0; i < 10; i++) {
+              var n = 4 * (19 - i);
+              if (data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) {
+                srcY -= i;
+                break;
+              }
+            }
             // Canvasの準備
             canvas.width = iconWidth;
             canvas.height = iconHeight;
             ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
-
-            // 一番上が黒くなかったら位置を微調整
-            data = ctx.getImageData(0, 0, 32, 8);
-            if (data.data[4 * 8 + 0] > 200 || data.data[4 * 8 + 1] > 200 || data.data[4 * 8 + 2] > 200) {
-              ctx.drawImage(img, srcX, srcY - (640 * 3 / imgWidth), srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
-            }
-
             // canvasを画像に変換
             var data = canvas.toDataURL('image/jpeg', 0.7);
             this.iconResultSrc = data;
