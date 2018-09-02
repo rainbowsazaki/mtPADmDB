@@ -1258,8 +1258,8 @@ var componentPic = {
           var img = new Image();
           img.src = uploadImgSrc;
           img.onload = () => {
-            var iconWidth = 96;
-            var iconHeight = 96;
+            var iconWidth = 98;
+            var iconHeight = 98
             
             function checkWaku(array, startIndex, targetColor) {
               function isRange(value, target, margin) {
@@ -1309,7 +1309,7 @@ var componentPic = {
             var srcX = marginLeft + (iconSrcScale[0] * imgWidth) | 0;
             var srcY = (imgHeight - iconSrcScale[1] * imgWidth) | 0;
             var srcWidth = (iconSrcScale[2] * imgWidth )| 0;
-            var srcHeight = srcWidth + 1;
+            var srcHeight = srcWidth;
 
             // アイコン上端の黒い線の位置を探す。
             srcY += 1; // 上にずらして確認していくので、最初は5sサイズの上端ラインの１段下から始める。
