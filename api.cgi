@@ -397,15 +397,15 @@ sub mode_update_monster_data {
   
   &check_range('No', $data->{no}, 1, 9999);
   &check_string_length('名前', $data->{name}, 1, 50);
-  &check_range('属性', $data->{attributes}[0], 0, 99);
-  &check_range('複属性', $data->{attributes}[1], 0, 99);
+  &check_range('属性', $data->{attributes}[0], 0, 99, 0);
+  &check_range('複属性', $data->{attributes}[1], 0, 99, 0);
   &check_range('コスト', $data->{cost}, 1, 999, 0);
   &check_range('レアリティ', $data->{rare}, 1, 99, 0);
   foreach my $i (0..3) {
-    &check_range('タイプ${i}', $data->{types}[$i], 0, 99);
+    &check_range('タイプ${i}', $data->{types}[$i], 0, 99, 0);
   }
   foreach my $i (0..9) {
-    &check_range('覚醒${i}', $data->{awakens}[$i], 0, 99);
+    &check_range('覚醒${i}', $data->{awakens}[$i], 0, 99, 0);
   }
   &check_range('経験値テーブル', $data->{expTable}, 0, 999999999, 0);
   &check_range('最大レベル', $data->{maxLevel}, 0, 99, 0);
@@ -427,8 +427,8 @@ sub mode_update_monster_data {
     &check_string_length('リーダースキル詳細', $data->{leaderSkillDetails}{description}, 0, 200);
 
   }
-  &check_range('アシスト', $data->{assist}, 0, 9);
-  &check_range('限界突破', $data->{overLimit}, 0, 9);
+  &check_range('アシスト', $data->{assist}, 0, 9, 0);
+  &check_range('限界突破', $data->{overLimit}, 0, 9, 0);
   if ($data->{overLimit} == 1) {
     &check_range('限界突破時 HP', $data->{overLimitParam}{hp}, 0, 99999, 0);
     &check_range('限界突破時 攻撃', $data->{overLimitParam}{attack}, 0, 99999, 0);
@@ -438,7 +438,7 @@ sub mode_update_monster_data {
     #&check_range('超覚醒', $n, 1, 99);
   }
   &to_number_with_key($data->{evolution}, qw/ baseNo materials /);
-  &check_range('進化タイプ', $data->{evolutionType}, 0, 99);
+  &check_range('進化タイプ', $data->{evolutionType}, 0, 99, 0);
   if ($data->{evolutionType} > 0 && $data->{evolutionType} < 99) {
     &check_range('進化前', $data->{evolution}{baseNo}, 1, 9999, 0);
     foreach my $i (0..4) {

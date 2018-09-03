@@ -31,11 +31,11 @@ const constData = {
   monsterClearData: {
     no: null,
     name:"",
-    attributes: [ 99, 0 ],
+    attributes: [ null, 0 ],
     cost: null,
     rare: null,
-    types: [ 99, 0, 0],
-    awakens: [ 99, 0, 0, 0, 0, 0, 0, 0, 0 ],
+    types: [ null, 0, 0],
+    awakens: [ null, 0, 0, 0, 0, 0, 0, 0, 0 ],
     expTable: null,
     maxLevel: null,
     maxParam: {
@@ -55,15 +55,15 @@ const constData = {
       name: '',
       description: ''
     },
-    assist: 9,
-    overLimit: 9,
+    assist: null,
+    overLimit: null,
     overLimitParam: {
       hp: null,
       attack: null,
       recovery: null
     },
     superAwakens: [],
-    evolutionType: 99,
+    evolutionType: null,
     evolution: {
       baseNo: null,
       materials: [
@@ -77,7 +77,7 @@ const constData = {
     0: "×",
     1: "○",
 
-    9: "不明",
+    null: "不明",
   },
 
   typeTable: {
@@ -95,7 +95,7 @@ const constData = {
     11: { name: "合成強化用", senzaiKiller: [] },
     12: { name: "売却用", senzaiKiller: [] },
 
-    99: { name: "不明", senzaiKiller: [] },
+    null: { name: "不明", senzaiKiller: [] },
   },
 
   attributeTable: {
@@ -105,7 +105,7 @@ const constData = {
     3: "木",
     4: "光",
     5: "闇",
-    99: "不明",
+    null: "不明",
   },
 
   attrColors: {
@@ -116,7 +116,7 @@ const constData = {
     4: "rgba(255, 255, 0, 1.0)",
     5: "rgba(192, 0, 192, 1.0)",
 
-    99: "rgba(192, 192, 192, 1.0)",
+    null: "rgba(192, 192, 192, 1.0)",
   },
 
   evolutionTypeTable: {
@@ -127,7 +127,7 @@ const constData = {
     4: "ドット進化",
     5: "アシスト進化",
 
-    99: "不明"
+    null: "不明"
   },
 
   awakenTable: {
@@ -197,7 +197,7 @@ const constData = {
     63: { name: "スキルボイス", description: 'スキル使用時に声が出る' },
     64: { name: "ダンジョンボーナス", description: '1人プレイのときにランク経験値、モンスター経験値、入手コイン、卵ドロップ率がほんの少し上昇' },
 
-    99: { name: "不明", description: '' },
+    null: { name: "不明", description: '' },
   },
 
 };

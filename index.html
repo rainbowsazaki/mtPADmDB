@@ -169,10 +169,10 @@
             <th colspan="2">タイプ</th><th>属性</th>
           </tr>
           <tr>
-            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join"><img v-if="type != 99" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></td>
+            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></td>
             <td>
-              <span v-if="monsterData.attributes[0] == 99">不明</span>
-              <img  v-for="attr in monsterData.attributes" v-if="attr != 0 && attr != 99" style="width: 1.1em; height: 1.1em;" :src="`./image/attribute/${attr}.png`">
+              <span v-if="monsterData.attributes[0] === null">不明</span>
+              <img  v-for="attr in monsterData.attributes" v-if="attr != 0 && attr !== null" style="width: 1.1em; height: 1.1em;" :src="`./image/attribute/${attr}.png`">
             </td>
           </tr>
           <tr class="thead-light">
@@ -199,7 +199,7 @@
           <tr class="thead-light"><th colspan="3">覚醒</th></tr>
           <tr><td colspan="3">
               <span v-if="monsterData.awakens[0] === 0">なし</span>
-              <span v-else-if="monsterData.awakens[0] === 99">不明</span>
+              <span v-else-if="monsterData.awakens[0] === null">不明</span>
               <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex;">
               <li v-for="awaken in monsterData.awakens" v-if="awaken !== 0" style="width: 11.11%; text-align: center;"><img :src="'./image/awaken/' + awaken + '.png'" width="24" height="24" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description"></li>
             </ul>
@@ -208,7 +208,7 @@
             <tr class="thead-light"><th colspan="3">振れる潜在キラー</th></tr>
             <tr>
               <td colspan="3">
-                <span v-if="monsterData.types[0] == 99">不明</span>
+                <span v-if="monsterData.types[0] === null">不明</span>
                 <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
                   <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" class="slash-join">
                     {{typeTable[senzaiKillerType].name}}キラー
@@ -239,17 +239,19 @@
 
         <table class="table table-bordered table-sm">
             <tr class="thead-light"><th>スキル</th></tr>
-            <tr><td>
+            <tr v-if="!skillDetails.name"><td>不明</td></tr>
+            <tr v-if="skillDetails.name"><td>
               {{skillDetails.name}}
               <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillDetails.baseTurn}} 最大Lv.<span v-if="skillDetails.maxLevel">{{skillDetails.maxLevel}} ターン:{{skillDetails.baseTurn - skillDetails.maxLevel + 1}}</span><span v-else>不明</span>)</span>
             </td></tr>
-            <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDetails.description}}</td></tr>
+            <tr v-if="skillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDetails.description}}</td></tr>
   
             <tr class="thead-light"><th>リーダースキル</th></tr>
-            <tr><td>
+            <tr v-if="!leaderSkillDetails.name"><td>不明</td></tr>
+            <tr v-if="leaderSkillDetails.name"><td>
               {{leaderSkillDetails.name}}
             </td></tr>
-            <tr><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{leaderSkillDetails.description}}</td></tr>
+            <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{leaderSkillDetails.description}}</td></tr>
           </table> 
       </div>
     </div>
@@ -434,7 +436,7 @@
         <tr v-for="n in 9" :key="n">
           <td colspan="12">
             <pd-select v-model="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
-              <pd-option v-for="(awaken, key) in awakenTable" :value="key" :key="key" v-once><img :src="(key == 0 || key == 99) ? '' : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken.name}}</pd-option>
+              <pd-option v-for="(awaken, key) in awakenTable" :value="key" :key="key" v-once><img :src="(key == 0 || key === 'null') ? '' : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken.name}}</pd-option>
             </pd-select>
           </td>
         </tr>
@@ -556,7 +558,7 @@
               <span v-for="(awaken, key) in awakenTable" v-if="key != 0" class="col-md-3 form-check" style="display:inline-block;" :key="key">
                 <input class="form-check-input" type="checkbox" :value="key" v-model="monsterData.superAwakens" :id="'superAwaken' + key">
                 <label class="form-check-label" :for="'superAwaken' + key">
-                  <img v-if="key != 99" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken.name}}
+                  <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken.name}}
                 </label>
               </span>
             </td>
