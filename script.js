@@ -1043,7 +1043,7 @@ var componentMonsterEdit = {
 
     skillDetails: function () {
       if (this.monsterData.skill != 0) {
-        this.monsterData.skillDetails = $.extend(true, {}, this.skillTable[this.monsterData.skill]);
+        this.monsterData.skillDetails = $.extend(true, { name:'', description:'' }, this.skillTable[this.monsterData.skill]);
       }
       return this.monsterData.skillDetails;
     },
@@ -1079,7 +1079,7 @@ var componentMonsterEdit = {
 
     leaderSkillDetails: function () {
       if (this.monsterData.leaderSkill != 0) {
-        this.monsterData.leaderSkillDetails = $.extend(true, {}, this.leaderSkillTable[this.monsterData.leaderSkill]);
+        this.monsterData.leaderSkillDetails = $.extend(true, { name:'', description:'' }, this.leaderSkillTable[this.monsterData.leaderSkill]);
       }
       return this.monsterData.leaderSkillDetails;
     },
