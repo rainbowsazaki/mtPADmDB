@@ -467,7 +467,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <skill-incremental-input id="inputSkillName" placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillName" :skill-table="skillTable"></skill-incremental-input>
+            <skill-incremental-input id="inputSkillName" placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillName" :skill-table="skillTable" :required="skillDescription.length > 0"></skill-incremental-input>
           </td>
         </tr>
         <tr>
@@ -505,7 +505,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <skill-incremental-input id="inputLeaderSkillname" placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillName" :skill-table="leaderSkillTable"></skill-incremental-input>
+            <skill-incremental-input id="inputLeaderSkillname" placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillName" :skill-table="leaderSkillTable" :required="leaderSkillDescription.length > 0"></skill-incremental-input>
           </td>
         </tr>
         <tr class="">
