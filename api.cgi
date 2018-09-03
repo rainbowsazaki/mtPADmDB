@@ -414,18 +414,27 @@ sub mode_update_monster_data {
   &check_range('回復', $data->{maxParam}{recovery}, -99999, 99999, 0);
 
   if ($data->{skill} == 0) {
-    &to_number_with_key($data->{skillDetails}, qw/ baseTurn maxLevel /);
-    &to_hankaku_with_key($data->{skillDetails}, qw/ name description /);
-    &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
-    &check_string_length('スキル詳細', $data->{skillDetails}{description}, 0, 200);
-    &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 1, 199, 0);
-    &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 1, 99, 0);
+    # 名前と説明文ともに空の場合は未指定と判断する。
+    if (!length $data->{skillDetails}{name} && !length $data->{skillDetails}{description}) {
+      $data->{skill} = undef;
+    } else {
+      &to_number_with_key($data->{skillDetails}, qw/ baseTurn maxLevel /);
+      &to_hankaku_with_key($data->{skillDetails}, qw/ name description /);
+      &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
+      &check_string_length('スキル詳細', $data->{skillDetails}{description}, 0, 200);
+      &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 1, 199, 0);
+      &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 1, 99, 0);
+    }
   }
   if ($data->{leaderSkill} == 0) {
-    &to_hankaku_with_key($data->{leaderSkillDetails}, qw/ name description /);
-    &check_string_length('リーダースキル名', $data->{leaderSkillDetails}{name}, 1, 50);
-    &check_string_length('リーダースキル詳細', $data->{leaderSkillDetails}{description}, 0, 200);
-
+    # 名前と説明文ともに空の場合は未指定と判断する。
+    if (!length $data->{leaderSkillDetails}{name} && !length $data->{leaderSkillDetails}{description}) {
+      $data->{leaderSkill} = undef;
+    } else {
+      &to_hankaku_with_key($data->{leaderSkillDetails}, qw/ name description /);
+      &check_string_length('リーダースキル名', $data->{leaderSkillDetails}{name}, 1, 50);
+      &check_string_length('リーダースキル詳細', $data->{leaderSkillDetails}{description}, 0, 200);
+    }
   }
   &check_range('アシスト', $data->{assist}, 0, 9, 0);
   &check_range('限界突破', $data->{overLimit}, 0, 9, 0);
@@ -457,7 +466,9 @@ sub mode_update_monster_data {
     my $dbh = &create_monster_db_dbh();
 
     # スキル
-    if ($data->{skill} == 0) {
+    if (!defined $data->{skill}) {
+      #そのまま
+    } elsif ($data->{skill} == 0) {
       my $sth;
 
       my %skill_check_data = map {
@@ -505,7 +516,9 @@ sub mode_update_monster_data {
     }
 
     #リーダースキル
-    if ($data->{leaderSkill} == 0) {
+    if (!defined $data->{leaderSkill}) {
+      # そのまま
+    } elsif ($data->{leaderSkill} == 0) {
       my $sth;
 
       my %leader_skill_check_data = map {
