@@ -1323,14 +1323,21 @@ var componentPic = {
             // アイコン上端の黒い線の位置を探す。
             srcY += 1; // 上にずらして確認していくので、最初は5sサイズの上端ラインの１段下から始める。
             // アイコン左上の主属性の上辺りを確認する。
-            data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - 19, 1, 20);
+            var checkWidth = 8;
+            var checkHeight = 16;
+            var isHitBlackLine = false;
+            data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - (checkHeight - 1), checkWidth, checkHeight);
             for (var i = 0; i < 10; i++) {
-              var n = 4 * (19 - i);
+              var n = 4 * (checkHeight - 1 - i) * checkWidth;
               if (data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) {
                 srcY -= i;
+                isHitBlackLine = true;
                 break;
               }
             }
+            // 黒線が見つからなかった場合は最初の位置に戻す。
+            if (!isHitBlackLine) { srcY -= 1; }
+            
             // Canvasの準備
             canvas.width = iconWidth;
             canvas.height = iconHeight;
