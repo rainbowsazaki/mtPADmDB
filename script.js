@@ -1445,7 +1445,7 @@ var componentPic = {
             'event_label': `No.${this.monsterNo}`
           });
 
-          alert(response.data.success);
+          this.$store.commit('setMessages', response.data.success);
           if (this.$route.params.no) {
             this.$router.push({ path:`/${this.$route.params.no}` });
           } else {
