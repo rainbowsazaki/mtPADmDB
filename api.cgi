@@ -308,6 +308,7 @@ sub mode_update_monster_data {
   my @error;
 
   # 第１引数に与えられた値を数値型に変換して返す。
+  # undef や 空文字列、 "null" の場合は undef (json 上の null に該当する) にする。
   # 配列やハッシュのリファレンスが与えられた場合は要素すべてを変換した結果を返す。
   sub to_number {
     my ($target) = @_;
@@ -316,7 +317,7 @@ sub mode_update_monster_data {
     } elsif (ref $target eq 'HASH') {
       return { map { $_ => &to_number($target->{$_}) } keys %{$target} };
     } else {
-      if (!defined $target || $target eq '') {
+      if (!defined $target || $target eq '' || $target eq 'null') {
         return undef;
       }
       return $target + 0;
