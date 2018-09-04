@@ -284,8 +284,11 @@ sub mode_monster_history_details {
   push @column_infos, [ 'comment', 'monster_data.comment' ], [ 'datetime', 'monster_data.createdDatetime' ];
 
   my $data_ref = &table_to_array($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.id' => $id }, { limit => 1 });
-  # データが取得できなかった場合は空情報を返す。
-  if (length @$data_ref == 0 || !$data_ref->[0]) { $data_ref = [ {} ]; }
+  # データが取得できなかった場合は404と空情報を返す。
+  if (length @$data_ref == 0 || !$data_ref->[0]) {
+    $data_ref = [ {} ];
+    print "Status: 404 Not Found\n";
+  }
   print "Content-Type: application/json\n\n", JSON::PP::encode_json($data_ref->[0]);
   $dbh->disconnect;
 }
