@@ -1143,8 +1143,8 @@ var componentMonsterEdit = {
       // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように１０秒後に復帰させる。
       var timeoutId = setTimeout(() => { this.isSubmitted = false; }, 10000);
 
-      this.$store.commit('clearMessages');
-      this.$store.commit('setMessages', [ '通信中...' ]);
+      this.$store.commit('clearErrors');
+      this.$store.commit('setMessages', [ '送信中...' ]);
 
       // データの整形
       // 超覚醒を昇順ソート
@@ -1419,6 +1419,9 @@ var componentPic = {
       // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように１０秒後に復帰させる。
       var timeoutId = setTimeout(() => { this.isSubmitted = false; }, 10000);
       
+      this.$store.commit('clearErrors');
+      this.$store.commit('setMessages', [ '送信中...' ]);
+
       var blobIcon = toBlob(this.iconResultSrc);
       var blobImage = toBlob(this.imageResultSrc);
 
