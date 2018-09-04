@@ -1556,6 +1556,8 @@ var app = new Vue({
   watch: {
     '$route': function () {
       this.sendGa();
+      // 元のページでのエラー表示を消す。
+      this.$store.commit('clearErrors');
     }
   },
   methods: {
