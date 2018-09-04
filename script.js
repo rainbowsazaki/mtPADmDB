@@ -319,7 +319,7 @@ const store = new Vuex.Store({
       }, 2000)
     },
     clearErrors: function (state) {
-      store.errors = [];
+      state.errors = [];
     },
     clearMessages: function (state) {
       state.messages = [];
