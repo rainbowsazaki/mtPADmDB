@@ -280,19 +280,24 @@ const store = new Vuex.Store({
         option = undefined;
       }
 
-      this.commit('setMessages', [ '初期情報取得中' ]);
+      this.commit('setMessages', [ 'モンスター情報取得中' ]);
       axios.get(path, option).then(
         response => {
           var data = $.extend(true, {}, commonData.monsterClearData, response.data);
           if (!data.superAwakens) { data.superAwakens = []; }
           state.monsterData = data;
           
-          this.commit('setMessages', [ '取得完了' ]);
+          this.commit('clearMessages');
           if (typeof param.callback === 'function') { param.callback(); }
         }
       ).catch(
         error => {
-          var errorMessage = `モンスターデータファイル (${error.config.url}) が ${error.response.status} ${error.response.statusText} です。`;
+          var errorMessage = '';
+          if (param.historyId) {
+            errorMessage = `モンスター編集履歴 ID:${param.historyId} の情報が見つかりませんでした。`;
+          } else {
+            errorMessage = `モンスター No.${param.no} の情報が見つかりませんでした。`;
+          }
           this.commit('clearMessages');
           this.commit('setErrors', [ errorMessage ]);
         }
