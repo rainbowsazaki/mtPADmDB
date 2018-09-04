@@ -1246,7 +1246,7 @@ var componentPic = {
   
       // 画像ファイル以外は処理を止める
       if(!fileData.type.match('image.*')) {
-          alert('画像を選択してください');
+          this.$store.commit('setErrors', [ '画像を選択してください' ]);
           return;
       }
 
@@ -1404,9 +1404,9 @@ var componentPic = {
         return blob;
       }
 
-      if (!this.iconResultSrc) { alert('画像が選択されていません。'); return; }
-      if (this.monsterNo == 0) { alert('モンスター番号が指定されていません。'); return; }
-      if (this.monsterNo < 1 || this.monsterNo > 9999) { alert('モンスター番号の指定が不正です。'); return; }
+      if (!this.iconResultSrc) { this.$store.commit('setErrors', [ '画像が選択されていません。' ]); return; }
+      if (this.monsterNo == 0) { this.$store.commit('setErrors', [ 'モンスター番号が指定されていません。' ]); return; }
+      if (this.monsterNo < 1 || this.monsterNo > 9999) { this.$store.commit('setErrors', [ 'モンスター番号の指定が不正です。' ]); return; }
       
       // 多重送信防止処理
       if (this.isSubmitted) { return; }
@@ -1431,7 +1431,7 @@ var componentPic = {
         clearTimeout(timeoutId);
         
         if (response.errors) {
-          alert(response.data.errors);
+          this.$store.commit('setErrors', response.data.errors);
           // 再度送信可能にする。
           this.isSubmitted = false;
         } else {
