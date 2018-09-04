@@ -27,7 +27,25 @@
     display: inline-block;
     padding: 0 0.4rem;
     content: "/";
-}
+  }
+
+  .message-enter-active, .message-leave-active, .error-leave-active {
+    transition: opacity .3s
+  }
+  .message-enter { opacity: 0; }
+  .message-leave, .error-leave { opacity: 1; }
+  .message-leave-to, .error-leave-to { opacity: 0; }
+
+  .error-enter-active {
+    animation: Blink3 1s;
+  }
+  @keyframes Blink3 {
+      0% { opacity: 0; }
+     20% { opacity: 1; }
+     40% { opacity: 0; }
+     60% { opacity: 1; }
+     80% { opacity: 0; }
+  }
 </style>
 </head>
 
@@ -50,15 +68,19 @@
   
   <div class="container">
     <div style="position:fixed; z-index: 2;">
-      <div v-for="error in errors" class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>注意!</strong>　{{error}}
-        <button type="button" @click="$store.commit('deleteError', error)" class="close" aria-label="閉じる">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div v-for="message in messages" class="alert alert-success alert-dismissible fade show" role="alert">
-        {{message}}
-      </div>
+      <transition-group name="error">
+        <div v-for="error in errors" :key="error" class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>注意!</strong>　{{error}}
+          <button type="button" @click="$store.commit('deleteError', error)" class="close" aria-label="閉じる">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </transition-group>
+      <transition-group name="message">
+        <div v-for="message in messages" :key="message" class="alert alert-success alert-dismissible fade show" role="alert">
+          {{message}}
+        </div>
+      </transition-group>
     </div>
     
     <nav aria-label="パンくずリスト">
