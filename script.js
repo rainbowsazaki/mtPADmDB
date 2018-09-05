@@ -671,7 +671,7 @@ Vue.component('monsterIcon', {
     attributes: function () { return (this.monsterTable[this.no] || {}).attributes || [] },
     hasAttr0: function () { var attr = this.attributes[0]; return (attr && attr != 0 && attr != 99); },
     hasAttr1: function () { var attr = this.attributes[1]; return (attr && attr != 0 && attr != 99); },
-    iconPath: function () { return `./monsterIcons/icon_${this.no}.jpg`; },
+    iconPath: function () { return `./monsterIconsLog/icon_${this.no}_${this.imageTable[this.no].id}.jpg`; },
     attrPath0: function () { return `./image/attribute/${this.attributes[0]}.png`; },
     attrPath1: function () { return `./image/attribute/${this.attributes[1]}.png`; },
   }
@@ -927,6 +927,12 @@ var componentMonsterData = {
     imageTable: function () { return this.$store.state.imageTable; },
     monsterData: function () { return this.$store.state.monsterData },
 
+    monsterImagePath: function () {
+      var no = this.monsterData.no;
+      var imageData = this.imageTable[no];
+      if (!imageData) { return './monsterImages/notFound.jpg'; }
+      return `./monsterImagesLog/${no}_${imageData.id}.jpg`;
+    },
     skillDetails: function () {
       var skillDetails = {};
       if (this.monsterData.skill != 0) { 
