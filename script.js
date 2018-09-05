@@ -812,12 +812,6 @@ var componentMonsterList = {
       return this.monsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
     }
   },
-
-  methods: {
-    hasImage: function (no) {
-      return (no in this.$store.state.imageTable);
-    },
-  },
 };
 
 
@@ -878,9 +872,6 @@ var componentMonsterData = {
       this.$_mixinForPage_updateTitle();
       this.$store.commit('loadMonsterData', param);
       this.$store.commit('fetchCommonData');
-    },
-    hasImage: function (no) {
-      return (no in this.$store.state.imageTable);
     },
     
     /** パラメータをプラス換算に変換する。 */
