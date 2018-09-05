@@ -313,6 +313,9 @@ const store = new Vuex.Store({
     addLeaderSkillData: function (state, leaderSkillData) {
       Object.assign(state.leaderSkillTable, leaderSkillData);
     },
+    addImageData: function (state, imageData) {
+      Object.assign(state.imageTable, imageData);
+    },
 
     setErrors: function (state, errors) {
       state.errors = errors;
@@ -1456,6 +1459,14 @@ var componentPic = {
           });
 
           this.$store.commit('setMessages', response.data.success);
+
+          if (response.data.newTableData) {
+            var newTableData = response.data.newTableData;
+            if (newTableData.imageTable) {
+              this.$store.commit('addImageData', newTableData.imageTable);
+            }
+          }
+
           if (this.$route.params.no) {
             this.$router.push({ path:`/${this.$route.params.no}` });
           } else {

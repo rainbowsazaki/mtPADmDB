@@ -154,6 +154,7 @@ sub mode_image {
   my ($q) = @_;
 
   my @error;
+  my %newImageTable;
   
   my $no = $q->param('no');
 
@@ -237,6 +238,8 @@ EOS
 
       # 投稿画像情報の一覧を作成する。
       &save_image_list_json($dbh);
+      
+      $newImageTable{$no} = { 'id' => $id }
     }
   }
 
@@ -245,6 +248,9 @@ EOS
     $outputData{'errors'} = \@error;
   } else {
     $outputData{'success'} = [ '投稿を受け付けました。ありがとうございました。' ];
+    $outputData{'newTableData'} = {
+      'imageTable' => \%newImageTable
+    };
     $dbh->commit;
   }
   print "Content-Type: application/json\n\n", JSON::PP::encode_json(\%outputData);
