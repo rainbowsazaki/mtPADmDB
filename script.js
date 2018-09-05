@@ -668,7 +668,7 @@ Vue.component('monsterIcon', {
     attributes: function () { return (this.monsterTable[this.no] || {}).attributes || [] },
     hasAttr0: function () { var attr = this.attributes[0]; return (attr && attr != 0 && attr != 99); },
     hasAttr1: function () { var attr = this.attributes[1]; return (attr && attr != 0 && attr != 99); },
-    iconPath: function () { return `./monsterImages/icon_${this.no}.jpg`; },
+    iconPath: function () { return `./monsterIcons/icon_${this.no}.jpg`; },
     attrPath0: function () { return `./image/attribute/${this.attributes[0]}.png`; },
     attrPath1: function () { return `./image/attribute/${this.attributes[1]}.png`; },
   }

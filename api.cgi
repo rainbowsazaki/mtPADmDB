@@ -211,7 +211,7 @@ EOS
 
       my $buffer;
 
-      open(OUT, ">./monsterImages/icon_${no}.jpg");
+      open(OUT, ">./monsterIcons/icon_${no}.jpg");
       binmode(OUT);
       while(read($iconFileName,$buffer,1024))
       {
@@ -232,7 +232,7 @@ EOS
       close($imageFileName); #ファイルハンドルをcloseしています。
 
       # ログとしてID付きで保存
-      copy("./monsterImages/icon_${no}.jpg","./monsterImagesLog/icon_${no}_${id}.jpg") or push @error, "error: $!";
+      copy("./monsterIcons/icon_${no}.jpg","./monsterIconsLog/icon_${no}_${id}.jpg") or push @error, "error: $!";
       copy("./monsterImages/${no}.jpg","./monsterImagesLog/${no}_${id}.jpg") or push @error, "error: $!";
 
       # 投稿画像情報の一覧を作成する。

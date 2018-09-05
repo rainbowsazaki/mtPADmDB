@@ -23,7 +23,7 @@ sub addError {
 }
 
 # 作成するフォルダの名前の配列
-my @dir_names = qw/ listJson monsterImages monsterJson monsterImagesLog /; 
+my @dir_names = qw/ listJson monsterImages monsterJson monsterImagesLog monsterIcons monsterIconsLog /; 
 
 foreach my $dir_name (@dir_names) {
   if (!-d "./${dir_name}"){
