@@ -379,6 +379,8 @@ Vue.component('pdSelect', {
       $(this.$el).children(0).focus();
     },
     changeDisp: function (value) {
+      // html要素上では null の値はなく文字列になっているため、値が null の場合は文字列にする。
+      if (value === null) { value = 'null'; }
       $(this.$el).children('.dropdown-menu').children().each((index, elem) => {
         if (elem.getAttribute('data-value') == value) {
           this.html = $(elem).html();
