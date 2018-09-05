@@ -185,7 +185,7 @@
     <div v-if="!isHistory"><tweet-button v-if="monsterData.no" :hashtags="`mtPADmDB_${monsterData.no}`"/></div>
     <div class="row">
       <div class="col-md-6">
-        <img v-if="monsterData.no" :src="'./monsterImages/' + (hasImage(monsterData.no) ? monsterData.no : 'notFound') + '.jpg'" style="width: 320px; height: auto; display: block; margin: 0 auto;" />
+        <img v-if="monsterData.no" :src="'./monsterImages/' + (hasImage(monsterData.no) ? monsterData.no : 'notFound') + '.jpg'" style="width: 100%; height: auto; max-width: 400px; display: block; margin: 0 auto;" />
         <table class="table table-bordered table-sm">
           <tr class="thead-light">
             <th colspan="2">タイプ</th><th>属性</th>
