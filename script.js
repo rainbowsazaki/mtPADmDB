@@ -785,6 +785,8 @@ var componentMonsterList = {
   pageTitle: null,
   data: function () {
     return {
+      searchWord: '',
+      refSearchWord: '',
       inPageCount: 20,
     };
   },
@@ -808,10 +810,24 @@ var componentMonsterList = {
       }
       return array;
     },
+    searchedMonsterTableArray: function () {
+      var searchWord = this.refSearchWord;
+      if (!searchWord) { return this.monsterTableArray; }
+      return this.monsterTableArray.filter(monsterData => {
+        return monsterData.name.indexOf(searchWord) != -1;
+      });
+    },
     monsterTableInPage () {
-      return this.monsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
+      return this.searchedMonsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
     }
   },
+  methods: {
+
+    search: function () {
+      this.refSearchWord = this.searchWord;
+    },
+
+  }
 };
 
 
