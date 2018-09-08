@@ -786,13 +786,13 @@ var componentMonsterList = {
   data: function () {
     return {
       searchWord: '',
-      refSearchWord: '',
       inPageCount: 20,
     };
   },
 
   created: function () {
     this.$store.commit('fetchCommonData');
+    this.searchWord = this.$route.query.searchWord;
   },
 
   computed: {
@@ -811,7 +811,7 @@ var componentMonsterList = {
       return array;
     },
     searchedMonsterTableArray: function () {
-      var searchWord = this.refSearchWord;
+      var searchWord = this.$route.query.searchWord;
       if (!searchWord) { return this.monsterTableArray; }
       return this.monsterTableArray.filter(monsterData => {
         return monsterData.name.indexOf(searchWord) != -1;
@@ -824,7 +824,7 @@ var componentMonsterList = {
   methods: {
 
     search: function () {
-      this.refSearchWord = this.searchWord;
+      this.$router.push({ path: this.$router.path, query: { searchWord: this.searchWord }})
     },
 
   }
