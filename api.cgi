@@ -918,16 +918,17 @@ sub save_monster_list_json {
     push @column_infos, [ 'comment', 'monster_data.comment' ];
   }
 
-  my $data_ref = &table_to_hash($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.state' => 1 });
+  my $data_ref = &table_to_array($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.state' => 1 }, { 'order' => 'no' });
 
   my $json_pp = JSON::PP->new;
 
   if ($option->{is_create_monster_json}) {
-    for my $key (keys %$data_ref) {
-      open(DATAFILE, "> ./monsterJson/${key}.json") or die("error :$!");
-      print DATAFILE $json_pp->encode($data_ref->{$key});
+    for my $value (@$data_ref) {
+      my $monster_no = $value->{no};
+      open(DATAFILE, "> ./monsterJson/${monster_no}.json") or die("error :$!");
+      print DATAFILE $json_pp->encode($value);
       close(DATAFILE);
-      delete $data_ref->{$key}{comment};
+      delete $value->{comment};
     }
   }
 
@@ -944,15 +945,15 @@ sub save_monster_list_json {
 
   # ピックアップ版用のデータを抜き出したものを作成する。
   my %pickup_data = map {
-    my $target_ref = $data_ref->{$_};
+    my $target_ref = $_;
       my %temp;
       for (@monster_data_pickup_keys) {
         &joined_key_access(\%temp, $_,
           &joined_key_access($target_ref, $_)
         )
       }
-      $_ => \%temp;
-  } keys %$data_ref;
+      $target_ref->{no} => \%temp;
+  } @$data_ref;
 
   # JSON化してファイルに保存。
   open(DATAFILE, "> ./listJson/monster_list.json") or die("error :$!");
