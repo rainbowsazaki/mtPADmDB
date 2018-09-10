@@ -670,7 +670,7 @@ Vue.component('pagination', {
 /** モンスターアイコンを表示するコンポーネント。 */
 Vue.component('monsterIcon', {
   template: `
-  <img v-if="hasImage" :src="iconPath" style="border-radius: 6%;" :style="{width: width, height: height }" />
+  <img v-if="hasImage" :src="iconPath" style="border-radius: 6%;" :style="{width: width, height: height }" :alt="monsterNoAndName" />
   <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 6%;" :style="{ width: width, height: height }"> 
     <img v-if="hasAttr0" style="position:absolute; left:  2%; top:    2%; width: 23%; height: 23%;" :src="attrPath0" />
     <img v-if="hasAttr1" style="position:absolute; right: 2%; bottom: 2%; width: 23%; height: 23%;" :src="attrPath1" />
@@ -680,7 +680,9 @@ Vue.component('monsterIcon', {
   
   computed: {
     hasImage: function () { return !!this.imageTable[this.no]; },
-    attributes: function () { return (this.monsterTable[this.no] || {}).attributes || [] },
+    monsterData: function () {return (this.monsterTable[this.no] || {}); },
+    monsterNoAndName: function () { return `No.${this.monsterData.no} ${this.monsterData.name}`; },
+    attributes: function () { return this.monsterData.attributes || []; },
     hasAttr0: function () { var attr = this.attributes[0]; return (attr && attr != 0 && attr != 99); },
     hasAttr1: function () { var attr = this.attributes[1]; return (attr && attr != 0 && attr != 99); },
     iconPath: function () { return `./monsterIconsLog/icon_${this.no}_${this.imageTable[this.no].id}.jpg`; },
