@@ -596,19 +596,19 @@ Vue.component('pagination', {
 <nav">
   <ul class="pagination justify-content-center">
     <li class="page-item" :class="{ disabled: page <= 1 }">
-      <router-link class="page-link" :to="'?page=' + (page - 1)" append aria-label="前">
+      <router-link class="page-link" :to="createToObj(page - 1)" append aria-label="前">
         <span aria-hidden="true">&laquo;</span>
         <span class="sr-only">前</span>
       </router-link>
     </li>
     
     <li v-for="n in paginationNos" :class="{ 'page-item': 1, 'active': n == page }">
-      <router-link v-if="n != page" class="page-link" :to="'?page=' + n" append>{{n}}</router-link>
+      <router-link v-if="n != page" class="page-link" :to="createToObj(n)" append>{{n}}</router-link>
       <span v-else class="page-link">{{n}}</span>
     </li>
 
     <li class="page-item" :class="{ disabled: page >= pageCount }">
-      <router-link class="page-link" :to="'?page=' + (page + 1)" append aria-label="次">
+      <router-link class="page-link" :to="createToObj(page + 1)" append aria-label="次">
         <span aria-hidden="true">&raquo;</span>
         <span class="sr-only">次</span>
       </router-link>
@@ -628,6 +628,18 @@ Vue.component('pagination', {
   data: function () {
     return {
     }
+  },
+  methods: {
+    createToObj: function (pageNo) {
+      var query = Object.assign({}, this.$route.query);
+      query.page = pageNo;
+
+      return {
+        path: this.$route.path,
+        params: this.$route.params,
+        query: query,
+      }
+    },
   },
 
   computed: {
