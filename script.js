@@ -812,7 +812,7 @@ var componentMonsterList = {
     imageTable() { return this.$store.state.imageTable; },
     attrColors () { return constData.attrColors; },
 
-    pageCount() { return ((this.monsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+    pageCount() { return ((this.searchedMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     page () { return (this.$route.query.page * 1) || 1; },
 
     monsterTableArray: function() {
