@@ -127,7 +127,7 @@ const constData = {
     4: "ドット進化",
     5: "アシスト進化",
 
-    null: "不明"
+    null: "進化形式不明"
   },
 
   awakenTable: {
