@@ -307,7 +307,7 @@ sub mode_update_monster_data {
   my $json = $q->param("POSTDATA");
 
   if ($json eq "") {
-    print "Content-Type: application/jsonl\n\n{ error: ['データなし'] }";
+    print "Content-Type: application/jsonl\n\n{ \"error\": [\"データなし\"] }";
     exit(0);
   }
 
