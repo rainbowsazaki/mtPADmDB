@@ -425,7 +425,7 @@
         <tr>
           <td v-for="n in 3" colspan="4">
             <select class="custom-select" :id="'selectType' + n" v-model="monsterData.types[n - 1]">
-              <option v-for="(type, key) in typeTable" :value="key" :key="key" v-once>{{type.name}}</option>
+              <option v-for="(type, key) in typeTable" :disabled="key == ((n == 1) ? 0 : 'null')" :value="key" :key="key" v-once>{{type.name}}</option>
             </select>
           </td>
         </tr>
@@ -438,11 +438,11 @@
         <tr>
             <td colspan="3">
                 <select class="custom-select" id="selectAttribute0" v-model="monsterData.attributes[0]">
-                  <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
+                  <option v-for="(attribute, key) in attributeTable" :disabled="key == 0" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
                 <select class="custom-select" id="selectAttribute1" v-model="monsterData.attributes[1]">
-                  <option v-for="(attribute, key) in attributeTable" :value="key" :key="key" v-once>{{attribute}}</option>
+                  <option v-for="(attribute, key) in attributeTable" :disabled="key == 'null'" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
               <div class="input-group">
@@ -485,7 +485,9 @@
         <tr v-for="n in 9" :key="n">
           <td colspan="12">
             <pd-select v-model="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
-              <pd-option v-for="(awaken, key) in awakenTable" :value="key" :key="key" v-once><img :src="(key == 0 || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken.name}}</pd-option>
+              <template v-for="(awaken, key) in awakenTable">
+                <pd-option v-if="n == 1 || key != 'null'" :value="key" :key="key" v-once><img :src="(key == 0 || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken.name}}</pd-option>
+              </template>
             </pd-select>
           </td>
         </tr>
