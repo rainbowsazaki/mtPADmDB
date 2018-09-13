@@ -1021,6 +1021,9 @@ sub table_to_array {
     if (ref $orders eq '') { $orders = [ $orders ]; }
     $sql_str .= ' ORDER BY ' . join ', ', @$orders;
   }
+  if ($option->{limit}) {
+    $sql_str .= " LIMIT $option->{limit}";
+  }
 
   my $sth = $dbh->prepare($sql_str);
   if (!$sth) { die "$sql_str :\n " . $dbh->errstr; }
