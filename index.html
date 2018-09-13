@@ -398,6 +398,27 @@
   </div>
 </script>
 
+<!-- モンスター編集履歴ページ -->
+<script type="text/x-template" id="templateHistory">
+<div>
+  <table class="table table-sm">
+    <tr v-for="history in histories">
+      <td>
+        <router-link :to="`/history/${history.id}`">{{history.datetime}}</router-link>
+      </td>
+      <td><router-link :to="`/${history.no}`">
+        No.{{history.no}} {{monsterName(history.no)}}
+      </router-link></td>
+      <td>
+        <span v-if="history.comment">{{history.comment}}</span>
+        <span v-else style="opacity: 0.6;">（コメントなし）</span>
+      </td>
+      <td><span v-if="isActiveHistory(history)">（現在のデータ）</span></td>
+    </tr>
+  </table>
+</div>
+</script>
+
 <!-- モンスター情報編集ページ -->
 <script type="text/x-template" id="templateMonsterEdit">
   <div>
