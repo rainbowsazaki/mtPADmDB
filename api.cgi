@@ -267,11 +267,18 @@ sub mode_monster_history {
   my ($q) = @_;
   my $monster_no = $q->param('no');
   
-  my $dbh = &create_monster_db_dbh();
-
-  my $data_ref = &table_to_array($dbh, "monster_data", [
+  my @columns = (
     'id', 'comment', [ 'datetime', 'createdDatetime' ], 'state'
-  ], { 'no' => $monster_no }, { order => 'createdDatetime DESC' });
+  );
+  my $dbh = &create_monster_db_dbh();
+  my %where;
+  if (defined $monster_no) {
+    $where{no} = $monster_no;
+  } else {
+    push @columns, 'no';
+  }
+
+  my $data_ref = &table_to_array($dbh, "monster_data", \@columns, \%where, { order => 'createdDatetime DESC', limit => 50 });
 
   print "Content-Type: application/json\n\n", JSON::PP::encode_json($data_ref);
   $dbh->disconnect;
