@@ -1171,6 +1171,8 @@ var componentMonsterEdit = {
           this.$_mixinForPage_updateTitle();
         };
         this.$store.commit('loadMonsterData', commitParam);
+      } else {
+        this.monsterData.comment = '新規登録';
       }
       this.$store.commit('fetchCommonData');
     },
