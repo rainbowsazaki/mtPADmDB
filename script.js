@@ -1022,8 +1022,6 @@ var componentHistory = {
   name: 'pageHistory',
   template: '#templateHistory',
   pageTitle: function () {
-    var str = `No.${this.$route.params.no || this.monsterData.no} ${this.monsterData.name}`;
-    if (this.isHistory) { str += ` (${this.monsterData.datetime})`}
     return '履歴一覧';
   },
   props: [ 'no' ],
