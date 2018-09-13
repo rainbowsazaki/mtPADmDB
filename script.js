@@ -1620,7 +1620,14 @@ var app = new Vue({
           'page_location': location.href,
         });
       }, 1);
-    }
+    },
+
+    hideNavi: function () {
+      if ($('#navbarNav').hasClass('show')) {
+        $('button.navbar-toggler').click();
+      }
+    },
+
   },
   computed: {
     errors: function () { return this.$store.state.errors; },
