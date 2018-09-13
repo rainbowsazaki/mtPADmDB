@@ -62,7 +62,7 @@ const constData = {
       attack: null,
       recovery: null
     },
-    superAwakens: [],
+    superAwakens: [ null ],
     evolutionType: null,
     evolution: {
       baseNo: null,
