@@ -136,7 +136,7 @@ sub create_monster_db_dbh {
   return $dbh;
 }
 
-# モンスター一覧更新モード
+# テーブルJSON更新モード
 sub mode_update_list {
   my ($q) = @_;
   my $dbh = &create_monster_db_dbh();
