@@ -507,9 +507,7 @@
         <tr v-for="n in 9" :key="n">
           <td colspan="12">
             <pd-select v-model="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
-              <template v-for="(awaken, key) in awakenTable">
-                <pd-option v-if="n == 1 || key != 'null'" :value="key" :key="key" v-once><img :src="(key == 0 || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken.name}}</pd-option>
-              </template>
+              <pd-option v-for="(awaken, key) in awakenTable" v-if="n == 1 || key != 'null'" :value="key" :key="key" v-once><img :src="(key == 0 || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" /> {{awaken.name}}</pd-option>
             </pd-select>
           </td>
         </tr>
