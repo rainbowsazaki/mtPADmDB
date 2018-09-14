@@ -1,3 +1,12 @@
+<IfModule mod_rewrite.c>
+#  Options FollowSymLinks
+  
+#  RewriteEngine On
+#  RewriteCond %{REQUEST_FILENAME} !-f
+#  RewriteCond %{REQUEST_FILENAME} !-d
+#  RewriteRule (.*) index.html [L,QSA]
+</IfModule>
+
 <Files ~ "\.(gif|png|jpg)$">
 SetEnvIf Referer "^http://*\.rainbowsite\.ne\.jp" ShowOK
 SetEnvIf Referer "^http://localhost" ShowOK
