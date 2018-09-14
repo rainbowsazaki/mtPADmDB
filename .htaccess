@@ -1,0 +1,8 @@
+<Files ~ "\.(gif|png|jpg)$">
+SetEnvIf Referer "^http://*\.rainbowsite\.ne\.jp" ShowOK
+SetEnvIf Referer "^http://localhost" ShowOK
+SetEnvIf Referer "^$" ShowOK
+order deny,allow
+deny from all
+allow from env=ShowOK
+</Files>
