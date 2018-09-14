@@ -1200,6 +1200,11 @@ var componentMonsterEdit = {
     isHistory: function () {
       return (this.$route.name == 'historyEdit');
     },
+
+    /** 超覚醒が 不明 かどうか */
+    isUnknownSuperAwaken: function () {
+      return this.monsterData.superAwakens.indexOf(null) != -1;
+    },
   },
   
   methods: {
