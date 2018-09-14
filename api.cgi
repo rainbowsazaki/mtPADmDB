@@ -460,8 +460,13 @@ sub mode_update_monster_data {
     &check_range('限界突破時 攻撃', $data->{overLimitParam}{attack}, 0, 99999, 0);
     &check_range('限界突破時 回復', $data->{overLimitParam}{recovery}, -99999, 99999, 0);
   }
-  foreach my $n ($data->{superawakens}) {
-    #&check_range('超覚醒', $n, 1, 99);
+
+  if ($data->{superawakens}) {
+    foreach my $n ($data->{superawakens}) {
+      $n = to_number($n)
+      &check_range('超覚醒', $n, 1, 99, 0);
+    }
+    $data->{superawakens} = [ sort { $a <=> $b } @$data->{superawakens} ];
   }
   &to_number_with_key($data->{evolution}, qw/ baseNo materials /);
   &check_range('進化タイプ', $data->{evolutionType}, 0, 99, 0);
