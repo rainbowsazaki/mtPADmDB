@@ -1059,6 +1059,7 @@ var componentHistory = {
 
   computed: {
     monsterTable: function () { return this.$store.state.monsterTable; },
+    imageTable: function () { return this.$store.state.imageTable; },
 
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
