@@ -806,7 +806,7 @@ var componentMonsterList = {
   data: function () {
     return {
       searchWord: '',
-      inPageCount: 20,
+      inPageCount: 50,
     };
   },
 
