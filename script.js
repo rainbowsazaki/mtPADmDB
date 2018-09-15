@@ -36,7 +36,7 @@ const constData = {
     rare: null,
     types: [ null, 0, 0],
     awakens: [ null, 0, 0, 0, 0, 0, 0, 0, 0 ],
-    expTable: null,
+    maxExp: null,
     maxLevel: null,
     maxParam: {
       hp: null,

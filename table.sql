@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS monster_base_data (
   awakens_6 INTEGER,
   awakens_7 INTEGER,
   awakens_8 INTEGER,
-  expTable INTEGER,
+  maxExp INTEGER,
   maxLevel INTEGER,
   maxParam_hp INTEGER,
   maxParam_attack INTEGER,

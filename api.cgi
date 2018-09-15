@@ -37,7 +37,7 @@ my %monster_data_db_info = (
     'awakens_6',
     'awakens_7',
     'awakens_8',
-    'expTable',
+    'maxExp',
     'maxLevel',
     'maxParam_hp',
     'maxParam_attack',
@@ -82,7 +82,7 @@ my %json_sort_ranks = (
   rare => 40,
   types => 50,
   awakens => 60,
-  expTable => 70,
+  maxExp => 70,
   maxLevel => 80,
   maxParam => 90,
   skill => 100,
@@ -407,7 +407,7 @@ sub mode_update_monster_data {
   );
 
 
-  &to_number_with_key($data, qw/ no attributes cost rate types awakens expTable maxLevel maxParam 
+  &to_number_with_key($data, qw/ no attributes cost rate types awakens maxExp maxLevel maxParam 
     skill leaderSkill assist overLimit overLimitParam superAwakens evolutionType /);
 
   &to_hankaku_with_key($data, qw/ name /);
@@ -424,7 +424,7 @@ sub mode_update_monster_data {
   foreach my $i (0..9) {
     &check_range('覚醒${i}', $data->{awakens}[$i], 0, 99, 0);
   }
-  &check_range('経験値テーブル', $data->{expTable}, 0, 999999999, 0);
+  &check_range('最大レベルに必要な経験値', $data->{maxExp}, 0, 999999999, 0);
   &check_range('最大レベル', $data->{maxLevel}, 0, 99, 0);
   &check_range('HP', $data->{maxParam}{hp}, 0, 99999, 0);
   &check_range('攻撃', $data->{maxParam}{attack}, 0, 99999, 0);

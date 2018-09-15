@@ -239,7 +239,7 @@
           <tr>
             <td v-if="monsterData.maxLevel" class="text-right">{{monsterData.maxLevel}}</td>
             <td v-else>不明</td>
-            <td v-if="monsterData.expTable != null" class="text-right">{{monsterData.expTable}}</td>
+            <td v-if="monsterData.maxExp != null" class="text-right">{{monsterData.maxExp}}</td>
             <td v-else>不明</td>
             <td>{{booleanTable[monsterData.overLimit]}}</td>
           </tr>
@@ -495,7 +495,7 @@
             </div>
           </td>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputExpTable" v-model="monsterData.expTable" min="0" max="999999999">
+            <input type="number" class="form-control" id="inputMaxExp" v-model="monsterData.maxExp" min="0" max="999999999">
           </td>
           <td colspan="4">
             <select class="custom-select" id="selectAssist" v-model="monsterData.assist">
