@@ -722,7 +722,7 @@ Vue.component('tweetButton', {
         setTimeout(() => { this.createButton(); }, 100);
         return;
       }
-      var hashtags = 'mtPADmDB';
+      var hashtags = 'パズドラ,mtPADmDB';
       if (this.hashtags) { hashtags += ',' + this.hashtags; }
       
       var targetId = 'tweetButtonPlace';
