@@ -7,7 +7,7 @@
 #  RewriteRule (.*) index.html [L,QSA]
 </IfModule>
 
-<Files ~ "\.(gif|png|jpg)$">
+<Files ~ "\.(gif|png|jpe?g)$">
 SetEnvIf Referer "^http://*\.rainbowsite\.ne\.jp" ShowOK
 SetEnvIf Referer "^http://localhost" ShowOK
 SetEnvIf Referer "^$" ShowOK
