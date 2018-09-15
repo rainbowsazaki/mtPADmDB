@@ -452,7 +452,7 @@
         </tr>
         <tr class="thead-light"><th colspan="12">タイプ</th></tr>
         <tr>
-          <td v-for="n in 3" colspan="4">
+          <td v-for="n in 3" colspan="4" :key="n" v-once>
             <select class="custom-select" :id="'selectType' + n" v-model="monsterData.types[n - 1]">
               <option v-for="(type, key) in typeTable" :disabled="key == ((n == 1) ? 0 : 'null')" :value="key" :key="key" v-once>{{type.name}}</option>
             </select>
