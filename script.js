@@ -471,7 +471,7 @@ Vue.component('monsterIncrementalInput', {
 </div>
   `,
   props: {
-    'value': Number,
+    'value': String,
     'monsterTable': Object,
     'imageTable': Object
   },
