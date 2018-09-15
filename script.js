@@ -999,6 +999,17 @@ var componentMonsterData = {
       return !((type >= 9 && type <= 12) || type == 99);
     },
 
+    /** 最大レベル時のパラメータが登録されているかどうかを取得する。 */
+    hasMaxParam: function () { 
+      var maxParam = this.monsterData.maxParam;
+      return (maxParam.hp != undefined || maxParam.attack != undefined || maxParam.recovery != undefined);
+    },
+    /** 限界突破時のパラメータが登録されているかどうかを取得する。 */
+    hasOverLimitParam: function () { 
+      var maxParam = this.monsterData.overLimitParam;
+      return (maxParam.hp != undefined || maxParam.attack != undefined || maxParam.recovery != undefined);
+    },
+
     /** 最大レベル時のパラメータのプラス換算値 */
     plusCountParam: function () {
       return this.culcPlusCountParam(this.monsterData.maxParam);
