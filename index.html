@@ -169,6 +169,7 @@
     <h1>みんなで作るパズドラモンスターデータベース</h1>
     <div><tweet-button /></div>
 
+    <div>現在の登録数：{{monsterCount}}種類</div>
     <form @submit="search(); return false;">
       <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="モンスター名検索" v-model="searchWord">
