@@ -1589,7 +1589,7 @@ var componentPic = {
 
 // 現在のURLでの history 形式でのルートを求める。
 var routerBase = '';
-var routerBaseArray = /^.*padmdb.*\//i.exec(location.pathname);
+var routerBaseArray = /^.*padmdb[^/]*\//i.exec(location.pathname);
 routerBase = routerBaseArray[0];
 
 // ルートオプションを渡してルーターインスタンスを生成します
