@@ -248,8 +248,10 @@
           <tr><td colspan="3">
               <span v-if="monsterData.awakens[0] === 0">なし</span>
               <span v-else-if="monsterData.awakens[0] === null">不明</span>
-              <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex;">
-              <li v-for="awaken in monsterData.awakens" v-if="awaken !== 0" style="width: 11.11%; text-align: center;"><img :src="'./image/awaken/' + awaken + '.png'" width="24" height="24" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description"></li>
+              <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex; justify-content: space-between;">
+              <li v-for="awaken in monsterData.awakens" style="flex-grow: 1; width: 24px;">
+                <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 24px; height: 24px;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description" />
+              </li>
             </ul>
           </td></tr>
           <template>
