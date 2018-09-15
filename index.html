@@ -732,7 +732,9 @@
       </div>
           
       </table>
-      <button @click="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' : 'この画像を送信する'}}</button>
+      <div style="margin-top: 1em;">
+        <button @click="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' : 'この画像を送信する'}}</button>
+      </div>
     </div>
   </div>
 </script>
