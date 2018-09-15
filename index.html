@@ -386,7 +386,7 @@
     <router-link v-else :to="`/${monsterData.no}/edit`" class="btn btn-primary">編集する</router-link>
     <router-link :to="`/${monsterData.no}/pic`" class="btn btn-primary">モンスター画像投稿</router-link>
 
-    <div>
+    <div style="margin-top: 1rem;">
       <h4>編集履歴</h4>
       <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
         {{isLoadingHistory ? '読み込み中…' : '編集履歴を確認する'}}
