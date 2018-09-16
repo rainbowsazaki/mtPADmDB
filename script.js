@@ -1431,8 +1431,8 @@ var componentPic = {
             }
 
             // 公式サイトのプレイヤー情報部分のない画像への対応。
-            if (imgWidth == 640 && imgHeight == 948) {
-              imgTop = -148 / 640 * imgWidth
+            if (imgWidth == 640 && imgHeight >= 944 && imgHeight <= 948) {
+              imgTop = imgHeight - 1096;
             }
 
             // アイコン画像取得
