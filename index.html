@@ -208,7 +208,7 @@
         <h2>No. {{monsterData.no}} {{monsterData.name}}</h2>
       </div>
     </div>
-    <div v-if="!isHistory"><tweet-button v-if="monsterData.no" :hashtags="`mtPADmDB_${monsterData.no}`"/></div>
+    <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
     <div class="row">
       <div class="col-md-6">
         <img v-if="monsterData.no" :src="monsterImagePath" style="width: 100%; height: auto; max-width: 400px; display: block; margin: 0 auto;" />
