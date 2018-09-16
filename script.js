@@ -1430,6 +1430,11 @@ var componentPic = {
               }
             }
 
+            // 公式サイトのプレイヤー情報部分のない画像への対応。
+            if (imgWidth == 640 && imgHeight == 948) {
+              imgTop = -148 / 640 * imgWidth
+            }
+
             // アイコン画像取得
             var srcX = marginLeft + (iconSrcScale[0] * imgWidth) | 0;
             var srcY = (imgHeight - iconSrcScale[1] * imgWidth) | 0;
