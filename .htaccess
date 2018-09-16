@@ -9,8 +9,8 @@
 </IfModule>
 
 <Files ~ "\.(gif|png|jpe?g)$">
-SetEnvIf Referer "^http://*\.rainbowsite\.ne\.jp" ShowOK
-SetEnvIf Referer "^http://localhost" ShowOK
+SetEnvIf Referer "^https?://.*\.?rainbowsite\.net" ShowOK
+SetEnvIf Referer "^https?://localhost" ShowOK
 SetEnvIf Referer "^$" ShowOK
 order deny,allow
 deny from all
