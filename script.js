@@ -242,23 +242,28 @@ const store = new Vuex.Store({
       var nowMs = (new Date()).getTime();
       if (state.lastLoadCommonDataTime + 5 * 60 * 1000 > nowMs) { return; }
 
+      // モンスター情報と画像情報はモンスター一覧ページをいち早く表示するために他と分けて読み込み処理を行う。
+      axios.get('./listJson/monster_list.json')
+        .then(responce => {
+          state.monsterTable = responce.data;
+        });
+      axios.get('./listJson/image_list.json')
+        .then(responce => {
+          state.imageTable = responce.data;
+
+        });
+
       axios.all([
-        axios.get('./listJson/monster_list.json'),
         axios.get('./listJson/skill_list.json'),
         axios.get('./listJson/leader_skill_list.json'),
-        axios.get('./listJson/image_list.json'),
         axios.get('./listJson/evolution_list.json',)
       ]).then( axios.spread( (
-        monsterListResponse,
         skillListResponse,
         leaderSkillListResponse,
-        imageListResponse,
         evolutionListResponse
       ) => {
-        state.monsterTable = monsterListResponse.data;
         state.skillTable = skillListResponse.data;
         state.leaderSkillTable = leaderSkillListResponse.data;
-        state.imageTable = imageListResponse.data;
         state.evolutionTable = evolutionListResponse.data;
       }));
 
