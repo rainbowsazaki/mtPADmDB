@@ -1611,15 +1611,17 @@ var componentPic = {
   }
 }
 
-// 現在のURLでの history 形式でのルートを求める。
-var routerBase = '';
-var routerBaseArray = /^.*padmdb[^/]*\//i.exec(location.href);
-routerBase = routerBaseArray[0];
+/** 現在のURLでの history 形式でのルートを求める */
+function getRouterBase () {
+  var routerBaseArray = /^.*padmdb[^/]*\//i.exec(location.pathname);
+  if (routerBaseArray) { return routerBaseArray[0]; }
+  return '/';
+}
 
 // ルートオプションを渡してルーターインスタンスを生成します
 var router = new VueRouter({
   //mode: 'history',
-  base: routerBase,
+  base: getRouterBase(),
   // 各ルートにコンポーネントをマッピングします
   // コンポーネントはVue.extend() によって作られたコンポーネントコンストラクタでも
   // コンポーネントオプションのオブジェクトでも構いません
