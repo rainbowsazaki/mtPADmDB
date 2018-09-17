@@ -821,6 +821,8 @@ var componentMonsterList = {
     attrColors () { return constData.attrColors; },
 
     monsterCount () { return this.monsterTableArray.length; },
+    /** モンスター一覧情報を読込中かどうか。 現在の実装だとデータ未登録の場合、ずっと読み込み中判定となる。 */
+    isLoadingMonsterList () { return this.monsterCount == 0; },
     pageCount() { return ((this.searchedMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     page () { return (this.$route.query.page * 1) || 1; },
 
