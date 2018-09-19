@@ -1554,8 +1554,15 @@ var componentPic = {
       formData.append('icon', blobIcon);
       formData.append('image', blobImage);
 
+      var onUploadProgress = (ev) => {
+        if (ev.loaded == ev.total) {
+          this.$store.commit('setMessages', [ '登録中...' ]);
+        }
+      };
+
       axios.post('./api.cgi', formData, {
         headers: { 'content-type': 'multipart/form-data' },
+        onUploadProgress: onUploadProgress,
       })
       .then(response => {
         // レスポンス来なかったときの復帰処理を止める。
