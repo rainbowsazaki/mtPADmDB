@@ -1258,8 +1258,8 @@ var componentMonsterEdit = {
       // 多重送信防止処理
       if (this.isSubmitted) { return; }
       this.isSubmitted = true;
-      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように１０秒後に復帰させる。
-      var timeoutId = setTimeout(() => { this.isSubmitted = false; }, 10000);
+      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
+      var timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
 
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', [ '送信中...' ]);
@@ -1539,8 +1539,8 @@ var componentPic = {
       // 多重送信防止処理
       if (this.isSubmitted) { return; }
       this.isSubmitted = true;
-      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように１０秒後に復帰させる。
-      var timeoutId = setTimeout(() => { this.isSubmitted = false; }, 10000);
+      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
+      var timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
       
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', [ '送信中...' ]);
