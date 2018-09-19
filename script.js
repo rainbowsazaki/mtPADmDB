@@ -989,7 +989,10 @@ var componentMonsterData = {
       return leaderSkillDetails;
     },
 
+    /** このモンスターに振れる潜在キラーの番号を配列を取得する。 */
     senzaiKillerNos: function () {
+      // 合成できないものは潜在覚醒を降ることができないので無し。
+      if (!this.canAddPlus) { return [] }
       var killerNoSet = new Set();
       for (var type of this.monsterData.types) {
         for (var killerNo of this.typeTable[type].senzaiKiller) {
