@@ -329,7 +329,7 @@ const store = new Vuex.Store({
       state.messages = messages;
       setTimeout(() => {
         state.messages = [];
-      }, 2000)
+      }, 3000)
     },
     clearErrors: function (state) {
       state.errors = [];
