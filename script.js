@@ -1685,6 +1685,21 @@ var router = new VueRouter({
     },
     
     {
+      path: '/compare',
+      component: componentCompare,
+      props: true
+    },
+    {
+      path: '/compare/:no1',
+      component: componentCompare,
+      props: true
+    },
+    {
+      path: '/compare/:no1/:no2',
+      component: componentCompare,
+    },
+    
+    {
       path: '/:no',
       component: componentMonsterData,
       props: true
