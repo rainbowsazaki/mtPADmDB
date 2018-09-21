@@ -1137,6 +1137,11 @@ var componentMonsterEdit = {
 
   created: function () {
     this.fetchData();
+    window._inputFromJson = (json) => { this.inputFromJson(json); };
+  },
+
+  destroyed: function () {
+    delete window._inputFromJson;
   },
 
   watch: {
@@ -1230,6 +1235,11 @@ var componentMonsterEdit = {
   },
   
   methods: {
+    /** 指定されたJSONテキストをもとに情報を設定する。 */
+    inputFromJson: function (json) {
+      this.monsterData = jQuery.extend(true, {}, constData.monsterClearData, JSON.parse(json));
+      this.monsterData.comment = '新規登録';
+    },
     fetchData: function () {
       this.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
       this.$_mixinForPage_updateTitle();
