@@ -1007,7 +1007,7 @@ var componentMonsterData = {
     /** リーダースキル説明文を装飾したHTMLを取得する。 */
     leaderSkillDescriptionHtml: function () {
       var description = escapeHtml(this.leaderSkillDetails.description);
-      description = description.replace(/^【.*】/, '<span style="color:rgba(255, 0, 0, 0.8);">$&</span>');
+      description = description.replace(/^(【.*】|ドロップを\d+個以下で消せない)/, '<span style="color:rgba(224, 0, 0, 0.8);">$&</span>');
       return description;
     },
 
