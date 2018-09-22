@@ -312,7 +312,7 @@
             <tr v-if="leaderSkillDetails.name"><td>
               {{leaderSkillDetails.name}}
             </td></tr>
-            <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{leaderSkillDetails.description}}</td></tr>
+            <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml"></td></tr>
           </table> 
       </div>
     </div>

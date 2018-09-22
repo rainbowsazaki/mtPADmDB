@@ -233,6 +233,21 @@ jQuery.fn.scrollParentShowThis = function() {
   return this;
 };
 
+/** HTMLエスケープを行う。 */
+function escapeHtml(str) {
+  if (!str) return;
+  return str.replace(/[<>&"'`]/g, (match) => {
+    const escape = {
+      '<': '&lt;',
+      '>': '&gt;',
+      '&': '&amp;',
+      '"': '&quot;',
+      "'": '&#39;',
+      '`': '&#x60;'
+    };
+    return escape[match];
+  });
+}
 
 const store = new Vuex.Store({
   state: commonData,
@@ -987,6 +1002,13 @@ var componentMonsterData = {
         }
       }
       return leaderSkillDetails;
+    },
+
+    /** リーダースキル説明文を装飾したHTMLを取得する。 */
+    leaderSkillDescriptionHtml: function () {
+      var description = escapeHtml(this.leaderSkillDetails.description);
+      description = description.replace(/^【.*】/, '<span style="color:rgba(255, 0, 0, 0.8);">$&</span>');
+      return description;
     },
 
     /** このモンスターに振れる潜在キラーの番号を配列を取得する。 */
