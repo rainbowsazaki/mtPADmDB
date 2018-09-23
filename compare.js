@@ -81,15 +81,15 @@ var componentCompare = {
     
     <tr class="thead-light">
       <th>HP</th>
-      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.hp}}</td>
+      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.hp | nullToUndefined}}</td>
     </tr>
     <tr class="thead-light">
       <th>攻撃</th>
-      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.attack}}</td>
+      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.attack | nullToUndefined}}</td>
     </tr>
     <tr class="thead-light">
       <th>回復</th>
-      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.recovery}}</td>
+      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.recovery | nullToUndefined}}</td>
     </tr>
     <template v-if="hasOverLimit">
       <tr class="thead-light">
@@ -97,15 +97,15 @@ var componentCompare = {
       </tr>
       <tr class="thead-light">
         <th>HP</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.hp}}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.hp | nullToUndefined}}</td>
       </tr>
       <tr class="thead-light">
         <th>攻撃</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.attack}}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.attack | nullToUndefined}}</td>
       </tr>
       <tr class="thead-light">
         <th>回復</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.recovery}}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.recovery | nullToUndefined}}</td>
       </tr>
     </template>
   </table>
@@ -122,6 +122,13 @@ var componentCompare = {
   created: function () { this.load(); },
   watch: {
     "$route": function () { this.load(); },
+  },
+
+  filters: {
+    /** パラメータが null の場合に 不明 と表示するためのフィルタ */
+    nullToUndefined: function (val) {
+      return (val === null) ? '不明' : val;
+    }
   },
 
   computed: {
