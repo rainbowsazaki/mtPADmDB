@@ -21,7 +21,7 @@ var componentCompare = {
   <table class="table table-bordered table-sm">
     <tr class="thead-light">
       <th></th>
-      <td v-for="data in monsterDatas">
+      <td v-for="data in monsterDatas" style="width: 40%;">
         <monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
       </td>
     </tr>
