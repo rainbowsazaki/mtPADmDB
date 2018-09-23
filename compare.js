@@ -155,6 +155,10 @@ var componentCompare = {
   methods: {
     /** 比較表示するモンスターを現在している番号のものに変更する。 */
     updateCompareMonster: function () {
+      if (!this.targets[0] || !this.targets[1]) {
+        this.$store.commit('setErrors', [ '対象モンスターが正しく指定されていません。' ]);
+        return;
+      }
       this.$router.push({ name: 'compare', params: { no1: this.targets[0], no2: this.targets[1] }});
     },
 
