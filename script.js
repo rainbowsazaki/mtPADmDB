@@ -1696,6 +1696,7 @@ var router = new VueRouter({
     },
     {
       path: '/compare/:no1/:no2',
+      name: 'compare',
       component: componentCompare,
     },
     

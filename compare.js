@@ -155,7 +155,7 @@ var componentCompare = {
   methods: {
     /** 比較表示するモンスターを現在している番号のものに変更する。 */
     updateCompareMonster: function () {
-      this.$router.push({ path: this.$router.path, params: { no1: this.targets[0], no2: this.targets[1] }});
+      this.$router.push({ name: 'compare', params: { no1: this.targets[0], no2: this.targets[1] }});
     },
 
     load: function () {
