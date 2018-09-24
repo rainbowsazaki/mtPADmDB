@@ -235,7 +235,7 @@ jQuery.fn.scrollParentShowThis = function() {
 
 /** HTMLエスケープを行う。 */
 function escapeHtml(str) {
-  if (!str) return;
+  if (typeof str !== 'string') { return; }
   return str.replace(/[<>&"'`]/g, (match) => {
     const escape = {
       '<': '&lt;',
