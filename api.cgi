@@ -532,7 +532,7 @@ sub mode_update_monster_data {
       }
     } else {
       # 指定された番号のスキルが有るか確認
-      if (!&check_same_table_data($dbh, 'skill', (id => $data->{skill}, state => 1))) {
+      if (!&check_same_table_data($dbh, 'skill', (no => $data->{skill}, state => 1))) {
         push @error, 'スキル番号指定が不正';
       }
     }
@@ -582,7 +582,7 @@ sub mode_update_monster_data {
       }
     } else {
       # 指定された番号のリーダースキルがあるか確認
-      if (!&check_same_table_data($dbh, 'leader_skill', (id => $data->{leaderSkill}, state => 1))) {
+      if (!&check_same_table_data($dbh, 'leader_skill', (no => $data->{leaderSkill}, state => 1))) {
         push @error, 'リーダースキル番号指定が不正';
       }
     }
