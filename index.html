@@ -184,7 +184,7 @@
     <div v-if="isLoadingMonsterList">データの読み込み中です ...</div>
     <div v-else>現在の登録数：{{monsterCount}}種類</div>
     
-    <form @submit="search(); return false;">
+    <form @submit="$event.preventDefault(); search();">
       <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="モンスター名検索" v-model="searchWord">
         <div class="input-group-append">
