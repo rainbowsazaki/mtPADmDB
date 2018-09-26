@@ -341,7 +341,7 @@
       <h4>このモンスターへの進化</h4>
       <table class="table table-bordered table-sm">
         <tr class="thead-light"><th>{{evolutionTypeTable[monsterData.evolutionType]}}</th></tr>
-        <template v-if="monsterData.evolutionType !== 99">
+        <template v-if="monsterData.evolutionType !== null">
         <tr><td>
           <template v-if="monsterData.evolution.baseNo">
             <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
@@ -677,7 +677,7 @@
             </select>
           </td>
         </tr>
-        <template v-if="monsterData.evolutionType != 0 && monsterData.evolutionType != 99">
+        <template v-if="monsterData.evolutionType != 0 && monsterData.evolutionType != null && monsterData.evolutionType != 'null'">
           <tr class="thead-light">
             <th colspan="12">進化前キャラ</th>
           </tr>
