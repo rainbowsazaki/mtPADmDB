@@ -159,17 +159,16 @@ var componentCompare = {
         this.$store.commit('setErrors', [ '対象モンスターが正しく指定されていません。' ]);
         return;
       }
-      this.$router.push({ name: 'compare', params: { no1: this.targets[0], no2: this.targets[1] }});
+      this.$router.push({ name: 'compare', params: { nos: this.targets.join(',') }});
     },
 
     load: function () {
-      this.targets = [ this.$route.params.no1, this.$route.params.no2 ];
+      this.targets = (this.$route.params.nos || '').split(/,/g);
       this.monsterData0 = this.monsterData1 = null;
-      if (this.$route.params.no1) {
-        this._load(0, this.$route.params.no1);
-      }
-      if (this.$route.params.no2) {
-        this._load(1, this.$route.params.no2);
+      if (this.$route.params.nos) {
+        for (var i = 0; i < this.targets.length; i++) {
+          this._load(i, this.targets[i]);
+        }
       }
     },
 
