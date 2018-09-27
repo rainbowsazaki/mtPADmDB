@@ -113,8 +113,7 @@ var componentCompare = {
 </div>`,
   data: function () {
     return {
-      monsterData0: null,
-      monsterData1: null,
+      monsterDatas: [],
 
       targets: [0, 0],
     };
@@ -138,10 +137,6 @@ var componentCompare = {
     typeTable () { return constData.typeTable; },
     awakenTable () { return constData.awakenTable; },
 
-    /** 比較するモンスター情報の配列を取得する。 */
-    monsterDatas: function () {
-      return [ this.monsterData0, this.monsterData1 ];
-    },
     /** モンスター情報がすべて存在しているかどうかを取得する。 */
     isEnableMonsterDatas: function () {
       return (this.monsterDatas.indexOf(null) == -1);
@@ -164,7 +159,7 @@ var componentCompare = {
 
     load: function () {
       this.targets = (this.$route.params.nos || '').split(/,/g);
-      this.monsterData0 = this.monsterData1 = null;
+      this.monsterDatas = [];
       if (this.$route.params.nos) {
         for (var i = 0; i < this.targets.length; i++) {
           this._load(i, this.targets[i]);
@@ -180,7 +175,7 @@ var componentCompare = {
         response => {
           var data = $.extend(true, {}, commonData.monsterClearData, response.data);
           if (!data.superAwakens) { data.superAwakens = []; }
-          this['monsterData' + index] = data; 
+          Vue.set(this.monsterDatas, index, data);
           this.$store.commit('clearMessages');
         }
       ).catch(
