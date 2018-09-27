@@ -173,7 +173,7 @@ var componentCompare = {
       this.$store.commit('setMessages', [ 'モンスター情報取得中' ]);
       axios.get(path).then(
         response => {
-          var data = $.extend(true, {}, commonData.monsterClearData, response.data);
+          var data = $.extend(true, {}, constData.monsterClearData, response.data);
           if (!data.superAwakens) { data.superAwakens = []; }
           Vue.set(this.monsterDatas, index, data);
           this.$store.commit('clearMessages');
