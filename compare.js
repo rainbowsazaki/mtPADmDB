@@ -110,6 +110,37 @@ var componentCompare = {
     </template>
   </table>
   </template>
+
+  <h4>スキル</h4>
+  <table class="table table-bordered table-sm">
+    <template v-for="data in monsterDatas">
+      <tr class="thead-light">
+        <th rowspan="2" style="width: 3em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" /></th>
+        <td v-if="data.skill == null">不明</td>
+        <td v-else>
+          {{skillTable[data.skill].name}}
+          <span style="font-size: 80%; float:right;">(最短ターン:<span v-if="skillTable[data.skill].baseTurn && skillTable[data.skill].maxLevel">{{skillTable[data.skill].baseTurn - skillTable[data.skill].maxLevel + 1}}</span><span v-else>不明</span>)</span>
+        </td>
+      </tr>
+      <tr v-if="data.skill"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillTable[data.skill].description}}</td></tr>
+      <tr v-else><td></td></tr>
+    </template>
+  </table>
+
+  <h4>リーダースキル</h4>
+  <table class="table table-bordered table-sm">
+    <template v-for="data in monsterDatas">
+      <tr class="thead-light">
+        <th rowspan="2" style="width: 3em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" /></th>
+        <td v-if="data.leaderSkill == null">不明</td>
+        <td v-else>
+          {{leaderSkillTable[data.leaderSkill].name}}
+        </td>
+      </tr>
+      <tr v-if="data.leaderSkill"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{leaderSkillTable[data.leaderSkill].description}}</td></tr>
+      <tr v-else><td></td></tr>
+    </template>
+  </table>
 </div>`,
   data: function () {
     return {
@@ -132,6 +163,8 @@ var componentCompare = {
 
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
+    skillTable () { return this.$store.state.skillTable; },
+    leaderSkillTable () { return this.$store.state.leaderSkillTable; },
     imageTable() { return this.$store.state.imageTable; },
     booleanTable() { return constData.booleanTable; },
     typeTable () { return constData.typeTable; },
