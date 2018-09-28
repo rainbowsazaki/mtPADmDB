@@ -108,6 +108,76 @@ var componentCompare = {
         <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.recovery | nullToUndefined}}</td>
       </tr>
     </template>
+    <template v-if="hasWay || hasComboUp || hasSpComboUp || hasA3x3">
+      <tr class="thead-light">
+        <th :colspan="monsterDatas.length + 1">レベル最大 攻撃+99時 覚醒反映攻撃力</th>
+      </tr>
+      <tr v-if="hasWay" class="thead-light">
+        <th>4個消し</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasLJi" class="thead-light">
+        <th>L字消し</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasComboUp" class="thead-light">
+        <th>7コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * comboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasSpComboUp" class="thead-light">
+        <th>10コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasWay && hasComboUp" class="thead-light">
+        <th>4個消し 7コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) * comboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasWay && hasSpComboUp" class="thead-light">
+        <th>4個消し 10コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasLJi && hasComboUp" class="thead-light">
+        <th>L字消し 7コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) * comboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasLJi && hasSpComboUp" class="thead-light">
+        <th>L字消し 10コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasA3x3" class="thead-light">
+        <th>無効貫通</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * a3x3AttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
+        <th>無効貫通 7コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * a3x3AttackRate(data) * comboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+    </template>
+    <template v-if="hasWay || hasA3x3">
+      <tr class="thead-light">
+        <th :colspan="monsterDatas.length + 1">レベル最大 攻撃+99時 覚醒反映複合消しダメージ （コンボ倍率除く）</th>
+      </tr>
+      <tr v-if="hasWay" class="thead-light">
+        <th>4+3個消し</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasWay && hasComboUp" class="thead-light">
+        <th>4+3個消し 7コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) * comboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasWay && hasComboUp" class="thead-light">
+        <th>4+3個消し 10コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) * comboUpAttackRate(data) * spComboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasA3x3" class="thead-light">
+        <th>無効貫通+3</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (2.5 * a3x3AttackRate(data) + 1) | nullToUndefined }}</td>
+      </tr>
+      <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
+        <th>無効貫通+3 7コンボ</th>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (2.5 * a3x3AttackRate(data) + 1) * comboUpAttackRate(data) | nullToUndefined }}</td>
+      </tr>
+    </template>
   </table>
   </template>
 
@@ -157,7 +227,7 @@ var componentCompare = {
   filters: {
     /** パラメータが null の場合に 不明 と表示するためのフィルタ */
     nullToUndefined: function (val) {
-      return (val === null) ? '不明' : val;
+      return (val === null || isNaN(val)) ? '不明' : val;
     }
   },
 
@@ -177,7 +247,28 @@ var componentCompare = {
     /** 限界突破可能なモンスターがいるかどうかを取得する。 */
     hasOverLimit: function () {
       return this.monsterDatas.find((o) => o.overLimit == 1);
-    }
+    },
+
+    /** 比較対象の中に２体攻撃を持つモンスターがいるかどうかを取得する。 */
+    hasWay: function () {
+      return this.HasAwakenMonster(27);
+    },
+    /** 比較対象の中にL字攻撃を持つモンスターがいるかどうかを取得する。 */
+    hasLJi: function () {
+      return this.HasAwakenMonster(60);
+    },
+    /** 比較対象の中にコンボ強化を持つモンスターがいるかどうかを取得する。 */
+    hasComboUp: function () {
+      return this.HasAwakenMonster(43);
+    },
+    /** 比較対象の中に超コンボ強化を持つモンスターがいるかどうかを取得する。 */
+    hasSpComboUp: function () {
+      return this.HasAwakenMonster(61);
+    },
+    /** 比較対象の中にダメージ無効貫通を持つモンスターがいるかどうかを取得する。 */
+    hasA3x3: function () {
+      return this.HasAwakenMonster(48);
+    },
   },
 
   methods: {
@@ -208,6 +299,11 @@ var componentCompare = {
         response => {
           var data = $.extend(true, {}, constData.monsterClearData, response.data);
           if (!data.superAwakens) { data.superAwakens = []; }
+
+          data.awakenObj = {};
+          for (var awaken of data.awakens) {
+            data.awakenObj[awaken] = (data.awakenObj[awaken] || 0) + 1;
+          }
           Vue.set(this.monsterDatas, index, data);
           this.$store.commit('clearMessages');
         }
@@ -231,6 +327,41 @@ var componentCompare = {
       }
       return Array.from(killerNoSet).sort(((a, b) => a - b ));
 
+    },
+
+    /** 比較対象の中に指定された覚醒を持つモンスターがいるかどうかを取得する。 */
+    HasAwakenMonster: function (awakenNo) {
+      return this.monsterDatas.find((o) => o.awakenObj[awakenNo] > 0);
+    },
+
+    /** 指定されたモンスターデータの、レベル最大・攻撃+99 時の攻撃力を取得する。 */
+    maxAttack: function (monsterData) {
+      if (monsterData.maxParam.attack == null) { return NaN; }
+      return monsterData.maxParam.attack + 495;
+    },
+    /** 指定されたモンスターデータの、指定された覚醒発動時のレートを算出する。 */
+    culcKakuseiRate: function (monsterData, awakenNo, oneRate) {
+      return Math.pow(oneRate, monsterData.awakenObj[awakenNo] | 0);
+    },
+    /** 指定されたモンスターデータの、２体攻撃発動時の攻撃力レートを取得する。 */
+    wayAttackRate: function (monsterData) {
+      return this.culcKakuseiRate(monsterData, 27, 1.5);
+    },
+    /** 指定されたモンスターデータの、L字攻撃発動時の攻撃力レートを取得する。 */
+    lJiAttackRate: function (monsterData) {
+      return this.culcKakuseiRate(monsterData, 60, 1.5);
+    },
+    /** 指定されたモンスターデータの、コンボ強化発動時の攻撃力レートを取得する。 */
+    comboUpAttackRate: function (monsterData) {
+      return this.culcKakuseiRate(monsterData, 43, 2);
+    },
+    /** 指定されたモンスターデータの、超コンボ強化発動時の攻撃力レートを取得する。 */
+    spComboUpAttackRate: function (monsterData) {
+      return this.culcKakuseiRate(monsterData, 61, 5);
+    },
+    /** 指定されたモンスターデータの、ダメージ無効貫通発動時の攻撃力レートを取得する。 */
+    a3x3AttackRate: function (monsterData) {
+      return this.culcKakuseiRate(monsterData, 48, 2.5);
     },
   }
 };
