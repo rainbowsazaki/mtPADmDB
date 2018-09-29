@@ -389,6 +389,10 @@
           <span v-else>不明</span>
         </td></tr>
       </table>
+      <router-link v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
+        :to="{ name: 'compare', params: { nos: evolutionTable[monsterData.no].map(e => e.no).join(',') } }">
+        進化後{{evolutionTable[monsterData.no].length}}種類のパラメータ比較へ
+      </router-link>
     </div>
     <div v-if="monsterData.comment">
       <table class="table table-bordered table-sm">
