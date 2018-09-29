@@ -33,8 +33,8 @@ var componentCompare = {
       <th>タイプ</th>
       <td v-for="data in monsterDatas">
         <span v-if="data.types[0] == null">不明</span>
-        <span v-else v-for="type in data.types" v-if="type !== 0">
-          <img v-if="type !== null" :src="\`./image/type/\${type}.png\`" alt="" style="width:1.5em; height: 1.5em;">
+        <span v-else>
+          <img v-for="type in data.types" v-if="type !== 0 && type !== null" :src="\`./image/type/\${type}.png\`" alt="" style="width:1.5em; height: 1.5em;">
         </span>
       </td>
     </tr>
