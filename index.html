@@ -338,6 +338,11 @@
               <monster-icon :no="monsterData.evolution.baseNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
               No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}
             </router-link>
+            <br>
+            <router-link class="btn btn-secondary btn-sm" style="margin-top: 4px;"
+              :to="{ name: 'compare', params: { nos: `${monsterData.evolution.baseNo},${monsterData.no}` } }">
+              進化前と進化後のパラメータ比較へ
+            </router-link>
           </template>
           <span v-else>進化元不明</span>
         </td></tr>
@@ -366,7 +371,11 @@
             <monster-icon :no="evolution.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
             No. {{evolution.no}} {{monsterTable[evolution.no] && monsterTable[evolution.no].name}}
           </router-link>
-          <span v-else>不明</span>
+          <br>
+          <router-link class="btn btn-secondary btn-sm" style="margin-top: 4px;"
+            :to="{ name: 'compare', params: { nos: `${monsterData.no},${evolution.no}` } }">
+            進化前と進化後のパラメータ比較へ
+          </router-link>
         </td></tr>
         <tr class="thead-light"><th>進化素材</th></tr>
         <tr><td>
