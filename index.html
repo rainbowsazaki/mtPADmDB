@@ -396,6 +396,7 @@
       <h3 class="h4">編集コメント</h3>
       <div>{{monsterData.comment}}</div>
     </div>
+    <hr />
     <router-link v-if="isHistory" :to=" `/history/${$route.params.id}/edit`" class="btn btn-primary">履歴をもとに編集する</router-link>
     <router-link v-else :to="`/${monsterData.no}/edit`" class="btn btn-primary">編集する</router-link>
     <router-link :to="`/${monsterData.no}/pic`" class="btn btn-primary">モンスター画像投稿</router-link>
