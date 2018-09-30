@@ -393,10 +393,8 @@
       </router-link>
     </div>
     <div v-if="monsterData.comment">
-      <table class="table table-bordered table-sm">
-        <tr class="thead-light"><th>編集コメント</th></tr>
-        <tr><td>{{monsterData.comment}}</td></tr>
-      </table>
+      <h3 class="h4">編集コメント</h3>
+      <div>{{monsterData.comment}}</div>
     </div>
     <router-link v-if="isHistory" :to=" `/history/${$route.params.id}/edit`" class="btn btn-primary">履歴をもとに編集する</router-link>
     <router-link v-else :to="`/${monsterData.no}/edit`" class="btn btn-primary">編集する</router-link>
