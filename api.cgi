@@ -351,7 +351,8 @@ sub mode_update_monster_data {
     }
   }
 
-  # ハッシュ内の任意の要素の全角英数字ピリオドパーセントスペースを半角に変換する。
+  # ハッシュ内の任意の要素の全角英数字ピリオドスペースを半角に変換し、
+  # 半角括弧プラスパーセントを全角に変換する。
   # 冒頭・末尾のスペースの取り除きも行う。
   # 第１引数 対象のハッシュのリファレンス
   # 第２引数以降 変換対象の要素のキー。
@@ -359,7 +360,8 @@ sub mode_update_monster_data {
     my ($target_ref, @keys) = @_;
     foreach my $key (@keys) {
       if (!exists $target_ref->{$key}) { next; }
-      $target_ref->{$key} =~ tr/０-９Ａ-Ｚａ-ｚ．％　/0-9A-Za-z.% /;
+      $target_ref->{$key} =~ tr/０-９Ａ-Ｚａ-ｚ．　/0-9A-Za-z. /;
+      $target_ref->{$key} =~ tr/\(\)\+%/（）＋％/;
     	$target_ref->{$key} =~ s/^[\s　]*(.*?)[\s　]*$/$1/;
     }
   }
