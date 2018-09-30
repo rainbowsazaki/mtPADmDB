@@ -328,9 +328,9 @@
     <div v-if="monsterData.evolutionType !== 0">
       <h4>このモンスターへの進化</h4>
       <table class="table table-bordered table-sm">
-        <tr class="thead-light"><th>{{evolutionTypeTable[monsterData.evolutionType]}}</th></tr>
+        <tr class="thead-light"><th colspan="2">{{evolutionTypeTable[monsterData.evolutionType]}}</th></tr>
         <template v-if="monsterData.evolutionType !== 99">
-        <tr><td>
+        <tr><td colspan="2">
           <template v-if="monsterData.evolution.baseNo">
             <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
             ←
@@ -338,16 +338,10 @@
               <monster-icon :no="monsterData.evolution.baseNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
               No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}
             </router-link>
-            <br>
-            <router-link class="btn btn-secondary btn-sm" style="margin-top: 4px;"
-              :to="{ name: 'compare', params: { nos: `${monsterData.evolution.baseNo},${monsterData.no}` } }">
-              進化前と進化後のパラメータ比較へ
-            </router-link>
           </template>
           <span v-else>進化元不明</span>
         </td></tr>
-        <tr class="thead-light"><th>進化素材</th></tr>
-        <tr><td>
+        <tr class="thead-light"><th style="width: 3em;">素材</th><td>
           <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
             <li v-for="material in monsterData.evolution.materials" v-if="material" style="margin-right: 2px;">
               <router-link :to="`/${material}`">
@@ -357,28 +351,27 @@
           </ul>
           <span v-else>不明</span>
         </td></tr>
+        <tr><td colspan="2">
+            <router-link :to="{ name: 'compare', params: { nos: `${monsterData.evolution.baseNo},${monsterData.no}` } }">
+              進化前と進化後のパラメータ比較へ
+            </router-link>
+        </td><tr>
         </template>
       </table>
     </div>
     <div v-if="evolutionTable[monsterData.no]">
       <h4>このモンスターからの進化</h4>
       <table v-for="evolution in evolutionTable[monsterData.no]" class="table table-bordered table-sm">
-        <tr class="thead-light"><th>{{evolutionTypeTable[evolution.type]}}</th></tr>
-        <tr><td>
+        <tr class="thead-light"><th colspan="2">{{evolutionTypeTable[evolution.type]}}</th></tr>
+        <tr><td colspan="2">
           <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
           →
           <router-link v-if="evolution.no" :to="`/${evolution.no}`">
             <monster-icon :no="evolution.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
             No. {{evolution.no}} {{monsterTable[evolution.no] && monsterTable[evolution.no].name}}
           </router-link>
-          <br>
-          <router-link class="btn btn-secondary btn-sm" style="margin-top: 4px;"
-            :to="{ name: 'compare', params: { nos: `${monsterData.no},${evolution.no}` } }">
-            進化前と進化後のパラメータ比較へ
-          </router-link>
         </td></tr>
-        <tr class="thead-light"><th>進化素材</th></tr>
-        <tr><td>
+        <tr class="thead-light"><th style="width: 3em;">素材</th><td>
           <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
             <li v-for="material in evolution.materials" v-if="material" style="margin-right: 2px;">
               <router-link :to="`/${material}`">
@@ -388,6 +381,11 @@
           </ul>
           <span v-else>不明</span>
         </td></tr>
+        <tr><td colspan="2">
+          <router-link :to="{ name: 'compare', params: { nos: `${monsterData.no},${evolution.no}` } }">
+            進化前と進化後のパラメータ比較へ
+          </router-link>
+        </td><tr>
       </table>
       <router-link v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
         :to="{ name: 'compare', params: { nos: evolutionTable[monsterData.no].map(e => e.no).join(',') } }">
