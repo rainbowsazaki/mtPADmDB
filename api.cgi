@@ -362,7 +362,7 @@ sub mode_update_monster_data {
       if (!exists $target_ref->{$key}) { next; }
       $target_ref->{$key} =~ tr/０-９Ａ-Ｚａ-ｚ．　/0-9A-Za-z. /;
       $target_ref->{$key} =~ tr/\(\)\+%/（）＋％/;
-    	$target_ref->{$key} =~ s/^[\s　]*(.*?)[\s　]*$/$1/;
+    	$target_ref->{$key} =~ s/^[\r\n\s　]*(.*?)[\r\n\s　]*$/$1/;
     }
   }
   
