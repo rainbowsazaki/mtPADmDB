@@ -362,6 +362,14 @@ const store = new Vuex.Store({
 })
 
 
+// 数字をカンマ区切りにする。
+Vue.filter('addComma', function(val) {
+  var arr;
+  arr = String(val).split('.');
+  arr[0] = arr[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+  return arr.join('.');
+});
+
 Vue.component('pdSelect', {
   template: `
 <div class="dropdown pd-select" style="width: 100%">
