@@ -614,7 +614,7 @@ Vue.component('monsterIncrementalSearch', {
 Vue.component('pagination', {
   template: `
 <nav">
-  <ul class="pagination justify-content-center">
+  <ul class="pagination pagination-sm justify-content-center">
     <li class="page-item" :class="{ disabled: page <= 1 }">
       <router-link class="page-link" :to="createToObj(page - 1)" append aria-label="前">
         <span aria-hidden="true">&laquo;</span>
@@ -622,9 +622,9 @@ Vue.component('pagination', {
       </router-link>
     </li>
     
-    <li v-for="n in paginationNos" :class="{ 'page-item': 1, 'active': n == page }">
-      <router-link v-if="n != page" class="page-link" :to="createToObj(n)" append>{{n}}</router-link>
-      <span v-else class="page-link">{{n}}</span>
+    <li v-for="n in paginationNos" :class="{ 'page-item': 1, 'active': n == page }" style="min-width: 2.2em; text-align: center;">
+      <router-link v-if="n != page" class="page-link" style="padding:.25rem .2rem;" :to="createToObj(n)" append>{{n}}</router-link>
+      <span v-else class="page-link" style="padding:.25rem .35rem;">{{n}}</span>
     </li>
 
     <li class="page-item" :class="{ disabled: page >= pageCount }">
@@ -642,7 +642,7 @@ Vue.component('pagination', {
     'pageCount': Number,
     'itemCount': {
       type: Number,
-      default: 5
+      default: 7
     }
   },
   data: function () {
