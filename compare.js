@@ -334,10 +334,10 @@ var componentCompare = {
       return this.monsterDatas.find((o) => o.awakenObj[awakenNo] > 0);
     },
 
-    /** 指定されたモンスターデータの、レベル最大・攻撃+99 時の攻撃力を取得する。 */
+    /** 指定されたモンスターデータの、レベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
     maxAttack: function (monsterData) {
       if (monsterData.maxParam.attack == null) { return NaN; }
-      return monsterData.maxParam.attack + 495;
+      return monsterData.maxParam.attack + 495 + (monsterData.awakenObj[2] || 0) * 100;
     },
     /** 指定されたモンスターデータの、指定された覚醒発動時のレートを算出する。 */
     culcKakuseiRate: function (monsterData, awakenNo, oneRate) {
