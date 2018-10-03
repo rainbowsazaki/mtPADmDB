@@ -337,31 +337,31 @@ var componentCompare = {
     /** 指定されたモンスターデータの、レベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
     maxAttack: function (monsterData) {
       if (monsterData.maxParam.attack == null) { return NaN; }
-      return monsterData.maxParam.attack + 495 + (monsterData.awakenObj[2] || 0) * 100;
+      return monsterData.maxParam.attack + 495 + (monsterData.awakenObj[2] || 0) * this.awakenTable[2].value;
     },
     /** 指定されたモンスターデータの、指定された覚醒発動時のレートを算出する。 */
-    culcKakuseiRate: function (monsterData, awakenNo, oneRate) {
-      return Math.pow(oneRate, monsterData.awakenObj[awakenNo] | 0);
+    culcKakuseiRate: function (monsterData, awakenNo) {
+      return Math.pow(this.awakenTable[awakenNo].rate, monsterData.awakenObj[awakenNo] | 0);
     },
     /** 指定されたモンスターデータの、２体攻撃発動時の攻撃力レートを取得する。 */
     wayAttackRate: function (monsterData) {
-      return this.culcKakuseiRate(monsterData, 27, 1.5);
+      return this.culcKakuseiRate(monsterData, 27);
     },
     /** 指定されたモンスターデータの、L字攻撃発動時の攻撃力レートを取得する。 */
     lJiAttackRate: function (monsterData) {
-      return this.culcKakuseiRate(monsterData, 60, 1.5);
+      return this.culcKakuseiRate(monsterData, 60);
     },
     /** 指定されたモンスターデータの、コンボ強化発動時の攻撃力レートを取得する。 */
     comboUpAttackRate: function (monsterData) {
-      return this.culcKakuseiRate(monsterData, 43, 2);
+      return this.culcKakuseiRate(monsterData, 43);
     },
     /** 指定されたモンスターデータの、超コンボ強化発動時の攻撃力レートを取得する。 */
     spComboUpAttackRate: function (monsterData) {
-      return this.culcKakuseiRate(monsterData, 61, 5);
+      return this.culcKakuseiRate(monsterData, 61);
     },
     /** 指定されたモンスターデータの、ダメージ無効貫通発動時の攻撃力レートを取得する。 */
     a3x3AttackRate: function (monsterData) {
-      return this.culcKakuseiRate(monsterData, 48, 2.5);
+      return this.culcKakuseiRate(monsterData, 48);
     },
   }
 };
