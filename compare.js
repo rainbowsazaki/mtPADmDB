@@ -185,7 +185,7 @@ var componentCompare = {
   <table class="table table-bordered table-sm">
     <template v-for="data in monsterDatas">
       <tr class="thead-light">
-        <th rowspan="2" style="width: 3em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" /></th>
+        <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
         <td v-if="data.skill == null">不明</td>
         <td v-else>
           {{skillTable[data.skill].name}}
@@ -201,7 +201,7 @@ var componentCompare = {
   <table class="table table-bordered table-sm">
     <template v-for="data in monsterDatas">
       <tr class="thead-light">
-        <th rowspan="2" style="width: 3em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" /></th>
+        <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
         <td v-if="data.leaderSkill == null">不明</td>
         <td v-else>
           {{leaderSkillTable[data.leaderSkill].name}}
