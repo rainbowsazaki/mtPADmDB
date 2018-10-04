@@ -114,43 +114,43 @@ var componentCompare = {
       </tr>
       <tr v-if="hasWay" class="thead-light">
         <th>4個消し</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasLJi" class="thead-light">
         <th>L字消し</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasComboUp" class="thead-light">
         <th>7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * comboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasSpComboUp" class="thead-light">
         <th>10コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasWay && hasComboUp" class="thead-light">
         <th>4個消し 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) * comboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasWay && hasSpComboUp" class="thead-light">
         <th>4個消し 10コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * wayAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasLJi && hasComboUp" class="thead-light">
         <th>L字消し 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) * comboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasLJi && hasSpComboUp" class="thead-light">
         <th>L字消し 10コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * lJiAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasA3x3" class="thead-light">
         <th>無効貫通</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * a3x3AttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * a3x3AttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
         <th>無効貫通 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * a3x3AttackRate(data) * comboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * a3x3AttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
     </template>
     <template v-if="hasWay || hasA3x3">
@@ -159,23 +159,23 @@ var componentCompare = {
       </tr>
       <tr v-if="hasWay" class="thead-light">
         <th>4+3個消し</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasWay && hasComboUp" class="thead-light">
         <th>4+3個消し 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) * comboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasWay && hasComboUp" class="thead-light">
         <th>4+3個消し 10コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) * comboUpAttackRate(data) * spComboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasA3x3" class="thead-light">
         <th>無効貫通+3</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (2.5 * a3x3AttackRate(data) + 1) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (2.5 * a3x3AttackRate(data) + 1) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
         <th>無効貫通+3 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (2.5 * a3x3AttackRate(data) + 1) * comboUpAttackRate(data) | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (2.5 * a3x3AttackRate(data) + 1) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
     </template>
   </table>
@@ -225,6 +225,8 @@ var componentCompare = {
   },
 
   filters: {
+    /** 少数点以下を切り上げるフィルタ */
+    ceil: Math.ceil,
     /** パラメータが null の場合に 不明 と表示するためのフィルタ */
     nullToUndefined: function (val) {
       return (val === null || isNaN(val)) ? '不明' : val;
