@@ -192,7 +192,7 @@ var componentCompare = {
           <span style="font-size: 80%; float:right;">(最短ターン:<span v-if="skillTable[data.skill].baseTurn && skillTable[data.skill].maxLevel">{{skillTable[data.skill].baseTurn - skillTable[data.skill].maxLevel + 1}}</span><span v-else>不明</span>)</span>
         </td>
       </tr>
-      <tr v-if="data.skill"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillTable[data.skill].description}}</td></tr>
+      <tr v-if="data.skill"><td style="font-size: 90%; padding-left: 1em;">{{skillTable[data.skill].description}}</td></tr>
       <tr v-else><td></td></tr>
     </template>
   </table>
@@ -207,7 +207,7 @@ var componentCompare = {
           {{leaderSkillTable[data.leaderSkill].name}}
         </td>
       </tr>
-      <tr v-if="data.leaderSkill"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{leaderSkillTable[data.leaderSkill].description}}</td></tr>
+      <tr v-if="data.leaderSkill"><td style="font-size: 90%; padding-left: 1em;">{{leaderSkillTable[data.leaderSkill].description}}</td></tr>
       <tr v-else><td></td></tr>
     </template>
   </table>
