@@ -22,6 +22,7 @@ const constData = {
   /** ナビゲーションメニュー用データ */
   navis: [
     { text: 'ホーム', to: '/' },
+    { text: 'パラメータ比較', to: '/compare' },
     { text: '新規登録', to: '/edit' },
     { text: '画像投稿', to: '/pic' },
     { text: 'これは何？', to: '/about' },
