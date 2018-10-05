@@ -244,7 +244,7 @@ var componentCompare = {
 
     /** モンスター情報がすべて存在しているかどうかを取得する。 */
     isEnableMonsterDatas: function () {
-      return (this.monsterDatas.indexOf(null) == -1);
+      return (this.monsterDatas.length > 0 && this.monsterDatas.indexOf(null) == -1);
     },
     /** 限界突破可能なモンスターがいるかどうかを取得する。 */
     hasOverLimit: function () {
