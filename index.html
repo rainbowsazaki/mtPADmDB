@@ -338,11 +338,11 @@
       </div>
     </div>
     <div v-if="monsterData.evolutionType !== 0">
-      <h4>このモンスターへの進化</h4>
+      <h3 class="h4">このモンスターへの進化</h3>
       <table class="table table-bordered table-sm">
-        <tr class="thead-light"><th>{{evolutionTypeTable[monsterData.evolutionType]}}</th></tr>
+        <tr class="thead-light"><th colspan="2">{{evolutionTypeTable[monsterData.evolutionType]}}</th></tr>
         <template v-if="monsterData.evolutionType !== null">
-        <tr><td>
+        <tr><td colspan="2">
           <template v-if="monsterData.evolution.baseNo">
             <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
             ←
@@ -353,8 +353,7 @@
           </template>
           <span v-else>進化元不明</span>
         </td></tr>
-        <tr class="thead-light"><th>進化素材</th></tr>
-        <tr><td>
+        <tr class="thead-light"><th style="width: 3em;">素材</th><td>
           <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
             <li v-for="material in monsterData.evolution.materials" v-if="material" style="margin-right: 2px;">
               <router-link :to="`/${material}`">
@@ -364,24 +363,27 @@
           </ul>
           <span v-else>不明</span>
         </td></tr>
+        <tr><td colspan="2">
+            <router-link :to="{ name: 'compare', params: { nos: `${monsterData.evolution.baseNo},${monsterData.no}` } }">
+              進化前と進化後のパラメータ比較へ
+            </router-link>
+        </td><tr>
         </template>
       </table>
     </div>
     <div v-if="evolutionTable[monsterData.no]">
-      <h4>このモンスターからの進化</h4>
+      <h3 class="h4">このモンスターからの進化</h3>
       <table v-for="evolution in evolutionTable[monsterData.no]" class="table table-bordered table-sm">
-        <tr class="thead-light"><th>{{evolutionTypeTable[evolution.type]}}</th></tr>
-        <tr><td>
+        <tr class="thead-light"><th colspan="2">{{evolutionTypeTable[evolution.type]}}</th></tr>
+        <tr><td colspan="2">
           <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
           →
           <router-link v-if="evolution.no" :to="`/${evolution.no}`">
             <monster-icon :no="evolution.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
             No. {{evolution.no}} {{monsterTable[evolution.no] && monsterTable[evolution.no].name}}
           </router-link>
-          <span v-else>不明</span>
         </td></tr>
-        <tr class="thead-light"><th>進化素材</th></tr>
-        <tr><td>
+        <tr class="thead-light"><th style="width: 3em;">素材</th><td>
           <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
             <li v-for="material in evolution.materials" v-if="material" style="margin-right: 2px;">
               <router-link :to="`/${material}`">
@@ -391,20 +393,28 @@
           </ul>
           <span v-else>不明</span>
         </td></tr>
+        <tr><td colspan="2">
+          <router-link :to="{ name: 'compare', params: { nos: `${monsterData.no},${evolution.no}` } }">
+            進化前と進化後のパラメータ比較へ
+          </router-link>
+        </td><tr>
       </table>
+      <router-link v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
+        :to="{ name: 'compare', params: { nos: evolutionTable[monsterData.no].map(e => e.no).join(',') } }">
+        進化後{{evolutionTable[monsterData.no].length}}種類のパラメータ比較へ
+      </router-link>
     </div>
     <div v-if="monsterData.comment">
-      <table class="table table-bordered table-sm">
-        <tr class="thead-light"><th>編集コメント</th></tr>
-        <tr><td>{{monsterData.comment}}</td></tr>
-      </table>
+      <h3 class="h4">編集コメント</h3>
+      <div>{{monsterData.comment}}</div>
     </div>
+    <hr />
     <router-link v-if="isHistory" :to=" `/history/${$route.params.id}/edit`" class="btn btn-primary">履歴をもとに編集する</router-link>
     <router-link v-else :to="`/${monsterData.no}/edit`" class="btn btn-primary">編集する</router-link>
     <router-link :to="`/${monsterData.no}/pic`" class="btn btn-primary">モンスター画像投稿</router-link>
 
     <div style="margin-top: 1rem;">
-      <h4>編集履歴</h4>
+      <h3 class="h4">編集履歴</h3>
       <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
         {{isLoadingHistory ? '読み込み中…' : '編集履歴を確認する'}}
       </button>
@@ -772,6 +782,7 @@
 
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
+<script src="./compare.js"></script>
 <script src="./script.js"></script>
 
 </body>
