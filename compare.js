@@ -15,7 +15,7 @@ var componentCompare = {
         <monster-incremental-search v-model="targets[n - 1]" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">比較対象を更新する。</button>
+    <button type="submit" class="btn btn-primary">{{ isEnableMonsterDatas ? '比較表を更新する' : '比較表を表示する' }}</button>
   </form>
 
   <template v-if="isEnableMonsterDatas">
