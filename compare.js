@@ -324,7 +324,7 @@ var componentCompare = {
 
     getSenzaiKillerNos: function (monsterData) {
       // 合成できないものは潜在覚醒を降ることができないので無し。
-      if (!this.canAddPlus) { return [] }
+      if (!this.canAddPlus(monsterData)) { return [] }
       var killerNoSet = new Set();
       for (var type of monsterData.types) {
         for (var killerNo of this.typeTable[type].senzaiKiller) {
@@ -332,7 +332,14 @@ var componentCompare = {
         }
       }
       return Array.from(killerNoSet).sort(((a, b) => a - b ));
+    },
 
+    /** プラスが振れるキャラクターかどうかを返す。 */
+    canAddPlus: function (monsterData) {
+      // 素材系のタイプの場合はプラス合成不可と判断する。
+      // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
+      var type = monsterData.types[0];
+      return !((type >= 9 && type <= 12) || type == 99);
     },
 
     /** 比較対象の中に指定された覚醒を持つモンスターがいるかどうかを取得する。 */
