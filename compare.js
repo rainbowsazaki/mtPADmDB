@@ -9,12 +9,14 @@ var componentCompare = {
 <div>
   <h2>モンスター情報比較</h2>
   <h3>比較対象指定</h3>
-  <div class="row">
-    <div class="col-md-6" v-for="n in 2">
-      <monster-incremental-search v-model="targets[n - 1]" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
+  <form @submit="$event.preventDefault(); updateCompareMonster();">
+    <div class="row">
+      <div class="col-md-6" v-for="n in 2">
+        <monster-incremental-search v-model="targets[n - 1]" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
+      </div>
     </div>
-  </div>
-  <button class="btn btn-primary" @click="updateCompareMonster">比較対象を更新する。</button>
+    <button type="submit" class="btn btn-primary">比較対象を更新する。</button>
+  </form>
 
   <template v-if="isEnableMonsterDatas">
   <h3>比較表</h3>
