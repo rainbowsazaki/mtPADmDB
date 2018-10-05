@@ -162,23 +162,23 @@ var componentCompare = {
       </tr>
       <tr v-if="hasWay" class="thead-light">
         <th>4+3個消し</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) | ceil | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasWay && hasComboUp" class="thead-light">
         <th>4+3個消し 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasWay && hasComboUp" class="thead-light">
         <th>4+3個消し 10コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (1.25 * wayAttackRate(data) + 1) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasA3x3" class="thead-light">
         <th>無効貫通+3</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (2.5 * a3x3AttackRate(data) + 1) | ceil | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) | ceil | nullToUndefined }}</td>
       </tr>
       <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
         <th>無効貫通+3 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (2.5 * a3x3AttackRate(data) + 1) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
     </template>
   </table>
@@ -344,6 +344,10 @@ var componentCompare = {
     maxAttack: function (monsterData) {
       if (monsterData.maxParam.attack == null) { return NaN; }
       return monsterData.maxParam.attack + 495 + (monsterData.awakenObj[2] || 0) * this.awakenTable[2].value;
+    },
+    /** 削除個数に応じてかかるダメージのレート */
+    eraseDropCountRate: function (count) {
+      return (count + 1) * 0.25;
     },
     /** 指定されたモンスターデータの、指定された覚醒発動時のレートを算出する。 */
     culcKakuseiRate: function (monsterData, awakenNo) {
