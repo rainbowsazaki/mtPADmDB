@@ -168,7 +168,7 @@ var componentCompare = {
         <th>4+3個消し 7コンボ</th>
         <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
-      <tr v-if="hasWay && hasComboUp" class="thead-light">
+      <tr v-if="hasWay && hasSpComboUp" class="thead-light">
         <th>4+3個消し 10コンボ</th>
         <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined }}</td>
       </tr>
