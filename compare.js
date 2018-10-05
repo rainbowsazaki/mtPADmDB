@@ -21,10 +21,10 @@ var componentCompare = {
   <template v-if="isEnableMonsterDatas">
 
   <h3 style="margin-top: 1em;">比較表</h3>
-  <table class="table table-bordered table-sm">
+  <table class="table table-bordered table-sm" style="table-layout: fixed;">
     <tr class="thead-light">
       <th></th>
-      <td v-for="data in monsterDatas" style="width: 40%;">
+      <td v-for="data in monsterDatas">
         <monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
       </td>
     </tr>
