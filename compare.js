@@ -179,7 +179,6 @@ var componentCompare = {
       </tr>
     </template>
   </table>
-  </template>
 
   <h4>スキル</h4>
   <table class="table table-bordered table-sm">
@@ -211,6 +210,8 @@ var componentCompare = {
       <tr v-else><td></td></tr>
     </template>
   </table>
+
+  </template>
 </div>`,
   data: function () {
     return {
