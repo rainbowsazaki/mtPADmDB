@@ -111,7 +111,7 @@ var componentCompare = {
         <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.recovery | nullToUndefined | addComma }}</td>
       </tr>
     </template>
-    <template v-if="hasWay || hasComboUp || hasSpComboUp || hasA3x3">
+    <template v-if="hasWay || hasComboUp || hasSpComboUp || canA3x3Compare">
       <tr class="thead-light">
         <th :colspan="monsterDatas.length + 1">レベル最大 攻撃+99時 覚醒反映ダメージ （コンボ倍率除く）</th>
       </tr>
@@ -147,14 +147,14 @@ var componentCompare = {
         <th>L字消し 10コンボ</th>
         <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(5) *　lJiAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
       </tr>
-      <tr v-if="hasA3x3" class="thead-light">
+      <tr v-if="canA3x3Compare" class="thead-light">
         <th>無効貫通</th>
         <td v-for="data in monsterDatas" class="text-right">
           <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) *　a3x3AttackRate(data) | ceil | nullToUndefined | addComma}}</span>
           <span v-else>−</span>
         </td>
       </tr>
-      <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
+      <tr v-if="canA3x3Compare && hasComboUp" class="thead-light">
         <th>無効貫通 7コンボ</th>
         <td v-for="data in monsterDatas" class="text-right">
           <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) *　a3x3AttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</span>
@@ -162,7 +162,7 @@ var componentCompare = {
         </td>
       </tr>
     </template>
-    <template v-if="hasWay || hasA3x3">
+    <template v-if="hasWay || canA3x3Compare">
       <tr class="thead-light">
         <th :colspan="monsterDatas.length + 1">レベル最大 攻撃+99時 覚醒反映複合消しダメージ （コンボ倍率除く）</th>
       </tr>
@@ -178,14 +178,14 @@ var componentCompare = {
         <th>4+3個消し 10コンボ</th>
         <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
       </tr>
-      <tr v-if="hasA3x3" class="thead-light">
+      <tr v-if="canA3x3Compare" class="thead-light">
         <th>無効貫通+3個</th>
         <td v-for="data in monsterDatas" class="text-right">
           <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) | ceil | nullToUndefined | addComma}}</span>
           <span v-else>−</span>
         </td>
       </tr>
-      <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
+      <tr v-if="canA3x3Compare && hasComboUp" class="thead-light">
         <th>無効貫通+3個 7コンボ</th>
           <td v-for="data in monsterDatas" class="text-right">
           <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</span>
@@ -287,6 +287,10 @@ var componentCompare = {
     hasA3x3: function () {
       return this.HasAwakenMonster(48);
     },
+    /** 比較対象の中にダメージ無効貫通を持つモンスターが２体以上いて比較可能かどうかを取得する。 */
+    canA3x3Compare: function () {
+      return this.GetAwakenMonsterCount(48) >= 2;
+    }
   },
 
   methods: {
@@ -354,6 +358,10 @@ var componentCompare = {
       return !((type >= 9 && type <= 12) || type == 99);
     },
 
+    /** 比較対象の中に指定された覚醒を持つモンスターが何体いるかを取得する。 */
+    GetAwakenMonsterCount: function (awakenNo) {
+      return this.monsterDatas.filter((o) => o.awakenObj[awakenNo] > 0).length;
+    },
     /** 比較対象の中に指定された覚醒を持つモンスターがいるかどうかを取得する。 */
     HasAwakenMonster: function (awakenNo) {
       return this.monsterDatas.find((o) => o.awakenObj[awakenNo] > 0);
