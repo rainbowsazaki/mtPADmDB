@@ -25,8 +25,8 @@ var componentCompare = {
   <div style="overflow: auto;">
     <table class="table table-bordered table-sm" style="table-layout: fixed;">
       <tr class="thead-light">
-        <th style="width: 4.5em;"></th>
-        <td v-for="data in monsterDatas" style="width: 4.5em;">
+        <th style="width: 5em;"></th>
+        <td v-for="data in monsterDatas" style="width: 4.3em;">
           <monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
         </td>
       </tr>
