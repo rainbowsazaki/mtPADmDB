@@ -100,15 +100,24 @@ var componentCompare = {
       </tr>
       <tr class="thead-light">
         <th>HP</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.hp | nullToUndefined | addComma }}</td>
+        <td v-for="data in monsterDatas" class="text-right">
+          <span v-if="data.overLimit">{{data.overLimitParam.hp | nullToUndefined | addComma }}</span>
+          <span v-else>−</span>
+        </td>
       </tr>
       <tr class="thead-light">
         <th>攻撃</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.attack | nullToUndefined | addComma }}</td>
+        <td v-for="data in monsterDatas" class="text-right">
+          <span v-if="data.overLimit">{{data.overLimitParam.attack | nullToUndefined | addComma }}</span>
+          <span v-else>−</span>
+        </td>
       </tr>
       <tr class="thead-light">
         <th>回復</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.recovery | nullToUndefined | addComma }}</td>
+        <td v-for="data in monsterDatas" class="text-right">
+          <span v-if="data.overLimit">{{data.overLimitParam.recovery | nullToUndefined | addComma }}</span>
+          <span v-else>−</span>
+        </td>
       </tr>
     </template>
     <template v-if="hasWay || hasComboUp || hasSpComboUp || canA3x3Compare">
