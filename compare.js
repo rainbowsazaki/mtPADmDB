@@ -149,11 +149,17 @@ var componentCompare = {
       </tr>
       <tr v-if="hasA3x3" class="thead-light">
         <th>無効貫通</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(9) *　a3x3AttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+        <td v-for="data in monsterDatas" class="text-right">
+          <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) *　a3x3AttackRate(data) | ceil | nullToUndefined | addComma}}</span>
+          <span v-else>−</span>
+        </td>
       </tr>
       <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
         <th>無効貫通 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(9) *　a3x3AttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+        <td v-for="data in monsterDatas" class="text-right">
+          <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) *　a3x3AttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</span>
+          <span v-else>−</span>
+        </td>
       </tr>
     </template>
     <template v-if="hasWay || hasA3x3">
@@ -174,11 +180,17 @@ var componentCompare = {
       </tr>
       <tr v-if="hasA3x3" class="thead-light">
         <th>無効貫通+3個</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) | ceil | nullToUndefined | addComma}}</td>
+        <td v-for="data in monsterDatas" class="text-right">
+          <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) | ceil | nullToUndefined | addComma}}</span>
+          <span v-else>−</span>
+        </td>
       </tr>
       <tr v-if="hasA3x3 && hasComboUp" class="thead-light">
         <th>無効貫通+3個 7コンボ</th>
-        <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">
+          <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</span>
+          <span v-else>−</span>
+        </td>
       </tr>
     </template>
   </table>
@@ -345,6 +357,11 @@ var componentCompare = {
     /** 比較対象の中に指定された覚醒を持つモンスターがいるかどうかを取得する。 */
     HasAwakenMonster: function (awakenNo) {
       return this.monsterDatas.find((o) => o.awakenObj[awakenNo] > 0);
+    },
+
+    /** 指定されたモンスターデータがダメージ無効貫通を持っているかどうかを取得する。 */
+    HasA3x3Awaken: function (monsterData) {
+      return monsterData.awakenObj[48] > 0;
     },
 
     /** 指定されたモンスターデータの、レベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
