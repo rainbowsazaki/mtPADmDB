@@ -55,8 +55,9 @@ var componentCompare = {
       <span v-if="data.awakens[0] === 0">なし</span>
       <span v-else-if="data.awakens[0] === null">不明</span>
       <ul v-else style="list-style: none; margin: 0px; padding: 0px;">
-        <li v-for="awaken in data.awakens">
+        <li v-for="(count, awaken) in data.awakenObj" v-if="awaken != 0" class="text-nowrap">
           <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[awaken].name + '\\n\\n' + awakenTable[awaken].description" />
+          × {{count}}
         </li>
       </ul>
     </td>
