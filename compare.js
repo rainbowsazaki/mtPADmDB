@@ -84,15 +84,15 @@ var componentCompare = {
     
     <tr class="thead-light">
       <th>HP</th>
-      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.hp | nullToUndefined}}</td>
+      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.hp | nullToUndefined | addComma }}</td>
     </tr>
     <tr class="thead-light">
       <th>攻撃</th>
-      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.attack | nullToUndefined}}</td>
+      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.attack | nullToUndefined | addComma }}</td>
     </tr>
     <tr class="thead-light">
       <th>回復</th>
-      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.recovery | nullToUndefined}}</td>
+      <td v-for="data in monsterDatas" class="text-right">{{data.maxParam.recovery | nullToUndefined | addComma }}</td>
     </tr>
     <template v-if="hasOverLimit">
       <tr class="thead-light">
@@ -100,15 +100,15 @@ var componentCompare = {
       </tr>
       <tr class="thead-light">
         <th>HP</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.hp | nullToUndefined}}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.hp | nullToUndefined | addComma }}</td>
       </tr>
       <tr class="thead-light">
         <th>攻撃</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.attack | nullToUndefined}}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.attack | nullToUndefined | addComma }}</td>
       </tr>
       <tr class="thead-light">
         <th>回復</th>
-        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.recovery | nullToUndefined}}</td>
+        <td v-for="data in monsterDatas" class="text-right">{{data.overLimitParam.recovery | nullToUndefined | addComma }}</td>
       </tr>
     </template>
     <template v-if="hasWay || hasComboUp || hasSpComboUp || hasA3x3">
