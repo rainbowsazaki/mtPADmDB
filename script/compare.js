@@ -21,6 +21,7 @@ var componentCompare = {
   <template v-if="isEnableMonsterDatas">
 
   <h3 style="margin-top: 1em;">比較表</h3>
+  <div><tweet-button /></div>
 
   <div style="overflow: auto;">
     <table class="table table-bordered table-sm" style="table-layout: fixed;">
