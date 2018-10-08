@@ -14,8 +14,8 @@ var componentCompare = {
   <h3>比較対象指定</h3>
   <form @submit="$event.preventDefault(); updateCompareMonster();">
     <div class="row" style="margin-bottom: 4px;">
-      <div class="col-md-6" v-for="n in 2">
-        <monster-incremental-search v-model="targets[n - 1]" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
+      <div class="col-md-12" v-for="(target, i) in targets">
+        <monster-incremental-search v-model="targets[i]" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
       </div>
     </div>
     <button type="submit" class="btn btn-primary">{{ isEnableMonsterDatas ? '比較表を更新する' : '比較表を表示する' }}</button>
@@ -324,6 +324,7 @@ var componentCompare = {
 
     load: function () {
       this.targets = (this.$route.params.nos || '').split(/,/g);
+      if (this.targets.length < 2) { this.targets.length = 2; }
       this.monsterDatas = [];
       if (this.$route.params.nos) {
         for (var i = 0; i < this.targets.length; i++) {
