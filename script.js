@@ -1671,7 +1671,7 @@ function getRouterBase () {
 
 // ルートオプションを渡してルーターインスタンスを生成します
 var router = new VueRouter({
-  //mode: 'history',
+  mode: 'history',
   base: getRouterBase(),
   // 各ルートにコンポーネントをマッピングします
   // コンポーネントはVue.extend() によって作られたコンポーネントコンストラクタでも

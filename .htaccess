@@ -1,11 +1,11 @@
 <IfModule mod_rewrite.c>
-#  Options FollowSymLinks
-  
-#  RewriteEngine On
-#  RewriteCond %{REQUEST_FILENAME} !-f
-#  RewriteCond %{REQUEST_FILENAME} !-d
-#  RewriteCond %{REQUEST_URI} !\.(css|js|jpe?g|gif|png)$
-#  RewriteRule (.*) index.html [L,QSA]
+  Options FollowSymLinks
+    
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !\.(css|js|jpe?g|gif|png)$
+  RewriteRule (.*) index.html [L,QSA]
 </IfModule>
 
 <Files ~ "\.(gif|png|jpe?g)$">
