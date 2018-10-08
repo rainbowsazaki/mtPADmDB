@@ -4,7 +4,10 @@
  */
 var componentCompare = {
   name: "pageCompare",
-  pageTitle: function () { return 'モンスター情報比較' },
+  pageTitle: function () {
+    if (!this.isEnableMonsterDatas) { return 'モンスター比較'; }
+    return 'モンスター比較 ' + this.targets.map(no => (this.monsterTable[no] || {}).name).join(',');
+  },
   template: `
 <div>
   <h2>モンスター情報比較</h2>
@@ -252,6 +255,8 @@ var componentCompare = {
   created: function () { this.load(); },
   watch: {
     "$route": function () { this.load(); },
+    monsterTable: "$_mixinForPage_updateTitle",
+    isEnableMonsterDatas: "$_mixinForPage_updateTitle",
   },
 
   filters: {
@@ -325,6 +330,7 @@ var componentCompare = {
           this._load(i, this.targets[i]);
         }
       }
+      this.$_mixinForPage_updateTitle();
     },
 
     _load: function (index, monsterNo) {
