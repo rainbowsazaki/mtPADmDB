@@ -1232,7 +1232,7 @@ const componentMonsterEdit = {
       this.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
       this.$_mixinForPage_updateTitle();
 
-      let commitParam = undefined;
+      let commitParam = null;
       if (this.isHistory) {
         commitParam = { historyId: this.$route.params.id };
       }
