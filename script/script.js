@@ -1,3 +1,4 @@
+/*global componentCompare */
 
 var commonData = {
 
