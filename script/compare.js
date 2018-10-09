@@ -250,14 +250,14 @@ window.componentCompare = {
     return {
       monsterDatas: [],
 
-      targets: [0, 0],
+      targets: [0, 0]
     };
   },
   created: function () { this.load(); },
   watch: {
     '$route': function () { this.load(); },
     monsterTable: '$_mixinForPage_updateTitle',
-    isEnableMonsterDatas: '$_mixinForPage_updateTitle',
+    isEnableMonsterDatas: '$_mixinForPage_updateTitle'
   },
 
   filters: {
@@ -427,7 +427,7 @@ window.componentCompare = {
     /** 指定されたモンスターデータの、ダメージ無効貫通発動時の攻撃力レートを取得する。 */
     a3x3AttackRate: function (monsterData) {
       return this.culcKakuseiRate(monsterData, 48);
-    },
+    }
   }
 };
 

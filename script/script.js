@@ -26,7 +26,7 @@ const constData = {
     { text: 'パラメータ比較', to: '/compare' },
     { text: '新規登録', to: '/edit' },
     { text: '画像投稿', to: '/pic' },
-    { text: 'これは何？', to: '/about' },
+    { text: 'これは何？', to: '/about' }
   ],
 
   /** モンスター情報の空データ */
@@ -79,7 +79,7 @@ const constData = {
     0: '×',
     1: '○',
 
-    null: '不明',
+    null: '不明'
   },
 
   typeTable: {
@@ -97,7 +97,7 @@ const constData = {
     11: { name: '合成強化用', senzaiKiller: [] },
     12: { name: '売却用', senzaiKiller: [] },
 
-    null: { name: '不明', senzaiKiller: [] },
+    null: { name: '不明', senzaiKiller: [] }
   },
 
   attributeTable: {
@@ -107,7 +107,7 @@ const constData = {
     3: '木',
     4: '光',
     5: '闇',
-    null: '不明',
+    null: '不明'
   },
 
   attrColors: {
@@ -118,7 +118,7 @@ const constData = {
     4: 'rgba(255, 255, 0, 1.0)',
     5: 'rgba(192, 0, 192, 1.0)',
 
-    null: 'rgba(192, 192, 192, 1.0)',
+    null: 'rgba(192, 192, 192, 1.0)'
   },
 
   evolutionTypeTable: {
@@ -199,8 +199,8 @@ const constData = {
     63: { name: 'スキルボイス', description: 'スキル使用時に声が出る' },
     64: { name: 'ダンジョンボーナス', description: '1人プレイのときにランク経験値、モンスター経験値、入手コイン、卵ドロップ率がほんの少し上昇' },
 
-    null: { name: '不明', description: '' },
-  },
+    null: { name: '不明', description: '' }
+  }
 
 };
 
@@ -273,7 +273,7 @@ const store = new Vuex.Store({
       axios.all([
         axios.get('./listJson/skill_list.json'),
         axios.get('./listJson/leader_skill_list.json'),
-        axios.get('./listJson/evolution_list.json'),
+        axios.get('./listJson/evolution_list.json')
       ]).then( axios.spread( (
         skillListResponse,
         leaderSkillListResponse,
@@ -384,7 +384,7 @@ Vue.component('pdSelect', {
   props: [ 'value' ],
   data: function () {
     return {
-      html: '',
+      html: ''
     };
   },
   mounted: function () {
@@ -419,8 +419,8 @@ Vue.component('pdSelect', {
           this.html = $(elem).html();
         }
       });
-    },
-  },
+    }
+  }
 });
 
 
@@ -459,7 +459,7 @@ Vue.component('skillIncrementalInput', {
     'placeholder': String,
     'required': {
       type: Boolean,
-      default: true,
+      default: true
     }
   },
 
@@ -475,7 +475,7 @@ Vue.component('skillIncrementalInput', {
         }
       }
       return obj;
-    },
+    }
   },
   methods: {
     showPopup: function (target) {
@@ -484,7 +484,7 @@ Vue.component('skillIncrementalInput', {
       }
       $(target).dropdown('update');
     }
-  },
+  }
 });
 
 
@@ -521,7 +521,7 @@ Vue.component('monsterIncrementalInput', {
     },
     monsterTable: function () {
       if (this.filter == '') { this.updateFilter(); }
-    },
+    }
   },
   computed: {
     filteredMonsterTable: function () {
@@ -535,7 +535,7 @@ Vue.component('monsterIncrementalInput', {
         }
       }
       return obj;
-    },
+    }
   },
   
   methods: {
@@ -553,7 +553,7 @@ Vue.component('monsterIncrementalInput', {
       }
       $(target).dropdown('update');
     }
-  },
+  }
 });
 
 
@@ -642,9 +642,9 @@ Vue.component('pagination', {
       return {
         path: this.$route.path,
         params: this.$route.params,
-        query: query,
+        query: query
       };
-    },
+    }
   },
 
   computed: {
@@ -667,7 +667,7 @@ Vue.component('pagination', {
         array.push(i);
       }
       return array;
-    },
+    }
   }
 });
 
@@ -706,11 +706,11 @@ Vue.component('monsterIcon', {
 Vue.component('tweetButton', {
   template: '<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>',
   props: {
-    'hashtags': String,
+    'hashtags': String
   },
   data: function () {
     return {
-      id: 'tweetButton' + (Math.random() * 1000000).toFixed(0),
+      id: 'tweetButton' + (Math.random() * 1000000).toFixed(0)
     };
   },
   mounted: function () {
@@ -737,7 +737,7 @@ Vue.component('tweetButton', {
         location.href,
         document.getElementById(this.id),
         {
-          hashtags: hashtags,
+          hashtags: hashtags
         }
       );
     }
@@ -763,7 +763,7 @@ let mixinForPage = {
           document.title = `${pageTitle} - ${constData.title}`;
           // パンくずリスト
           let breadcrumbs = [
-            { text: 'ホーム', link: '/' },
+            { text: 'ホーム', link: '/' }
           ];
           let middleOfBreadcrumbs = this.$options.middleOfBreadcrumbs;
           if (typeof middleOfBreadcrumbs === 'function') {
@@ -779,12 +779,12 @@ let mixinForPage = {
           document.title = constData.title;
           // パンくずリスト
           this.$root.breadcrumbs = [
-            { text: 'ホーム' },
+            { text: 'ホーム' }
           ];
         }
       }
-    },
-  },
+    }
+  }
 };
 
 Vue.mixin(mixinForPage);
@@ -796,7 +796,7 @@ Vue.mixin(mixinForPage);
 let componentAbout = {
   name: 'pageAbout',
   template: '#templateAbout',
-  pageTitle: 'これは何？',
+  pageTitle: 'これは何？'
 };
 
 
@@ -810,7 +810,7 @@ let componentMonsterList = {
   data: function () {
     return {
       searchWord: '',
-      inPageCount: 50,
+      inPageCount: 50
     };
   },
 
@@ -852,7 +852,7 @@ let componentMonsterList = {
 
     search: function () {
       this.$router.push({ path: this.$router.path, query: { searchWord: this.searchWord }});
-    },
+    }
 
   }
 };
@@ -881,7 +881,7 @@ let componentMonsterData = {
       /** 履歴情報の読み込み中かどうか。 */
       isLoadingHistory: false,
       /** 履歴情報 */
-      histories: null,
+      histories: null
     };
   },
   created: function () {
@@ -903,7 +903,7 @@ let componentMonsterData = {
       let param = {
         callback: () => {
           this.$_mixinForPage_updateTitle();
-        },
+        }
       };
 
       if (this.isHistory) {
@@ -922,7 +922,7 @@ let componentMonsterData = {
       let obj = {
         hp: param.hp / 10,
         attack: param.attack / 5,
-        recovery: param.recovery / 3,
+        recovery: param.recovery / 3
       };
       obj.total = obj.hp + obj.attack + obj.recovery;
       return obj;
@@ -1037,8 +1037,8 @@ let componentMonsterData = {
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
       return (this.$route.name == 'history');
-    },
-  },
+    }
+  }
 };
 
 
@@ -1055,7 +1055,7 @@ let componentHistory = {
   data: function () {
     return {
       /** 履歴情報 */
-      histories: null,
+      histories: null
     };
   },
   created: function () {
@@ -1090,8 +1090,8 @@ let componentHistory = {
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
       return (this.$route.name == 'history');
-    },
-  },
+    }
+  }
 };
 
 
@@ -1113,12 +1113,12 @@ let componentMonsterEdit = {
     if (this.isHistory) {
       return {
         text: `No.${this.monsterData.no} ${this.monsterData.name} (${this.monsterData.datetime})`,
-        link: `/history/${this.$route.params.id}`,
+        link: `/history/${this.$route.params.id}`
       };
     } else if (this.$route.params.no) {
       return {
         text: `No.${this.$route.params.no} ${this.monsterData.name}`,
-        link: `/${this.$route.params.no}`,
+        link: `/${this.$route.params.no}`
       };
     } else {
       return undefined;
@@ -1135,7 +1135,7 @@ let componentMonsterEdit = {
 
       monsterData: {},
       /** 送信済みかどうか。 */
-      isSubmitted: false,
+      isSubmitted: false
     };
   },
 
@@ -1234,7 +1234,7 @@ let componentMonsterEdit = {
     /** 超覚醒が 不明 かどうか */
     isUnknownSuperAwaken: function () {
       return this.monsterData.superAwakens.indexOf(null) != -1;
-    },
+    }
   },
   
   methods: {
@@ -1325,7 +1325,7 @@ let componentMonsterEdit = {
         }
       });
     }
-  },
+  }
 };
 
 
@@ -1357,7 +1357,7 @@ let componentPic = {
       imageResultSrc: '',
       iconResultSrc: '',
       /** 送信済みかどうか */
-      isSubmitted: false,
+      isSubmitted: false
     };
   },
 
@@ -1577,7 +1577,7 @@ let componentPic = {
 
       axios.post('./api.cgi', formData, {
         headers: { 'content-type': 'multipart/form-data' },
-        onUploadProgress: onUploadProgress,
+        onUploadProgress: onUploadProgress
       }).then(response => {
         // レスポンス来なかったときの復帰処理を止める。
         clearTimeout(timeoutId);
@@ -1674,7 +1674,7 @@ let router = new VueRouter({
     },
     {
       path: '/about',
-      component: componentAbout,
+      component: componentAbout
     },
     {
       path: '/history',
@@ -1709,14 +1709,14 @@ let router = new VueRouter({
     {
       path: '/compare/:no1/:no2',
       name: 'compare',
-      component: componentCompare,
+      component: componentCompare
     },
     
     {
       path: '/:no',
       component: componentMonsterData,
       props: true
-    },
+    }
   ]
 });
 
@@ -1730,7 +1730,7 @@ new Vue({
   router: router,
   store: store,
   data: {
-    breadcrumbs: [],
+    breadcrumbs: []
   },
   created: function () {
     this.$store.commit('fetchCommonData');
@@ -1751,7 +1751,7 @@ new Vue({
       // タイトルを変更させるために少しあとに実行する。
       setTimeout(() => {
         gtagProductionOnly('config', 'UA-124771141-1', {
-          'page_location': location.href,
+          'page_location': location.href
         });
       }, 1);
     },
@@ -1760,7 +1760,7 @@ new Vue({
       if ($('#navbarNav').hasClass('show')) {
         $('button.navbar-toggler').click();
       }
-    },
+    }
 
   },
   computed: {
