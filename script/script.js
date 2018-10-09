@@ -267,7 +267,6 @@ const store = new Vuex.Store({
       axios.get('./listJson/image_list.json')
         .then(responce => {
           state.imageTable = responce.data;
-
         });
 
       axios.all([
@@ -1511,7 +1510,6 @@ const componentPic = {
 
           canvas.width = canvas.height = 0;
         };
-          
       };
       // ファイル読み込みを実行
       reader.readAsDataURL(fileData);
