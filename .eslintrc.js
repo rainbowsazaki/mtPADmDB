@@ -12,7 +12,7 @@ module.exports = {
       "gtag": true,
       "twttr": true
     },
-    "extends": "eslint:recommended",
+    "extends": ['vue', 'plugin:vue/recommended'],
     "parserOptions": {
         "ecmaVersion": 2016
     },
