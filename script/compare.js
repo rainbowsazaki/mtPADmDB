@@ -328,7 +328,7 @@ window.componentCompare = {
       if (this.targets.length < 2) { this.targets.length = 2; }
       this.monsterDatas = [];
       if (this.$route.params.nos) {
-        for (var i = 0; i < this.targets.length; i++) {
+        for (let i = 0; i < this.targets.length; i++) {
           this._load(i, this.targets[i]);
         }
       }
@@ -346,7 +346,7 @@ window.componentCompare = {
           if (!data.superAwakens) { data.superAwakens = []; }
 
           data.awakenObj = {};
-          for (var awaken of data.awakens) {
+          for (let awaken of data.awakens) {
             data.awakenObj[awaken] = (data.awakenObj[awaken] || 0) + 1;
           }
           Vue.set(this.monsterDatas, index, data);
@@ -365,8 +365,8 @@ window.componentCompare = {
       // 合成できないものは潜在覚醒を降ることができないので無し。
       if (!this.canAddPlus(monsterData)) { return []; }
       var killerNoSet = new Set();
-      for (var type of monsterData.types) {
-        for (var killerNo of this.typeTable[type].senzaiKiller) {
+      for (let type of monsterData.types) {
+        for (let killerNo of this.typeTable[type].senzaiKiller) {
           killerNoSet.add(killerNo);
         }
       }

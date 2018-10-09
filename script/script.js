@@ -468,7 +468,7 @@ Vue.component('skillIncrementalInput', {
       // 文字が入力されていない場合は表示しない。
       if (this.value.length < 1) { return {}; }
       var obj = {};
-      for (var key in this.skillTable) {
+      for (let key in this.skillTable) {
         var value = this.skillTable[key];
         if (value.name.indexOf(this.value) != -1) {
           obj[key] = value;
@@ -528,7 +528,7 @@ Vue.component('monsterIncrementalInput', {
       // 文字が入力されていない場合は表示しない。
       if (this.filter.length < 1) { return {}; }
       var obj = {};
-      for (var key in this.monsterTable) {
+      for (let key in this.monsterTable) {
         var value = this.monsterTable[key];
         if (value && value.name && value.name.indexOf(this.filter) != -1) {
           obj[key] = value;
@@ -663,7 +663,7 @@ Vue.component('pagination', {
 
     paginationNos () {
       var array = [];
-      for (var i = this.paginationStart; i <= this.paginationEnd; i++) {
+      for (let i = this.paginationStart; i <= this.paginationEnd; i++) {
         array.push(i);
       }
       return array;
@@ -832,7 +832,7 @@ var componentMonsterList = {
 
     monsterTableArray: function() {
       var array = [];
-      for (var key in this.monsterTable) {
+      for (let key in this.monsterTable) {
         array.push(this.monsterTable[key]);
       }
       return array;
@@ -999,8 +999,8 @@ var componentMonsterData = {
       // 合成できないものは潜在覚醒を降ることができないので無し。
       if (!this.canAddPlus) { return []; }
       var killerNoSet = new Set();
-      for (var type of this.monsterData.types) {
-        for (var killerNo of this.typeTable[type].senzaiKiller) {
+      for (let type of this.monsterData.types) {
+        for (let killerNo of this.typeTable[type].senzaiKiller) {
           killerNoSet.add(killerNo);
         }
       }
@@ -1427,7 +1427,7 @@ var componentPic = {
           // 下端位置取得
           var data = ctx.getImageData(img.width * 0.1, 0, 8, img.height);
           var imgHeight = img.height;
-          for (var i = data.height - 1; i > 0; i--) {
+          for (let i = data.height - 1; i > 0; i--) {
             if (checkWaku(data.data, data.width * 4 * i, [152, 114, 64])) {
               imgHeight = i + 1;
               break;
@@ -1436,7 +1436,7 @@ var componentPic = {
           // 上端位置取得
           var imgTop = 0;
           data = ctx.getImageData(1, 0, 8, img.height);
-          for (var i = 0; i < img.height; i++) {
+          for (let i = 0; i < img.height; i++) {
             if (checkWaku(data.data, data.width * 4 * i + 4, [152, 114, 64])) {
               imgTop = i;
               break;
@@ -1446,7 +1446,7 @@ var componentPic = {
           var marginLeft = 0;
           var imgWidth = img.width;
           data = ctx.getImageData(0, imgHeight - (img.width * 0.2) | 0, img.width, 8);
-          for (var i = 0; i < data.width; i++) {
+          for (let i = 0; i < data.width; i++) {
             if (checkWaku(data.data, 4 * i, [132, 101, 57])) {
               marginLeft = i;
               imgWidth -= marginLeft * 2;
@@ -1472,7 +1472,7 @@ var componentPic = {
           var checkHeight = 16;
           var isHitBlackLine = false;
           data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - (checkHeight - 1), checkWidth, checkHeight);
-          for (var i = 0; i < 10; i++) {
+          for (let i = 0; i < 10; i++) {
             var n = 4 * (checkHeight - 1 - i) * checkWidth;
             if (data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) {
               srcY -= i;
@@ -1537,7 +1537,7 @@ var componentPic = {
       function toBlob (dataUrl) {
         var bin = atob(dataUrl.replace(/^.*,/, ''));
         var buffer = new Uint8Array(bin.length);
-        for (var i = 0; i < bin.length; i++) {
+        for (let i = 0; i < bin.length; i++) {
           buffer[i] = bin.charCodeAt(i);
         }
         // Blobを作成
