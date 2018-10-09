@@ -1,6 +1,6 @@
 /*global constData */
 
-/** 
+/**
  * モンスター同士の比較を行うページのコンポーネント。
  */
 window.componentCompare = {
@@ -252,7 +252,7 @@ window.componentCompare = {
 
       targets: [0, 0],
     };
-  }, 
+  },
   created: function () { this.load(); },
   watch: {
     '$route': function () { this.load(); },

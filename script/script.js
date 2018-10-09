@@ -456,11 +456,11 @@ Vue.component('skillIncrementalInput', {
     'id': String,
     'value': String,
     'skillTable': Object,
-    'placeholder': String, 
+    'placeholder': String,
     'required': {
       type: Boolean,
       default: true,
-    } 
+    }
   },
 
   computed: {
@@ -572,7 +572,7 @@ Vue.component('monsterIncrementalSearch', {
     </div>
   </div>
   <div class="col-md-8">
-      <monster-incremental-input 
+      <monster-incremental-input
       :value="value"
       @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
     </div>
@@ -676,7 +676,7 @@ Vue.component('pagination', {
 Vue.component('monsterIcon', {
   template: `
   <img v-if="hasImage" :src="iconPath" style="border-radius: 6%;" :style="{width: width, height: height }" :alt="monsterNoAndName" :key="no" />
-  <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 6%;" :style="{ width: width, height: height }"> 
+  <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 6%;" :style="{ width: width, height: height }">
     <img v-if="hasAttr0" style="position:absolute; left:  2%; top:    2%; width: 23%; height: 23%;" :src="attrPath0" />
     <img v-if="hasAttr1" style="position:absolute; right: 2%; bottom: 2%; width: 23%; height: 23%;" :src="attrPath1" />
     <div :style="{ fontSize: fontSize, lineHeight: height }" style="text-align: center; overflow: hidden; color: #aaa;">{{no}}</div>
@@ -968,7 +968,7 @@ let componentMonsterData = {
     },
     skillDetails: function () {
       let skillDetails = {};
-      if (this.monsterData.skill != 0) { 
+      if (this.monsterData.skill != 0) {
         let target = this.skillTable[this.monsterData.skill];
         if (target) {
           skillDetails = target;
@@ -1016,12 +1016,12 @@ let componentMonsterData = {
     },
 
     /** 最大レベル時のパラメータが登録されているかどうかを取得する。 */
-    hasMaxParam: function () { 
+    hasMaxParam: function () {
       let maxParam = this.monsterData.maxParam;
       return (maxParam.hp != undefined || maxParam.attack != undefined || maxParam.recovery != undefined);
     },
     /** 限界突破時のパラメータが登録されているかどうかを取得する。 */
-    hasOverLimitParam: function () { 
+    hasOverLimitParam: function () {
       let maxParam = this.monsterData.overLimitParam;
       return (maxParam.hp != undefined || maxParam.attack != undefined || maxParam.recovery != undefined);
     },
@@ -1178,28 +1178,28 @@ let componentMonsterEdit = {
     skillName: {
       get: function () { return this.skillDetails.name; },
       set: function (value) {
-        this.skillDetails.name = value; 
+        this.skillDetails.name = value;
         this.monsterData.skill = 0;
       }
     },
     skillBaseTurn: {
       get: function () { return this.skillDetails.baseTurn; },
       set: function (value) {
-        this.skillDetails.baseTurn = value; 
+        this.skillDetails.baseTurn = value;
         this.monsterData.skill = 0;
       }
     },
     skillMaxLevel: {
       get: function () { return this.skillDetails.maxLevel; },
       set: function (value) {
-        this.skillDetails.maxLevel = value; 
+        this.skillDetails.maxLevel = value;
         this.monsterData.skill = 0;
       }
     },
     skillDescription: {
       get: function () { return this.skillDetails.description; },
       set: function (value) {
-        this.skillDetails.description = value; 
+        this.skillDetails.description = value;
         this.monsterData.skill = 0;
       }
     },
@@ -1325,7 +1325,7 @@ let componentMonsterEdit = {
         }
       });
     }
-  }, 
+  },
 };
 
 
