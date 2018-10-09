@@ -32,6 +32,18 @@ module.exports = {
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-var": "error",
+        "no-irregular-whitespace": "error",
+        "block-spacing": "error",
+        "comma-spacing": "error",
+        "func-call-spacing": "error",
+        "keyword-spacing": "error",
+        "no-trailing-spaces": [
+            "error",
+            {"skipBlankLines": true }
+        ],
+        "no-whitespace-before-property": "error",
+        "arrow-spacing": "error"
     }
 };
