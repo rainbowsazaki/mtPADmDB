@@ -1488,8 +1488,7 @@ var componentPic = {
           canvas.height = iconHeight;
           ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
           // canvasを画像に変換
-          var data = canvas.toDataURL('image/jpeg', 0.7);
-          this.iconResultSrc = data;
+          this.iconResultSrc = canvas.toDataURL('image/jpeg', 0.7);
 
           // モンスター画像取得
           var imageWidth = 540;
@@ -1512,8 +1511,7 @@ var componentPic = {
           ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, imageWidth, imageHeight);
 
           // canvasを画像に変換
-          var data = canvas.toDataURL('image/jpeg', 0.85);
-          this.imageResultSrc = data;
+          this.imageResultSrc = canvas.toDataURL('image/jpeg', 0.85);
 
           // モンスター番号＆モンスター名の領域を切り抜く。
           var nameAreaHeight = 76 / 640 * imgWidth;
