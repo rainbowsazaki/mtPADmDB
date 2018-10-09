@@ -518,6 +518,9 @@ Vue.component('monsterIncrementalInput', {
     value: function (val, oldVal) {
       this.updateFilter();
     },
+    monsterTable: function () {
+      if (this.filter == '') { this.updateFilter(); }
+    },
   },
   computed: {
     filteredMonsterTable: function () {
