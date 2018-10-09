@@ -378,7 +378,12 @@ Vue.component('pdSelect', {
   </div>
 </div>
   `,
-  props: ['value'],
+  props: {
+    'value': {
+      type: [Number, String],
+      default: 0
+    }
+  },
   data: function () {
     return {
       html: ''
@@ -426,7 +431,12 @@ Vue.component('pdOption', {
   <slot></slot>
 </a>
   `,
-  props: ['value'],
+  props: {
+    value: {
+      type: [Number, String],
+      required: true
+    }
+  },
 
   methods: {
     click: function () {
@@ -448,10 +458,22 @@ Vue.component('skillIncrementalInput', {
 </div>
   `,
   props: {
-    'id': String,
-    'value': String,
-    'skillTable': Object,
-    'placeholder': String,
+    'id': {
+      type: String,
+      default: undefined
+    },
+    'value': {
+      type: String,
+      default: 0
+    },
+    'skillTable': {
+      type: Object,
+      required: true
+    },
+    'placeholder': {
+      type: String,
+      default: ''
+    },
     'required': {
       type: Boolean,
       default: true
@@ -495,9 +517,18 @@ Vue.component('monsterIncrementalInput', {
 </div>
   `,
   props: {
-    'value': String,
-    'monsterTable': Object,
-    'imageTable': Object
+    'value': {
+      type: String,
+      default: 0
+    },
+    'monsterTable': {
+      type: Object,
+      required: true
+    },
+    'imageTable': {
+      type: Object,
+      default: undefined
+    }
   },
   data: function () {
     return {
@@ -572,7 +603,24 @@ Vue.component('monsterIncrementalSearch', {
   </div>
 </div>
   `,
-  props: ['id', 'value', 'monsterTable', 'imageTable'],
+  props: {
+    'id': {
+      type: String,
+      default: undefined
+    },
+    'value': {
+      type: Number,
+      default: 0
+    },
+    'monsterTable': {
+      type: Object,
+      required: true
+    },
+    'imageTable': {
+      type: Object,
+      default: undefined
+    }
+  },
   data: function () {
     return {
     };
@@ -615,8 +663,14 @@ Vue.component('pagination', {
   `,
 
   props: {
-    'page': Number,
-    'pageCount': Number,
+    'page': {
+      type: Number,
+      default: 0
+    },
+    'pageCount': {
+      type: Number,
+      required: true
+    },
     'itemCount': {
       type: Number,
       default: 7
@@ -673,7 +727,28 @@ Vue.component('monsterIcon', {
     <div :style="{ fontSize: fontSize, lineHeight: height }" style="text-align: center; overflow: hidden; color: #aaa;">{{no}}</div>
   </div>
   `,
-  props: ['no', 'monsterTable', 'imageTable', 'width', 'height'],
+  props: {
+    'no': {
+      type: Number,
+      required: true
+    },
+    'monsterTable': {
+      type: Object,
+      default: undefined
+    },
+    'imageTable': {
+      type: Object,
+      required: true
+    },
+    'width': {
+      type: String,
+      default: '96px'
+    },
+    'height': {
+      type: String,
+      default: '96px'
+    }
+  },
   
   computed: {
     hasImage: function () { return !!this.imageTable[this.no]; },
@@ -697,7 +772,10 @@ Vue.component('monsterIcon', {
 Vue.component('tweetButton', {
   template: '<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>',
   props: {
-    'hashtags': String
+    'hashtags': {
+      type: String,
+      default: 2
+    }
   },
   data: function () {
     return {
