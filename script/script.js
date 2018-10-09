@@ -226,7 +226,7 @@ jQuery.fn.scrollParentShowThis = function () {
   
   const nowTop = this.position().top;
   const nowBottom = nowTop + this.height();
-  if (nowTop < 0){
+  if (nowTop < 0) {
     offsetParent.scrollTop(scrollTop + nowTop);
   }
   if (nowBottom > scrollHeight) {
