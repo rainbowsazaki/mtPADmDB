@@ -686,7 +686,7 @@ Vue.component('monsterIcon', {
   
   computed: {
     hasImage: function () { return !!this.imageTable[this.no]; },
-    monsterData: function () {return (this.monsterTable[this.no] || {}); },
+    monsterData: function () { return (this.monsterTable[this.no] || {}); },
     monsterNoAndName: function () { return `No.${this.monsterData.no} ${this.monsterData.name}`; },
     attributes: function () { return this.monsterData.attributes || []; },
     hasAttr0: function () { let attr = this.attributes[0]; return (attr && attr != 0 && attr != 99); },
