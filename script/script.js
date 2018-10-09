@@ -32,7 +32,7 @@ const constData = {
   /** モンスター情報の空データ */
   monsterClearData: {
     no: null,
-    name:'',
+    name: '',
     attributes: [null, 0],
     cost: null,
     rare: null,
@@ -1169,7 +1169,7 @@ const componentMonsterEdit = {
 
     skillDetails: function () {
       if (this.monsterData.skill != 0) {
-        this.monsterData.skillDetails = $.extend(true, { name:'', description:'' }, this.skillTable[this.monsterData.skill]);
+        this.monsterData.skillDetails = $.extend(true, { name: '', description: '' }, this.skillTable[this.monsterData.skill]);
       }
       return this.monsterData.skillDetails;
     },
@@ -1205,7 +1205,7 @@ const componentMonsterEdit = {
 
     leaderSkillDetails: function () {
       if (this.monsterData.leaderSkill != 0) {
-        this.monsterData.leaderSkillDetails = $.extend(true, { name:'', description:'' }, this.leaderSkillTable[this.monsterData.leaderSkill]);
+        this.monsterData.leaderSkillDetails = $.extend(true, { name: '', description: '' }, this.leaderSkillTable[this.monsterData.leaderSkill]);
       }
       return this.monsterData.leaderSkillDetails;
     },
@@ -1305,7 +1305,7 @@ const componentMonsterEdit = {
             'event_label': `No.${this.monsterData.no}`
           });
 
-          this.$router.push({ path:`/${this.monsterData.no}` });
+          this.$router.push({ path: `/${this.monsterData.no}` });
         }
         if (response.data.message) {
           this.$store.commit('setMessages', response.data.message);
@@ -1606,7 +1606,7 @@ const componentPic = {
           }
 
           if (this.$route.params.no) {
-            this.$router.push({ path:`/${this.$route.params.no}` });
+            this.$router.push({ path: `/${this.$route.params.no}` });
           } else {
             this.monsterNo = null;
             this.uploadImgSrc = '';
