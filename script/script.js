@@ -370,14 +370,6 @@ Vue.filter('addComma', function (val) {
 });
 
 Vue.component('pdSelect', {
-  template: `
-<div class="dropdown pd-select" style="width: 100%">
-  <div class="custom-select" tabindex="0" data-toggle="dropdown" v-html="html">{{html}}</div>
-  <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden; -webkit-overflow-scrolling: touch; width: 100%;">
-    <slot></slot>
-  </div>
-</div>
-  `,
   props: {
     'value': {
       type: [Number, String],
@@ -388,13 +380,6 @@ Vue.component('pdSelect', {
     return {
       html: ''
     };
-  },
-  mounted: function () {
-    $(this.$el).on('shown.bs.dropdown', () => {
-      $(this.$el).children('div.dropdown-menu').children('.active').focus().scrollParentShowThis();
-    });
-    this.$on('clickOption', this.clickOption);
-    this.changeDisp(this.value);
   },
   watch: {
     value: function (newValue) {
@@ -407,6 +392,13 @@ Vue.component('pdSelect', {
         }
       });
     }
+  },
+  mounted: function () {
+    $(this.$el).on('shown.bs.dropdown', () => {
+      $(this.$el).children('div.dropdown-menu').children('.active').focus().scrollParentShowThis();
+    });
+    this.$on('clickOption', this.clickOption);
+    this.changeDisp(this.value);
   },
   methods: {
     clickOption: function (option) {
@@ -422,15 +414,18 @@ Vue.component('pdSelect', {
         }
       });
     }
-  }
+  },
+  template: `
+<div class="dropdown pd-select" style="width: 100%">
+  <div class="custom-select" tabindex="0" data-toggle="dropdown" v-html="html">{{html}}</div>
+  <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden; -webkit-overflow-scrolling: touch; width: 100%;">
+    <slot></slot>
+  </div>
+</div>
+  `
 });
 
 Vue.component('pdOption', {
-  template: `
-<a class="dropdown-item pd-option" href="javascript:void(0);" @click="click" :data-value="value" style="width: 8em; overflow-x: hidden; display: inline-flex; padding: 4px;">
-  <slot></slot>
-</a>
-  `,
   props: {
     value: {
       type: [Number, String],
@@ -442,21 +437,15 @@ Vue.component('pdOption', {
     click: function () {
       this.$parent.$emit('clickOption', [this.value]);
     }
-  }
+  },
+  template: `
+<a class="dropdown-item pd-option" href="javascript:void(0);" @click="click" :data-value="value" style="width: 8em; overflow-x: hidden; display: inline-flex; padding: 4px;">
+  <slot></slot>
+</a>
+  `
 });
 
 Vue.component('skillIncrementalInput', {
-  template: `
-<div class="dropdown show">
-  <input :value="value" :id="id" @input="$emit('input', $event.target.value); showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" onfocus="$('.dropdown-toggle').dropdown();" :required="required" minLength="1" maxLength="50">
-  <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
-    <a v-for="(value, key) in filteredSkillTable" class="dropdown-item" @click="$emit('select-no', key)" href="javascript:void(0)">
-      {{value.name}}<br>
-      <span style="font-size: 80%;">{{value.description}}</span>
-    </a>
-  </div>
-</div>
-  `,
   props: {
     'id': {
       type: String,
@@ -501,21 +490,21 @@ Vue.component('skillIncrementalInput', {
       }
       $(target).dropdown('update');
     }
-  }
-});
-
-Vue.component('monsterIncrementalInput', {
+  },
   template: `
 <div class="dropdown show">
-  <input v-model="filter" placeholder="モンスター名で検索" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
+  <input :value="value" :id="id" @input="$emit('input', $event.target.value); showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" onfocus="$('.dropdown-toggle').dropdown();" :required="required" minLength="1" maxLength="50">
   <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
-    <a v-for="(value, key) in filteredMonsterTable" class="dropdown-item" @click="updateValue(key)" href="javascript:void(0)">
-      <monster-icon v-if="imageTable" :no="value.no" :monsterTable="monsterTable" :imageTable="imageTable" width="1.6em" height="1.6em" />
-      {{value.name}}
+    <a v-for="(value, key) in filteredSkillTable" class="dropdown-item" @click="$emit('select-no', key)" href="javascript:void(0)">
+      {{value.name}}<br>
+      <span style="font-size: 80%;">{{value.description}}</span>
     </a>
   </div>
 </div>
-  `,
+  `
+});
+
+Vue.component('monsterIncrementalInput', {
   props: {
     'value': {
       type: String,
@@ -535,19 +524,6 @@ Vue.component('monsterIncrementalInput', {
       filter: ''
     };
   },
-
-  mounted: function () {
-    this.updateFilter();
-  },
-  
-  watch: {
-    value: function () {
-      this.updateFilter();
-    },
-    monsterTable: function () {
-      if (this.filter == '') { this.updateFilter(); }
-    }
-  },
   computed: {
     filteredMonsterTable: function () {
       // 文字が入力されていない場合は表示しない。
@@ -562,7 +538,17 @@ Vue.component('monsterIncrementalInput', {
       return obj;
     }
   },
-  
+  watch: {
+    value: function () {
+      this.updateFilter();
+    },
+    monsterTable: function () {
+      if (this.filter == '') { this.updateFilter(); }
+    }
+  },
+  mounted: function () {
+    this.updateFilter();
+  },
   methods: {
     updateFilter: function () {
       this.filter = (this.monsterTable[this.value] || { name: '' }).name;
@@ -578,31 +564,21 @@ Vue.component('monsterIncrementalInput', {
       }
       $(target).dropdown('update');
     }
-  }
+  },
+  template: `
+<div class="dropdown show">
+  <input v-model="filter" placeholder="モンスター名で検索" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
+  <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
+    <a v-for="(value, key) in filteredMonsterTable" class="dropdown-item" @click="updateValue(key)" href="javascript:void(0)">
+      <monster-icon v-if="imageTable" :no="value.no" :monsterTable="monsterTable" :imageTable="imageTable" width="1.6em" height="1.6em" />
+      {{value.name}}
+    </a>
+  </div>
+</div>
+  `
 });
 
 Vue.component('monsterIncrementalSearch', {
-  template: `
-<div class="form-row">
-  <div class="col-md-4">
-    <div class="input-group">
-      <monster-icon v-if="imageTable" :no="value" :monsterTable="monsterTable" :imageTable="imageTable" width="38px" height="38px" />
-      <div class="input-group-prepend">
-        <span class="input-group-text">No.</span>
-      </div>
-      <input :id="id" type="number" class="form-control"  
-      :value="value"
-      @input="updateValue($event.target.value);" min="1" max="9999">
-    </div>
-  </div>
-  <div class="col-md-8">
-      <monster-incremental-input
-      :value="value"
-      @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
-    </div>
-  </div>
-</div>
-  `,
   props: {
     'id': {
       type: String,
@@ -630,13 +606,86 @@ Vue.component('monsterIncrementalSearch', {
     updateValue: function (value) {
       this.$emit('input', value);
     }
-  }
+  },
+  template: `
+<div class="form-row">
+  <div class="col-md-4">
+    <div class="input-group">
+      <monster-icon v-if="imageTable" :no="value" :monsterTable="monsterTable" :imageTable="imageTable" width="38px" height="38px" />
+      <div class="input-group-prepend">
+        <span class="input-group-text">No.</span>
+      </div>
+      <input :id="id" type="number" class="form-control"  
+      :value="value"
+      @input="updateValue($event.target.value);" min="1" max="9999">
+    </div>
+  </div>
+  <div class="col-md-8">
+      <monster-incremental-input
+      :value="value"
+      @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
+    </div>
+  </div>
+</div>
+  `
 });
 
 /**
  * ページ送りのコンポーネント
  */
 Vue.component('pagination', {
+  props: {
+    'page': {
+      type: Number,
+      default: 0
+    },
+    'pageCount': {
+      type: Number,
+      required: true
+    },
+    'itemCount': {
+      type: Number,
+      default: 7
+    }
+  },
+  data: function () {
+    return {
+    };
+  },
+  computed: {
+    itemCountReal () { return Math.min(this.itemCount, this.pageCount); },
+    itemCountHarf () { return (this.itemCountReal / 2) | 0; },
+    paginationStart () {
+      return (this.page > this.pageCount - this.itemCountHarf)
+        ? this.pageCount - this.itemCountReal + 1
+        : Math.max(1, this.page - this.itemCountHarf);
+    },
+    paginationEnd () {
+      return (this.page <= this.itemCountHarf)
+        ? this.itemCountReal
+        : Math.min(this.pageCount, this.page + this.itemCountHarf);
+    },
+
+    paginationNos () {
+      const array = [];
+      for (let i = this.paginationStart; i <= this.paginationEnd; i++) {
+        array.push(i);
+      }
+      return array;
+    }
+  },
+  methods: {
+    createToObj: function (pageNo) {
+      const query = Object.assign({}, this.$route.query);
+      query.page = pageNo;
+
+      return {
+        path: this.$route.path,
+        params: this.$route.params,
+        query: query
+      };
+    }
+  },
   template: `
 <nav">
   <ul class="pagination pagination-sm justify-content-center">
@@ -660,73 +709,11 @@ Vue.component('pagination', {
     </li>
   </ul>
 </nav>
-  `,
-
-  props: {
-    'page': {
-      type: Number,
-      default: 0
-    },
-    'pageCount': {
-      type: Number,
-      required: true
-    },
-    'itemCount': {
-      type: Number,
-      default: 7
-    }
-  },
-  data: function () {
-    return {
-    };
-  },
-  methods: {
-    createToObj: function (pageNo) {
-      const query = Object.assign({}, this.$route.query);
-      query.page = pageNo;
-
-      return {
-        path: this.$route.path,
-        params: this.$route.params,
-        query: query
-      };
-    }
-  },
-
-  computed: {
-    itemCountReal () { return Math.min(this.itemCount, this.pageCount); },
-    itemCountHarf () { return (this.itemCountReal / 2) | 0; },
-    paginationStart () {
-      return (this.page > this.pageCount - this.itemCountHarf)
-        ? this.pageCount - this.itemCountReal + 1
-        : Math.max(1, this.page - this.itemCountHarf);
-    },
-    paginationEnd () {
-      return (this.page <= this.itemCountHarf)
-        ? this.itemCountReal
-        : Math.min(this.pageCount, this.page + this.itemCountHarf);
-    },
-
-    paginationNos () {
-      const array = [];
-      for (let i = this.paginationStart; i <= this.paginationEnd; i++) {
-        array.push(i);
-      }
-      return array;
-    }
-  }
+  `
 });
 
 /** モンスターアイコンを表示するコンポーネント。 */
 Vue.component('monsterIcon', {
-  template: `
-  <img v-if="hasImage" :src="iconPath" style="border-radius: 6%;" :style="{width: width, height: height }" :alt="monsterNoAndName" :key="no" />
-  <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 6%;" :style="{ width: width, height: height }">
-    <img v-if="hasAttr0" style="position:absolute; left:  2%; top:    2%; width: 23%; height: 23%;" :src="attrPath0" />
-    <img v-if="hasAttr1" style="position:absolute; right: 2%; bottom: 2%; width: 23%; height: 23%;" :src="attrPath1" />
-    <div :style="{ fontSize: fontSize, lineHeight: height }" style="text-align: center; overflow: hidden; color: #aaa;">{{no}}</div>
-  </div>
-  `,
   props: {
     'no': {
       type: Number,
@@ -749,7 +736,6 @@ Vue.component('monsterIcon', {
       default: '96px'
     }
   },
-  
   computed: {
     hasImage: function () { return !!this.imageTable[this.no]; },
     monsterData: function () { return (this.monsterTable[this.no] || {}); },
@@ -765,12 +751,19 @@ Vue.component('monsterIcon', {
       const ret = /^([\d|.]*)(.*)$/.exec(this.width);
       return ret[1] / 3 + ret[2];
     }
-  }
+  },
+  template: `
+  <img v-if="hasImage" :src="iconPath" style="border-radius: 6%;" :style="{width: width, height: height }" :alt="monsterNoAndName" :key="no" />
+  <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 6%;" :style="{ width: width, height: height }">
+    <img v-if="hasAttr0" style="position:absolute; left:  2%; top:    2%; width: 23%; height: 23%;" :src="attrPath0" />
+    <img v-if="hasAttr1" style="position:absolute; right: 2%; bottom: 2%; width: 23%; height: 23%;" :src="attrPath1" />
+    <div :style="{ fontSize: fontSize, lineHeight: height }" style="text-align: center; overflow: hidden; color: #aaa;">{{no}}</div>
+  </div>
+  `
 });
 
 /** ツイートボタン表示のコンポーネント */
 Vue.component('tweetButton', {
-  template: '<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>',
   props: {
     'hashtags': {
       type: String,
@@ -782,13 +775,13 @@ Vue.component('tweetButton', {
       id: 'tweetButton' + (Math.random() * 1000000).toFixed(0)
     };
   },
-  mounted: function () {
-    this.createButton();
-  },
   watch: {
     '$route': function () {
       this.createButton();
     }
+  },
+  mounted: function () {
+    this.createButton();
   },
   methods: {
     createButton: function () {
@@ -810,7 +803,8 @@ Vue.component('tweetButton', {
         }
       );
     }
-  }
+  },
+  template: '<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>'
 });
 
 // ページ用のコンポーネントで使用する処理のミックスイン
@@ -1792,11 +1786,10 @@ new Vue({
   data: {
     breadcrumbs: []
   },
-  created: function () {
-    this.$store.commit('fetchCommonData');
-  },
-  mounted: function () {
-    this.sendGa();
+  computed: {
+    errors: function () { return this.$store.state.errors; },
+    messages: function () { return this.$store.state.messages; },
+    navis: function () { return constData.navis; }
   },
   watch: {
     '$route': function () {
@@ -1804,6 +1797,12 @@ new Vue({
       // 元のページでのエラー表示を消す。
       this.$store.commit('clearErrors');
     }
+  },
+  created: function () {
+    this.$store.commit('fetchCommonData');
+  },
+  mounted: function () {
+    this.sendGa();
   },
   methods: {
     /** Google Analytics のページビュートラッキングを送信する。 */
@@ -1821,11 +1820,5 @@ new Vue({
         $('button.navbar-toggler').click();
       }
     }
-
-  },
-  computed: {
-    errors: function () { return this.$store.state.errors; },
-    messages: function () { return this.$store.state.messages; },
-    navis: function () { return constData.navis; }
   }
 }).$mount('#app');
