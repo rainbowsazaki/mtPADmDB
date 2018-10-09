@@ -1,7 +1,16 @@
 module.exports = {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "jquery": true
+    },
+    "globals": {
+      "Vue": true,
+      "VueRouter": true,
+      "Vuex": true,
+      "axios": true,
+      "gtag": true,
+      "twttr": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
