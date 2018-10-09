@@ -933,8 +933,7 @@ var componentMonsterData = {
       this.isLoadingHistory = true;
       axios.get('./api.cgi', {
         params: { mode: 'monsterHistory', no: this.monsterData.no }
-      })
-      .then(response => {
+      }).then(response => {
         this.histories = response.data;
       });
     },
@@ -1069,8 +1068,7 @@ var componentHistory = {
       this.isLoadingHistory = true;
       axios.get('./api.cgi', {
         params: { mode: 'monsterHistory' }
-      })
-      .then(response => {
+      }).then(response => {
         this.histories = response.data;
       });
     },
@@ -1287,8 +1285,9 @@ var componentMonsterEdit = {
       // 超覚醒を昇順ソート
       this.monsterData.superAwakens.sort((a, b) => a - b);
 
-      axios.post('./api.cgi', this.monsterData)
-      .then(response => {
+      axios.post(
+        './api.cgi', this.monsterData
+      ).then(response => {
         // レスポンス来なかったときの復帰処理を止める。
         clearTimeout(timeoutId);
 
@@ -1582,8 +1581,7 @@ var componentPic = {
       axios.post('./api.cgi', formData, {
         headers: { 'content-type': 'multipart/form-data' },
         onUploadProgress: onUploadProgress,
-      })
-      .then(response => {
+      }).then(response => {
         // レスポンス来なかったときの復帰処理を止める。
         clearTimeout(timeoutId);
         
