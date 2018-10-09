@@ -313,7 +313,7 @@ const store = new Vuex.Store({
           if (typeof param.callback === 'function') { param.callback(); }
         }
       ).catch(
-        error => {
+        () => {
           var errorMessage = '';
           if (param.historyId) {
             errorMessage = `モンスター編集履歴 ID:${param.historyId} の情報が見つかりませんでした。`;
@@ -395,7 +395,7 @@ Vue.component('pdSelect', {
     this.changeDisp(this.value);
   },
   watch: {
-    value: function (newValue, oldValue) {
+    value: function (newValue) {
       this.changeDisp(newValue);
       $(this.$el).children('div.dropdown-menu').children().each((index, elem) => {
         if (elem.getAttribute('data-value') == newValue) {
@@ -433,7 +433,7 @@ Vue.component('pdOption', {
   props: [ 'value' ],
 
   methods: {
-    click: function (event) {
+    click: function () {
       this.$parent.$emit('clickOption', [ this.value ] );
     }
   }
@@ -516,7 +516,7 @@ Vue.component('monsterIncrementalInput', {
   },
   
   watch: {
-    value: function (val, oldVal) {
+    value: function () {
       this.updateFilter();
     },
     monsterTable: function () {
@@ -730,7 +730,6 @@ Vue.component('tweetButton', {
       var hashtags = 'パズドラ,mtPADmDB';
       if (this.hashtags) { hashtags += ',' + this.hashtags; }
       
-      var targetId = 'tweetButtonPlace';
       var jq = $(`#${this.id}`);
       if (!jq.length) { return; }
       jq.empty();
@@ -1722,12 +1721,12 @@ var router = new VueRouter({
 });
 
 // ナビゲーション変更時に一番上にスクロールする。
-router.afterEach((to, from) => {
+router.afterEach(() => {
   $('html,body').scrollTop(0);
 });
 
 // ルーターのインスタンスをrootとなるVueインスタンスに渡します
-var app = new Vue({
+new Vue({
   router: router,
   store: store,
   data: {

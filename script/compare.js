@@ -353,7 +353,7 @@ window.componentCompare = {
           this.$store.commit('clearMessages');
         }
       ).catch(
-        error => {
+        () => {
           var errorMessage = `モンスター No.${monsterNo} の情報が見つかりませんでした。`;
           this.$store.commit('clearMessages');
           this.$store.commit('setErrors', [ errorMessage ]);
