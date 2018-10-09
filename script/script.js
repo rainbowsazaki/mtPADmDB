@@ -1,6 +1,6 @@
 /*global componentCompare */
 
-let commonData = {
+const commonData = {
 
   monsterData: {},
 
@@ -205,7 +205,7 @@ const constData = {
 };
 
 /** 本番環境でのみ gtag を実行する関数 */
-let gtagProductionOnly = (document.domain == 'localhost') ? function () {} : gtag;
+const gtagProductionOnly = (document.domain == 'localhost') ? function () {} : gtag;
 
 axios.interceptors.request.use(function (config) {
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
@@ -220,12 +220,12 @@ axios.interceptors.request.use(function (config) {
 jQuery.fn.scrollParentShowThis = function() {
   if (this.length == 0) { return this; }
   
-  let offsetParent = this.offsetParent();
-  let scrollTop    = offsetParent.scrollTop();
-  let scrollHeight = offsetParent.height();
+  const offsetParent = this.offsetParent();
+  const scrollTop    = offsetParent.scrollTop();
+  const scrollHeight = offsetParent.height();
   
-  let nowTop = this.position().top;
-  let nowBottom = nowTop + this.height();
+  const nowTop = this.position().top;
+  const nowBottom = nowTop + this.height();
   if (nowTop < 0){
     offsetParent.scrollTop(scrollTop + nowTop);
   }
@@ -256,7 +256,7 @@ const store = new Vuex.Store({
   mutations: {
     fetchCommonData: function (state) {
       // 最後に読み込んだ時間から 5分以上経過していた場合に読み込みを実効する。
-      let nowMs = (new Date()).getTime();
+      const nowMs = (new Date()).getTime();
       if (state.lastLoadCommonDataTime + 5 * 60 * 1000 > nowMs) { return; }
 
       // モンスター情報と画像情報はモンスター一覧ページをいち早く表示するために他と分けて読み込み処理を行う。
@@ -305,7 +305,7 @@ const store = new Vuex.Store({
       this.commit('setMessages', [ 'モンスター情報取得中' ]);
       axios.get(path, option).then(
         response => {
-          let data = $.extend(true, {}, constData.monsterClearData, response.data);
+          const data = $.extend(true, {}, constData.monsterClearData, response.data);
           if (!data.superAwakens) { data.superAwakens = []; }
           state.monsterData = data;
           
@@ -366,8 +366,7 @@ const store = new Vuex.Store({
 
 // 数字をカンマ区切りにする。
 Vue.filter('addComma', function(val) {
-  let arr;
-  arr = String(val).split('.');
+  const arr = String(val).split('.');
   arr[0] = arr[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
   return arr.join('.');
 });
@@ -467,9 +466,9 @@ Vue.component('skillIncrementalInput', {
     filteredSkillTable: function () {
       // 文字が入力されていない場合は表示しない。
       if (this.value.length < 1) { return {}; }
-      let obj = {};
-      for (let key in this.skillTable) {
-        let value = this.skillTable[key];
+      const obj = {};
+      for (const key in this.skillTable) {
+        const value = this.skillTable[key];
         if (value.name.indexOf(this.value) != -1) {
           obj[key] = value;
         }
@@ -527,9 +526,9 @@ Vue.component('monsterIncrementalInput', {
     filteredMonsterTable: function () {
       // 文字が入力されていない場合は表示しない。
       if (this.filter.length < 1) { return {}; }
-      let obj = {};
-      for (let key in this.monsterTable) {
-        let value = this.monsterTable[key];
+      const obj = {};
+      for (const key in this.monsterTable) {
+        const value = this.monsterTable[key];
         if (value && value.name && value.name.indexOf(this.filter) != -1) {
           obj[key] = value;
         }
@@ -636,7 +635,7 @@ Vue.component('pagination', {
   },
   methods: {
     createToObj: function (pageNo) {
-      let query = Object.assign({}, this.$route.query);
+      const query = Object.assign({}, this.$route.query);
       query.page = pageNo;
 
       return {
@@ -662,7 +661,7 @@ Vue.component('pagination', {
     },
 
     paginationNos () {
-      let array = [];
+      const array = [];
       for (let i = this.paginationStart; i <= this.paginationEnd; i++) {
         array.push(i);
       }
@@ -689,14 +688,14 @@ Vue.component('monsterIcon', {
     monsterData: function () { return (this.monsterTable[this.no] || {}); },
     monsterNoAndName: function () { return `No.${this.monsterData.no} ${this.monsterData.name}`; },
     attributes: function () { return this.monsterData.attributes || []; },
-    hasAttr0: function () { let attr = this.attributes[0]; return (attr && attr != 0 && attr != 99); },
-    hasAttr1: function () { let attr = this.attributes[1]; return (attr && attr != 0 && attr != 99); },
+    hasAttr0: function () { const attr = this.attributes[0]; return (attr && attr != 0 && attr != 99); },
+    hasAttr1: function () { const attr = this.attributes[1]; return (attr && attr != 0 && attr != 99); },
     iconPath: function () { return `./monsterIconsLog/icon_${this.no}_${this.imageTable[this.no].id}.jpg`; },
     attrPath0: function () { return `./image/attribute/${this.attributes[0]}.png`; },
     attrPath1: function () { return `./image/attribute/${this.attributes[1]}.png`; },
     
     fontSize: function () {
-      let ret = /^([\d|.]*)(.*)$/.exec(this.width);
+      const ret = /^([\d|.]*)(.*)$/.exec(this.width);
       return ret[1] / 3 + ret[2];
     }
   }
@@ -730,7 +729,7 @@ Vue.component('tweetButton', {
       let hashtags = 'パズドラ,mtPADmDB';
       if (this.hashtags) { hashtags += ',' + this.hashtags; }
       
-      let jq = $(`#${this.id}`);
+      const jq = $(`#${this.id}`);
       if (!jq.length) { return; }
       jq.empty();
       twttr.widgets.createShareButton(
@@ -746,7 +745,7 @@ Vue.component('tweetButton', {
 
 
 // ページ用のコンポーネントで使用する処理のミックスイン
-let mixinForPage = {
+const mixinForPage = {
   created: function () {
     this.$_mixinForPage_updateTitle();
   },
@@ -793,7 +792,7 @@ Vue.mixin(mixinForPage);
 /**
  * アバウトページコンポーネント
  */
-let componentAbout = {
+const componentAbout = {
   name: 'pageAbout',
   template: '#templateAbout',
   pageTitle: 'これは何？'
@@ -803,7 +802,7 @@ let componentAbout = {
 /**
  * モンスター一覧ページコンポーネント
  */
-let componentMonsterList = {
+const componentMonsterList = {
   name: 'pageMonsterList',
   template: '#templateMonsterList',
   pageTitle: null,
@@ -831,14 +830,14 @@ let componentMonsterList = {
     page () { return (this.$route.query.page * 1) || 1; },
 
     monsterTableArray: function() {
-      let array = [];
-      for (let key in this.monsterTable) {
+      const array = [];
+      for (const key in this.monsterTable) {
         array.push(this.monsterTable[key]);
       }
       return array;
     },
     searchedMonsterTableArray: function () {
-      let searchWord = this.$route.query.searchWord;
+      const searchWord = this.$route.query.searchWord;
       if (!searchWord) { return this.monsterTableArray; }
       return this.monsterTableArray.filter(monsterData => {
         return monsterData.name.indexOf(searchWord) != -1;
@@ -861,7 +860,7 @@ let componentMonsterList = {
 /**
  * モンスター情報ページコンポーネント
  */
-let componentMonsterData = {
+const componentMonsterData = {
   name: 'pageMonsterData',
   template: '#templateMonsterData',
   pageTitle: function () {
@@ -900,7 +899,7 @@ let componentMonsterData = {
       this.histories = null;
       this.isLoadingHistory = false;
 
-      let param = {
+      const param = {
         callback: () => {
           this.$_mixinForPage_updateTitle();
         }
@@ -919,7 +918,7 @@ let componentMonsterData = {
     
     /** パラメータをプラス換算に変換する。 */
     culcPlusCountParam: function (param) {
-      let obj = {
+      const obj = {
         hp: param.hp / 10,
         attack: param.attack / 5,
         recovery: param.recovery / 3
@@ -961,15 +960,15 @@ let componentMonsterData = {
     monsterData: function () { return this.$store.state.monsterData; },
 
     monsterImagePath: function () {
-      let no = this.monsterData.no;
-      let imageData = this.imageTable[no];
+      const no = this.monsterData.no;
+      const imageData = this.imageTable[no];
       if (!imageData) { return './monsterImages/notFound.jpg'; }
       return `./monsterImagesLog/${no}_${imageData.id}.jpg`;
     },
     skillDetails: function () {
       let skillDetails = {};
       if (this.monsterData.skill != 0) {
-        let target = this.skillTable[this.monsterData.skill];
+        const target = this.skillTable[this.monsterData.skill];
         if (target) {
           skillDetails = target;
         }
@@ -979,7 +978,7 @@ let componentMonsterData = {
     leaderSkillDetails: function () {
       let leaderSkillDetails = {};
       if (this.monsterData.leaderSkill != 0) {
-        let target = this.leaderSkillTable[this.monsterData.leaderSkill];
+        const target = this.leaderSkillTable[this.monsterData.leaderSkill];
         if (target) {
           leaderSkillDetails = target;
         }
@@ -998,9 +997,9 @@ let componentMonsterData = {
     senzaiKillerNos: function () {
       // 合成できないものは潜在覚醒を降ることができないので無し。
       if (!this.canAddPlus) { return []; }
-      let killerNoSet = new Set();
-      for (let type of this.monsterData.types) {
-        for (let killerNo of this.typeTable[type].senzaiKiller) {
+      const killerNoSet = new Set();
+      for (const type of this.monsterData.types) {
+        for (const killerNo of this.typeTable[type].senzaiKiller) {
           killerNoSet.add(killerNo);
         }
       }
@@ -1011,18 +1010,18 @@ let componentMonsterData = {
     canAddPlus: function () {
       // 素材系のタイプの場合はプラス合成不可と判断する。
       // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
-      let type = this.monsterData.types[0];
+      const type = this.monsterData.types[0];
       return !((type >= 9 && type <= 12) || type == 99);
     },
 
     /** 最大レベル時のパラメータが登録されているかどうかを取得する。 */
     hasMaxParam: function () {
-      let maxParam = this.monsterData.maxParam;
+      const maxParam = this.monsterData.maxParam;
       return (maxParam.hp != undefined || maxParam.attack != undefined || maxParam.recovery != undefined);
     },
     /** 限界突破時のパラメータが登録されているかどうかを取得する。 */
     hasOverLimitParam: function () {
-      let maxParam = this.monsterData.overLimitParam;
+      const maxParam = this.monsterData.overLimitParam;
       return (maxParam.hp != undefined || maxParam.attack != undefined || maxParam.recovery != undefined);
     },
 
@@ -1045,7 +1044,7 @@ let componentMonsterData = {
 /**
  * モンスター情報変更履歴ページコンポーネント
  */
-let componentHistory = {
+const componentHistory = {
   name: 'pageHistory',
   template: '#templateHistory',
   pageTitle: function () {
@@ -1098,7 +1097,7 @@ let componentHistory = {
 /**
  * モンスター情報編集ページコンポーネント
  */
-let componentMonsterEdit = {
+const componentMonsterEdit = {
   name: 'pageMonsterEdit',
   template: '#templateMonsterEdit',
   pageTitle: function () {
@@ -1163,7 +1162,7 @@ let componentMonsterEdit = {
     /** スキルレベル最大時の（最短の）スキルターン */
     minimumSkillTurn: function () {
       if (!this.skillDetails.baseTurn || !this.skillDetails.maxLevel) { return NaN; }
-      let turn = this.skillDetails.baseTurn - this.skillDetails.maxLevel + 1;
+      const turn = this.skillDetails.baseTurn - this.skillDetails.maxLevel + 1;
       if (turn < 0) { return NaN; }
       return turn;
     },
@@ -1256,7 +1255,7 @@ let componentMonsterEdit = {
       }
       if (commitParam) {
         commitParam.callback = () => {
-          let m = $.extend(true, {}, this.$store.state.monsterData);
+          const m = $.extend(true, {}, this.$store.state.monsterData);
           m.leaderSkillDetails = $.extend(true, m.leaderSkillDetails, this.leaderSkillTable[m.skill]);
           m.skillDetails = $.extend(true, m.skillDetails, this.skillTable[m.leaderSkill]);
           m.comment = '';
@@ -1275,7 +1274,7 @@ let componentMonsterEdit = {
       if (this.isSubmitted) { return; }
       this.isSubmitted = true;
       // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
-      let timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
+      const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
 
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', [ '送信中...' ]);
@@ -1312,7 +1311,7 @@ let componentMonsterEdit = {
           this.$store.commit('setMessages', response.data.message);
         }
         if (response.data.newTableData) {
-          let newTableData = response.data.newTableData;
+          const newTableData = response.data.newTableData;
           if (newTableData.monster) {
             this.$store.commit('addMonsterData', newTableData.monster);
           }
@@ -1332,7 +1331,7 @@ let componentMonsterEdit = {
 /**
  * 画像投稿ページコンポーネント
  */
-let componentPic = {
+const componentPic = {
   name: 'pagePic',
   template: '#templatePic',
   pageTitle: function () {
@@ -1382,7 +1381,7 @@ let componentPic = {
     },
     loadLocalImage: function loadLocalImage(e) {
       // ファイル情報を取得
-      let fileData = e.target.files[0];
+      const fileData = e.target.files[0];
   
       // 画像ファイル以外は処理を止める
       if (!fileData.type.match('image.*')) {
@@ -1393,28 +1392,28 @@ let componentPic = {
       $(e.target).next('.custom-file-label').text($(e.target)[0].files[0].name);
   
       // FileReaderオブジェクトを使ってファイル読み込み
-      let reader = new FileReader();
+      const reader = new FileReader();
       // ファイル読み込みに成功したときの処理
       reader.onload = () => {
         // Canvas上に表示する
-        let uploadImgSrc = reader.result;
-        let iconSrcScale = [12 / 640, (1136 - 795.8) / 640, 98.5 / 640 ];
-        let imageSrcScale = [ 50 / 640, (1136 - 795 + 480) / 640, 540 / 640, 405 / 640 ];
-        let canvas = document.getElementById('canvas');
-        let ctx = canvas.getContext('2d');
+        const uploadImgSrc = reader.result;
+        const iconSrcScale = [12 / 640, (1136 - 795.8) / 640, 98.5 / 640 ];
+        const imageSrcScale = [ 50 / 640, (1136 - 795 + 480) / 640, 540 / 640, 405 / 640 ];
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
 
         // Canvas上に画像を表示
-        let img = new Image();
+        const img = new Image();
         img.src = uploadImgSrc;
         img.onload = () => {
-          let iconWidth = 98;
-          let iconHeight = 98;
+          const iconWidth = 98;
+          const iconHeight = 98;
           
           function checkWaku(array, startIndex, targetColor) {
             function isRange(value, target, margin) {
               return value - margin <= target && value + margin >= target;
             }
-            let colorMargin = 64;
+            const colorMargin = 64;
             return  isRange(array[startIndex + 0], targetColor[0], colorMargin) &&
                     isRange(array[startIndex + 1], targetColor[1], colorMargin) &&
                     isRange(array[startIndex + 2], targetColor[2], colorMargin);
@@ -1468,12 +1467,12 @@ let componentPic = {
           // アイコン上端の黒い線の位置を探す。
           srcY += 1; // 上にずらして確認していくので、最初は5sサイズの上端ラインの１段下から始める。
           // アイコン左上の主属性の上辺りを確認する。
-          let checkWidth = 8;
-          let checkHeight = 16;
+          const checkWidth = 8;
+          const checkHeight = 16;
           let isHitBlackLine = false;
           data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - (checkHeight - 1), checkWidth, checkHeight);
           for (let i = 0; i < 10; i++) {
-            let n = 4 * (checkHeight - 1 - i) * checkWidth;
+            const n = 4 * (checkHeight - 1 - i) * checkWidth;
             if (data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) {
               srcY -= i;
               isHitBlackLine = true;
@@ -1491,15 +1490,15 @@ let componentPic = {
           this.iconResultSrc = canvas.toDataURL('image/jpeg', 0.7);
 
           // モンスター画像取得
-          let imageWidth = 540;
-          let imageHeight = 405;
+          const imageWidth = 540;
+          const imageHeight = 405;
           
           // モンスター画像の縦の中心を求める
-          let monsterAreaTop = imgTop + 144 / 640 * imgWidth;
-          let monsterAreaBottom = imgHeight - 354 / 640 * imgWidth;
-          let monsterAreaMiddleRate = 0.624;
-          let monsterAreaMiddleOffset = imgWidth * 0.07;
-          let monsterAreaMiddle = (monsterAreaTop * monsterAreaMiddleRate + monsterAreaBottom * (1 - monsterAreaMiddleRate) - monsterAreaMiddleOffset) | 0;
+          const monsterAreaTop = imgTop + 144 / 640 * imgWidth;
+          const monsterAreaBottom = imgHeight - 354 / 640 * imgWidth;
+          const monsterAreaMiddleRate = 0.624;
+          const monsterAreaMiddleOffset = imgWidth * 0.07;
+          const monsterAreaMiddle = (monsterAreaTop * monsterAreaMiddleRate + monsterAreaBottom * (1 - monsterAreaMiddleRate) - monsterAreaMiddleOffset) | 0;
 
           srcX = marginLeft + (imageSrcScale[0] * imgWidth + 0.5) | 0;
           srcY = monsterAreaMiddle - srcHeight / 2;
@@ -1514,8 +1513,8 @@ let componentPic = {
           this.imageResultSrc = canvas.toDataURL('image/jpeg', 0.85);
 
           // モンスター番号＆モンスター名の領域を切り抜く。
-          let nameAreaHeight = 76 / 640 * imgWidth;
-          let nameAreaTop = monsterAreaTop + 8 / 640 * imgWidth;
+          const nameAreaHeight = 76 / 640 * imgWidth;
+          const nameAreaTop = monsterAreaTop + 8 / 640 * imgWidth;
           srcX = marginLeft + (0.15 * imgWidth + 0.5) | 0;
           srcWidth = (0.7 * imgWidth + 0.5)| 0;
           // Canvasの準備
@@ -1535,13 +1534,13 @@ let componentPic = {
 
     submit: function () {
       function toBlob (dataUrl) {
-        let bin = atob(dataUrl.replace(/^.*,/, ''));
-        let buffer = new Uint8Array(bin.length);
+        const bin = atob(dataUrl.replace(/^.*,/, ''));
+        const buffer = new Uint8Array(bin.length);
         for (let i = 0; i < bin.length; i++) {
           buffer[i] = bin.charCodeAt(i);
         }
         // Blobを作成
-        let blob = new Blob([buffer.buffer], {
+        const blob = new Blob([buffer.buffer], {
           type: 'image/jpeg'
         });
         return blob;
@@ -1555,21 +1554,21 @@ let componentPic = {
       if (this.isSubmitted) { return; }
       this.isSubmitted = true;
       // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
-      let timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
+      const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
       
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', [ '送信中...' ]);
 
-      let blobIcon = toBlob(this.iconResultSrc);
-      let blobImage = toBlob(this.imageResultSrc);
+      const blobIcon = toBlob(this.iconResultSrc);
+      const blobImage = toBlob(this.imageResultSrc);
 
-      let formData = new FormData();
+      const formData = new FormData();
       formData.append('mode', 'image');
       formData.append('no', this.monsterNo);
       formData.append('icon', blobIcon);
       formData.append('image', blobImage);
 
-      let onUploadProgress = (ev) => {
+      const onUploadProgress = (ev) => {
         if (ev.loaded == ev.total) {
           this.$store.commit('setMessages', [ '登録中...' ]);
         }
@@ -1600,7 +1599,7 @@ let componentPic = {
           this.$store.commit('setMessages', response.data.success);
 
           if (response.data.newTableData) {
-            let newTableData = response.data.newTableData;
+            const newTableData = response.data.newTableData;
             if (newTableData.imageTable) {
               this.$store.commit('addImageData', newTableData.imageTable);
             }
@@ -1634,13 +1633,13 @@ let componentPic = {
 
 /** 現在のURLでの history 形式でのルートを求める */
 function getRouterBase () {
-  let routerBaseArray = /^.*padmdb[^/]*\//i.exec(location.pathname);
+  const routerBaseArray = /^.*padmdb[^/]*\//i.exec(location.pathname);
   if (routerBaseArray) { return routerBaseArray[0]; }
   return '/';
 }
 
 // ルートオプションを渡してルーターインスタンスを生成します
-let router = new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   base: getRouterBase(),
   // 各ルートにコンポーネントをマッピングします

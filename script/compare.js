@@ -336,17 +336,17 @@ window.componentCompare = {
     },
 
     _load: function (index, monsterNo) {
-      let path = `./monsterJson/${monsterNo}.json`;
+      const path = `./monsterJson/${monsterNo}.json`;
 
       Vue.set(this.monsterDatas, index, null);
       this.$store.commit('setMessages', [ 'モンスター情報取得中' ]);
       axios.get(path).then(
         response => {
-          let data = $.extend(true, {}, constData.monsterClearData, response.data);
+          const data = $.extend(true, {}, constData.monsterClearData, response.data);
           if (!data.superAwakens) { data.superAwakens = []; }
 
           data.awakenObj = {};
-          for (let awaken of data.awakens) {
+          for (const awaken of data.awakens) {
             data.awakenObj[awaken] = (data.awakenObj[awaken] || 0) + 1;
           }
           Vue.set(this.monsterDatas, index, data);
@@ -354,7 +354,7 @@ window.componentCompare = {
         }
       ).catch(
         () => {
-          let errorMessage = `モンスター No.${monsterNo} の情報が見つかりませんでした。`;
+          const errorMessage = `モンスター No.${monsterNo} の情報が見つかりませんでした。`;
           this.$store.commit('clearMessages');
           this.$store.commit('setErrors', [ errorMessage ]);
         }
@@ -364,9 +364,9 @@ window.componentCompare = {
     getSenzaiKillerNos: function (monsterData) {
       // 合成できないものは潜在覚醒を降ることができないので無し。
       if (!this.canAddPlus(monsterData)) { return []; }
-      let killerNoSet = new Set();
-      for (let type of monsterData.types) {
-        for (let killerNo of this.typeTable[type].senzaiKiller) {
+      const killerNoSet = new Set();
+      for (const type of monsterData.types) {
+        for (const killerNo of this.typeTable[type].senzaiKiller) {
           killerNoSet.add(killerNo);
         }
       }
@@ -377,7 +377,7 @@ window.componentCompare = {
     canAddPlus: function (monsterData) {
       // 素材系のタイプの場合はプラス合成不可と判断する。
       // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
-      let type = monsterData.types[0];
+      const type = monsterData.types[0];
       return !((type >= 9 && type <= 12) || type == 99);
     },
 
