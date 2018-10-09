@@ -687,7 +687,7 @@ Vue.component('pagination', {
     }
   },
   template: `
-<nav">
+<nav>
   <ul class="pagination pagination-sm justify-content-center">
     <li class="page-item" :class="{ disabled: page <= 1 }">
       <router-link class="page-link" :to="createToObj(page - 1)" append aria-label="前">
