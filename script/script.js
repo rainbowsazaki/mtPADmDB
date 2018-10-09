@@ -704,7 +704,7 @@ Vue.component('monsterIcon', {
 
 /** ツイートボタン表示のコンポーネント */
 Vue.component('tweetButton', {
-  template: `<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>`,
+  template: '<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>',
   props: {
     'hashtags': String,
   },
