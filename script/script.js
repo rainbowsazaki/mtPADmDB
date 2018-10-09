@@ -272,7 +272,7 @@ const store = new Vuex.Store({
       axios.all([
         axios.get('./listJson/skill_list.json'),
         axios.get('./listJson/leader_skill_list.json'),
-        axios.get('./listJson/evolution_list.json',)
+        axios.get('./listJson/evolution_list.json'),
       ]).then( axios.spread( (
         skillListResponse,
         leaderSkillListResponse,
