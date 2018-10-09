@@ -370,7 +370,7 @@ window.componentCompare = {
           killerNoSet.add(killerNo);
         }
       }
-      return Array.from(killerNoSet).filter(a => a < 9).sort(((a, b) => a - b));
+      return Array.from(killerNoSet).filter(a => a < 9).sort((a, b) => a - b);
     },
 
     /** プラスが振れるキャラクターかどうかを返す。 */

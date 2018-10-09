@@ -991,7 +991,7 @@ const componentMonsterData = {
           killerNoSet.add(killerNo);
         }
       }
-      return Array.from(killerNoSet).sort(((a, b) => a - b));
+      return Array.from(killerNoSet).sort((a, b) => a - b);
     },
 
     /** プラスが振れるキャラクターかどうかを返す。 */
