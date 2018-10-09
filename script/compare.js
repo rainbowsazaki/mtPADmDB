@@ -317,7 +317,7 @@ window.componentCompare = {
     /** 比較表示するモンスターを現在している番号のものに変更する。 */
     updateCompareMonster: function () {
       if (!this.targets[0] || !this.targets[1]) {
-        this.$store.commit('setErrors', [ '対象モンスターが正しく指定されていません。' ]);
+        this.$store.commit('setErrors', ['対象モンスターが正しく指定されていません。']);
         return;
       }
       this.$router.push({ name: 'compare', params: { nos: this.targets.join(',') }});
@@ -339,7 +339,7 @@ window.componentCompare = {
       const path = `./monsterJson/${monsterNo}.json`;
 
       Vue.set(this.monsterDatas, index, null);
-      this.$store.commit('setMessages', [ 'モンスター情報取得中' ]);
+      this.$store.commit('setMessages', ['モンスター情報取得中']);
       axios.get(path).then(
         response => {
           const data = $.extend(true, {}, constData.monsterClearData, response.data);
@@ -356,7 +356,7 @@ window.componentCompare = {
         () => {
           const errorMessage = `モンスター No.${monsterNo} の情報が見つかりませんでした。`;
           this.$store.commit('clearMessages');
-          this.$store.commit('setErrors', [ errorMessage ]);
+          this.$store.commit('setErrors', [errorMessage]);
         }
       );
     },

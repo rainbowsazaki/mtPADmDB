@@ -33,11 +33,11 @@ const constData = {
   monsterClearData: {
     no: null,
     name:'',
-    attributes: [ null, 0 ],
+    attributes: [null, 0],
     cost: null,
     rare: null,
-    types: [ null, 0, 0],
-    awakens: [ null, 0, 0, 0, 0, 0, 0, 0, 0 ],
+    types: [null, 0, 0],
+    awakens: [null, 0, 0, 0, 0, 0, 0, 0, 0],
     maxExp: null,
     maxLevel: null,
     maxParam: {
@@ -64,7 +64,7 @@ const constData = {
       attack: null,
       recovery: null
     },
-    superAwakens: [ null ],
+    superAwakens: [null],
     evolutionType: null,
     evolution: {
       baseNo: null,
@@ -84,14 +84,14 @@ const constData = {
 
   typeTable: {
     0: { name: 'なし', senzaiKiller: [] },
-    1: { name: '神', senzaiKiller: [ 3, 9, 10, 11, 12 ] },
-    2: { name: 'ドラゴン', senzaiKiller: [ 4, 9, 10, 11, 12] },
-    3: { name: '悪魔', senzaiKiller: [ 1, 9, 10, 11, 12 ] },
-    4: { name: 'マシン', senzaiKiller: [1, 6, 9, 10, 11, 12 ] },
-    5: { name: 'バランス', senzaiKiller: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] },
-    6: { name: '攻撃', senzaiKiller: [ 3, 7, 9, 10, 11, 12 ] },
-    7: { name: '体力', senzaiKiller: [ 4, 8, 9, 10, 11, 12 ] },
-    8: { name: '回復', senzaiKiller: [ 2, 6, 9, 10, 11, 12 ] },
+    1: { name: '神', senzaiKiller: [3, 9, 10, 11, 12] },
+    2: { name: 'ドラゴン', senzaiKiller: [4, 9, 10, 11, 12] },
+    3: { name: '悪魔', senzaiKiller: [1, 9, 10, 11, 12] },
+    4: { name: 'マシン', senzaiKiller: [1, 6, 9, 10, 11, 12] },
+    5: { name: 'バランス', senzaiKiller: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+    6: { name: '攻撃', senzaiKiller: [3, 7, 9, 10, 11, 12] },
+    7: { name: '体力', senzaiKiller: [4, 8, 9, 10, 11, 12] },
+    8: { name: '回復', senzaiKiller: [2, 6, 9, 10, 11, 12] },
     9: { name: '進化用', senzaiKiller: [] },
     10: { name: '能力覚醒用', senzaiKiller: [] },
     11: { name: '合成強化用', senzaiKiller: [] },
@@ -302,7 +302,7 @@ const store = new Vuex.Store({
         option = undefined;
       }
 
-      this.commit('setMessages', [ 'モンスター情報取得中' ]);
+      this.commit('setMessages', ['モンスター情報取得中']);
       axios.get(path, option).then(
         response => {
           const data = $.extend(true, {}, constData.monsterClearData, response.data);
@@ -321,7 +321,7 @@ const store = new Vuex.Store({
             errorMessage = `モンスター No.${param.no} の情報が見つかりませんでした。`;
           }
           this.commit('clearMessages');
-          this.commit('setErrors', [ errorMessage ]);
+          this.commit('setErrors', [errorMessage]);
         }
       );
     },
@@ -380,7 +380,7 @@ Vue.component('pdSelect', {
   </div>
 </div>
   `,
-  props: [ 'value' ],
+  props: ['value'],
   data: function () {
     return {
       html: ''
@@ -429,11 +429,11 @@ Vue.component('pdOption', {
   <slot></slot>
 </a>
   `,
-  props: [ 'value' ],
+  props: ['value'],
 
   methods: {
     click: function () {
-      this.$parent.$emit('clickOption', [ this.value ] );
+      this.$parent.$emit('clickOption', [this.value] );
     }
   }
 });
@@ -578,7 +578,7 @@ Vue.component('monsterIncrementalSearch', {
   </div>
 </div>
   `,
-  props: [ 'id', 'value', 'monsterTable', 'imageTable' ],
+  props: ['id', 'value', 'monsterTable', 'imageTable'],
   data: function () {
     return {
     };
@@ -681,7 +681,7 @@ Vue.component('monsterIcon', {
     <div :style="{ fontSize: fontSize, lineHeight: height }" style="text-align: center; overflow: hidden; color: #aaa;">{{no}}</div>
   </div>
   `,
-  props: [ 'no', 'monsterTable', 'imageTable', 'width', 'height' ],
+  props: ['no', 'monsterTable', 'imageTable', 'width', 'height'],
   
   computed: {
     hasImage: function () { return !!this.imageTable[this.no]; },
@@ -868,7 +868,7 @@ const componentMonsterData = {
     if (this.isHistory) { str += ` (${this.monsterData.datetime})`; }
     return str;
   },
-  props: [ 'no' ],
+  props: ['no'],
   data: function () {
     return {
       booleanTable: constData.booleanTable,
@@ -1050,7 +1050,7 @@ const componentHistory = {
   pageTitle: function () {
     return '履歴一覧';
   },
-  props: [ 'no' ],
+  props: ['no'],
   data: function () {
     return {
       /** 履歴情報 */
@@ -1277,7 +1277,7 @@ const componentMonsterEdit = {
       const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
 
       this.$store.commit('clearErrors');
-      this.$store.commit('setMessages', [ '送信中...' ]);
+      this.$store.commit('setMessages', ['送信中...']);
 
       // データの整形
       // 超覚醒を昇順ソート
@@ -1385,7 +1385,7 @@ const componentPic = {
   
       // 画像ファイル以外は処理を止める
       if (!fileData.type.match('image.*')) {
-        this.$store.commit('setErrors', [ '画像を選択してください' ]);
+        this.$store.commit('setErrors', ['画像を選択してください']);
         return;
       }
 
@@ -1397,8 +1397,8 @@ const componentPic = {
       reader.onload = () => {
         // Canvas上に表示する
         const uploadImgSrc = reader.result;
-        const iconSrcScale = [12 / 640, (1136 - 795.8) / 640, 98.5 / 640 ];
-        const imageSrcScale = [ 50 / 640, (1136 - 795 + 480) / 640, 540 / 640, 405 / 640 ];
+        const iconSrcScale = [12 / 640, (1136 - 795.8) / 640, 98.5 / 640];
+        const imageSrcScale = [50 / 640, (1136 - 795 + 480) / 640, 540 / 640, 405 / 640];
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
@@ -1546,9 +1546,9 @@ const componentPic = {
         return blob;
       }
 
-      if (!this.iconResultSrc) { this.$store.commit('setErrors', [ '画像が選択されていません。' ]); return; }
-      if (this.monsterNo == 0) { this.$store.commit('setErrors', [ 'モンスター番号が指定されていません。' ]); return; }
-      if (this.monsterNo < 1 || this.monsterNo > 9999) { this.$store.commit('setErrors', [ 'モンスター番号の指定が不正です。' ]); return; }
+      if (!this.iconResultSrc) { this.$store.commit('setErrors', ['画像が選択されていません。']); return; }
+      if (this.monsterNo == 0) { this.$store.commit('setErrors', ['モンスター番号が指定されていません。']); return; }
+      if (this.monsterNo < 1 || this.monsterNo > 9999) { this.$store.commit('setErrors', ['モンスター番号の指定が不正です。']); return; }
       
       // 多重送信防止処理
       if (this.isSubmitted) { return; }
@@ -1557,7 +1557,7 @@ const componentPic = {
       const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
       
       this.$store.commit('clearErrors');
-      this.$store.commit('setMessages', [ '送信中...' ]);
+      this.$store.commit('setMessages', ['送信中...']);
 
       const blobIcon = toBlob(this.iconResultSrc);
       const blobImage = toBlob(this.imageResultSrc);
@@ -1570,7 +1570,7 @@ const componentPic = {
 
       const onUploadProgress = (ev) => {
         if (ev.loaded == ev.total) {
-          this.$store.commit('setMessages', [ '登録中...' ]);
+          this.$store.commit('setMessages', ['登録中...']);
         }
       };
 
