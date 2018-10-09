@@ -217,7 +217,7 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(err);
 });
 
-jQuery.fn.scrollParentShowThis = function() {
+jQuery.fn.scrollParentShowThis = function () {
   if (this.length == 0) { return this; }
   
   const offsetParent = this.offsetParent();
@@ -236,7 +236,7 @@ jQuery.fn.scrollParentShowThis = function() {
 };
 
 /** HTMLエスケープを行う。 */
-function escapeHtml(str) {
+function escapeHtml (str) {
   if (typeof str !== 'string') { return; }
   return str.replace(/[<>&"'`]/g, (match) => {
     const escape = {
@@ -365,7 +365,7 @@ const store = new Vuex.Store({
 
 
 // 数字をカンマ区切りにする。
-Vue.filter('addComma', function(val) {
+Vue.filter('addComma', function (val) {
   const arr = String(val).split('.');
   arr[0] = arr[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
   return arr.join('.');
@@ -538,7 +538,7 @@ Vue.component('monsterIncrementalInput', {
   },
   
   methods: {
-    updateFilter: function() {
+    updateFilter: function () {
       this.filter = (this.monsterTable[this.value] || { name: '' }).name;
     },
 
@@ -647,7 +647,7 @@ Vue.component('pagination', {
   },
 
   computed: {
-    itemCountReal() { return Math.min(this.itemCount, this.pageCount); },
+    itemCountReal () { return Math.min(this.itemCount, this.pageCount); },
     itemCountHarf () { return (this.itemCountReal / 2) | 0; },
     paginationStart () {
       return (this.page > this.pageCount - this.itemCountHarf)
@@ -820,16 +820,16 @@ const componentMonsterList = {
 
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
-    imageTable() { return this.$store.state.imageTable; },
+    imageTable () { return this.$store.state.imageTable; },
     attrColors () { return constData.attrColors; },
 
     monsterCount () { return this.monsterTableArray.length; },
     /** モンスター一覧情報を読込中かどうか。 現在の実装だとデータ未登録の場合、ずっと読み込み中判定となる。 */
     isLoadingMonsterList () { return this.monsterCount == 0; },
-    pageCount() { return ((this.searchedMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+    pageCount () { return ((this.searchedMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     page () { return (this.$route.query.page * 1) || 1; },
 
-    monsterTableArray: function() {
+    monsterTableArray: function () {
       const array = [];
       for (const key in this.monsterTable) {
         array.push(this.monsterTable[key]);
@@ -1269,7 +1269,7 @@ const componentMonsterEdit = {
       }
       this.$store.commit('fetchCommonData');
     },
-    submit: function( ) {
+    submit: function ( ) {
       // 多重送信防止処理
       if (this.isSubmitted) { return; }
       this.isSubmitted = true;
@@ -1379,7 +1379,7 @@ const componentPic = {
       }
       this.$_mixinForPage_updateTitle();
     },
-    loadLocalImage: function loadLocalImage(e) {
+    loadLocalImage: function loadLocalImage (e) {
       // ファイル情報を取得
       const fileData = e.target.files[0];
   
@@ -1409,8 +1409,8 @@ const componentPic = {
           const iconWidth = 98;
           const iconHeight = 98;
           
-          function checkWaku(array, startIndex, targetColor) {
-            function isRange(value, target, margin) {
+          function checkWaku (array, startIndex, targetColor) {
+            function isRange (value, target, margin) {
               return value - margin <= target && value + margin >= target;
             }
             const colorMargin = 64;

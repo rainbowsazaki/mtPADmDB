@@ -273,8 +273,8 @@ window.componentCompare = {
     monsterTable () { return this.$store.state.monsterTable; },
     skillTable () { return this.$store.state.skillTable; },
     leaderSkillTable () { return this.$store.state.leaderSkillTable; },
-    imageTable() { return this.$store.state.imageTable; },
-    booleanTable() { return constData.booleanTable; },
+    imageTable () { return this.$store.state.imageTable; },
+    booleanTable () { return constData.booleanTable; },
     typeTable () { return constData.typeTable; },
     awakenTable () { return constData.awakenTable; },
 
