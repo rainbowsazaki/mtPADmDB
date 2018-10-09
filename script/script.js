@@ -221,7 +221,7 @@ jQuery.fn.scrollParentShowThis = function () {
   if (this.length == 0) { return this; }
   
   const offsetParent = this.offsetParent();
-  const scrollTop    = offsetParent.scrollTop();
+  const scrollTop = offsetParent.scrollTop();
   const scrollHeight = offsetParent.height();
   
   const nowTop = this.position().top;
@@ -1285,8 +1285,8 @@ const componentMonsterEdit = {
         } else {
           // Google Analiticsにイベントを送信。
           let action = 'monsterDataPost';
-          if (this.$route.params.no) { action = 'monsterDataUpdate'; }      // 現在のデータを元した編集の場合
-          if (this.isHistory) { action = 'monsterDataUpdateFromHistory'; }  // 編集履歴をもとにした編集の場合
+          if (this.$route.params.no) { action = 'monsterDataUpdate'; } // 現在のデータを元した編集の場合
+          if (this.isHistory) { action = 'monsterDataUpdateFromHistory'; } // 編集履歴をもとにした編集の場合
           gtagProductionOnly('event', action, {
             'event_category': 'monsterData',
             'event_label': `No.${this.monsterData.no}`
@@ -1400,7 +1400,7 @@ const componentPic = {
               return value - margin <= target && value + margin >= target;
             }
             const colorMargin = 64;
-            return  isRange(array[startIndex + 0], targetColor[0], colorMargin) &&
+            return isRange(array[startIndex + 0], targetColor[0], colorMargin) &&
                     isRange(array[startIndex + 1], targetColor[1], colorMargin) &&
                     isRange(array[startIndex + 2], targetColor[2], colorMargin);
           }
