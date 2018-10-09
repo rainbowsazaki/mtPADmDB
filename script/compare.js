@@ -3,7 +3,7 @@
  * モンスター同士の比較を行うページのコンポーネント。
  */
 var componentCompare = {
-  name: "pageCompare",
+  name: 'pageCompare',
   pageTitle: function () {
     if (!this.isEnableMonsterDatas) { return 'モンスター比較'; }
     return 'モンスター比較 ' + this.targets.map(no => (this.monsterTable[no] || {}).name).join(',');
@@ -133,47 +133,47 @@ var componentCompare = {
         </tr>
         <tr v-if="hasWay" class="thead-light">
           <th>4個消し</th>
-          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(4) *　wayAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
         </tr>
         <tr v-if="hasLJi" class="thead-light">
           <th>L字消し</th>
-          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(5) *　lJiAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
         </tr>
         <tr v-if="hasComboUp" class="thead-light">
           <th>3個消し 7コンボ</th>
-          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(3) *　comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(3) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
         </tr>
         <tr v-if="hasSpComboUp" class="thead-light">
           <th>3個消し 10コンボ</th>
-          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(3) *　comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(3) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
         </tr>
         <tr v-if="hasWay && hasComboUp" class="thead-light">
           <th>4個消し 7コンボ</th>
-          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(4) *　wayAttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
         </tr>
         <tr v-if="hasWay && hasSpComboUp" class="thead-light">
           <th>4個消し 10コンボ</th>
-          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(4) *　wayAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
         </tr>
         <tr v-if="hasLJi && hasComboUp" class="thead-light">
           <th>L字消し 7コンボ</th>
-          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(5) *　lJiAttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
         </tr>
         <tr v-if="hasLJi && hasSpComboUp" class="thead-light">
           <th>L字消し 10コンボ</th>
-          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(5) *　lJiAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
+          <td v-for="data in monsterDatas" class="text-right">{{ maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</td>
         </tr>
         <tr v-if="canA3x3Compare" class="thead-light">
           <th>無効貫通</th>
           <td v-for="data in monsterDatas" class="text-right">
-            <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) *　a3x3AttackRate(data) | ceil | nullToUndefined | addComma}}</span>
+            <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) * a3x3AttackRate(data) | ceil | nullToUndefined | addComma}}</span>
             <span v-else>−</span>
           </td>
         </tr>
         <tr v-if="canA3x3Compare && hasComboUp" class="thead-light">
           <th>無効貫通 7コンボ</th>
           <td v-for="data in monsterDatas" class="text-right">
-            <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) *　a3x3AttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</span>
+            <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) * a3x3AttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma}}</span>
             <span v-else>−</span>
           </td>
         </tr>
@@ -254,9 +254,9 @@ var componentCompare = {
   }, 
   created: function () { this.load(); },
   watch: {
-    "$route": function () { this.load(); },
-    monsterTable: "$_mixinForPage_updateTitle",
-    isEnableMonsterDatas: "$_mixinForPage_updateTitle",
+    '$route': function () { this.load(); },
+    monsterTable: '$_mixinForPage_updateTitle',
+    isEnableMonsterDatas: '$_mixinForPage_updateTitle',
   },
 
   filters: {
@@ -362,7 +362,7 @@ var componentCompare = {
 
     getSenzaiKillerNos: function (monsterData) {
       // 合成できないものは潜在覚醒を降ることができないので無し。
-      if (!this.canAddPlus(monsterData)) { return [] }
+      if (!this.canAddPlus(monsterData)) { return []; }
       var killerNoSet = new Set();
       for (var type of monsterData.types) {
         for (var killerNo of this.typeTable[type].senzaiKiller) {
