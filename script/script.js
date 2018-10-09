@@ -205,7 +205,7 @@ const constData = {
 };
 
 /** 本番環境でのみ gtag を実行する関数 */
-const gtagProductionOnly = (document.domain == 'localhost') ? function () {} : gtag;
+const gtagProductionOnly = (document.domain === 'localhost') ? function () {} : gtag;
 
 axios.interceptors.request.use(function (config) {
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
@@ -218,7 +218,7 @@ axios.interceptors.request.use(function (config) {
 });
 
 jQuery.fn.scrollParentShowThis = function () {
-  if (this.length == 0) { return this; }
+  if (this.length === 0) { return this; }
   
   const offsetParent = this.offsetParent();
   const scrollTop = offsetParent.scrollTop();
@@ -476,7 +476,7 @@ Vue.component('skillIncrementalInput', {
       const obj = {};
       for (const key in this.skillTable) {
         const value = this.skillTable[key];
-        if (value.name.indexOf(this.value) != -1) {
+        if (value.name.indexOf(this.value) !== -1) {
           obj[key] = value;
         }
       }
@@ -531,7 +531,7 @@ Vue.component('monsterIncrementalInput', {
       const obj = {};
       for (const key in this.monsterTable) {
         const value = this.monsterTable[key];
-        if (value && value.name && value.name.indexOf(this.filter) != -1) {
+        if (value && value.name && value.name.indexOf(this.filter) !== -1) {
           obj[key] = value;
         }
       }
@@ -543,7 +543,7 @@ Vue.component('monsterIncrementalInput', {
       this.updateFilter();
     },
     monsterTable: function () {
-      if (this.filter == '') { this.updateFilter(); }
+      if (this.filter === '') { this.updateFilter(); }
     }
   },
   mounted: function () {
@@ -741,8 +741,8 @@ Vue.component('monsterIcon', {
     monsterData: function () { return (this.monsterTable[this.no] || {}); },
     monsterNoAndName: function () { return `No.${this.monsterData.no} ${this.monsterData.name}`; },
     attributes: function () { return this.monsterData.attributes || []; },
-    hasAttr0: function () { const attr = this.attributes[0]; return (attr && attr != 0 && attr != 99); },
-    hasAttr1: function () { const attr = this.attributes[1]; return (attr && attr != 0 && attr != 99); },
+    hasAttr0: function () { const attr = this.attributes[0]; return (attr && attr !== 0 && attr !== 99); },
+    hasAttr1: function () { const attr = this.attributes[1]; return (attr && attr !== 0 && attr !== 99); },
     iconPath: function () { return `./monsterIconsLog/icon_${this.no}_${this.imageTable[this.no].id}.jpg`; },
     attrPath0: function () { return `./image/attribute/${this.attributes[0]}.png`; },
     attrPath1: function () { return `./image/attribute/${this.attributes[1]}.png`; },
@@ -886,7 +886,7 @@ const componentMonsterList = {
 
     monsterCount () { return this.monsterTableArray.length; },
     /** モンスター一覧情報を読込中かどうか。 現在の実装だとデータ未登録の場合、ずっと読み込み中判定となる。 */
-    isLoadingMonsterList () { return this.monsterCount == 0; },
+    isLoadingMonsterList () { return this.monsterCount === 0; },
     pageCount () { return ((this.searchedMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     page () { return (this.$route.query.page * 1) || 1; },
 
@@ -901,7 +901,7 @@ const componentMonsterList = {
       const searchWord = this.$route.query.searchWord;
       if (!searchWord) { return this.monsterTableArray; }
       return this.monsterTableArray.filter(monsterData => {
-        return monsterData.name.indexOf(searchWord) != -1;
+        return monsterData.name.indexOf(searchWord) !== -1;
       });
     },
     monsterTableInPage () {
@@ -999,12 +999,12 @@ const componentMonsterData = {
 
     /** 指定された履歴情報が今有効なデータかどうかを取得する。 */
     isActiveHistory: function (history) {
-      return history.state == 1;
+      return history.state === 1;
     },
     /** 指定された履歴情報が現在表示している */
     isShowHistory: function (history) {
       if (this.isHistory) {
-        return history.id == this.$route.params.id;
+        return history.id === this.$route.params.id;
       } else {
         return this.isActiveHistory(history);
       }
@@ -1027,7 +1027,7 @@ const componentMonsterData = {
     },
     skillDetails: function () {
       let skillDetails = {};
-      if (this.monsterData.skill != 0) {
+      if (this.monsterData.skill !== 0) {
         const target = this.skillTable[this.monsterData.skill];
         if (target) {
           skillDetails = target;
@@ -1037,7 +1037,7 @@ const componentMonsterData = {
     },
     leaderSkillDetails: function () {
       let leaderSkillDetails = {};
-      if (this.monsterData.leaderSkill != 0) {
+      if (this.monsterData.leaderSkill !== 0) {
         const target = this.leaderSkillTable[this.monsterData.leaderSkill];
         if (target) {
           leaderSkillDetails = target;
@@ -1071,7 +1071,7 @@ const componentMonsterData = {
       // 素材系のタイプの場合はプラス合成不可と判断する。
       // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
       const type = this.monsterData.types[0];
-      return !((type >= 9 && type <= 12) || type == 99);
+      return !((type >= 9 && type <= 12) || type === 99);
     },
 
     /** 最大レベル時のパラメータが登録されているかどうかを取得する。 */
@@ -1095,7 +1095,7 @@ const componentMonsterData = {
     },
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
-      return (this.$route.name == 'history');
+      return (this.$route.name === 'history');
     }
   }
 };
@@ -1133,7 +1133,7 @@ const componentHistory = {
 
     /** 指定された履歴情報が今有効なデータかどうかを取得する。 */
     isActiveHistory: function (history) {
-      return history.state == 1;
+      return history.state === 1;
     },
     /** 指定された番号のモンスターの名前を取得する。 */
     monsterName: function (no) {
@@ -1147,7 +1147,7 @@ const componentHistory = {
 
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
-      return (this.$route.name == 'history');
+      return (this.$route.name === 'history');
     }
   }
 };
@@ -1226,7 +1226,7 @@ const componentMonsterEdit = {
     },
 
     skillDetails: function () {
-      if (this.monsterData.skill != 0) {
+      if (this.monsterData.skill !== 0) {
         this.monsterData.skillDetails = $.extend(true, { name: '', description: '' }, this.skillTable[this.monsterData.skill]);
       }
       return this.monsterData.skillDetails;
@@ -1262,7 +1262,7 @@ const componentMonsterEdit = {
     },
 
     leaderSkillDetails: function () {
-      if (this.monsterData.leaderSkill != 0) {
+      if (this.monsterData.leaderSkill !== 0) {
         this.monsterData.leaderSkillDetails = $.extend(true, { name: '', description: '' }, this.leaderSkillTable[this.monsterData.leaderSkill]);
       }
       return this.monsterData.leaderSkillDetails;
@@ -1285,12 +1285,12 @@ const componentMonsterEdit = {
 
     /** 編集履歴を元データとした編集かどうか。 */
     isHistory: function () {
-      return (this.$route.name == 'historyEdit');
+      return (this.$route.name === 'historyEdit');
     },
 
     /** 超覚醒が 不明 かどうか */
     isUnknownSuperAwaken: function () {
-      return this.monsterData.superAwakens.indexOf(null) != -1;
+      return this.monsterData.superAwakens.indexOf(null) !== -1;
     }
   },
   
@@ -1510,7 +1510,7 @@ const componentPic = {
           }
 
           // 公式サイトのプレイヤー情報部分のない画像への対応。
-          if (imgWidth == 640 && imgHeight >= 944 && imgHeight <= 948) {
+          if (imgWidth === 640 && imgHeight >= 944 && imgHeight <= 948) {
             imgTop = imgHeight - 1096;
           }
 
@@ -1624,7 +1624,7 @@ const componentPic = {
       formData.append('image', blobImage);
 
       const onUploadProgress = (ev) => {
-        if (ev.loaded == ev.total) {
+        if (ev.loaded === ev.total) {
           this.$store.commit('setMessages', ['登録中...']);
         }
       };

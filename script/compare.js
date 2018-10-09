@@ -280,11 +280,11 @@ window.componentCompare = {
 
     /** モンスター情報がすべて存在しているかどうかを取得する。 */
     isEnableMonsterDatas: function () {
-      return (this.monsterDatas.length > 0 && this.monsterDatas.indexOf(null) == -1);
+      return (this.monsterDatas.length > 0 && this.monsterDatas.indexOf(null) === -1);
     },
     /** 限界突破可能なモンスターがいるかどうかを取得する。 */
     hasOverLimit: function () {
-      return this.monsterDatas.find((o) => o.overLimit == 1);
+      return this.monsterDatas.find((o) => o.overLimit === 1);
     },
 
     /** 比較対象の中に２体攻撃を持つモンスターがいるかどうかを取得する。 */
@@ -378,7 +378,7 @@ window.componentCompare = {
       // 素材系のタイプの場合はプラス合成不可と判断する。
       // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
       const type = monsterData.types[0];
-      return !((type >= 9 && type <= 12) || type == 99);
+      return !((type >= 9 && type <= 12) || type === 99);
     },
 
     /** 比較対象の中に指定された覚醒を持つモンスターが何体いるかを取得する。 */
