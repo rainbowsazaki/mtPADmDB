@@ -1461,7 +1461,7 @@ const componentPic = {
           // アイコン画像取得
           let srcX = marginLeft + (iconSrcScale[0] * imgWidth) | 0;
           let srcY = (imgHeight - iconSrcScale[1] * imgWidth) | 0;
-          let srcWidth = (iconSrcScale[2] * imgWidth)| 0;
+          let srcWidth = (iconSrcScale[2] * imgWidth) | 0;
           let srcHeight = srcWidth;
 
           // アイコン上端の黒い線の位置を探す。
@@ -1502,8 +1502,8 @@ const componentPic = {
 
           srcX = marginLeft + (imageSrcScale[0] * imgWidth + 0.5) | 0;
           srcY = monsterAreaMiddle - srcHeight / 2;
-          srcWidth = (imageSrcScale[2] * imgWidth + 0.5)| 0;
-          srcHeight = (imageSrcScale[3] * imgWidth + 0.5)| 0;
+          srcWidth = (imageSrcScale[2] * imgWidth + 0.5) | 0;
+          srcHeight = (imageSrcScale[3] * imgWidth + 0.5) | 0;
           // Canvasの準備
           canvas.width = imageWidth;
           canvas.height = imageHeight;
@@ -1516,7 +1516,7 @@ const componentPic = {
           const nameAreaHeight = 76 / 640 * imgWidth;
           const nameAreaTop = monsterAreaTop + 8 / 640 * imgWidth;
           srcX = marginLeft + (0.15 * imgWidth + 0.5) | 0;
-          srcWidth = (0.7 * imgWidth + 0.5)| 0;
+          srcWidth = (0.7 * imgWidth + 0.5) | 0;
           // Canvasの準備
           canvas.width = srcWidth;
           canvas.height = nameAreaHeight;
