@@ -815,7 +815,7 @@ const mixinForPage = {
   
   methods: {
     // ページタイトルの更新。
-    $_mixinForPage_updateTitle: function () {
+    $_mixinForPage_updateTitle: function () { // eslint-disable-line camelcase
       if ('pageTitle' in this.$options) {
         let pageTitle = this.$options.pageTitle;
         if (typeof pageTitle === 'function') {
