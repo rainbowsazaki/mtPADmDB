@@ -336,13 +336,13 @@ window.componentCompare = {
     },
 
     _load: function (index, monsterNo) {
-      var path = `./monsterJson/${monsterNo}.json`;
+      let path = `./monsterJson/${monsterNo}.json`;
 
       Vue.set(this.monsterDatas, index, null);
       this.$store.commit('setMessages', [ 'モンスター情報取得中' ]);
       axios.get(path).then(
         response => {
-          var data = $.extend(true, {}, constData.monsterClearData, response.data);
+          let data = $.extend(true, {}, constData.monsterClearData, response.data);
           if (!data.superAwakens) { data.superAwakens = []; }
 
           data.awakenObj = {};
@@ -354,7 +354,7 @@ window.componentCompare = {
         }
       ).catch(
         () => {
-          var errorMessage = `モンスター No.${monsterNo} の情報が見つかりませんでした。`;
+          let errorMessage = `モンスター No.${monsterNo} の情報が見つかりませんでした。`;
           this.$store.commit('clearMessages');
           this.$store.commit('setErrors', [ errorMessage ]);
         }
@@ -364,7 +364,7 @@ window.componentCompare = {
     getSenzaiKillerNos: function (monsterData) {
       // 合成できないものは潜在覚醒を降ることができないので無し。
       if (!this.canAddPlus(monsterData)) { return []; }
-      var killerNoSet = new Set();
+      let killerNoSet = new Set();
       for (let type of monsterData.types) {
         for (let killerNo of this.typeTable[type].senzaiKiller) {
           killerNoSet.add(killerNo);
@@ -377,7 +377,7 @@ window.componentCompare = {
     canAddPlus: function (monsterData) {
       // 素材系のタイプの場合はプラス合成不可と判断する。
       // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
-      var type = monsterData.types[0];
+      let type = monsterData.types[0];
       return !((type >= 9 && type <= 12) || type == 99);
     },
 
