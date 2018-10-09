@@ -723,7 +723,7 @@ Vue.component('tweetButton', {
   },
   methods: {
     createButton: function () {
-      if(typeof twttr === 'undefined') {
+      if (typeof twttr === 'undefined') {
         setTimeout(() => { this.createButton(); }, 100);
         return;
       }
@@ -1385,7 +1385,7 @@ let componentPic = {
       let fileData = e.target.files[0];
   
       // 画像ファイル以外は処理を止める
-      if(!fileData.type.match('image.*')) {
+      if (!fileData.type.match('image.*')) {
         this.$store.commit('setErrors', [ '画像を選択してください' ]);
         return;
       }
