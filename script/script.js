@@ -363,7 +363,6 @@ const store = new Vuex.Store({
   }
 });
 
-
 // 数字をカンマ区切りにする。
 Vue.filter('addComma', function (val) {
   const arr = String(val).split('.');
@@ -422,7 +421,6 @@ Vue.component('pdSelect', {
   }
 });
 
-
 Vue.component('pdOption', {
   template: `
 <a class="dropdown-item pd-option" href="javascript:void(0);" @click="click" :data-value="value" style="width: 8em; overflow-x: hidden; display: inline-flex; padding: 4px;">
@@ -437,7 +435,6 @@ Vue.component('pdOption', {
     }
   }
 });
-
 
 Vue.component('skillIncrementalInput', {
   template: `
@@ -485,7 +482,6 @@ Vue.component('skillIncrementalInput', {
     }
   }
 });
-
 
 Vue.component('monsterIncrementalInput', {
   template: `
@@ -555,7 +551,6 @@ Vue.component('monsterIncrementalInput', {
   }
 });
 
-
 Vue.component('monsterIncrementalSearch', {
   template: `
 <div class="form-row">
@@ -590,7 +585,6 @@ Vue.component('monsterIncrementalSearch', {
     }
   }
 });
-
 
 /**
  * ページ送りのコンポーネント
@@ -670,7 +664,6 @@ Vue.component('pagination', {
   }
 });
 
-
 /** モンスターアイコンを表示するコンポーネント。 */
 Vue.component('monsterIcon', {
   template: `
@@ -743,7 +736,6 @@ Vue.component('tweetButton', {
   }
 });
 
-
 // ページ用のコンポーネントで使用する処理のミックスイン
 const mixinForPage = {
   created: function () {
@@ -788,7 +780,6 @@ const mixinForPage = {
 
 Vue.mixin(mixinForPage);
 
-
 /**
  * アバウトページコンポーネント
  */
@@ -797,7 +788,6 @@ const componentAbout = {
   template: '#templateAbout',
   pageTitle: 'これは何？'
 };
-
 
 /**
  * モンスター一覧ページコンポーネント
@@ -855,7 +845,6 @@ const componentMonsterList = {
 
   }
 };
-
 
 /**
  * モンスター情報ページコンポーネント
@@ -1040,7 +1029,6 @@ const componentMonsterData = {
   }
 };
 
-
 /**
  * モンスター情報変更履歴ページコンポーネント
  */
@@ -1092,7 +1080,6 @@ const componentHistory = {
     }
   }
 };
-
 
 /**
  * モンスター情報編集ページコンポーネント
@@ -1327,7 +1314,6 @@ const componentMonsterEdit = {
   }
 };
 
-
 /**
  * 画像投稿ページコンポーネント
  */
@@ -1418,7 +1404,6 @@ const componentPic = {
                     isRange(array[startIndex + 1], targetColor[1], colorMargin) &&
                     isRange(array[startIndex + 2], targetColor[2], colorMargin);
           }
-
 
           canvas.width = img.width;
           canvas.height = img.height;
