@@ -1077,12 +1077,12 @@ const componentMonsterData = {
     /** 最大レベル時のパラメータが登録されているかどうかを取得する。 */
     hasMaxParam: function () {
       const maxParam = this.monsterData.maxParam;
-      return (maxParam.hp != undefined || maxParam.attack != undefined || maxParam.recovery != undefined);
+      return (maxParam.hp !== null || maxParam.attack !== null || maxParam.recovery !== null);
     },
     /** 限界突破時のパラメータが登録されているかどうかを取得する。 */
     hasOverLimitParam: function () {
       const maxParam = this.monsterData.overLimitParam;
-      return (maxParam.hp != undefined || maxParam.attack != undefined || maxParam.recovery != undefined);
+      return (maxParam.hp !== null || maxParam.attack !== null || maxParam.recovery !== null);
     },
 
     /** 最大レベル時のパラメータのプラス換算値 */
