@@ -1106,7 +1106,7 @@ var componentMonsterEdit = {
   pageTitle: function () {
     if (this.isHistory) { return '履歴をもとに編集'; }
     if (this.$route.params.no) {
-        return `編集 No.${this.$route.params.no} ${this.monsterData.name}`;
+      return `編集 No.${this.$route.params.no} ${this.monsterData.name}`;
     } else {
       return '新規登録';
     }
@@ -1388,8 +1388,8 @@ var componentPic = {
   
       // 画像ファイル以外は処理を止める
       if(!fileData.type.match('image.*')) {
-          this.$store.commit('setErrors', [ '画像を選択してください' ]);
-          return;
+        this.$store.commit('setErrors', [ '画像を選択してください' ]);
+        return;
       }
 
       $(e.target).next('.custom-file-label').text($(e.target)[0].files[0].name);
@@ -1398,139 +1398,139 @@ var componentPic = {
       var reader = new FileReader();
       // ファイル読み込みに成功したときの処理
       reader.onload = () => {
-          // Canvas上に表示する
-          var uploadImgSrc = reader.result;
-          var iconSrcScale = [12 / 640, (1136 - 795.8) / 640, 98.5 / 640 ];
-          var imageSrcScale = [ 50 / 640, (1136 - 795 + 480) / 640, 540 / 640, 405 / 640 ];
-          var canvas = document.getElementById('canvas');
-          var ctx = canvas.getContext('2d');
+        // Canvas上に表示する
+        var uploadImgSrc = reader.result;
+        var iconSrcScale = [12 / 640, (1136 - 795.8) / 640, 98.5 / 640 ];
+        var imageSrcScale = [ 50 / 640, (1136 - 795 + 480) / 640, 540 / 640, 405 / 640 ];
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
 
-          // Canvas上に画像を表示
-          var img = new Image();
-          img.src = uploadImgSrc;
-          img.onload = () => {
-            var iconWidth = 98;
-            var iconHeight = 98;
-            
-            function checkWaku(array, startIndex, targetColor) {
-              function isRange(value, target, margin) {
-                return value - margin <= target && value + margin >= target;
-              }
-              var colorMargin = 64;
-              return  isRange(array[startIndex + 0], targetColor[0], colorMargin) &&
-                      isRange(array[startIndex + 1], targetColor[1], colorMargin) &&
-                      isRange(array[startIndex + 2], targetColor[2], colorMargin);
+        // Canvas上に画像を表示
+        var img = new Image();
+        img.src = uploadImgSrc;
+        img.onload = () => {
+          var iconWidth = 98;
+          var iconHeight = 98;
+          
+          function checkWaku(array, startIndex, targetColor) {
+            function isRange(value, target, margin) {
+              return value - margin <= target && value + margin >= target;
             }
+            var colorMargin = 64;
+            return  isRange(array[startIndex + 0], targetColor[0], colorMargin) &&
+                    isRange(array[startIndex + 1], targetColor[1], colorMargin) &&
+                    isRange(array[startIndex + 2], targetColor[2], colorMargin);
+          }
 
 
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-            // 下端位置取得
-            var data = ctx.getImageData(img.width * 0.1, 0, 8, img.height);
-            var imgHeight = img.height;
-            for (var i = data.height - 1; i > 0; i--) {
-              if (checkWaku(data.data, data.width * 4 * i, [152, 114, 64])) {
-                imgHeight = i + 1;
-                break;
-              }
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+          // 下端位置取得
+          var data = ctx.getImageData(img.width * 0.1, 0, 8, img.height);
+          var imgHeight = img.height;
+          for (var i = data.height - 1; i > 0; i--) {
+            if (checkWaku(data.data, data.width * 4 * i, [152, 114, 64])) {
+              imgHeight = i + 1;
+              break;
             }
-            // 上端位置取得
-            var imgTop = 0;
-            data = ctx.getImageData(1, 0, 8, img.height);
-            for (var i = 0; i < img.height; i++) {
-              if (checkWaku(data.data, data.width * 4 * i + 4, [152, 114, 64])) {
-                imgTop = i;
-                break;
-              }
+          }
+          // 上端位置取得
+          var imgTop = 0;
+          data = ctx.getImageData(1, 0, 8, img.height);
+          for (var i = 0; i < img.height; i++) {
+            if (checkWaku(data.data, data.width * 4 * i + 4, [152, 114, 64])) {
+              imgTop = i;
+              break;
             }
-            // 左端・横幅取得
-            var marginLeft = 0;
-            var imgWidth = img.width;
-            data = ctx.getImageData(0, imgHeight - (img.width * 0.2) | 0, img.width, 8);
-            for (var i = 0; i < data.width; i++) {
-              if (checkWaku(data.data, 4 * i, [132, 101, 57])) {
-                marginLeft = i;
-                imgWidth -= marginLeft * 2;
-                break;
-              }
+          }
+          // 左端・横幅取得
+          var marginLeft = 0;
+          var imgWidth = img.width;
+          data = ctx.getImageData(0, imgHeight - (img.width * 0.2) | 0, img.width, 8);
+          for (var i = 0; i < data.width; i++) {
+            if (checkWaku(data.data, 4 * i, [132, 101, 57])) {
+              marginLeft = i;
+              imgWidth -= marginLeft * 2;
+              break;
             }
+          }
 
-            // 公式サイトのプレイヤー情報部分のない画像への対応。
-            if (imgWidth == 640 && imgHeight >= 944 && imgHeight <= 948) {
-              imgTop = imgHeight - 1096;
+          // 公式サイトのプレイヤー情報部分のない画像への対応。
+          if (imgWidth == 640 && imgHeight >= 944 && imgHeight <= 948) {
+            imgTop = imgHeight - 1096;
+          }
+
+          // アイコン画像取得
+          var srcX = marginLeft + (iconSrcScale[0] * imgWidth) | 0;
+          var srcY = (imgHeight - iconSrcScale[1] * imgWidth) | 0;
+          var srcWidth = (iconSrcScale[2] * imgWidth )| 0;
+          var srcHeight = srcWidth;
+
+          // アイコン上端の黒い線の位置を探す。
+          srcY += 1; // 上にずらして確認していくので、最初は5sサイズの上端ラインの１段下から始める。
+          // アイコン左上の主属性の上辺りを確認する。
+          var checkWidth = 8;
+          var checkHeight = 16;
+          var isHitBlackLine = false;
+          data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - (checkHeight - 1), checkWidth, checkHeight);
+          for (var i = 0; i < 10; i++) {
+            var n = 4 * (checkHeight - 1 - i) * checkWidth;
+            if (data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) {
+              srcY -= i;
+              isHitBlackLine = true;
+              break;
             }
+          }
+          // 黒線が見つからなかった場合は最初の位置に戻す。
+          if (!isHitBlackLine) { srcY -= 1; }
+          
+          // Canvasの準備
+          canvas.width = iconWidth;
+          canvas.height = iconHeight;
+          ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
+          // canvasを画像に変換
+          var data = canvas.toDataURL('image/jpeg', 0.7);
+          this.iconResultSrc = data;
 
-            // アイコン画像取得
-            var srcX = marginLeft + (iconSrcScale[0] * imgWidth) | 0;
-            var srcY = (imgHeight - iconSrcScale[1] * imgWidth) | 0;
-            var srcWidth = (iconSrcScale[2] * imgWidth )| 0;
-            var srcHeight = srcWidth;
+          // モンスター画像取得
+          var imageWidth = 540;
+          var imageHeight = 405;
+          
+          // モンスター画像の縦の中心を求める
+          var monsterAreaTop = imgTop + 144 / 640 * imgWidth;
+          var monsterAreaBottom = imgHeight - 354 / 640 * imgWidth;
+          var monsterAreaMiddleRate = 0.624;
+          var monsterAreaMiddleOffset = imgWidth * 0.07;
+          var monsterAreaMiddle = (monsterAreaTop * monsterAreaMiddleRate + monsterAreaBottom * (1 - monsterAreaMiddleRate) - monsterAreaMiddleOffset) | 0;
 
-            // アイコン上端の黒い線の位置を探す。
-            srcY += 1; // 上にずらして確認していくので、最初は5sサイズの上端ラインの１段下から始める。
-            // アイコン左上の主属性の上辺りを確認する。
-            var checkWidth = 8;
-            var checkHeight = 16;
-            var isHitBlackLine = false;
-            data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - (checkHeight - 1), checkWidth, checkHeight);
-            for (var i = 0; i < 10; i++) {
-              var n = 4 * (checkHeight - 1 - i) * checkWidth;
-              if (data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) {
-                srcY -= i;
-                isHitBlackLine = true;
-                break;
-              }
-            }
-            // 黒線が見つからなかった場合は最初の位置に戻す。
-            if (!isHitBlackLine) { srcY -= 1; }
-            
-            // Canvasの準備
-            canvas.width = iconWidth;
-            canvas.height = iconHeight;
-            ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, iconWidth, iconHeight);
-            // canvasを画像に変換
-            var data = canvas.toDataURL('image/jpeg', 0.7);
-            this.iconResultSrc = data;
+          srcX = marginLeft + (imageSrcScale[0] * imgWidth + 0.5) | 0;
+          srcY = monsterAreaMiddle - srcHeight / 2;
+          srcWidth = (imageSrcScale[2] * imgWidth + 0.5)| 0;
+          srcHeight = (imageSrcScale[3] * imgWidth + 0.5)| 0;
+          // Canvasの準備
+          canvas.width = imageWidth;
+          canvas.height = imageHeight;
+          ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, imageWidth, imageHeight);
 
-            // モンスター画像取得
-            var imageWidth = 540;
-            var imageHeight = 405;
-            
-            // モンスター画像の縦の中心を求める
-            var monsterAreaTop = imgTop + 144 / 640 * imgWidth;
-            var monsterAreaBottom = imgHeight - 354 / 640 * imgWidth;
-            var monsterAreaMiddleRate = 0.624;
-            var monsterAreaMiddleOffset = imgWidth * 0.07;
-            var monsterAreaMiddle = (monsterAreaTop * monsterAreaMiddleRate + monsterAreaBottom * (1 - monsterAreaMiddleRate) - monsterAreaMiddleOffset) | 0;
+          // canvasを画像に変換
+          var data = canvas.toDataURL('image/jpeg', 0.85);
+          this.imageResultSrc = data;
 
-            srcX = marginLeft + (imageSrcScale[0] * imgWidth + 0.5) | 0;
-            srcY = monsterAreaMiddle - srcHeight / 2;
-            srcWidth = (imageSrcScale[2] * imgWidth + 0.5)| 0;
-            srcHeight = (imageSrcScale[3] * imgWidth + 0.5)| 0;
-            // Canvasの準備
-            canvas.width = imageWidth;
-            canvas.height = imageHeight;
-            ctx.drawImage(img, srcX, srcY, srcWidth, srcHeight, 0, 0, imageWidth, imageHeight);
+          // モンスター番号＆モンスター名の領域を切り抜く。
+          var nameAreaHeight = 76 / 640 * imgWidth;
+          var nameAreaTop = monsterAreaTop + 8 / 640 * imgWidth;
+          srcX = marginLeft + (0.15 * imgWidth + 0.5) | 0;
+          srcWidth = (0.7 * imgWidth + 0.5)| 0;
+          // Canvasの準備
+          canvas.width = srcWidth;
+          canvas.height = nameAreaHeight;
+          ctx.drawImage(img, srcX, nameAreaTop, srcWidth, nameAreaHeight, 0, 0, srcWidth, nameAreaHeight);
+          // canvasを画像に変換
+          this.uploadImgSrc = canvas.toDataURL('image/png');
 
-            // canvasを画像に変換
-            var data = canvas.toDataURL('image/jpeg', 0.85);
-            this.imageResultSrc = data;
-
-            // モンスター番号＆モンスター名の領域を切り抜く。
-            var nameAreaHeight = 76 / 640 * imgWidth;
-            var nameAreaTop = monsterAreaTop + 8 / 640 * imgWidth;
-            srcX = marginLeft + (0.15 * imgWidth + 0.5) | 0;
-            srcWidth = (0.7 * imgWidth + 0.5)| 0;
-            // Canvasの準備
-            canvas.width = srcWidth;
-            canvas.height = nameAreaHeight;
-            ctx.drawImage(img, srcX, nameAreaTop, srcWidth, nameAreaHeight, 0, 0, srcWidth, nameAreaHeight);
-            // canvasを画像に変換
-            this.uploadImgSrc = canvas.toDataURL('image/png');
-
-            canvas.width = canvas.height = 0;
-          };
+          canvas.width = canvas.height = 0;
+        };
           
       };
       // ファイル読み込みを実行
@@ -1542,11 +1542,11 @@ var componentPic = {
         var bin = atob(dataUrl.replace(/^.*,/, ''));
         var buffer = new Uint8Array(bin.length);
         for (var i = 0; i < bin.length; i++) {
-            buffer[i] = bin.charCodeAt(i);
+          buffer[i] = bin.charCodeAt(i);
         }
         // Blobを作成
         var blob = new Blob([buffer.buffer], {
-            type: 'image/jpeg'
+          type: 'image/jpeg'
         });
         return blob;
       }
