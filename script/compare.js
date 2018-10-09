@@ -337,6 +337,7 @@ var componentCompare = {
     _load: function (index, monsterNo) {
       var path = `./monsterJson/${monsterNo}.json`;
 
+      Vue.set(this.monsterDatas, index, null);
       this.$store.commit('setMessages', [ 'モンスター情報取得中' ]);
       axios.get(path).then(
         response => {
