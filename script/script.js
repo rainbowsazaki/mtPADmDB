@@ -345,7 +345,7 @@ const store = new Vuex.Store({
       state.messages = messages;
       setTimeout(() => {
         state.messages = [];
-      }, 3000)
+      }, 3000);
     },
     clearErrors: function (state) {
       state.errors = [];
@@ -357,10 +357,10 @@ const store = new Vuex.Store({
       state.errors = state.errors.filter(n => n !== error);
     },
     deleteMessage: function (state, message) {
-      state.messages = state.messages.filter(n => n !== message)
+      state.messages = state.messages.filter(n => n !== message);
     }
   }
-})
+});
 
 
 // 数字をカンマ区切りにする。
@@ -507,7 +507,7 @@ Vue.component('monsterIncrementalInput', {
   data: function () {
     return {
       filter: ''
-    }
+    };
   },
 
   mounted: function () {
@@ -581,7 +581,7 @@ Vue.component('monsterIncrementalSearch', {
   props: [ 'id', 'value', 'monsterTable', 'imageTable' ],
   data: function () {
     return {
-    }
+    };
   },
   
   methods: {
@@ -631,7 +631,7 @@ Vue.component('pagination', {
   },
   data: function () {
     return {
-    }
+    };
   },
   methods: {
     createToObj: function (pageNo) {
@@ -642,7 +642,7 @@ Vue.component('pagination', {
         path: this.$route.path,
         params: this.$route.params,
         query: query,
-      }
+      };
     },
   },
 
@@ -699,7 +699,7 @@ Vue.component('monsterIcon', {
       return ret[1] / 3 + ret[2];
     }
   }
-})
+});
 
 /** ツイートボタン表示のコンポーネント */
 Vue.component('tweetButton', {
@@ -851,7 +851,7 @@ var componentMonsterList = {
   methods: {
 
     search: function () {
-      this.$router.push({ path: this.$router.path, query: { searchWord: this.searchWord }})
+      this.$router.push({ path: this.$router.path, query: { searchWord: this.searchWord }});
     },
 
   }
@@ -866,7 +866,7 @@ var componentMonsterData = {
   template: '#templateMonsterData',
   pageTitle: function () {
     var str = `No.${this.$route.params.no || this.monsterData.no} ${this.monsterData.name}`;
-    if (this.isHistory) { str += ` (${this.monsterData.datetime})`}
+    if (this.isHistory) { str += ` (${this.monsterData.datetime})`; }
     return str;
   },
   props: [ 'no' ],
@@ -904,7 +904,7 @@ var componentMonsterData = {
         callback: () => {
           this.$_mixinForPage_updateTitle();
         },
-      }
+      };
 
       if (this.isHistory) {
         param.historyId = this.$route.params.id;
@@ -959,7 +959,7 @@ var componentMonsterData = {
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
     evolutionTable: function () { return this.$store.state.evolutionTable; },
     imageTable: function () { return this.$store.state.imageTable; },
-    monsterData: function () { return this.$store.state.monsterData },
+    monsterData: function () { return this.$store.state.monsterData; },
 
     monsterImagePath: function () {
       var no = this.monsterData.no;
@@ -998,7 +998,7 @@ var componentMonsterData = {
     /** このモンスターに振れる潜在キラーの番号を配列を取得する。 */
     senzaiKillerNos: function () {
       // 合成できないものは潜在覚醒を降ることができないので無し。
-      if (!this.canAddPlus) { return [] }
+      if (!this.canAddPlus) { return []; }
       var killerNoSet = new Set();
       for (var type of this.monsterData.types) {
         for (var killerNo of this.typeTable[type].senzaiKiller) {
@@ -1325,10 +1325,10 @@ var componentMonsterEdit = {
             this.$store.commit('addLeaderSkillData', newTableData.leaderSkillDetails);
           }
         }
-      })
+      });
     }
   }, 
-}
+};
 
 
 /**
@@ -1346,7 +1346,7 @@ var componentPic = {
   },
   middleOfBreadcrumbs: function () {
     if (this.$route.params.no) {
-      return { text: `No.${this.$route.params.no} ${this.selectMonsterName}`, link: '/' + this.$route.params.no }
+      return { text: `No.${this.$route.params.no} ${this.selectMonsterName}`, link: '/' + this.$route.params.no };
     } else {
       return undefined;
     }
@@ -1410,7 +1410,7 @@ var componentPic = {
           img.src = uploadImgSrc;
           img.onload = () => {
             var iconWidth = 98;
-            var iconHeight = 98
+            var iconHeight = 98;
             
             function checkWaku(array, startIndex, targetColor) {
               function isRange(value, target, margin) {
@@ -1419,7 +1419,7 @@ var componentPic = {
               var colorMargin = 64;
               return  isRange(array[startIndex + 0], targetColor[0], colorMargin) &&
                       isRange(array[startIndex + 1], targetColor[1], colorMargin) &&
-                      isRange(array[startIndex + 2], targetColor[2], colorMargin)
+                      isRange(array[startIndex + 2], targetColor[2], colorMargin);
             }
 
 
@@ -1519,7 +1519,7 @@ var componentPic = {
 
             // モンスター番号＆モンスター名の領域を切り抜く。
             var nameAreaHeight = 76 / 640 * imgWidth;
-            var nameAreaTop = monsterAreaTop + 8 / 640 * imgWidth;;
+            var nameAreaTop = monsterAreaTop + 8 / 640 * imgWidth;
             srcX = marginLeft + (0.15 * imgWidth + 0.5) | 0;
             srcWidth = (0.7 * imgWidth + 0.5)| 0;
             // Canvasの準備
@@ -1530,9 +1530,9 @@ var componentPic = {
             this.uploadImgSrc = canvas.toDataURL('image/png');
 
             canvas.width = canvas.height = 0;
-          }
+          };
           
-      }
+      };
       // ファイル読み込みを実行
       reader.readAsDataURL(fileData);
     },
@@ -1635,7 +1635,7 @@ var componentPic = {
       return (this.monsterTable[this.$route.params.no] || {}).name || '';
     }
   }
-}
+};
 
 /** 現在のURLでの history 形式でのルートを求める */
 function getRouterBase () {
@@ -1723,7 +1723,7 @@ var router = new VueRouter({
       props: true
     },
   ]
-})
+});
 
 // ナビゲーション変更時に一番上にスクロールする。
 router.afterEach((to, from) => {
@@ -1773,4 +1773,4 @@ var app = new Vue({
     messages: function () { return this.$store.state.messages; },
     navis: function () { return constData.navis; }
   }
-}).$mount('#app')
+}).$mount('#app');
