@@ -274,7 +274,7 @@ const store = new Vuex.Store({
         axios.get('./listJson/skill_list.json'),
         axios.get('./listJson/leader_skill_list.json'),
         axios.get('./listJson/evolution_list.json')
-      ]).then( axios.spread( (
+      ]).then(axios.spread((
         skillListResponse,
         leaderSkillListResponse,
         evolutionListResponse
@@ -433,7 +433,7 @@ Vue.component('pdOption', {
 
   methods: {
     click: function () {
-      this.$parent.$emit('clickOption', [this.value] );
+      this.$parent.$emit('clickOption', [this.value]);
     }
   }
 });
@@ -538,7 +538,7 @@ Vue.component('monsterIncrementalInput', {
   },
   
   methods: {
-    updateFilter: function () {
+    updateFilter: function() {
       this.filter = (this.monsterTable[this.value] || { name: '' }).name;
     },
 
@@ -647,7 +647,7 @@ Vue.component('pagination', {
   },
 
   computed: {
-    itemCountReal () { return Math.min(this.itemCount, this.pageCount); },
+    itemCountReal() { return Math.min(this.itemCount, this.pageCount); },
     itemCountHarf () { return (this.itemCountReal / 2) | 0; },
     paginationStart () {
       return (this.page > this.pageCount - this.itemCountHarf)
@@ -820,16 +820,16 @@ const componentMonsterList = {
 
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
-    imageTable () { return this.$store.state.imageTable; },
+    imageTable() { return this.$store.state.imageTable; },
     attrColors () { return constData.attrColors; },
 
     monsterCount () { return this.monsterTableArray.length; },
     /** モンスター一覧情報を読込中かどうか。 現在の実装だとデータ未登録の場合、ずっと読み込み中判定となる。 */
     isLoadingMonsterList () { return this.monsterCount == 0; },
-    pageCount () { return ((this.searchedMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+    pageCount() { return ((this.searchedMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     page () { return (this.$route.query.page * 1) || 1; },
 
-    monsterTableArray: function () {
+    monsterTableArray: function() {
       const array = [];
       for (const key in this.monsterTable) {
         array.push(this.monsterTable[key]);
@@ -1003,7 +1003,7 @@ const componentMonsterData = {
           killerNoSet.add(killerNo);
         }
       }
-      return Array.from(killerNoSet).sort(((a, b) => a - b ));
+      return Array.from(killerNoSet).sort(((a, b) => a - b));
     },
 
     /** プラスが振れるキャラクターかどうかを返す。 */
@@ -1269,7 +1269,7 @@ const componentMonsterEdit = {
       }
       this.$store.commit('fetchCommonData');
     },
-    submit: function ( ) {
+    submit: function() {
       // 多重送信防止処理
       if (this.isSubmitted) { return; }
       this.isSubmitted = true;
@@ -1409,8 +1409,8 @@ const componentPic = {
           const iconWidth = 98;
           const iconHeight = 98;
           
-          function checkWaku (array, startIndex, targetColor) {
-            function isRange (value, target, margin) {
+          function checkWaku(array, startIndex, targetColor) {
+            function isRange(value, target, margin) {
               return value - margin <= target && value + margin >= target;
             }
             const colorMargin = 64;
@@ -1461,7 +1461,7 @@ const componentPic = {
           // アイコン画像取得
           let srcX = marginLeft + (iconSrcScale[0] * imgWidth) | 0;
           let srcY = (imgHeight - iconSrcScale[1] * imgWidth) | 0;
-          let srcWidth = (iconSrcScale[2] * imgWidth )| 0;
+          let srcWidth = (iconSrcScale[2] * imgWidth)| 0;
           let srcHeight = srcWidth;
 
           // アイコン上端の黒い線の位置を探す。
