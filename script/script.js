@@ -581,39 +581,11 @@ Vue.component('monsterIncrementalSearch', {
   props: [ 'id', 'value', 'monsterTable', 'imageTable' ],
   data: function () {
     return {
-      filter: ""
     }
-  },
-
-  mounted: function () {
-    this.updateFilter();
-  },
-  
-  watch: {
-    value: function (val, oldVal) {
-      this.updateFilter();
-    },
-  },
-  computed: {
-    filteredMonsterTable: function () {
-      var obj = {};
-      for (var key in this.monsterTable) {
-        var value = this.monsterTable[key];
-        if (value.name.indexOf(this.filter) != -1) {
-          obj[key] = value;
-        }
-      }
-      return obj;
-    },
   },
   
   methods: {
-    updateFilter: function() {
-      this.filter = (this.monsterTable[this.value] || { name: '' }).name;
-    },
-
     updateValue: function (value) {
-      this.filter = (this.monsterTable[value] || { name: '' }).name;
       this.$emit('input', value);
     }
   }
