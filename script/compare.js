@@ -3,7 +3,7 @@
 /** 
  * モンスター同士の比較を行うページのコンポーネント。
  */
-var componentCompare = {
+window.componentCompare = {
   name: 'pageCompare',
   pageTitle: function () {
     if (!this.isEnableMonsterDatas) { return 'モンスター比較'; }
