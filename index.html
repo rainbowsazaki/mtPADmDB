@@ -379,7 +379,7 @@
             <router-link :to="{ name: 'compare', params: { nos: `${monsterData.evolution.baseNo},${monsterData.no}` } }">
               進化前と進化後のパラメータ比較へ
             </router-link>
-        </td><tr>
+        </td></tr>
         </template>
       </table>
     </div>
@@ -409,7 +409,7 @@
           <router-link :to="{ name: 'compare', params: { nos: `${monsterData.no},${evolution.no}` } }">
             進化前と進化後のパラメータ比較へ
           </router-link>
-        </td><tr>
+        </td></tr>
       </table>
       <router-link v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
         :to="{ name: 'compare', params: { nos: evolutionTable[monsterData.no].map(e => e.no).join(',') } }">
