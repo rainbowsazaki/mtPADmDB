@@ -1510,8 +1510,13 @@ const componentPic = {
           }
 
           // 公式サイトのプレイヤー情報部分のない画像への対応。
+          let isOfficialW750 = false;
           if (imgWidth === 640 && imgHeight >= 944 && imgHeight <= 948) {
             imgTop = imgHeight - 1096;
+          }
+          if (imgWidth === 750 && imgHeight >= 1117 && imgHeight <= 1119) {
+            imgTop = imgHeight - 1293;
+            isOfficialW750 = true;
           }
 
           // アイコン画像取得
@@ -1529,7 +1534,8 @@ const componentPic = {
           data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - (checkHeight - 1), checkWidth, checkHeight);
           for (let i = 0; i < 10; i++) {
             const n = 4 * (checkHeight - 1 - i) * checkWidth;
-            if (data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) {
+            if ((data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) ||
+                (isOfficialW750 && data.data[n] < 60 && data.data[n + 1] < 20 && data.data[n + 2] < 10)) { // iPhoneから公式サイトの横750pxが画像を指定したとき用
               srcY -= i;
               isHitBlackLine = true;
               break;
