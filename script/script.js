@@ -767,7 +767,7 @@ Vue.component('tweetButton', {
   props: {
     'hashtags': {
       type: String,
-      default: 2
+      default: ''
     }
   },
   data: function () {
