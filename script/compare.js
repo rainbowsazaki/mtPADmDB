@@ -324,12 +324,13 @@ window.componentCompare = {
     },
 
     load: function () {
-      this.targets = (this.$route.params.nos || '').split(/,/g);
+      this.targets = (this.$route.params.nos || '').split(/,/g).map(s => { let n = parseInt(s); if (isNaN(n)) { n = null; } return n; });
       while (this.targets.length < 2) { this.targets.push(null); }
+      
       this.monsterDatas = [];
       if (this.$route.params.nos) {
         for (let i = 0; i < this.targets.length; i++) {
-          this._load(i, this.targets[i]);
+          if (this.targets[i] !== null) { this._load(i, this.targets[i]); }
         }
       }
       this.$_mixinForPage_updateTitle();
