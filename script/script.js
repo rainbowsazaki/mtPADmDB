@@ -1432,7 +1432,7 @@ const componentPic = {
       if (this.$route.params.no) {
         this.monsterNo = this.$route.params.no;
       } else {
-        this.monsterNo = '';
+        this.monsterNo = null;
       }
       this.$_mixinForPage_updateTitle();
     },
