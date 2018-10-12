@@ -325,7 +325,7 @@ window.componentCompare = {
 
     load: function () {
       this.targets = (this.$route.params.nos || '').split(/,/g);
-      if (this.targets.length < 2) { this.targets.length = 2; }
+      while (this.targets.length < 2) { this.targets.push(null); }
       this.monsterDatas = [];
       if (this.$route.params.nos) {
         for (let i = 0; i < this.targets.length; i++) {
