@@ -495,7 +495,7 @@ Vue.component('skillIncrementalInput', {
 <div class="dropdown show">
   <input :value="value" :id="id" @input="$emit('input', $event.target.value); showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" onfocus="$('.dropdown-toggle').dropdown();" :required="required" minLength="1" maxLength="50">
   <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
-    <a v-for="(value, key) in filteredSkillTable" class="dropdown-item" @click="$emit('select-no', key)" href="javascript:void(0)">
+    <a v-for="value in filteredSkillTable" class="dropdown-item" @click="$emit('select-no', value.no)" href="javascript:void(0)">
       {{value.name}}<br>
       <span style="font-size: 80%;">{{value.description}}</span>
     </a>
@@ -569,7 +569,7 @@ Vue.component('monsterIncrementalInput', {
 <div class="dropdown show">
   <input v-model="filter" placeholder="モンスター名で検索" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
   <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
-    <a v-for="(value, key) in filteredMonsterTable" class="dropdown-item" @click="updateValue(key)" href="javascript:void(0)">
+    <a v-for="value in filteredMonsterTable" class="dropdown-item" @click="updateValue(value.no)" href="javascript:void(0)">
       <monster-icon v-if="imageTable" :no="value.no" :monsterTable="monsterTable" :imageTable="imageTable" width="1.6em" height="1.6em" />
       {{value.name}}
     </a>
