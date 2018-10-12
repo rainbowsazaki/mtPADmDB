@@ -507,8 +507,8 @@ Vue.component('skillIncrementalInput', {
 Vue.component('monsterIncrementalInput', {
   props: {
     'value': {
-      type: String,
-      default: 0
+      type: Number,
+      default: null
     },
     'monsterTable': {
       type: Object,
@@ -586,7 +586,7 @@ Vue.component('monsterIncrementalSearch', {
     },
     'value': {
       type: Number,
-      default: 0
+      default: null
     },
     'monsterTable': {
       type: Object,
@@ -717,7 +717,7 @@ Vue.component('monsterIcon', {
   props: {
     'no': {
       type: Number,
-      required: true
+      default: null
     },
     'monsterTable': {
       type: Object,
