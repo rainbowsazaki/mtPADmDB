@@ -1608,7 +1608,7 @@ const componentPic = {
       }
 
       if (!this.iconResultSrc) { this.$store.commit('setErrors', ['画像が選択されていません。']); return; }
-      if (this.monsterNo == 0) { this.$store.commit('setErrors', ['モンスター番号が指定されていません。']); return; }
+      if (isNaN(this.monsterNo) || this.monsterNo === null) { this.$store.commit('setErrors', ['モンスター番号が指定されていません。']); return; }
       if (this.monsterNo < 1 || this.monsterNo > 9999) { this.$store.commit('setErrors', ['モンスター番号の指定が不正です。']); return; }
       
       // 多重送信防止処理
