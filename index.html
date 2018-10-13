@@ -246,7 +246,7 @@
             <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></td>
             <td>
               <span v-if="monsterData.attributes[0] === null">不明</span>
-              <img  v-for="attr in monsterData.attributes" v-if="attr != 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+              <img  v-for="attr in monsterData.attributes" v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
             </td>
           </tr>
           <tr class="thead-light">
@@ -266,7 +266,7 @@
           <tr>
             <td v-if="monsterData.maxLevel" class="text-right">{{monsterData.maxLevel}}</td>
             <td v-else>不明</td>
-            <td v-if="monsterData.maxExp != null" class="text-right">{{monsterData.maxExp | addComma}}</td>
+            <td v-if="monsterData.maxExp !== null" class="text-right">{{monsterData.maxExp | addComma}}</td>
             <td v-else>不明</td>
             <td>{{booleanTable[monsterData.overLimit]}}</td>
           </tr>
@@ -306,7 +306,7 @@
             <tr><td></td><td v-if="canAddPlus"></td><th class="text-right">＋合計</th><td class="text-right">{{plusCountParam.total.toFixed(1)}}</td></tr>
           </template>
           <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>          
-          <template v-if="monsterData.overLimit == 1">
+          <template v-if="monsterData.overLimit === 1">
             <template v-if="hasOverLimitParam">
               <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr></td>
               <tr><th>HP</th><td class="text-right">{{monsterData.overLimitParam.hp}}</td><td v-if="canAddPlus" class="text-right">{{monsterData.overLimitParam.hp + 10 * 99}}</td><td class="text-right">{{plusCountOverlimitParam.hp.toFixed(1)}}</td></tr>
@@ -337,7 +337,7 @@
       </div>
     </div>
 
-    <div class="row" v-if="monsterData.overLimit == 1 && monsterData.superAwakens.length">
+    <div class="row" v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length">
       <div class="col-12">
         <table class="table table-bordered table-sm">
           <tr class="thead-light"><th>超覚醒</th></tr>
