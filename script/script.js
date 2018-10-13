@@ -422,7 +422,7 @@ Vue.component('pdSelect', {
 Vue.component('pdOption', {
   props: {
     value: {
-      type: [Number, String],
+      type: String,
       required: true
     }
   },
