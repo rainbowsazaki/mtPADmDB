@@ -493,7 +493,7 @@
         <tr>
           <td v-for="n in 3" colspan="4" :key="n">
             <select class="custom-select" :id="'selectType' + n" v-model.number="monsterData.types[n - 1]">
-              <option v-for="(type, key) in typeTable" :disabled="key == ((n == 1) ? 0 : 'null')" :value="key" :key="key" v-once>{{type.name}}</option>
+              <option v-for="(type, key) in typeTable" :disabled="key === ((n === 1) ? '0' : 'null')" :value="key" :key="key" v-once>{{type.name}}</option>
             </select>
           </td>
         </tr>
@@ -506,11 +506,11 @@
         <tr>
             <td colspan="3">
                 <select class="custom-select" id="selectAttribute0" v-model.number="monsterData.attributes[0]">
-                  <option v-for="(attribute, key) in attributeTable" :disabled="key == 0" :value="key" :key="key" v-once>{{attribute}}</option>
+                  <option v-for="(attribute, key) in attributeTable" :disabled="key === '0'" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
                 <select class="custom-select" id="selectAttribute1" v-model.number="monsterData.attributes[1]">
-                  <option v-for="(attribute, key) in attributeTable" :disabled="key == 'null'" :value="key" :key="key" v-once>{{attribute}}</option>
+                  <option v-for="(attribute, key) in attributeTable" :disabled="key === 'null'" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
               <div class="input-group">
@@ -554,7 +554,7 @@
           <td colspan="12">
             <pd-select v-model.number="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
               <template v-for="(awaken, key) in awakenTable" :key="key" v-once>
-              <pd-option v-if="n == 1 || key != 'null'" :value="key" v-once><img :src="(key == 0 || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once /> {{awaken.name}}</pd-option>
+              <pd-option v-if="n === 1 || key !== 'null'" :value="key" v-once><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once /> {{awaken.name}}</pd-option>
               </template>
             </pd-select>
           </td>
@@ -647,7 +647,7 @@
             </select>
           </td>
         </tr>
-        <template v-if="monsterData.overLimit == 1">
+        <template v-if="monsterData.overLimit === 1">
           <tr class="thead-light">
             <th colspan="12">限界突破時パラメータ</th>
           </tr>
@@ -680,7 +680,7 @@
                   不明
                 </label>
               </span>
-              <span v-for="(awaken, key) in awakenTable" v-if="key != 0 && key != 'null'" class="col-md-3 form-check" style="display:inline-block;" :key="key">
+              <span v-for="(awaken, key) in awakenTable" v-if="key !== '0' && key !== 'null'" class="col-md-3 form-check" style="display:inline-block;" :key="key">
                 <input class="form-check-input" type="checkbox" :value="key" v-model.number="monsterData.superAwakens" :id="'superAwaken' + key" :disabled="isUnknownSuperAwaken">
                 <label class="form-check-label" :for="'superAwaken' + key">
                   <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken.name}}
@@ -699,7 +699,7 @@
             </select>
           </td>
         </tr>
-        <template v-if="monsterData.evolutionType != 0 && monsterData.evolutionType != null && monsterData.evolutionType != 'null'">
+        <template v-if="monsterData.evolutionType !== 0 && monsterData.evolutionType !== null && monsterData.evolutionType !== 'null'">
           <tr class="thead-light">
             <th colspan="12">進化前キャラ</th>
           </tr>
