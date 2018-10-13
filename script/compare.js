@@ -42,7 +42,7 @@ window.componentCompare = {
       <tr class="thead-light">
         <th>タイプ</th>
         <td v-for="data in monsterDatas">
-          <span v-if="data.types[0] == null">不明</span>
+          <span v-if="data.types[0] === null">不明</span>
           <span v-else>
             <img v-for="type in data.types" v-if="type !== 0 && type !== null" :src="\`./image/type/\${type}.png\`" alt="" style="width:1.5em; height: 1.5em;">
           </span>
@@ -52,7 +52,7 @@ window.componentCompare = {
         <th>属性</th>
         <td v-for="data in monsterDatas">
           <span v-if="data.attributes[0] === null">不明</span>
-          <img  v-for="attr in data.attributes" v-if="attr != 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="\`./image/attribute/\${attr}.png\`">
+          <img  v-for="attr in data.attributes" v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="\`./image/attribute/\${attr}.png\`">
         </td>
       </tr>
 
@@ -62,7 +62,7 @@ window.componentCompare = {
         <span v-if="data.awakens[0] === 0">なし</span>
         <span v-else-if="data.awakens[0] === null">不明</span>
         <ul v-else style="list-style: none; margin: 0px; padding: 0px;">
-          <li v-for="(count, awaken) in data.awakenObj" v-if="awaken != 0" class="text-nowrap">
+          <li v-for="(count, awaken) in data.awakenObj" v-if="awaken !== '0'" class="text-nowrap">
             <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[awaken].name + '\\n\\n' + awakenTable[awaken].description" />
             × {{count}}
           </li>
@@ -218,7 +218,7 @@ window.componentCompare = {
     <template v-for="data in monsterDatas">
       <tr class="thead-light">
         <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
-        <td v-if="data.skill == null">不明</td>
+        <td v-if="data.skill === null">不明</td>
         <td v-else>
           {{skillTable[data.skill].name}}
           <span style="font-size: 80%; float:right;">(最短ターン:<span v-if="skillTable[data.skill].baseTurn && skillTable[data.skill].maxLevel">{{skillTable[data.skill].baseTurn - skillTable[data.skill].maxLevel + 1}}</span><span v-else>不明</span>)</span>
@@ -234,7 +234,7 @@ window.componentCompare = {
     <template v-for="data in monsterDatas">
       <tr class="thead-light">
         <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
-        <td v-if="data.leaderSkill == null">不明</td>
+        <td v-if="data.leaderSkill === null">不明</td>
         <td v-else>
           {{leaderSkillTable[data.leaderSkill].name}}
         </td>
@@ -398,7 +398,7 @@ window.componentCompare = {
 
     /** 指定されたモンスターデータの、レベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
     maxAttack: function (monsterData) {
-      if (monsterData.maxParam.attack == null) { return NaN; }
+      if (monsterData.maxParam.attack === null) { return NaN; }
       return monsterData.maxParam.attack + 495 + (monsterData.awakenObj[2] || 0) * this.awakenTable[2].value;
     },
     /** 削除個数に応じてかかるダメージのレート */
