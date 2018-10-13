@@ -382,18 +382,7 @@ Vue.component('pdSelect', {
     };
   },
   watch: {
-    value: function (newValue) {
-      // html要素上では null の値はなく文字列になっているため、値が null の場合は文字列にする。
-      newValue = (newValue === null) ? 'null' : newValue.toString();
-      this.changeDisp(newValue);
-      $(this.$el).children('div.dropdown-menu').children().each((index, elem) => {
-        if (elem.getAttribute('data-value') === newValue) {
-          $(elem).addClass('active');
-        } else {
-          $(elem).removeClass('active');
-        }
-      });
-    }
+    value: 'changeDisp'
   },
   mounted: function () {
     $(this.$el).on('shown.bs.dropdown', () => {
@@ -412,7 +401,10 @@ Vue.component('pdSelect', {
       value = (value === null) ? 'null' : value.toString();
       $(this.$el).children('.dropdown-menu').children().each((index, elem) => {
         if (elem.getAttribute('data-value') === value) {
+          $(elem).addClass('active');
           this.html = $(elem).html();
+        } else {
+          $(elem).removeClass('active');
         }
       });
     }
