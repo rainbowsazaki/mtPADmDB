@@ -480,7 +480,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text">No.</span>
                   </div>
-                  <input type="number" class="form-control" id="inputNo" v-model="monsterData.no" required min="1" max="9999">
+                  <input type="number" class="form-control" id="inputNo" v-model.number="monsterData.no" required min="1" max="9999">
                 </div>
               </div>
               <div class="form-group col-md-8">
@@ -492,7 +492,7 @@
         <tr class="thead-light"><th colspan="12">タイプ</th></tr>
         <tr>
           <td v-for="n in 3" colspan="4" :key="n">
-            <select class="custom-select" :id="'selectType' + n" v-model="monsterData.types[n - 1]">
+            <select class="custom-select" :id="'selectType' + n" v-model.number="monsterData.types[n - 1]">
               <option v-for="(type, key) in typeTable" :disabled="key == ((n == 1) ? 0 : 'null')" :value="key" :key="key" v-once>{{type.name}}</option>
             </select>
           </td>
@@ -505,11 +505,11 @@
         </tr>
         <tr>
             <td colspan="3">
-                <select class="custom-select" id="selectAttribute0" v-model="monsterData.attributes[0]">
+                <select class="custom-select" id="selectAttribute0" v-model.number="monsterData.attributes[0]">
                   <option v-for="(attribute, key) in attributeTable" :disabled="key == 0" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
-                <select class="custom-select" id="selectAttribute1" v-model="monsterData.attributes[1]">
+                <select class="custom-select" id="selectAttribute1" v-model.number="monsterData.attributes[1]">
                   <option v-for="(attribute, key) in attributeTable" :disabled="key == 'null'" :value="key" :key="key" v-once>{{attribute}}</option>
                 </select></td>
             <td colspan="3">
@@ -517,11 +517,11 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text" style="padding: 0.375rem; font-size: 80%;">★</span>
                 </div>
-                <input type="number" class="form-control" id="inputRare" v-model="monsterData.rare" min="1" max="99">
+                <input type="number" class="form-control" id="inputRare" v-model.number="monsterData.rare" min="1" max="99">
               </div>
             </td>
             <td colspan="3">
-              <input type="number" class="form-control" id="inputCost" v-model="monsterData.cost" min="1" max="999">
+              <input type="number" class="form-control" id="inputCost" v-model.number="monsterData.cost" min="1" max="999">
             </td>
         </tr>
         <tr class="thead-light">
@@ -535,14 +535,14 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">Lv.</span>
               </div>
-              <input type="number" class="form-control" id="inputMaxLevel" v-model="monsterData.maxLevel" min="1" max="99">
+              <input type="number" class="form-control" id="inputMaxLevel" v-model.number="monsterData.maxLevel" min="1" max="99">
             </div>
           </td>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputMaxExp" v-model="monsterData.maxExp" min="0" max="999999999">
+            <input type="number" class="form-control" id="inputMaxExp" v-model.number="monsterData.maxExp" min="0" max="999999999">
           </td>
           <td colspan="4">
-            <select class="custom-select" id="selectAssist" v-model="monsterData.assist">
+            <select class="custom-select" id="selectAssist" v-model.number="monsterData.assist">
               <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{type}}</option>
             </select>
           </td>
@@ -552,7 +552,7 @@
         </tr>
         <tr v-for="n in 9" :key="n">
           <td colspan="12">
-            <pd-select v-model="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
+            <pd-select v-model.number="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
               <template v-for="(awaken, key) in awakenTable" :key="key" v-once>
               <pd-option v-if="n == 1 || key != 'null'" :value="key" v-once><img :src="(key == 0 || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once /> {{awaken.name}}</pd-option>
               </template>
@@ -565,19 +565,19 @@
         <tr>
           <th colspan="4">HP</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputMaxHp" v-model="monsterData.maxParam.hp" min="1" max="99999">
+            <input type="number" class="form-control" id="inputMaxHp" v-model.number="monsterData.maxParam.hp" min="1" max="99999">
           </td>
         </tr>
         <tr>
           <th colspan="4">攻撃</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputMaxAttack" v-model="monsterData.maxParam.attack" min="1" max="99999">
+            <input type="number" class="form-control" id="inputMaxAttack" v-model.number="monsterData.maxParam.attack" min="1" max="99999">
           </td>
         </tr>
         <tr>
           <th colspan="4">回復</th>
           <td colspan="8">
-            <input type="number" class="form-control" id="inputMaxRecovery" v-model="monsterData.maxParam.recovery" min="-9999" max="99999">
+            <input type="number" class="form-control" id="inputMaxRecovery" v-model.number="monsterData.maxParam.recovery" min="-9999" max="99999">
           </td>
         </tr>
         <tr class="thead-light">
@@ -598,14 +598,14 @@
         </tr>
         <tr>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputSkillBaseTurn" v-model="skillBaseTurn" min="1" max="199">
+            <input type="number" class="form-control" id="inputSkillBaseTurn" v-model.number="skillBaseTurn" min="1" max="199">
           </td>
           <td colspan="4">
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text">SLv.</span>
               </div>
-              <input type="number" class="form-control" id="inputSkillMaxLevel" v-model="skillMaxLevel" min="1" max="99">
+              <input type="number" class="form-control" id="inputSkillMaxLevel" v-model.number="skillMaxLevel" min="1" max="99">
             </div>
           </td>
           <td colspan="4">{{(minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
@@ -642,7 +642,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <select class="custom-select" id="selectOverLimit" v-model="monsterData.overLimit">
+            <select class="custom-select" id="selectOverLimit" v-model.number="monsterData.overLimit">
               <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{type}}</option>
             </select>
           </td>
@@ -654,19 +654,19 @@
           <tr>
             <th colspan="4">HP</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputOverLimitHp" v-model="monsterData.overLimitParam.hp" min="1" max="99999">
+              <input type="number" class="form-control" id="inputOverLimitHp" v-model.number="monsterData.overLimitParam.hp" min="1" max="99999">
             </td>
           </tr>
           <tr>
             <th colspan="4">攻撃</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputOverLimitAttack" v-model="monsterData.overLimitParam.attack" min="1" max="99999">
+              <input type="number" class="form-control" id="inputOverLimitAttack" v-model.number="monsterData.overLimitParam.attack" min="1" max="99999">
             </td>
           </tr>
           <tr>
             <th colspan="4">回復</th>
             <td colspan="8">
-              <input type="number" class="form-control" id="inputOverLimitRecovery" v-model="monsterData.overLimitParam.recovery" min="-9999" max="99999">
+              <input type="number" class="form-control" id="inputOverLimitRecovery" v-model.number="monsterData.overLimitParam.recovery" min="-9999" max="99999">
             </td>
           </tr>
           <tr class="thead-light">
@@ -681,7 +681,7 @@
                 </label>
               </span>
               <span v-for="(awaken, key) in awakenTable" v-if="key != 0 && key != 'null'" class="col-md-3 form-check" style="display:inline-block;" :key="key">
-                <input class="form-check-input" type="checkbox" :value="key" v-model="monsterData.superAwakens" :id="'superAwaken' + key" :disabled="isUnknownSuperAwaken">
+                <input class="form-check-input" type="checkbox" :value="key" v-model.number="monsterData.superAwakens" :id="'superAwaken' + key" :disabled="isUnknownSuperAwaken">
                 <label class="form-check-label" :for="'superAwaken' + key">
                   <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken.name}}
                 </label>
@@ -694,7 +694,7 @@
         </tr>
         <tr>
           <td colspan="12"> 
-            <select class="custom-select" id="evolutionType" v-model="monsterData.evolutionType">
+            <select class="custom-select" id="evolutionType" v-model.number="monsterData.evolutionType">
               <option v-for="(type, key) in evolutionTypeTable" :value="key" :key="key" v-once>{{type}}</option>
             </select>
           </td>
@@ -705,7 +705,7 @@
           </tr>
           <tr>
             <td colspan="12">
-              <monster-incremental-search id="inputEvolutionBaseNo" v-model="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
+              <monster-incremental-search id="inputEvolutionBaseNo" v-model.number="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
             </td>
           </tr>
           <tr class="thead-light">
@@ -713,7 +713,7 @@
           </tr>
           <tr v-for="n in 5">
             <td colspan="12">
-              <monster-incremental-search :id="`inputEvolutionMaterial${n}`" v-model="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :image-table="imageTable" :key="n"></monster-incremental-search>
+              <monster-incremental-search :id="`inputEvolutionMaterial${n}`" v-model.number="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :image-table="imageTable" :key="n"></monster-incremental-search>
             </td>
           </tr>
         </template>
