@@ -383,9 +383,11 @@ Vue.component('pdSelect', {
   },
   watch: {
     value: function (newValue) {
+      // html要素上では null の値はなく文字列になっているため、値が null の場合は文字列にする。
+      newValue = (newValue === null) ? 'null' : newValue.toString();
       this.changeDisp(newValue);
       $(this.$el).children('div.dropdown-menu').children().each((index, elem) => {
-        if (elem.getAttribute('data-value') == newValue) {
+        if (elem.getAttribute('data-value') === newValue) {
           $(elem).addClass('active');
         } else {
           $(elem).removeClass('active');
@@ -407,9 +409,9 @@ Vue.component('pdSelect', {
     },
     changeDisp: function (value) {
       // html要素上では null の値はなく文字列になっているため、値が null の場合は文字列にする。
-      if (value === null) { value = 'null'; }
+      value = (value === null) ? 'null' : value.toString();
       $(this.$el).children('.dropdown-menu').children().each((index, elem) => {
-        if (elem.getAttribute('data-value') == value) {
+        if (elem.getAttribute('data-value') === value) {
           this.html = $(elem).html();
         }
       });
