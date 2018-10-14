@@ -1089,8 +1089,7 @@ sub save_evolution_list_json {
       LEFT JOIN monster_data ON monster_data.evolution = evolution.id
   ", \@column_infos, { 'monster_data.state' => 1 }, { order => 'monster_data.no ASC' });
 
-  # 取得したデータは進化後のモンスター番号がキーとなっているので、
-  # 進化前をキーとして情報の配列を持つハッシュを作成する。
+  # 進化前番号をキーとして情報の配列を持つハッシュを作成する。
   my %to_evolution_hash;
   for my $data (@$data_ref) {
     if (!exists $to_evolution_hash{$data->{baseNo}}) {
