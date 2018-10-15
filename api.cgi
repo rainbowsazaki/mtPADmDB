@@ -10,6 +10,9 @@ use DBI;
 
 use File::Copy;
 
+use lib qw(./modules);
+use Data::MessagePack;
+
 # ローカルでの動作でなく x-requested-with が指定されていない場合は CSRF 対策として弾く。
 if (!$ENV{'HTTP_X_REQUESTED_WITH'} &&
     $ENV{'HTTP_HOST'} ne 'localhost' && $ENV{'HTTP_HOST'} ne '127.0.0.1'
@@ -134,6 +137,21 @@ sub create_monster_db_dbh {
   $dbh->{sqlite_unicode} = 1;
   $dbh->{AutoCommit} = 0;
   return $dbh;
+}
+
+# JSON と MessagePack で指定データを保存する。
+sub save_json_and_msgpack {
+  my ($path_base, $data_ref) = @_;
+
+  open(DATAFILE, "> ${path_base}.json") or die("error :$!");
+  print DATAFILE JSON::PP::encode_json($data_ref);
+  close(DATAFILE);
+
+  my $mp = Data::MessagePack->new;
+  $mp->prefer_integer(1);
+  open(DATAFILE, "> ${path_base}.mpac") or die("error :$!");
+  print DATAFILE $mp->encode($data_ref);
+  close(DATAFILE);
 }
 
 # テーブルJSON更新モード
@@ -957,6 +975,17 @@ sub save_monster_list_json {
     ->encode($data_ref);
   close(DATAFILE);
 
+  my $mp = Data::MessagePack->new;
+  $mp->prefer_integer(1);
+  # モンスター番号をキーとしたハッシュにしてMessagePackでファイルに保存する。
+  my %msgpack_data = map {
+    $_->{no} => $_;
+  } @$data_ref;
+
+  open(DATAFILE, "> ./listJson/monster_data.mp") or die("error :$!");
+  print DATAFILE $mp->encode(\%msgpack_data);
+  close(DATAFILE);
+
   # ピックアップ版用のデータを抜き出したものを作成する。
   my %pickup_data = map {
     my $target_ref = $_;
@@ -969,10 +998,8 @@ sub save_monster_list_json {
       $target_ref->{no} => \%temp;
   } @$data_ref;
 
-  # JSON化してファイルに保存。
-  open(DATAFILE, "> ./listJson/monster_list.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json(\%pickup_data);
-  close(DATAFILE);
+  # JSON/MessagePackでファイルに保存。
+  &save_json_and_msgpack('./listJson/monster_list', \%pickup_data);
 }
 
 
@@ -1055,9 +1082,7 @@ sub save_skill_list_json {
   my @keys = qw/ no name description baseTurn maxLevel /;
   my $data = table_to_hash($dbh, 'skill', \@keys, { state => 1 });
 
-  open(DATAFILE, "> ./listJson/skill_list.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json($data);
-  close(DATAFILE);
+  &save_json_and_msgpack('./listJson/skill_list', $data);
 }
 
 
@@ -1066,9 +1091,7 @@ sub save_leader_skill_list_json {
   my @keys = qw/ no name description /;
   my $data = table_to_hash($dbh, 'leader_skill', \@keys, { state => 1 });
 
-  open(DATAFILE, "> ./listJson/leader_skill_list.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json($data);
-  close(DATAFILE);
+  &save_json_and_msgpack('./listJson/leader_skill_list', $data);
 }
 
 # 進化前のモンスター番号キーとして進化情報の配列を格納したJSONを保存する。
@@ -1098,9 +1121,7 @@ sub save_evolution_list_json {
     push @{$to_evolution_hash{$data->{baseNo}}}, $data;
   }
 
-  open(DATAFILE, "> ./listJson/evolution_list.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json(\%to_evolution_hash);
-  close(DATAFILE);
+  &save_json_and_msgpack('./listJson/evolution_list', \%to_evolution_hash);
 }
 
 sub save_image_list_json {
@@ -1111,9 +1132,7 @@ sub save_image_list_json {
   );
   my $data = table_to_hash($dbh, 'monster_image', \@keys, { state => 1 }, { remove_key_column => 1});
 
-  open(DATAFILE, "> ./listJson/image_list.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json($data);
-  close(DATAFILE);
+  &save_json_and_msgpack('./listJson/image_list', $data);
 }
 
 __END__
