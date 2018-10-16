@@ -944,7 +944,8 @@ const componentMonsterData = {
   watch: {
     '$route': function () {
       this.fetchData();
-    }
+    },
+    'monsterData': '$_mixinForPage_updateTitle'
   },
   
   methods: {
@@ -953,20 +954,17 @@ const componentMonsterData = {
       this.histories = null;
       this.isLoadingHistory = false;
 
-      const param = {
-        callback: () => {
-          this.$_mixinForPage_updateTitle();
-        }
-      };
+      // 現在のデータの取得の場合は読み込み処理は行わず、monsterTable 内から取得する処理が computed の monsterData で行われる。
 
       if (this.isHistory) {
-        param.historyId = this.$route.params.id;
-      } else {
-        param.no = this.$route.params.no;
+        const param = {
+          callback: () => {
+            this.$_mixinForPage_updateTitle();
+          },
+          historyId: this.$route.params.id
+        };
+        this.$store.commit('loadMonsterData', param);
       }
-
-      this.$_mixinForPage_updateTitle();
-      this.$store.commit('loadMonsterData', param);
       this.$store.commit('fetchCommonData');
     },
     
@@ -1011,7 +1009,9 @@ const componentMonsterData = {
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
     evolutionTable: function () { return this.$store.state.evolutionTable; },
     imageTable: function () { return this.$store.state.imageTable; },
-    monsterData: function () { return this.$store.state.monsterData; },
+    monsterData: function () {
+      return this.isHistory ? this.$store.state.monsterData : this.monsterTable[this.$route.params.no];
+    },
 
     monsterImagePath: function () {
       const no = this.monsterData.no;
