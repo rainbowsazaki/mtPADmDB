@@ -982,7 +982,7 @@ sub save_monster_list_json {
     $_->{no} => $_;
   } @$data_ref;
 
-  open(DATAFILE, "> ./listJson/monster_data.mp") or die("error :$!");
+  open(DATAFILE, "> ./listJson/monster_data.mpac") or die("error :$!");
   print DATAFILE $mp->encode(\%msgpack_data);
   close(DATAFILE);
 
