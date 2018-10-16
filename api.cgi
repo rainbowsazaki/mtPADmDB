@@ -938,11 +938,20 @@ sub save_monster_list_json {
   my ($dbh, $option) = @_;
   $option ||= {};
   my @column_infos = @{&create_monster_data_column_infos()};
-  if ($option->{is_create_monster_json}) {
-    push @column_infos, [ 'comment', 'monster_data.comment' ];
-  }
+  push @column_infos, [ 'comment', 'monster_data.comment' ];
 
   my $data_ref = &table_to_array($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.state' => 1 }, { 'order' => 'no' });
+
+  my $mp = Data::MessagePack->new;
+  $mp->prefer_integer(1);
+  # モンスター番号をキーとしたハッシュにしてMessagePackでファイルに保存する。
+  my %msgpack_data = map {
+    $_->{no} => $_;
+  } @$data_ref;
+
+  open(DATAFILE, "> ./listJson/monster_data.mpac") or die("error :$!");
+  print DATAFILE $mp->encode(\%msgpack_data);
+  close(DATAFILE);
 
   my $json_pp = JSON::PP->new;
 
@@ -952,8 +961,12 @@ sub save_monster_list_json {
       open(DATAFILE, "> ./monsterJson/${monster_no}.json") or die("error :$!");
       print DATAFILE $json_pp->encode($value);
       close(DATAFILE);
-      delete $value->{comment};
     }
+  }
+
+  # JSON化する際に更新コメントは入れない。
+  for my $value (@$data_ref) {
+    delete $value->{comment};
   }
 
   # JSON化してファイルに保存。
@@ -965,17 +978,6 @@ sub save_monster_list_json {
     } )
     ->indent_length(2)
     ->encode($data_ref);
-  close(DATAFILE);
-
-  my $mp = Data::MessagePack->new;
-  $mp->prefer_integer(1);
-  # モンスター番号をキーとしたハッシュにしてMessagePackでファイルに保存する。
-  my %msgpack_data = map {
-    $_->{no} => $_;
-  } @$data_ref;
-
-  open(DATAFILE, "> ./listJson/monster_data.mpac") or die("error :$!");
-  print DATAFILE $mp->encode(\%msgpack_data);
   close(DATAFILE);
 
   # ピックアップ版用のデータを抜き出したものを作成する。
