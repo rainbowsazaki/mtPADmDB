@@ -498,14 +498,15 @@ sub mode_update_monster_data {
   }
   &check_string_length('コメント', $data->{comment}, 0, 1000);
 
-
-  my $is_update_monster_data = 0;
-  my $is_update_skill_table = 0;
-  my $is_update_leader_skill_table = 0;
-
+  my %outputData;
+  
   if (@error) {
   } else {
     my $dbh = &create_monster_db_dbh();
+
+    my $is_update_monster_data = 0;
+    my $is_update_skill_table = 0;
+    my $is_update_leader_skill_table = 0;
 
     # スキル
     if (!defined $data->{skill}) {
@@ -661,12 +662,12 @@ sub mode_update_monster_data {
         push @error, '同一内容で登録されています';
       } else {
         # データ更新。
+        my %to_json_data;
         if ($is_update_monster_data) {
           &update_disable_state($dbh, 'monster_data', (no => $data->{no}, state => 1));
           &insert_table_data($dbh, 'monster_data', %monster_data_table_data, %common_insert_data);
 
           # モンスターデータのJSON保存
-          my %to_json_data;
           for my $column_names_ref (values %monster_data_db_info) {
             for (@$column_names_ref) {
               my $key = $_;
@@ -702,48 +703,39 @@ sub mode_update_monster_data {
         }
 
         $dbh->commit;
+
+        $outputData{message} = [ 'モンスターデータを更新しました。' ];
+        $outputData{newTableData} = {};
+
+        if ($is_update_monster_data) {
+          $outputData{newTableData}{monster} = { $data->{no} => \%to_json_data };
+        }
+
+        if ($is_update_skill_table) {
+          $outputData{newTableData}{skillDetails} = {
+            $data->{skill} => {
+              name => $data->{skillDetails}{name},
+              description => $data->{skillDetails}{description},
+              baseTurn => $data->{skillDetails}{baseTurn},
+              maxLevel => $data->{skillDetails}{maxLevel}
+            }
+          };
+        }
+        if ($is_update_leader_skill_table) {
+          $outputData{newTableData}{leaderSkillDetails} = {
+            $data->{leaderSkill} => {
+              name => $data->{leaderSkillDetails}{name},
+              description => $data->{leaderSkillDetails}{description}
+            }
+          };
+        }
       }
     }
     $dbh->disconnect;
   }
 
-  my %outputData;
-
   if (@error) {
     $outputData{error} = \@error;
-  } else {
-    $outputData{message} = [ 'モンスターデータを更新しました。' ];
-    $outputData{newTableData} = {};
-
-    if ($is_update_monster_data) {
-      my %pickup_monster;
-
-      for (@monster_data_pickup_keys) {
-        &joined_key_access(\%pickup_monster, $_,
-          &joined_key_access($data, $_)
-        )
-      }
-      $outputData{newTableData}{monster} = { $data->{no} => \%pickup_monster };
-    }
-
-    if ($is_update_skill_table) {
-      $outputData{newTableData}{skillDetails} = {
-        $data->{skill} => {
-          name => $data->{skillDetails}{name},
-          description => $data->{skillDetails}{description},
-          baseTurn => $data->{skillDetails}{baseTurn},
-          maxLevel => $data->{skillDetails}{maxLevel}
-        }
-      };
-    }
-    if ($is_update_leader_skill_table) {
-      $outputData{newTableData}{leaderSkillDetails} = {
-        $data->{leaderSkill} => {
-          name => $data->{leaderSkillDetails}{name},
-          description => $data->{leaderSkillDetails}{description}
-        }
-      };
-    }
   }
 
   print "Content-Type: application/json\n\n", JSON::PP::encode_json(\%outputData);
