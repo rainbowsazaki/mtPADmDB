@@ -256,7 +256,7 @@ window.componentCompare = {
   created: function () { this.load(); },
   watch: {
     '$route': function () { this.load(); },
-    monsterTable: '$_mixinForPage_updateTitle',
+    monsterTable: ['$_mixinForPage_updateTitle', 'load'],
     isEnableMonsterDatas: '$_mixinForPage_updateTitle'
   },
 
@@ -337,29 +337,22 @@ window.componentCompare = {
     },
 
     _load: function (index, monsterNo) {
-      const path = `./monsterJson/${monsterNo}.json`;
+      const monsterData = this.monsterTable[monsterNo];
+      if (monsterData) {
+        const data = $.extend(true, {}, constData.monsterClearData, monsterData);
+        if (!data.superAwakens) { data.superAwakens = []; }
 
-      Vue.set(this.monsterDatas, index, null);
-      this.$store.commit('setMessages', ['モンスター情報取得中']);
-      axios.get(path).then(
-        response => {
-          const data = $.extend(true, {}, constData.monsterClearData, response.data);
-          if (!data.superAwakens) { data.superAwakens = []; }
-
-          data.awakenObj = {};
-          for (const awaken of data.awakens) {
-            data.awakenObj[awaken] = (data.awakenObj[awaken] || 0) + 1;
-          }
-          Vue.set(this.monsterDatas, index, data);
-          this.$store.commit('clearMessages');
+        data.awakenObj = {};
+        for (const awaken of data.awakens) {
+          data.awakenObj[awaken] = (data.awakenObj[awaken] || 0) + 1;
         }
-      ).catch(
-        () => {
-          const errorMessage = `モンスター No.${monsterNo} の情報が見つかりませんでした。`;
-          this.$store.commit('clearMessages');
-          this.$store.commit('setErrors', [errorMessage]);
-        }
-      );
+        Vue.set(this.monsterDatas, index, data);
+        this.$store.commit('clearMessages');
+      } else {
+        const errorMessage = `モンスター No.${monsterNo} の情報が見つかりませんでした。`;
+        this.$store.commit('clearMessages');
+        this.$store.commit('setErrors', [errorMessage]);
+      }
     },
 
     getSenzaiKillerNos: function (monsterData) {
