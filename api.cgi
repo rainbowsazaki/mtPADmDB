@@ -942,16 +942,13 @@ sub save_monster_list_json {
 
   my $data_ref = &table_to_array($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.state' => 1 }, { 'order' => 'no' });
 
-  my $mp = Data::MessagePack->new;
-  $mp->prefer_integer(1);
-  # モンスター番号をキーとしたハッシュにしてMessagePackでファイルに保存する。
-  my %msgpack_data = map {
+  # モンスター番号をキーとしたハッシュにしてJSON/MessagePackでファイルに保存する。
+  my %full_data = map {
     $_->{no} => $_;
   } @$data_ref;
 
-  open(DATAFILE, "> ./listJson/monster_data.mpac") or die("error :$!");
-  print DATAFILE $mp->encode(\%msgpack_data);
-  close(DATAFILE);
+  # JSON/MessagePackでファイルに保存。
+  &save_json_and_msgpack('./listJson/monster_list_full', \%full_data);
 
   my $json_pp = JSON::PP->new;
 

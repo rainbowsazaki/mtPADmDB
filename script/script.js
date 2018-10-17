@@ -260,27 +260,27 @@ const store = new Vuex.Store({
       if (state.lastLoadCommonDataTime + 5 * 60 * 1000 > nowMs) { return; }
 
       // モンスター情報と画像情報はモンスター一覧ページをいち早く表示するために他と分けて読み込み処理を行う。
-      axios.get('./listJson/monster_data.mpac', { responseType: 'arraybuffer' })
+      axios.get('./listJson/monster_list_full.json')
         .then(responce => {
-          state.monsterTable = msgpack.decode(new Uint8Array(responce.data));
+          state.monsterTable = responce.data;
         });
-      axios.get('./listJson/image_list.mpac', { responseType: 'arraybuffer' })
+      axios.get('./listJson/image_list.json')
         .then(responce => {
-          state.imageTable = msgpack.decode(new Uint8Array(responce.data));
+          state.imageTable = responce.data;
         });
 
       axios.all([
-        axios.get('./listJson/skill_list.mpac', { responseType: 'arraybuffer' }),
-        axios.get('./listJson/leader_skill_list.mpac', { responseType: 'arraybuffer' }),
-        axios.get('./listJson/evolution_list.mpac', { responseType: 'arraybuffer' })
+        axios.get('./listJson/skill_list.json'),
+        axios.get('./listJson/leader_skill_list.json'),
+        axios.get('./listJson/evolution_list.json')
       ]).then(axios.spread((
         skillListResponse,
         leaderSkillListResponse,
         evolutionListResponse
       ) => {
-        state.skillTable = msgpack.decode(new Uint8Array(skillListResponse.data));
-        state.leaderSkillTable = msgpack.decode(new Uint8Array(leaderSkillListResponse.data));
-        state.evolutionTable = msgpack.decode(new Uint8Array(evolutionListResponse.data));
+        state.skillTable = skillListResponse.data;
+        state.leaderSkillTable = leaderSkillListResponse.data;
+        state.evolutionTable = evolutionListResponse.data;
       }));
 
       state.lastLoadCommonDataTime = nowMs;
