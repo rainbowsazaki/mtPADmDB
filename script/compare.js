@@ -220,11 +220,11 @@ window.componentCompare = {
         <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
         <td v-if="data.skill === null">不明</td>
         <td v-else>
-          {{skillTable[data.skill].name}}
-          <span style="font-size: 80%; float:right;">(最短ターン:<span v-if="skillTable[data.skill].baseTurn && skillTable[data.skill].maxLevel">{{skillTable[data.skill].baseTurn - skillTable[data.skill].maxLevel + 1}}</span><span v-else>不明</span>)</span>
+          {{getSkillData(data.skill).name}}
+          <span style="font-size: 80%; float:right;">(最短ターン:<span v-if="getSkillData(data.skill).baseTurn && getSkillData(data.skill).maxLevel">{{skillTable[data.skill].baseTurn - skillTable[data.skill].maxLevel + 1}}</span><span v-else>不明</span>)</span>
         </td>
       </tr>
-      <tr v-if="data.skill"><td style="font-size: 90%; padding-left: 1em;">{{skillTable[data.skill].description}}</td></tr>
+      <tr v-if="data.skill"><td style="font-size: 90%; padding-left: 1em;">{{getSkillData(data.skill).description}}</td></tr>
       <tr v-else><td></td></tr>
     </template>
   </table>
@@ -236,10 +236,10 @@ window.componentCompare = {
         <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
         <td v-if="data.leaderSkill === null">不明</td>
         <td v-else>
-          {{leaderSkillTable[data.leaderSkill].name}}
+          {{getLeaderSkillData(data.leaderSkill).name}}
         </td>
       </tr>
-      <tr v-if="data.leaderSkill"><td style="font-size: 90%; padding-left: 1em;">{{leaderSkillTable[data.leaderSkill].description}}</td></tr>
+      <tr v-if="data.leaderSkill"><td style="font-size: 90%; padding-left: 1em;">{{getLeaderSkillData(data.leaderSkill).description}}</td></tr>
       <tr v-else><td></td></tr>
     </template>
   </table>
@@ -355,6 +355,14 @@ window.componentCompare = {
       }
     },
 
+    /** 指定された番号のスキル情報を取得する。存在しない場合はダミーデータを返す。 */
+    getSkillData: function (no) {
+      return this.$store.state.skillTable[no] || { name: '', description: '' };
+    },
+    /** 指定された番号のリーダースキル情報を取得する。存在しない場合はダミーデータを返す。 */
+    getLeaderSkillData: function (no) {
+      return this.$store.state.leaderSkillTable[no] || { name: '', description: '' };
+    },
     getSenzaiKillerNos: function (monsterData) {
       // 合成できないものは潜在覚醒を降ることができないので無し。
       if (!this.canAddPlus(monsterData)) { return []; }
