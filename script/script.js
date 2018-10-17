@@ -802,11 +802,10 @@ Vue.component('tweetButton', {
 });
 
 // ページ用のコンポーネントで使用する処理のミックスイン
-const mixinForPage = {
+Vue.mixin({
   created: function () {
     this.$_mixinForPage_updateTitle();
   },
-  
   methods: {
     // ページタイトルの更新。
     $_mixinForPage_updateTitle: function () { // eslint-disable-line camelcase
@@ -841,9 +840,7 @@ const mixinForPage = {
       }
     }
   }
-};
-
-Vue.mixin(mixinForPage);
+});
 
 /**
  * アバウトページコンポーネント
