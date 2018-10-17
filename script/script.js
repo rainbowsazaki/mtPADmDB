@@ -4,7 +4,7 @@ const commonData = {
 
   monsterData: {},
 
-  monsterTable: {},
+  monsterTable: null,
   skillTable: {},
   leaderSkillTable: {},
   imageTable: {},
