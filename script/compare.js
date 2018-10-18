@@ -1,4 +1,4 @@
-/*global constData */
+/*global constData leaderSkillDescriptionToDecoratedHtml */
 
 /**
  * モンスター同士の比較を行うページのコンポーネント。
@@ -239,7 +239,7 @@ window.componentCompare = {
           {{getLeaderSkillData(data.leaderSkill).name}}
         </td>
       </tr>
-      <tr v-if="data.leaderSkill"><td style="font-size: 90%; padding-left: 1em;">{{getLeaderSkillData(data.leaderSkill).description}}</td></tr>
+      <tr v-if="data.leaderSkill"><td style="font-size: 90%; padding-left: 1em;" v-html="getLeaderSkillDescriptionHtml(getLeaderSkillData(data.leaderSkill))"></td></tr>
       <tr v-else><td></td></tr>
     </template>
   </table>
@@ -373,6 +373,11 @@ window.componentCompare = {
         }
       }
       return Array.from(killerNoSet).filter(a => a < 9).sort((a, b) => a - b);
+    },
+    
+    /** リーダースキル情報を元に、リーダースキルの説明文をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
+    getLeaderSkillDescriptionHtml: function (leaderSkillData) {
+      return leaderSkillDescriptionToDecoratedHtml(leaderSkillData.description);
     },
 
     /** プラスが振れるキャラクターかどうかを返す。 */

@@ -251,6 +251,12 @@ function escapeHtml (str) {
   });
 }
 
+/** リーダースキルの説明文をゲーム内の表記と同様の表示になるよう装飾した HTML を作成する。 */
+function leaderSkillDescriptionToDecoratedHtml (description) {
+  const escapedDescription = escapeHtml(description);
+  return escapedDescription.replace(/^(【.*】|ドロップを\d+個以下で消せない)/, '<span style="color:rgba(224, 0, 0, 0.8);">$&</span>');
+}
+
 const store = new Vuex.Store({
   state: commonData,
   mutations: {
@@ -1039,9 +1045,7 @@ const componentMonsterData = {
 
     /** リーダースキル説明文を装飾したHTMLを取得する。 */
     leaderSkillDescriptionHtml: function () {
-      let description = escapeHtml(this.leaderSkillDetails.description);
-      description = description.replace(/^(【.*】|ドロップを\d+個以下で消せない)/, '<span style="color:rgba(224, 0, 0, 0.8);">$&</span>');
-      return description;
+      return leaderSkillDescriptionToDecoratedHtml(this.leaderSkillDetails.description);
     },
 
     /** このモンスターに振れる潜在キラーの番号を配列を取得する。 */
