@@ -343,7 +343,10 @@
           <tr class="thead-light"><th>超覚醒</th></tr>
           <tr><td>
               <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
-                <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;"><img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description"></li>
+                <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;">
+                  <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
+                  <span v-else>不明</span>
+                </li>
               </ul>
           </td></tr>
         </table>
