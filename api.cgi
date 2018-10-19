@@ -714,6 +714,7 @@ sub mode_update_monster_data {
         if ($is_update_skill_table) {
           $outputData{newTableData}{skillDetails} = {
             $data->{skill} => {
+              no => $data->{skill},
               name => $data->{skillDetails}{name},
               description => $data->{skillDetails}{description},
               baseTurn => $data->{skillDetails}{baseTurn},
@@ -724,6 +725,7 @@ sub mode_update_monster_data {
         if ($is_update_leader_skill_table) {
           $outputData{newTableData}{leaderSkillDetails} = {
             $data->{leaderSkill} => {
+              no => $data->{leaderSkill},
               name => $data->{leaderSkillDetails}{name},
               description => $data->{leaderSkillDetails}{description}
             }
