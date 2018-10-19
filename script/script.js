@@ -254,7 +254,7 @@ function escapeHtml (str) {
 /** リーダースキルの説明文をゲーム内の表記と同様の表示になるよう装飾した HTML を作成する。 */
 function leaderSkillDescriptionToDecoratedHtml (description) {
   const escapedDescription = escapeHtml(description);
-  return escapedDescription.replace(/^(【.*】|ドロップを\d+個以下で消せない)/, '<span style="color:rgba(224, 0, 0, 0.8);">$&</span>');
+  return escapedDescription.replace(/^(【.*】|ドロップを\d+個以下で消せない)+/, '<span style="color:rgba(224, 0, 0, 0.8);">$&</span>');
 }
 
 const store = new Vuex.Store({
