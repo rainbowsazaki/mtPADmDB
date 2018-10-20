@@ -912,7 +912,8 @@ sub create_monster_data_column_infos {
   # 先頭のキーがハッシュのキーとして使用されるのでモンスター番号を予め指定しておく。
   my @column_infos = ([ 'no', 'monster_data.no' ]);
   my %used_keys;    # 複数回登場するキーは最初のもののみを使用するための確認用ハッシュ。
-  for my $table_name (keys %monster_data_db_info) {
+  # keys %monster_data_db_info を使うと順番が不定で結果が安定しないのでテーブル名を直接入れる。
+  for my $table_name (qw/monster_base_data over_limit evolution/) {
     for my $column (@{$monster_data_db_info{$table_name}}) {
       my ($hash_key, $db_column);
       if (ref $column eq 'ARRAY') {
