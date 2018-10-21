@@ -1,4 +1,4 @@
-/*global componentCompare msgpack */
+/*global componentCompare componentSkillList msgpack */
 
 const commonData = {
 
@@ -23,6 +23,7 @@ const constData = {
   /** ナビゲーションメニュー用データ */
   navis: [
     { text: 'ホーム', to: '/' },
+    { text: 'スキル一覧', to: '/skill' },
     { text: 'パラメータ比較', to: '/compare' },
     { text: '新規登録', to: '/edit' },
     { text: '画像投稿', to: '/pic' },
@@ -1765,6 +1766,11 @@ const router = new VueRouter({
       path: '/compare/:no1/:no2',
       name: 'compare',
       component: componentCompare
+    },
+    {
+      path: '/skill',
+      name: 'skillList',
+      component: componentSkillList
     },
     
     {
