@@ -65,3 +65,20 @@ window.componentSkillList = {
   <pagination :page="page" :pageCount="pageCount" />
 </div>`
 };
+
+/**
+ * スキル詳細のコンポーネント。
+ */
+window.componentSkillDetails = {
+  name: 'skillList',
+  pageTitle: function () { return 'スキル詳細'; },
+  data: function () {
+    return {
+    };
+  },
+  template: `
+<div>
+  <h2>スキル詳細</h2>
+</div>
+  `
+};
