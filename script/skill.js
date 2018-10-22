@@ -72,6 +72,12 @@ window.componentSkillList = {
 window.componentSkillDetails = {
   name: 'skillList',
   pageTitle: function () { return 'スキル詳細'; },
+  middleOfBreadcrumbs: function () {
+    return {
+      text: 'スキル一覧',
+      link: { name: 'skillList' }
+    };
+  },
   data: function () {
     return {
     };
