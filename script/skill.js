@@ -39,10 +39,25 @@ window.componentSkillList = {
   <pagination :page="page" :pageCount="pageCount" />
   
   <div class="row" style="margin-bottom: 1rem;">
+    <scoped-style>
+      .box {
+        border: 1px solid #dee2e6;
+        margin-bottom: -1px;
+        padding: 4.8px;
+      }
+      .skillDescription {
+        font-size: 90%;
+        min-height: 3em;
+        padding-left: 1em;
+        white-space: pre;
+        overflow: scroll;
+      }
+    </scoped-style>
+
     <div v-for="skill in skillArrayInPage" class="col-md-6">
-      <div style="border: 1px solid #dee2e6; margin-bottom:-1px; padding: 4.8px;">
+      <div class="box">
         <div>{{skill.name}}</div>
-        <div style="font-size: 90%; min-height: 3em; padding-left: 1em; white-space: pre; overflow:scroll;">{{skill.description}}</div>
+        <div class="skillDescription">{{skill.description}}</div>
       </div>
     </div>
   </div>
