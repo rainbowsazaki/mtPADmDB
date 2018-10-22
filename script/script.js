@@ -1783,6 +1783,11 @@ const router = new VueRouter({
       name: 'skillList',
       component: componentSkillList
     },
+    {
+      path: '/skill/:no',
+      name: 'skillDetails',
+      component: componentSkillDetails
+    },
     
     {
       path: '/:no',
