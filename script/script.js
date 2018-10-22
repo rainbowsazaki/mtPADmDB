@@ -808,6 +808,17 @@ Vue.component('tweetButton', {
   template: '<span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>'
 });
 
+/** 親要素および親要素の子要素にのみ適用されるスタイル情報要素のコンポーネントです。 */
+Vue.component('scopedStyle', {
+  common: { inc: 0 },
+  mounted: function () {
+    const className = 'scopedStyle' + this.$options.common.inc++;
+    this.$el.parentNode.classList.add(className);
+    this.$el.textContent = this.$slots.default[0].text.replace(/([^\}]+\{)/g, `.${className} $1`);
+  },
+  template: '<div is="style" />'
+});
+
 // ページ用のコンポーネントで使用する処理のミックスイン
 Vue.mixin({
   created: function () {
