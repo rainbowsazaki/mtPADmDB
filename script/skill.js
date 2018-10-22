@@ -56,7 +56,7 @@ window.componentSkillList = {
 
     <div v-for="skill in skillArrayInPage" class="col-md-6">
       <div class="box">
-        <div>{{skill.name}}</div>
+        <div><router-link :to="{ name: 'skillDetails', params: { no: skill.no }}">{{skill.name}}</router-link></div>
         <div class="skillDescription">{{skill.description}}</div>
       </div>
     </div>
