@@ -71,12 +71,27 @@ window.componentSkillList = {
  */
 window.componentSkillDetails = {
   name: 'skillList',
-  pageTitle: function () { return 'スキル詳細'; },
+  pageTitle: function () { return this.skillDetails.name || 'スキル詳細'; },
   middleOfBreadcrumbs: function () {
     return {
       text: 'スキル一覧',
       link: { name: 'skillList' }
     };
+  },
+  watch: {
+    skillDetails: '$_mixinForPage_updateTitle'
+  },
+  computed: {
+    /** スキルテーブル。 */
+    skillTable () { return this.$store.state.skillTable; },
+    /** 現在のページで表示するスキルの情報。 */
+    skillDetails: function () {
+      return this.skillTable[this.$route.params.no] || {};
+    },
+    /** 最小ターン */
+    minTurn: function () {
+      return this.skillDetails.baseTurn - this.skillDetails.maxLevel + 1;
+    }
   },
   data: function () {
     return {
@@ -85,6 +100,14 @@ window.componentSkillDetails = {
   template: `
 <div>
   <h2>スキル詳細</h2>
+  <h3>{{skillDetails.name}}</h3>
+  <h4>ターン</h4>
+  <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{skillDetails.baseTurn}}</span><span v-else>不明</span></div>
+  <div v-if="skillDetails.maxLevel">最大Lv.{{skillDetails.maxLevel}} ターン:<span v-if="skillDetails.baseTurn">{{minTurn}}</span><span v-else>不明</span></div>
+  <div v-else>最大lv.不明</div> 
+  <h4>説明</h4>
+  <div v-if="skillDetails.description" style="white-space: pre;">{{skillDetails.description}}</div>
+  <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
 </div>
   `
 };
