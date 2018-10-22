@@ -260,6 +260,19 @@ function leaderSkillDescriptionToDecoratedHtml (description) {
 
 const store = new Vuex.Store({
   state: commonData,
+  getters: {
+    /** スキル番号をキーとして、スキルを持っているモンスター番号の配列を格納したオブジェクトを取得する。 */
+    skillToMonsterNosTable: state => {
+      const obj = {};
+      for (const prop in state.monsterTable) {
+        const monsterData = state.monsterTable[prop];
+        const skill = monsterData.skill;
+        if (!obj[skill]) { obj[skill] = []; }
+        obj[skill].push(monsterData.no);
+      }
+      return obj;
+    }
+  },
   mutations: {
     fetchCommonData: function (state) {
       // 最後に読み込んだ時間から 5分以上経過していた場合に読み込みを実効する。
@@ -1791,6 +1804,7 @@ const router = new VueRouter({
     
     {
       path: '/:no',
+      name: 'monsterDetails',
       component: componentMonsterData,
       props: true
     }

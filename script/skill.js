@@ -82,6 +82,10 @@ window.componentSkillDetails = {
     skillDetails: '$_mixinForPage_updateTitle'
   },
   computed: {
+    /** モンスター情報のテーブル。 */
+    monsterTable () { return this.$store.state.monsterTable; },
+    /** モンスター画像情報のテーブル。 */
+    imageTable () { return this.$store.state.imageTable; },
     /** スキルテーブル。 */
     skillTable () { return this.$store.state.skillTable; },
     /** 現在のページで表示するスキルの情報。 */
@@ -91,6 +95,10 @@ window.componentSkillDetails = {
     /** 最小ターン */
     minTurn: function () {
       return this.skillDetails.baseTurn - this.skillDetails.maxLevel + 1;
+    },
+    /** このスキルを持つモンスターの番号の配列。 */
+    monsterNosUsingThisSkill: function () {
+      return this.$store.getters.skillToMonsterNosTable[this.skillDetails.no] || [];
     }
   },
   data: function () {
@@ -108,6 +116,19 @@ window.componentSkillDetails = {
   <h4>説明</h4>
   <div v-if="skillDetails.description" style="white-space: pre;">{{skillDetails.description}}</div>
   <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
+  <h4>スキル所持モンスター</h4>
+  <scoped-style>
+    ul { padding: 0; }
+    li { padding-right: 4.8px; }
+  </scoped-style>
+  <ul style="list-inline">
+    <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item">
+      <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
+        <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+      </router-link>
+    </li>
+  </ul>
+
 </div>
   `
 };
