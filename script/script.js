@@ -252,6 +252,20 @@ function escapeHtml (str) {
   });
 }
 
+// 正規表現エスケープを行う関数を作成する。 from https://s8a.jp/javascript-escape-regexp にあるものを若干変更
+(function (w) {
+  const reRegExp = /[\\^$.*+?()[\]{}|]/g;
+  const reHasRegExp = new RegExp(reRegExp.source);
+
+  function escapeRegExp (string) {
+    return (string && reHasRegExp.test(string))
+      ? string.replace(reRegExp, '\\$&')
+      : string;
+  }
+
+  w.escapeRegExp = escapeRegExp;
+})(window);
+
 /** リーダースキルの説明文をゲーム内の表記と同様の表示になるよう装飾した HTML を作成する。 */
 function leaderSkillDescriptionToDecoratedHtml (description) {
   const escapedDescription = escapeHtml(description);

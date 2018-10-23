@@ -1,4 +1,4 @@
-/*global */
+/*global escapeRegExp */
 
 /**
  * スキル一覧のコンポーネント。
@@ -35,9 +35,11 @@ window.componentSkillList = {
     searchedSkillArray () {
       const searchWord = this.$route.query.searchWord;
       if (!searchWord) { return this.skillArray; }
+      const searchWords = searchWord.split(/\s+/g);
+      // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
+      const regexp = new RegExp('^(?=.*' + searchWords.map(escapeRegExp).join(')(?=.*') + ').*$', 's');
       return this.skillArray.filter((skill) => {
-        return skill.name.indexOf(searchWord) !== -1 ||
-          skill.description.indexOf(searchWord) !== -1;
+        return regexp.test(skill.name + '<>' + skill.description);
       });
     },
     /** 現在の条件を満たすデータを最後を表示するのに必要なページ数。 */
