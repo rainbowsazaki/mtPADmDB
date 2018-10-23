@@ -8,20 +8,37 @@ window.componentSkillList = {
   pageTitle: function () { return 'スキル一覧'; },
   data: function () {
     return {
+      /** 検索ワード。 */
+      searchWord: '',
       /** １ページに表示するデータの個数。 */
       inPageCount: 50
     };
   },
+  created: function () {
+    this.updateSearchWordFromUrl();
+  },
+  watch: {
+    '$route': 'updateSearchWordFromUrl'
+  },
   computed: {
     /** スキルテーブル。 */
     skillTable () { return this.$store.state.skillTable; },
-    /** 検索条件を満たすデータの配列。 */
-    searchedSkillArray () {
+    /** スキルテーブルの値を配列にしたもの。 */
+    skillArray () {
       const array = [];
       for (const key in this.skillTable) {
         array.push(this.skillTable[key]);
       }
       return array;
+    },
+    /** 検索条件を満たすデータの配列。 */
+    searchedSkillArray () {
+      const searchWord = this.$route.query.searchWord;
+      if (!searchWord) { return this.skillArray; }
+      return this.skillArray.filter((skill) => {
+        return skill.name.indexOf(searchWord) !== -1 ||
+          skill.description.indexOf(searchWord) !== -1;
+      });
     },
     /** 現在の条件を満たすデータを最後を表示するのに必要なページ数。 */
     pageCount () { return ((this.searchedSkillArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
@@ -32,10 +49,28 @@ window.componentSkillList = {
       return this.searchedSkillArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
     }
   },
+  methods: {
+    /** URLで指定された検索ワードで searchWord を更新する。 */
+    updateSearchWordFromUrl: function () {
+      this.searchWord = this.$route.query.searchWord;
+    },
+    /** searchWord の文字列を使用して検索を行う。 */
+    search: function () {
+      this.$router.push({ path: this.$router.path, query: { searchWord: this.searchWord }});
+    }
+  },
   template: `
 <div>
   <h2>スキル一覧</h2>
 
+  <form @submit="$event.preventDefault(); search();">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="スキル検索" v-model="searchWord">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-outline-secondary">検索</button>
+      </div>
+    </div>
+  </form>
   <pagination :page="page" :pageCount="pageCount" />
   
   <div class="row" style="margin-bottom: 1rem;">
