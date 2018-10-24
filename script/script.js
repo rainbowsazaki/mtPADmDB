@@ -1815,6 +1815,11 @@ const router = new VueRouter({
       name: 'skillDetails',
       component: componentSkillDetails
     },
+    {
+      path: '/leaderSkill',
+      name: 'leaderSkillList',
+      component: componentSkillList
+    },
     
     {
       path: '/:no',

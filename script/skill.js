@@ -5,7 +5,7 @@
  */
 window.componentSkillList = {
   name: 'skillList',
-  pageTitle: function () { return 'スキル一覧'; },
+  pageTitle: function () { return this.targetName + '一覧'; },
   data: function () {
     return {
       /** 検索ワード。 */
@@ -18,11 +18,20 @@ window.componentSkillList = {
     this.updateSearchWordFromUrl();
   },
   watch: {
-    '$route': 'updateSearchWordFromUrl'
+    '$route': [
+      'updateSearchWordFromUrl',
+      '$_mixinForPage_updateTitle'
+    ]
   },
   computed: {
+    /** リーダースキルの表示かどうか。 */
+    isLeaderSkill () { return this.$route.name === 'leaderSkillList'; },
+    /** 現在の条件で表示する情報の名前。 */
+    targetName () { return (this.isLeaderSkill) ? 'リーダースキル' : 'スキル'; },
+    /** 現在の条件で表示するデータの詳細ページのルート名。 */
+    detailsPageName () { return (this.isLeaderSkill) ? 'leaderSkillDetails' : 'skillDetails'; },
     /** スキルテーブル。 */
-    skillTable () { return this.$store.state.skillTable; },
+    skillTable () { return (this.isLeaderSkill) ? this.$store.state.leaderSkillTable : this.$store.state.skillTable; },
     /** スキルテーブルの値を配列にしたもの。 */
     skillArray () {
       const array = [];
@@ -63,11 +72,11 @@ window.componentSkillList = {
   },
   template: `
 <div>
-  <h2>スキル一覧</h2>
+  <h2>{{targetName}}一覧</h2>
 
   <form @submit="$event.preventDefault(); search();">
     <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="スキル検索" v-model="searchWord">
+      <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="searchWord">
       <div class="input-group-append">
         <button type="submit" class="btn btn-outline-secondary">検索</button>
       </div>
@@ -93,7 +102,7 @@ window.componentSkillList = {
 
     <div v-for="skill in skillArrayInPage" class="col-md-6">
       <div class="box">
-        <div><router-link :to="{ name: 'skillDetails', params: { no: skill.no }}">{{skill.name}}</router-link></div>
+        <div><router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{skill.name}}</router-link></div>
         <div class="skillDescription">{{skill.description}}</div>
       </div>
     </div>
