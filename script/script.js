@@ -24,6 +24,7 @@ const constData = {
   navis: [
     { text: 'ホーム', to: '/' },
     { text: 'スキル一覧', to: '/skill' },
+    { text: 'リーダースキル一覧', to: { name: 'leaderSkillList' }},
     { text: 'パラメータ比較', to: '/compare' },
     { text: '新規登録', to: '/edit' },
     { text: '画像投稿', to: '/pic' },
