@@ -285,6 +285,17 @@ const store = new Vuex.Store({
         obj[skill].push(monsterData.no);
       }
       return obj;
+    },
+    /** リーダースキル番号をキーとして、リーダースキルを持っているモンスター番号の配列を格納したオブジェクトを取得する。 */
+    leaderSkillToMonsterNosTable: state => {
+      const obj = {};
+      for (const prop in state.monsterTable) {
+        const monsterData = state.monsterTable[prop];
+        const leaderSkill = monsterData.leaderSkill;
+        if (!obj[leaderSkill]) { obj[leaderSkill] = []; }
+        obj[leaderSkill].push(monsterData.no);
+      }
+      return obj;
     }
   },
   mutations: {
@@ -1819,6 +1830,11 @@ const router = new VueRouter({
       path: '/leaderSkill',
       name: 'leaderSkillList',
       component: componentSkillList
+    },
+    {
+      path: '/leaderSkill/:no',
+      name: 'leaderSkillDetails',
+      component: componentSkillDetails
     },
     
     {
