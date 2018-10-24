@@ -329,7 +329,7 @@
             <tr class="thead-light"><th>スキル</th></tr>
             <tr v-if="!skillDetails.name"><td>不明</td></tr>
             <tr v-if="skillDetails.name"><td>
-              {{skillDetails.name}}
+              <router-link :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{skillDetails.name}}</router-link>
               <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillDetails.baseTurn}} 最大Lv.<span v-if="skillDetails.maxLevel">{{skillDetails.maxLevel}} ターン:{{skillDetails.baseTurn - skillDetails.maxLevel + 1}}</span><span v-else>不明</span>)</span>
             </td></tr>
             <tr v-if="skillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDetails.description}}</td></tr>
@@ -337,7 +337,7 @@
             <tr class="thead-light"><th>リーダースキル</th></tr>
             <tr v-if="!leaderSkillDetails.name"><td>不明</td></tr>
             <tr v-if="leaderSkillDetails.name"><td>
-              {{leaderSkillDetails.name}}
+              <router-link :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{leaderSkillDetails.name}}</router-link>
             </td></tr>
             <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml"></td></tr>
           </table> 
