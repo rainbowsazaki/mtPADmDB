@@ -220,7 +220,7 @@ window.componentCompare = {
         <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
         <td v-if="data.skill === null">不明</td>
         <td v-else>
-          {{getSkillData(data.skill).name}}
+          <router-link :to="{ name: 'skillDetails', params: { no: data.skill }}">{{getSkillData(data.skill).name}}</router-link>
           <span style="font-size: 80%; float:right;">(最短ターン:<span v-if="getSkillData(data.skill).baseTurn && getSkillData(data.skill).maxLevel">{{skillTable[data.skill].baseTurn - skillTable[data.skill].maxLevel + 1}}</span><span v-else>不明</span>)</span>
         </td>
       </tr>
@@ -236,7 +236,7 @@ window.componentCompare = {
         <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
         <td v-if="data.leaderSkill === null">不明</td>
         <td v-else>
-          {{getLeaderSkillData(data.leaderSkill).name}}
+          <router-link :to="{ name: 'leaderSkillDetails', params: { no: data.leaderSkill }}">{{getLeaderSkillData(data.leaderSkill).name}}</router-link>
         </td>
       </tr>
       <tr v-if="data.leaderSkill"><td style="font-size: 90%; padding-left: 1em;" v-html="getLeaderSkillDescriptionHtml(getLeaderSkillData(data.leaderSkill))"></td></tr>
