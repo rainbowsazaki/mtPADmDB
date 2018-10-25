@@ -168,23 +168,22 @@ window.componentSkillDetails = {
   },
   template: `
 <div>
-  <h2>{{targetName}}詳細</h2>
+  <h2 class="h6">{{targetName}}詳細</h2>
   <h3>{{skillDetails.name}}</h3>
   <template v-if="!isLeaderSkill">
-    <h4>ターン</h4>
+    <h4 class="p-2 mt-3 bg-light">ターン</h4>
     <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{skillDetails.baseTurn}}</span><span v-else>不明</span></div>
     <div v-if="skillDetails.maxLevel">最大Lv.{{skillDetails.maxLevel}} ターン:<span v-if="skillDetails.baseTurn">{{minTurn}}</span><span v-else>不明</span></div>
     <div v-else>最大lv.不明</div>
   </template>
-  <h4>説明</h4>
+  <h4 class="p-2 mt-3 bg-light">説明</h4>
   <div v-if="skillDetails.description" style="white-space: pre;">{{skillDetails.description}}</div>
   <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
-  <h4>{{targetName}}所持モンスター</h4>
+  <h4 class="p-2 mt-3 bg-light">{{targetName}}所持モンスター</h4>
   <scoped-style>
-    ul { padding: 0; }
-    li { padding-right: 4.8px; }
+    li { margin: 0; padding: 0; padding-right: 4.8px; }
   </scoped-style>
-  <ul style="list-inline">
+  <ul class="list-inline">
     <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item">
       <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
         <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
