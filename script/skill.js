@@ -181,7 +181,7 @@ window.componentSkillDetails = {
   <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
   <h4 class="p-2 mt-3 bg-light">{{targetName}}所持モンスター</h4>
   <scoped-style>
-    li { margin: 0; padding: 0; padding-right: 4.8px; }
+    li { margin: 0; padding: 0; padding: 2.4px; }
   </scoped-style>
   <ul class="list-inline">
     <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item">
