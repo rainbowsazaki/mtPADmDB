@@ -1,4 +1,4 @@
-/*global escapeRegExp */
+/*global escapeRegExp leaderSkillDescriptionToDecoratedHtml */
 
 /**
  * スキル一覧のコンポーネント。
@@ -166,6 +166,12 @@ window.componentSkillDetails = {
     return {
     };
   },
+  methods: {
+    /** リーダースキル情報を元に、リーダースキルの説明文をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
+    getLeaderSkillDescriptionHtml: function (leaderSkillData) {
+      return leaderSkillDescriptionToDecoratedHtml(leaderSkillData.description);
+    }
+  },
   template: `
 <div>
   <h2 class="h6">{{targetName}}詳細</h2>
@@ -177,7 +183,7 @@ window.componentSkillDetails = {
     <div v-else>最大lv.不明</div>
   </template>
   <h4 class="p-2 mt-3 bg-light">説明</h4>
-  <div v-if="skillDetails.description" style="white-space: pre;">{{skillDetails.description}}</div>
+  <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{skillDetails.description}}</div>
   <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
   <h4 class="p-2 mt-3 bg-light">{{targetName}}所持モンスター</h4>
   <scoped-style>
