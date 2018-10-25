@@ -1,4 +1,4 @@
-/*global componentCompare componentSkillList msgpack */
+/*global componentCompare componentSkillList componentSkillDetails */
 
 const commonData = {
 
