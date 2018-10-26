@@ -160,6 +160,10 @@ window.componentSkillDetails = {
     /** このスキルを持つモンスターの番号の配列。 */
     monsterNosUsingThisSkill: function () {
       return this.skillToMonsterNosTable[this.skillDetails.no] || [];
+    },
+    /** このスキルを持つモンスターが存在するかどうか。 */
+    existsMonsterUsingThisSkill: function () {
+      return this.monsterNosUsingThisSkill.length > 0;
     }
   },
   data: function () {
@@ -189,14 +193,14 @@ window.componentSkillDetails = {
   <scoped-style>
     li { margin: 0; padding: 0; padding: 2.4px; }
   </scoped-style>
-  <ul class="list-inline">
+  <ul v-if="existsMonsterUsingThisSkill" class="list-inline">
     <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item">
       <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
         <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
       </router-link>
     </li>
   </ul>
-
+  <div v-else>なし</div>
 </div>
   `
 };
