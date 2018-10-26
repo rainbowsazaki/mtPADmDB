@@ -32,13 +32,13 @@ window.componentSkillList = {
     detailsPageName () { return (this.isLeaderSkill) ? 'leaderSkillDetails' : 'skillDetails'; },
     /** スキルテーブル。 */
     skillTable () { return (this.isLeaderSkill) ? this.$store.state.leaderSkillTable : this.$store.state.skillTable; },
-    /** スキルテーブルの値を配列にしたもの。 */
+    /** スキル番号をキーとして、スキルを持っているモンスター番号の配列を格納したオブジェクト。 */
+    skillToMonsterNosTable: function () {
+      return (this.isLeaderSkill) ? this.$store.getters.leaderSkillToMonsterNosTable : this.$store.getters.skillToMonsterNosTable;
+    },
+    /** 所持しているモンスターが存在するスキルテーブルの値を配列にしたもの。 */
     skillArray () {
-      const array = [];
-      for (const key in this.skillTable) {
-        array.push(this.skillTable[key]);
-      }
-      return array;
+      return Object.values(this.skillTable).filter((skill) => skill.no in this.skillToMonsterNosTable);
     },
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
