@@ -45,17 +45,35 @@ window.componentSkillList = {
       const searchWord = this.$route.query.searchWord;
       if (!searchWord) { return this.skillArray; }
       const searchWords = searchWord.split(/\s+/g);
+      /* 検索ワードに後方参照指定のある正規表現として扱うものが含まれているかどうか。 */
+      let isSortRegExpSearch = false;
       /** 検索ワードが正規表現扱いか確認して適切に処理する。 */
       const checkSearchWord = (word) => {
         // スラッシュで囲まれている場合は中身をそのまま正規表現として扱う。
         if (word.match(/^\/(.*)\/$/)) {
-          return RegExp.$1;
+          const useWord = RegExp.$1;
+          // 直前がバックスラッシュでなく、直後が ?: でない括弧があるかどうかの確認。
+          isSortRegExpSearch |= /(^|[^\\])\([^(\?\:)]/.test(useWord);
+          return useWord;
         }
         // それ以外はそのままの文字列として検索するため正規表現用にエスケープする。
         return escapeRegExp(word);
       };
       // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
       const regexp = new RegExp('^(?=.*' + searchWords.map(checkSearchWord).join(')(?=.*') + ').*$', 's');
+      if (isSortRegExpSearch) {
+        /** 文字列の昇順比較関数。 */
+        const strcmp = (a, b) => {
+          if (a < b) { return -1; }
+          if (a > b) { return 1; }
+          return 0;
+        };
+        // 正規表現の後方参照の結果を hit プロパティに入れた状態のオブジェクトの配列を、 hit プロパティでソートして返す。
+        return this.skillArray.map((skill) => {
+          if (!(skill.name + '<>' + skill.description).match(regexp)) { return undefined; }
+          return Object.assign({ hit: RegExp.$1 }, skill);
+        }).filter(o => o).sort((a, b) => strcmp(a.hit, b.hit));
+      }
       return this.skillArray.filter((skill) => {
         return regexp.test(skill.name + '<>' + skill.description);
       });
