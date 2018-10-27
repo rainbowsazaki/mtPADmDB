@@ -45,8 +45,17 @@ window.componentSkillList = {
       const searchWord = this.$route.query.searchWord;
       if (!searchWord) { return this.skillArray; }
       const searchWords = searchWord.split(/\s+/g);
+      /** 検索ワードが正規表現扱いか確認して適切に処理する。 */
+      const checkSearchWord = (word) => {
+        // スラッシュで囲まれている場合は中身をそのまま正規表現として扱う。
+        if (word.match(/^\/(.*)\/$/)) {
+          return RegExp.$1;
+        }
+        // それ以外はそのままの文字列として検索するため正規表現用にエスケープする。
+        return escapeRegExp(word);
+      };
       // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
-      const regexp = new RegExp('^(?=.*' + searchWords.map(escapeRegExp).join(')(?=.*') + ').*$', 's');
+      const regexp = new RegExp('^(?=.*' + searchWords.map(checkSearchWord).join(')(?=.*') + ').*$', 's');
       return this.skillArray.filter((skill) => {
         return regexp.test(skill.name + '<>' + skill.description);
       });
