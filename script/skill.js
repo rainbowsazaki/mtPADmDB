@@ -72,7 +72,7 @@ window.componentSkillList = {
         const array = this.skillArray.map((skill) => {
           if (!(skill.name + '<>' + skill.description).match(regexp)) { return undefined; }
           return Object.assign({ hit: RegExp.$1 }, skill);
-        }).filter(o => o).sort((a, b) => strcmp(a.hit, b.hit));
+        }).filter(o => o).sort((a, b) => parseFloat(a.hit) - parseFloat(b.hit) || strcmp(a.hit, b.hit));
         // グループ名が切り替わった先頭のオブジェクトに印をつけておく。
         let lastGroupName = '';
         for (const i in array) {
