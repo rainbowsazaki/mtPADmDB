@@ -69,10 +69,19 @@ window.componentSkillList = {
           return 0;
         };
         // 正規表現の後方参照の結果を hit プロパティに入れた状態のオブジェクトの配列を、 hit プロパティでソートして返す。
-        return this.skillArray.map((skill) => {
+        const array = this.skillArray.map((skill) => {
           if (!(skill.name + '<>' + skill.description).match(regexp)) { return undefined; }
           return Object.assign({ hit: RegExp.$1 }, skill);
         }).filter(o => o).sort((a, b) => strcmp(a.hit, b.hit));
+        // グループ名が切り替わった先頭のオブジェクトに印をつけておく。
+        let lastGroupName = '';
+        for (const i in array) {
+          if (array[i].hit !== lastGroupName) {
+            array[i].isGroupHead = true;
+            lastGroupName = array[i].hit;
+          }
+        }
+        return array;
       }
       return this.skillArray.filter((skill) => {
         return regexp.test(skill.name + '<>' + skill.description);
@@ -125,14 +134,23 @@ window.componentSkillList = {
         white-space: pre;
         overflow: scroll;
       }
+      h3 {
+        font-size: 1.25rem;
+        margin-top: 1rem;
+      }
     </scoped-style>
 
-    <div v-for="skill in skillArrayInPage" class="col-md-6">
+    <template v-for="(skill, n) in skillArrayInPage">
+    <div v-if="skill.hit && (n === 0 || skill.isGroupHead)" class="col-md-12">
+      <h3>{{skill.hit}}</h3>
+    </div>
+    <div class="col-md-6">
       <div class="box">
         <div><router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{skill.name}}</router-link></div>
         <div class="skillDescription">{{skill.description}}</div>
       </div>
     </div>
+    </template>
   </div>
 
   <pagination :page="page" :pageCount="pageCount" />
