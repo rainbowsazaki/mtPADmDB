@@ -108,7 +108,7 @@ window.componentSkillList = {
         };
         // 正規表現の後方参照の結果を hit プロパティに入れた状態のオブジェクトの配列を、 hit プロパティでソートして返す。
         const array = this.skillArray.map((skill) => {
-          if (!(skill.name + '<>' + skill.description).match(regexp)) { return undefined; }
+          if (!(skill.name + '\n' + skill.description).match(regexp)) { return undefined; }
           return Object.assign({ hit: RegExp.$1 }, skill);
         }).filter(o => o).sort((a, b) => parseFloat(a.hit) - parseFloat(b.hit) || strcmp(a.hit, b.hit));
         // グループ名が切り替わった先頭のオブジェクトに印をつけておく。
@@ -122,7 +122,7 @@ window.componentSkillList = {
         return array;
       }
       return this.skillArray.filter((skill) => {
-        return regexp.test(skill.name + '<>' + skill.description);
+        return regexp.test(skill.name + '\n' + skill.description);
       });
     },
     /** 検索のテンプレート情報の配列。 */
