@@ -6,6 +6,44 @@
 window.componentSkillList = {
   name: 'skillList',
   pageTitle: function () { return this.targetName + '一覧'; },
+  /** 検索テンプレート情報。1つ目はスキル、2つ名はリーダースキル用。 */
+  searchTemplateArrays: [
+    [
+      ['威嚇系', '/(\\d+ターン)遅/'],
+      ['１体ブレス', '/敵1体に(.*倍)の.*攻撃。/'],
+      ['全体ブレス', '/敵全体に(.*倍)の.*攻撃。/'],
+      ['固定ダメージ', '/(敵.+?)の?固定/'],
+      ['ヘイスト', '/味方スキルが(\\d+ターン)溜まる/'],
+      ['陣（全ドロップ変化）', '/全ドロップを(.+?)に変化。/'],
+      ['操作延長', '/操作(?:時間)[がを]?(.+?)。/'],
+      ['バインド回復', '/バインド状態(?:と覚醒無効状態)?を(.*?回復)/'],
+      ['覚醒無効状態回復', '/覚醒無効状態を(\\d+ターン)回復/'],
+      ['タイプエンハ', '/の間、(.*タイプ)の攻撃力が[\\d.]+倍/'],
+      ['属性エンハ', '/の間、(.*属性)の攻撃力が[\\d.]+倍/'],
+      ['覚醒エンハ', '/の間、チーム内の(.+)の.*攻撃力/'],
+      ['吸収無効化', '/(\\d+ターンの間、.*吸収を無効化)/'],
+      ['ロック', '/[\\n。】](.+?)をロック/'],
+      ['ロック解除', 'ロック状態を解除'],
+      ['ダメージ減', '/\\d+ターンの間、受ける(ダメージを[^、。]*)/'],
+      ['横1列変換', '/横\\d+列を(.*ドロップ)に変化/'],
+      ['縦1列変換', '/縦\\d+列を(.*ドロップ)に変化/'],
+      ['コンボ加算', '/(\\d+ターンの間、\\d+コンボ加算)される/'],
+      ['落ちコンしなくなる', '/(\\d+ターン)の間、落ちコンしなくなる/']
+    ],
+    [
+      ['無条件ダメージ軽減', '/[\\n。】](受けるダメージを.*?)[。、]/'],
+      ['属性ダメージ軽減', '/[\\n。】](.*属性)の敵から受けるダメージを.*[。、]/'],
+      ['条件付きダメージ軽減系', '/[\\n。】]([^\\nら]+ダメージ.*?減)/'],
+      ['属性同時攻撃', '/[\\n。】](.*(属性|色)同時攻撃)/'],
+      ['コンボ条件', '/[\\n。】](\\d*コンボ.*?)で/'],
+      ['指定色コンボ', '/[\\n。】](.*の\\d*コンボ.*?)で/'],
+      ['根性', 'ふんばることがある'],
+      ['追い打ち', '/(攻撃力×\\d+?倍)の追い打ち/'],
+      ['操作時間延長', '/ドロップ操作(?:時間)?[\\D]*(\\d+.*?)。/'],
+      ['操作時間固定', '/操作時間(\\d+秒固定)/'],
+      ['経験値アップ', '/ランク経験値が(.+?)。/']
+    ]
+  ],
   data: function () {
     return {
       /** 検索ワード。 */
@@ -87,6 +125,10 @@ window.componentSkillList = {
         return regexp.test(skill.name + '<>' + skill.description);
       });
     },
+    /** 検索のテンプレート情報の配列。 */
+    searchTemplateArray: function () {
+      return this.$options.searchTemplateArrays[this.isLeaderSkill ? 1 : 0];
+    },
     /** 現在の条件を満たすデータを最後を表示するのに必要なページ数。 */
     pageCount () { return ((this.searchedSkillArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     /** 現在表示中のページ番号。 */
@@ -116,6 +158,11 @@ window.componentSkillList = {
       <div class="input-group-append">
         <button type="submit" class="btn btn-outline-secondary">検索</button>
       </div>
+    </div>
+    <div>
+      <router-link v-for="searchWordPair in searchTemplateArray" class="ml-2" :to="{ query: { title: searchWordPair[0], searchWord: searchWordPair[1] }}">
+        {{searchWordPair[0]}}
+      </router-link>
     </div>
   </form>
   <pagination :page="page" :pageCount="pageCount" />
