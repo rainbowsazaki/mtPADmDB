@@ -171,7 +171,7 @@ window.componentSkillList = {
 
   <form @submit="$event.preventDefault(); search();">
     <div class="input-group mb-3">
-      <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="searchWord">
+      <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model.lazy="searchWord">
       <div class="input-group-append">
         <button type="submit" class="btn btn-outline-secondary">検索</button>
       </div>
