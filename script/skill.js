@@ -5,7 +5,24 @@
  */
 window.componentSkillList = {
   name: 'skillList',
-  pageTitle: function () { return this.targetName + '一覧'; },
+  pageTitle: function () {
+    if (!this.$route.query.searchWord) { return this.targetName + '一覧'; }
+    return this.targetName + '検索 ' + (this.$route.query.title || this.$route.query.searchWord);
+  },
+  middleOfBreadcrumbs: function () {
+    if (!this.$route.query.searchWord) { return undefined; }
+    if (this.isLeaderSkill) {
+      return {
+        text: 'リーダースキル一覧',
+        link: { name: 'leaderSkillList' }
+      };
+    } else {
+      return {
+        text: 'スキル一覧',
+        link: { name: 'skillList' }
+      };
+    }
+  },
   /** 検索テンプレート情報。1つ目はスキル、2つ名はリーダースキル用。 */
   searchTemplateArrays: [
     [
