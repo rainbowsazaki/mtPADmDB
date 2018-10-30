@@ -66,7 +66,9 @@ window.componentSkillList = {
       /** 検索ワード。 */
       searchWord: '',
       /** １ページに表示するデータの個数。 */
-      inPageCount: 50
+      inPageCount: 50,
+      /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
+      monsterIconCountMax: 10,
     };
   },
   created: function () {
@@ -85,6 +87,10 @@ window.componentSkillList = {
     targetName () { return (this.isLeaderSkill) ? 'リーダースキル' : 'スキル'; },
     /** 現在の条件で表示するデータの詳細ページのルート名。 */
     detailsPageName () { return (this.isLeaderSkill) ? 'leaderSkillDetails' : 'skillDetails'; },
+    /** モンスター情報のテーブル。 */
+    monsterTable () { return this.$store.state.monsterTable; },
+    /** モンスター画像情報のテーブル。 */
+    imageTable () { return this.$store.state.imageTable; },
     /** スキルテーブル。 */
     skillTable () { return (this.isLeaderSkill) ? this.$store.state.leaderSkillTable : this.$store.state.skillTable; },
     /** スキル番号をキーとして、スキルを持っているモンスター番号の配列を格納したオブジェクト。 */
@@ -163,6 +169,10 @@ window.componentSkillList = {
     /** searchWord の文字列を使用して検索を行う。 */
     search: function () {
       this.$router.push({ path: this.$router.path, query: { searchWord: this.searchWord }});
+    },
+    /** このスキルを持つモンスターの番号の配列を取得する。 */
+    monsterNosUsingThisSkill: function (no) {
+      return this.skillToMonsterNosTable[no] || [];
     }
   },
   template: `
@@ -198,6 +208,12 @@ window.componentSkillList = {
         white-space: pre;
         overflow: scroll;
       }
+      .monsterUsingSkillIcons {
+        min-height: 1.5rem;
+        padding-left: 0.9rem;
+        overflow: scroll;
+        margin: 0;
+      }
       h3 {
         font-size: 1.25rem;
         margin-top: 1rem;
@@ -212,6 +228,14 @@ window.componentSkillList = {
       <div class="box">
         <div><router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{skill.name}}</router-link></div>
         <div class="skillDescription">{{skill.description}}</div>
+        <ul class="list-inline monsterUsingSkillIcons">
+          <li v-for="(monsterNo, n) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item">
+            <router-link v-if="n < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
+              <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
+            </router-link>
+            <span v-else v-if="n == monsterIconCountMax">…</span>
+          </li>
+        </ul>
       </div>
     </div>
     </template>
