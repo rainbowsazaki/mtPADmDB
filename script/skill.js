@@ -192,6 +192,7 @@ window.componentSkillList = {
       </router-link>
     </div>
   </form>
+  <div><tweet-button /></div>
   <pagination :page="page" :pageCount="pageCount" />
   
   <div class="row" style="margin-bottom: 1rem;">
@@ -313,6 +314,7 @@ window.componentSkillDetails = {
 <div>
   <h2 class="h6">{{targetName}}詳細</h2>
   <h3>{{skillDetails.name}}</h3>
+  <div><tweet-button /></div>
   <template v-if="!isLeaderSkill">
     <h4 class="p-2 mt-3 bg-light">ターン</h4>
     <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{skillDetails.baseTurn}}</span><span v-else>不明</span></div>
