@@ -172,7 +172,7 @@ window.componentSkillList = {
     },
     /** このスキルを持つモンスターの番号の配列を取得する。 */
     monsterNosUsingThisSkill: function (no) {
-      return this.skillToMonsterNosTable[no] || [];
+      return (this.skillToMonsterNosTable[no] || []).slice().reverse();
     }
   },
   template: `
