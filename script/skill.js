@@ -213,6 +213,7 @@ window.componentSkillList = {
         min-height: 1.5rem;
         padding-left: 0.9rem;
         overflow: scroll;
+        white-space: nowrap;
         margin: 0;
       }
       h3 {
