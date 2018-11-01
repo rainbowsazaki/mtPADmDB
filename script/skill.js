@@ -1,4 +1,4 @@
-/*global escapeRegExp leaderSkillDescriptionToDecoratedHtml */
+/*global escapeRegExp leaderSkillDescriptionToDecoratedHtml gtagProductionOnly */
 
 /**
  * スキル一覧のコンポーネント。
@@ -299,44 +299,179 @@ window.componentSkillDetails = {
     /** このスキルを持つモンスターが存在するかどうか。 */
     existsMonsterUsingThisSkill: function () {
       return this.monsterNosUsingThisSkill.length > 0;
+    },
+    /** スキルレベル最大時の（最短の）スキルターン */
+    minimumSkillTurn: function () {
+      if (!this.editData.baseTurn || !this.editData.maxLevel) { return NaN; }
+      const turn = this.editData.baseTurn - this.editData.maxLevel + 1;
+      if (turn < 0) { return NaN; }
+      return turn;
     }
   },
   data: function () {
     return {
+      /** 編集モードかどうか。 */
+      isEditing: false,
+      /** 編集中データ。 */
+      editData: {},
+      /** 送信中かどうか。 */
+      isSubmitted: false
     };
   },
   methods: {
     /** リーダースキル情報を元に、リーダースキルの説明文をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
     getLeaderSkillDescriptionHtml: function (leaderSkillData) {
       return leaderSkillDescriptionToDecoratedHtml(leaderSkillData.description);
+    },
+    /** 編集モードを開始する。 */
+    startEdit: function () {
+      this.editData = Object.assign({ comment: '' }, this.skillDetails);
+      this.isEditing = true;
+    },
+    /** 編集モードを終了する。 */
+    endEdit: function () {
+      this.isEditing = false;
+      this.isSubmitted = false;
+    },
+    /** 編集結果を送信する。 */
+    submit: function () {
+      // 多重送信防止処理
+      if (this.isSubmitted) { return; }
+      this.isSubmitted = true;
+      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
+      const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
+
+      this.$store.commit('clearErrors');
+      this.$store.commit('setMessages', ['送信中...']);
+
+      axios.post(
+        './api.cgi',
+        {
+          mode: 'updateSkill',
+          isLeaderSkill: this.isLeaderSkill,
+          updateData: this.editData
+        }
+      ).then(response => {
+        // レスポンス来なかったときの復帰処理を止める。
+        clearTimeout(timeoutId);
+
+        this.$store.commit('clearErrors');
+        this.$store.commit('clearMessages');
+        if (response.data.error) {
+          this.$store.commit('setErrors', response.data.error);
+          // 再度送信可能にする。
+          this.isSubmitted = false;
+        } else {
+          // Google Analiticsにイベントを送信。
+          let action = 'skillDataPost';
+          if (this.$route.params.no) { action = 'skillDataUpdate'; }
+          gtagProductionOnly('event', action, {
+            'event_category': 'monsterData',
+            'event_label': `No.${this.editData.no}`
+          });
+          this.endEdit();
+        }
+        if (response.data.message) {
+          this.$store.commit('setMessages', response.data.message);
+        }
+        if (response.data.newTableData) {
+          const newTableData = response.data.newTableData;
+          if (newTableData.skillDetails) {
+            this.$store.commit('addSkillData', newTableData.skillDetails);
+          }
+          if (newTableData.leaderSkillDetails) {
+            this.$store.commit('addLeaderSkillData', newTableData.leaderSkillDetails);
+          }
+        }
+      });
     }
   },
   template: `
 <div>
   <h2 class="h6">{{targetName}}詳細</h2>
-  <h3>{{skillDetails.name}}</h3>
-  <div><tweet-button /></div>
-  <template v-if="!isLeaderSkill">
-    <h4 class="p-2 mt-3 bg-light">ターン</h4>
-    <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{skillDetails.baseTurn}}</span><span v-else>不明</span></div>
-    <div v-if="skillDetails.maxLevel">最大Lv.{{skillDetails.maxLevel}} ターン:<span v-if="skillDetails.baseTurn">{{minTurn}}</span><span v-else>不明</span></div>
-    <div v-else>最大lv.不明</div>
+  <template v-if="!isEditing">
+    <h3>{{skillDetails.name}}</h3>
+    <div><tweet-button /></div>
+    <template v-if="!isLeaderSkill">
+      <h4 class="p-2 mt-3 bg-light">ターン</h4>
+      <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{skillDetails.baseTurn}}</span><span v-else>不明</span></div>
+      <div v-if="skillDetails.maxLevel">最大Lv.{{skillDetails.maxLevel}} ターン:<span v-if="skillDetails.baseTurn">{{minTurn}}</span><span v-else>不明</span></div>
+      <div v-else>最大lv.不明</div>
+    </template>
+    <h4 class="p-2 mt-3 bg-light">説明</h4>
+    <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{skillDetails.description}}</div>
+    <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
+    <h4 class="p-2 mt-3 bg-light">{{targetName}}所持モンスター</h4>
+    <scoped-style>
+      li { margin: 0; padding: 0; padding: 2.4px; }
+    </scoped-style>
+    <ul v-if="existsMonsterUsingThisSkill" class="list-inline">
+      <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item">
+        <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
+          <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+        </router-link>
+      </li>
+    </ul>
+    <div v-else>なし</div>
+    <hr>
+    <button type="button" class="btn btn-secondary" @click="startEdit">編集する</button>
   </template>
-  <h4 class="p-2 mt-3 bg-light">説明</h4>
-  <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{skillDetails.description}}</div>
-  <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
-  <h4 class="p-2 mt-3 bg-light">{{targetName}}所持モンスター</h4>
-  <scoped-style>
-    li { margin: 0; padding: 0; padding: 2.4px; }
-  </scoped-style>
-  <ul v-if="existsMonsterUsingThisSkill" class="list-inline">
-    <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item">
-      <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
-        <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
-      </router-link>
-    </li>
-  </ul>
-  <div v-else>なし</div>
+
+  <form v-else onsubmit="return false;" @submit="submit">
+    <table class="table table-bordered table-sm">
+      <tr>
+        <th colspan="12">名称</th>
+      </tr>
+      <tr>
+        <td colspan="12">
+          <input v-model="editData.name" class="form-control dropdown-toggle" required minLength="1" maxLength="50" />
+        </td>
+      </tr>
+      <template v-if="!isLeaderSkill">
+        <tr>
+          <th colspan="4">SLv1時ターン</th>
+          <th colspan="4">最大SLv</th>
+          <th colspan="4">最短ターン</th>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <input type="number" class="form-control" id="inputSkillBaseTurn" v-model.number="editData.baseTurn" min="1" max="199">
+          </td>
+          <td colspan="4">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">SLv.</span>
+              </div>
+              <input type="number" class="form-control" id="inputSkillMaxLevel" v-model.number="editData.maxLevel" min="1" max="99">
+            </div>
+          </td>
+          <td colspan="4">{{(minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
+        </tr>
+      </template>
+      <tr>
+        <th colspan="12">説明</th>
+      </tr>
+      <tr>
+        <td colspan="12">
+          <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="editData.description" maxLength="200"></textarea>
+        </td>
+      </tr>
+      <tr class="thead-light">
+        <th colspan="12">編集コメント（任意）</th>
+      </tr>
+      <tr>
+        <td colspan="12">
+          編集理由などを書いてください。（例：説明を更新）
+          <textarea class="form-control" id="textareaComment" rows="3" v-model="editData.comment" minLength="0" maxLength="1000"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;"></td>
+      </tr>
+    </table>
+    <button type="button" class="btn btn-secondary" :disabled="isSubmitted" @click="endEdit">キャンセル</button>
+    <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' :'送信する'}}</button>
+  </form>
 </div>
   `
 };
