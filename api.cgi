@@ -130,6 +130,7 @@ my %modes = (
   'image' => \&mode_image,
   'monsterHistory' => \&mode_monster_history,
   'monsterHistoryDetails' => \&mode_monster_history_details,
+  'updateSkill' => \&mode_update_skill,
 );
 
 if (exists $modes{$mode}) {
@@ -332,6 +333,194 @@ sub mode_monster_history_details {
   $dbh->disconnect;
 }
 
+# スキル更新モード
+sub mode_update_skill {
+  my $response = {
+    error => [],
+    message => [],
+    response => undef,
+  };
+  eval {
+    mode_update_skill_(@_, $response);
+  };
+  # 例外が発生した場合の処理
+  if ($@) {
+    push @{$response->{error}}, "Exception occur: $@";
+  }
+  if (!@{$response->{message}}) { delete $response->{message}; }
+  if (!@{$response->{error}}) { delete $response->{error}; }
+  print "Content-Type: application/json\n\n", JSON::PP::encode_json($response);
+}
+
+sub mode_update_skill_ {
+  my ($q, $response) = @_;
+
+  my $json = $q->param("POSTDATA");
+  if ($json eq "") {
+    push @{$response->{error}}, 'データなし';
+    return;
+  }
+
+  my $data = JSON::PP::decode_json($json);
+
+  my @error;
+  
+  sub check_range {
+    my ($name, $value, $min, $max, $is_not_null) = @_;
+    if ($is_not_null == undef) { $is_not_null = 1; }
+
+    if ($value == undef) {
+      if ($is_not_null) { return 1; }
+      push @error, "${name} の値が入力されていません。";
+      return 0;
+    }
+    if ($value < $min || $value > $max) {
+      push @error, "${name} の値が不正(${value})";
+      return 0;
+    }
+    return 1;
+  }
+
+  sub check_string_length {
+    my $length = length $_[1];
+    if ($length < $_[2]) {
+      if ($length == 0) {
+        push @error, "${_[0]}が未入力";
+      } else {
+        push @error, "${_[0]}が短すぎます。(${_[2]}文字以上)";
+      }
+      return 0;
+    }
+    if ($length > $_[3]) {
+      push @error, "${_[0]}が長すぎます。(${_[3]}文字以内)";
+      return 0;
+    }
+    return 1;
+  }
+  
+  &to_number_with_key($data->{updateData}, qw/ baseTurn maxLevel /);
+  &to_hankaku_with_key($data->{updateData}, qw/ name description /);
+  &check_string_length('スキル名', $data->{updateData}{name}, 1, 50);
+  &check_string_length('スキル詳細', $data->{updateData}{description}, 0, 200);
+  &check_range('スキルLv1ターン', $data->{updateData}{baseTurn}, 1, 199, 0);
+  &check_range('スキル最大レベル', $data->{updateData}{maxLevel}, 1, 99, 0);
+
+  if (@error) {
+    push @{$response->{error}}, @error;
+    return;
+  }
+
+  my $is_leader_skill = $data->{isLeaderSkill};
+
+  my $table_name = ($is_leader_skill) ? 'leader_skill' : 'skill';
+  my $type_name = ($is_leader_skill) ? 'リーダースキル' : 'スキル';
+  my $response_propaty_name = ($is_leader_skill) ? 'leaderSkillDetails' : 'skillDetails';
+  my $dbh = &create_monster_db_dbh();
+
+  my @get_columns = qw/ no name description /;
+  
+  if (!$is_leader_skill) {
+    push @get_columns, qw/ baseTurn maxLevel /;
+  }
+
+  my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, \@get_columns, ( no => $data->{updateData}{no}, state => 1 ) );
+  if (!$tbl_ary_ref) {
+    push @{$response->{error}}, "指定された番号の${type_name}は存在していません。";
+    return;
+  }
+  
+  my $skill_no = $tbl_ary_ref->[0];
+  # 同一内容か確認
+  my $is_equal = 1;
+  for my $i (1 .. $#get_columns) {
+    if ($tbl_ary_ref->[$i] ne $data->{updateData}{$get_columns[$i]}) {
+      $is_equal = 0;
+      last;
+    }
+  }
+  # 　同じ場合は更新しない。
+  if ($is_equal) {
+    push @{$response->{error}}, '同じデータで登録されています。';
+    return;
+  }
+
+  my $ip_address = $ENV{'REMOTE_ADDR'};
+  my $account_name = '';
+
+  my %common_insert_data = (
+    comment => $data->{updateData}{comment},
+    ipAddress => $ip_address,
+    accountName => $account_name,
+    state => 1
+  );
+  # テーブルにある項目のみを取り出したハッシュを作成する。
+  my %update_data = ();
+  for my $column (@get_columns) {
+    $update_data{$column} = $data->{updateData}{$column};
+  }
+  
+  &update_disable_state($dbh, $table_name, (no => $update_data{no}, state => 1));
+  &insert_table_data($dbh, $table_name, %update_data, %common_insert_data);
+  
+  $response->{newTableData}{$response_propaty_name} = {
+    $update_data{no} => \%update_data
+  };
+
+  if ($is_leader_skill) {
+    &save_leader_skill_list_json($dbh);
+  } else {
+    &save_skill_list_json($dbh);
+  }
+
+  $dbh->commit;
+  push @{$response->{message}}, "${type_name}データを更新しました。";
+
+}
+
+# 第１引数に与えられた値を数値型に変換して返す。
+# undef や 空文字列、 "null" の場合は undef (json 上の null に該当する) にする。
+# 配列やハッシュのリファレンスが与えられた場合は要素すべてを変換した結果を返す。
+sub to_number {
+  my ($target) = @_;
+  if (ref $target eq 'ARRAY') {
+    return [ map { &to_number($_) } @{$target} ];
+  } elsif (ref $target eq 'HASH') {
+    return { map { $_ => &to_number($target->{$_}) } keys %{$target} };
+  } else {
+    if (!defined $target || $target eq '' || $target eq 'null') {
+      return undef;
+    }
+    return $target + 0;
+  }
+}
+
+# ハッシュ内の任意の要素を数値型に変換する。
+# 第１引数 対象のハッシュのリファレンス
+# 第２引数以降 変換対象の要素のキー。
+sub to_number_with_key {
+  my ($target_ref, @keys) = @_;
+  foreach my $key (@keys) {
+    if (!exists $target_ref->{$key}) { next; }
+    $target_ref->{$key} = &to_number($target_ref->{$key});
+  }
+}
+
+# ハッシュ内の任意の要素の全角英数字ピリオドスペースを半角に変換し、
+# 半角括弧プラスパーセントアンパサンドを全角に変換する。
+# 冒頭・末尾のスペースの取り除きも行う。
+# 第１引数 対象のハッシュのリファレンス
+# 第２引数以降 変換対象の要素のキー。
+sub to_hankaku_with_key {
+  my ($target_ref, @keys) = @_;
+  foreach my $key (@keys) {
+    if (!exists $target_ref->{$key}) { next; }
+    $target_ref->{$key} =~ tr/０-９Ａ-Ｚａ-ｚ．　/0-9A-Za-z. /;
+    $target_ref->{$key} =~ tr/\(\)\+%&/（）＋％＆/;
+    $target_ref->{$key} =~ s/^[\r\n\s　]*(.*?)[\r\n\s　]*$/$1/;
+  }
+}
+
+
 
 # モンスター情報更新モード
 sub mode_update_monster_data {
@@ -348,49 +537,6 @@ sub mode_update_monster_data {
   my $data = JSON::PP::decode_json($json);
 
   my @error;
-
-  # 第１引数に与えられた値を数値型に変換して返す。
-  # undef や 空文字列、 "null" の場合は undef (json 上の null に該当する) にする。
-  # 配列やハッシュのリファレンスが与えられた場合は要素すべてを変換した結果を返す。
-  sub to_number {
-    my ($target) = @_;
-    if (ref $target eq 'ARRAY') {
-      return [ map { &to_number($_) } @{$target} ];
-    } elsif (ref $target eq 'HASH') {
-      return { map { $_ => &to_number($target->{$_}) } keys %{$target} };
-    } else {
-      if (!defined $target || $target eq '' || $target eq 'null') {
-        return undef;
-      }
-      return $target + 0;
-    }
-  }
-
-  # ハッシュ内の任意の要素を数値型に変換する。
-  # 第１引数 対象のハッシュのリファレンス
-  # 第２引数以降 変換対象の要素のキー。
-  sub to_number_with_key {
-    my ($target_ref, @keys) = @_;
-    foreach my $key (@keys) {
-      if (!exists $target_ref->{$key}) { next; }
-      $target_ref->{$key} = &to_number($target_ref->{$key});
-    }
-  }
-
-  # ハッシュ内の任意の要素の全角英数字ピリオドスペースを半角に変換し、
-  # 半角括弧プラスパーセントアンパサンドを全角に変換する。
-  # 冒頭・末尾のスペースの取り除きも行う。
-  # 第１引数 対象のハッシュのリファレンス
-  # 第２引数以降 変換対象の要素のキー。
-  sub to_hankaku_with_key {
-    my ($target_ref, @keys) = @_;
-    foreach my $key (@keys) {
-      if (!exists $target_ref->{$key}) { next; }
-      $target_ref->{$key} =~ tr/０-９Ａ-Ｚａ-ｚ．　/0-9A-Za-z. /;
-      $target_ref->{$key} =~ tr/\(\)\+%&/（）＋％＆/;
-    	$target_ref->{$key} =~ s/^[\r\n\s　]*(.*?)[\r\n\s　]*$/$1/;
-    }
-  }
   
   sub check_range {
     my ($name, $value, $min, $max, $is_not_null) = @_;
