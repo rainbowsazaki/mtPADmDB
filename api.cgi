@@ -346,6 +346,7 @@ sub mode_update_skill {
   # 例外が発生した場合の処理
   if ($@) {
     push @{$response->{error}}, "Exception occur: $@";
+    print "Status: 500 Internal Server Error\n";
   }
   if (!@{$response->{message}}) { delete $response->{message}; }
   if (!@{$response->{error}}) { delete $response->{error}; }
