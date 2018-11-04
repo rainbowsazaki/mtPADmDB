@@ -1,5 +1,73 @@
 /*global componentCompare componentSkillList componentSkillDetails */
 
+/** このウェブサービス固有の情報関連。 */
+const mtpadmdb = {
+  /** サーバーAPI とのやり取りを行う。 */
+  api: function (mode, params, option, onSuccess, onError) {
+    if (typeof (option) === 'function') {
+      onError = onSuccess;
+      onSuccess = option;
+    }
+
+    let axiosObj;
+    switch (mode) {
+    case 'monsterHistory':
+    case 'monsterHistoryDetails':
+      axiosObj = axios.get('./api.cgi', {
+        params: Object.assign({ mode: mode }, params)
+      });
+      break;
+    case '':
+    case 'image':
+    case 'updateSkill':
+      axiosObj = axios.post(
+        './api.cgi', params, option
+      );
+      break;
+    default:
+      console.log(`mode"${mode}" is not found. by mtpadmdb.api()\n`);
+      return;
+    }
+    const commonWork = (response) => {
+      if (response.data.newTableData) {
+        const newTableData = response.data.newTableData;
+        if (newTableData.monster) {
+          store.commit('addMonsterData', newTableData.monster);
+        }
+        if (newTableData.skillDetails) {
+          store.commit('addSkillData', newTableData.skillDetails);
+        }
+        if (newTableData.leaderSkillDetails) {
+          store.commit('addLeaderSkillData', newTableData.leaderSkillDetails);
+        }
+        if (newTableData.imageTable) {
+          store.commit('addImageData', newTableData.imageTable);
+        }
+      }
+      store.commit('clearErrors');
+      store.commit('clearMessages');
+      if (response.data.messages || response.data.message) {
+        store.commit('setMessages', response.data.messages || response.data.message);
+      }
+      if (response.data.errors || response.data.error) {
+        store.commit('setErrors', response.data.errors || response.data.error);
+      }
+    };
+
+    axiosObj.then(response => {
+      commonWork(response);
+      if (response.data.errors || response.data.error) {
+        onError && onError(response);
+      } else {
+        onSuccess(response);
+      }
+    }).catch(response => {
+      commonWork(response);
+      onError && onError(response);
+    });
+  }
+};
+
 const commonData = {
 
   monsterData: {},
