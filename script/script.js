@@ -46,11 +46,13 @@ const mtpadmdb = {
       }
       store.commit('clearErrors');
       store.commit('clearMessages');
-      if (response.data.messages || response.data.message) {
-        store.commit('setMessages', response.data.messages || response.data.message);
+      const messages = response.data.messages || response.data.message || response.data.success;
+      const errors = response.data.errors || response.data.error;
+      if (messages) {
+        store.commit('setMessages', messages);
       }
-      if (response.data.errors || response.data.error) {
-        store.commit('setErrors', response.data.errors || response.data.error);
+      if (errors) {
+        store.commit('setErrors', errors);
       }
     };
 
