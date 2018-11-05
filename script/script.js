@@ -407,42 +407,36 @@ const store = new Vuex.Store({
     },
     
     loadMonsterData: function (state, param) {
-      let path, option;
+      let mode, params;
       if (param.historyId) {
-        path = './api.cgi';
-        option = {
-          params: {
-            mode: 'monsterHistoryDetails',
-            id: param.historyId
-          }
+        mode = 'monsterHistoryDetails';
+        params = {
+          id: param.historyId
         };
       } else {
-        path = `./monsterJson/${param.no}.json`;
-        option = undefined;
+        mode = 'monsterDetails';
+        params = {
+          no: param.no
+        };
       }
 
       this.commit('setMessages', ['モンスター情報取得中']);
-      axios.get(path, option).then(
-        response => {
-          const data = $.extend(true, {}, constData.monsterClearData, response.data);
-          if (!data.superAwakens) { data.superAwakens = []; }
-          state.monsterData = data;
-          
-          this.commit('clearMessages');
-          if (typeof param.callback === 'function') { param.callback(); }
+      
+      mtpadmdb.api(mode, params, (response) => {
+        const data = $.extend(true, {}, constData.monsterClearData, response.data);
+        if (!data.superAwakens) { data.superAwakens = []; }
+        state.monsterData = data;
+        
+        if (typeof param.callback === 'function') { param.callback(); }
+      }, (response) => {
+        let errorMessage = '';
+        if (param.historyId) {
+          errorMessage = `モンスター編集履歴 ID:${param.historyId} の情報が見つかりませんでした。`;
+        } else {
+          errorMessage = `モンスター No.${param.no} の情報が見つかりませんでした。`;
         }
-      ).catch(
-        () => {
-          let errorMessage = '';
-          if (param.historyId) {
-            errorMessage = `モンスター編集履歴 ID:${param.historyId} の情報が見つかりませんでした。`;
-          } else {
-            errorMessage = `モンスター No.${param.no} の情報が見つかりませんでした。`;
-          }
-          this.commit('clearMessages');
-          this.commit('setErrors', [errorMessage]);
-        }
-      );
+        this.commit('setErrors', [errorMessage]);
+      });
     },
 
     addMonsterData: function (state, monsterData) {
