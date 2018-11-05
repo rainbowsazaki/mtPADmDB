@@ -1108,11 +1108,10 @@ const componentMonsterData = {
     /** 履歴リストを取得する。 */
     loadHistories: function () {
       this.isLoadingHistory = true;
-      axios.get('./api.cgi', {
-        params: { mode: 'monsterHistory', no: this.monsterData.no }
-      }).then(response => {
-        this.histories = response.data;
-      });
+      mtpadmdb.api('monsterHistory', { no: this.monsterData.no },
+        (response) => {
+          this.histories = response.data;
+        });
     },
 
     /** 指定された履歴情報が今有効なデータかどうかを取得する。 */
@@ -1242,11 +1241,10 @@ const componentHistory = {
     /** 履歴リストを取得する。 */
     loadHistories: function () {
       this.isLoadingHistory = true;
-      axios.get('./api.cgi', {
-        params: { mode: 'monsterHistory' }
-      }).then(response => {
-        this.histories = response.data;
-      });
+      mtpadmdb.api('monsterHistory', {},
+        (response) => {
+          this.histories = response.data;
+        });
     },
 
     /** 指定された履歴情報が今有効なデータかどうかを取得する。 */
@@ -1459,45 +1457,25 @@ const componentMonsterEdit = {
       // 超覚醒を昇順ソート
       this.monsterData.superAwakens.sort((a, b) => a - b);
 
-      axios.post(
-        './api.cgi', this.monsterData
-      ).then(response => {
+      mtpadmdb.api('', this.monsterData, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
         clearTimeout(timeoutId);
 
-        this.$store.commit('clearErrors');
-        this.$store.commit('clearMessages');
-        if (response.data.error) {
-          this.$store.commit('setErrors', response.data.error);
-          // 再度送信可能にする。
-          this.isSubmitted = false;
-        } else {
-          // Google Analiticsにイベントを送信。
-          let action = 'monsterDataPost';
-          if (this.$route.params.no) { action = 'monsterDataUpdate'; } // 現在のデータを元した編集の場合
-          if (this.isHistory) { action = 'monsterDataUpdateFromHistory'; } // 編集履歴をもとにした編集の場合
-          gtagProductionOnly('event', action, {
-            'event_category': 'monsterData',
-            'event_label': `No.${this.monsterData.no}`
-          });
+        // Google Analiticsにイベントを送信。
+        let action = 'monsterDataPost';
+        if (this.$route.params.no) { action = 'monsterDataUpdate'; } // 現在のデータを元した編集の場合
+        if (this.isHistory) { action = 'monsterDataUpdateFromHistory'; } // 編集履歴をもとにした編集の場合
+        gtagProductionOnly('event', action, {
+          'event_category': 'monsterData',
+          'event_label': `No.${this.monsterData.no}`
+        });
 
-          this.$router.push({ path: `/${this.monsterData.no}` });
-        }
-        if (response.data.message) {
-          this.$store.commit('setMessages', response.data.message);
-        }
-        if (response.data.newTableData) {
-          const newTableData = response.data.newTableData;
-          if (newTableData.monster) {
-            this.$store.commit('addMonsterData', newTableData.monster);
-          }
-          if (newTableData.skillDetails) {
-            this.$store.commit('addSkillData', newTableData.skillDetails);
-          }
-          if (newTableData.leaderSkillDetails) {
-            this.$store.commit('addLeaderSkillData', newTableData.leaderSkillDetails);
-          }
-        }
+        this.$router.push({ path: `/${this.monsterData.no}` });
+      }, (response) => {
+        // レスポンス来なかったときの復帰処理を止める。
+        clearTimeout(timeoutId);
+        // 再度送信可能にする。
+        this.isSubmitted = false;
       });
     }
   }
@@ -1753,50 +1731,40 @@ const componentPic = {
         }
       };
 
-      axios.post('./api.cgi', formData, {
+      mtpadmdb.api('image', formData, {
         headers: { 'content-type': 'multipart/form-data' },
         onUploadProgress: onUploadProgress
-      }).then(response => {
+      }, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
         clearTimeout(timeoutId);
-        
-        if (response.errors) {
-          this.$store.commit('setErrors', response.data.errors);
+
+        // Google Analiticsにイベントを送信。
+        let action = 'monsterImagePost';
+        if (this.monsterNo in this.$store.state.imageTable) {
+          action = 'monsterImageUpdate'; // すでに画像投稿のあるモンスターに対して上書き投稿した場合。
+        }
+        gtagProductionOnly('event', action, {
+          'event_category': 'monsterImage',
+          'event_label': `No.${this.monsterNo}`
+        });
+
+        if (this.$route.params.no) {
+          this.$router.push({ path: `/${this.$route.params.no}` });
+        } else {
+          this.monsterNo = null;
+          this.uploadImgSrc = '';
+          this.iconResultSrc = '';
+          this.imageResultSrc = '';
+          $('#monsterImageFile').next('.custom-file-label').text('モンスター情報画像選択');
+          $('html,body').scrollTop(0);
           // 再度送信可能にする。
           this.isSubmitted = false;
-        } else {
-          // Google Analiticsにイベントを送信。
-          let action = 'monsterImagePost';
-          if (this.monsterNo in this.$store.state.imageTable) {
-            action = 'monsterImageUpdate'; // すでに画像投稿のあるモンスターに対して上書き投稿した場合。
-          }
-          gtagProductionOnly('event', action, {
-            'event_category': 'monsterImage',
-            'event_label': `No.${this.monsterNo}`
-          });
-
-          this.$store.commit('setMessages', response.data.success);
-
-          if (response.data.newTableData) {
-            const newTableData = response.data.newTableData;
-            if (newTableData.imageTable) {
-              this.$store.commit('addImageData', newTableData.imageTable);
-            }
-          }
-
-          if (this.$route.params.no) {
-            this.$router.push({ path: `/${this.$route.params.no}` });
-          } else {
-            this.monsterNo = null;
-            this.uploadImgSrc = '';
-            this.iconResultSrc = '';
-            this.imageResultSrc = '';
-            $('#monsterImageFile').next('.custom-file-label').text('モンスター情報画像選択');
-            $('html,body').scrollTop(0);
-            // 再度送信可能にする。
-            this.isSubmitted = false;
-          }
         }
+      }, (response) => {
+        // レスポンス来なかったときの復帰処理を止める。
+        clearTimeout(timeoutId);
+        // 再度送信可能にする。
+        this.isSubmitted = false;
       });
     }
   },

@@ -1,4 +1,4 @@
-/*global escapeRegExp leaderSkillDescriptionToDecoratedHtml gtagProductionOnly */
+/*global mtpadmdb escapeRegExp leaderSkillDescriptionToDecoratedHtml gtagProductionOnly */
 
 /**
  * スキル一覧のコンポーネント。
@@ -344,45 +344,27 @@ window.componentSkillDetails = {
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', ['送信中...']);
 
-      axios.post(
-        './api.cgi',
-        {
-          mode: 'updateSkill',
-          isLeaderSkill: this.isLeaderSkill,
-          updateData: this.editData
-        }
-      ).then(response => {
+      mtpadmdb.api('updateSkill', {
+        mode: 'updateSkill',
+        isLeaderSkill: this.isLeaderSkill,
+        updateData: this.editData
+      }, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
         clearTimeout(timeoutId);
 
-        this.$store.commit('clearErrors');
-        this.$store.commit('clearMessages');
-        if (response.data.error) {
-          this.$store.commit('setErrors', response.data.error);
-          // 再度送信可能にする。
-          this.isSubmitted = false;
-        } else {
-          // Google Analiticsにイベントを送信。
-          let action = 'skillDataPost';
-          if (this.$route.params.no) { action = 'skillDataUpdate'; }
-          gtagProductionOnly('event', action, {
-            'event_category': 'monsterData',
-            'event_label': `No.${this.editData.no}`
-          });
-          this.endEdit();
-        }
-        if (response.data.message) {
-          this.$store.commit('setMessages', response.data.message);
-        }
-        if (response.data.newTableData) {
-          const newTableData = response.data.newTableData;
-          if (newTableData.skillDetails) {
-            this.$store.commit('addSkillData', newTableData.skillDetails);
-          }
-          if (newTableData.leaderSkillDetails) {
-            this.$store.commit('addLeaderSkillData', newTableData.leaderSkillDetails);
-          }
-        }
+        // Google Analiticsにイベントを送信。
+        let action = 'skillDataPost';
+        if (this.$route.params.no) { action = 'skillDataUpdate'; }
+        gtagProductionOnly('event', action, {
+          'event_category': 'monsterData',
+          'event_label': `No.${this.editData.no}`
+        });
+        this.endEdit();
+      }, (response) => {
+        // レスポンス来なかったときの復帰処理を止める。
+        clearTimeout(timeoutId);
+        // 再度送信可能にする。
+        this.isSubmitted = false;
       });
     }
   },
