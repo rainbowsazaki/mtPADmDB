@@ -33,6 +33,7 @@ const mtpadmdb = {
       return;
     }
     const commonWork = (response) => {
+      if (!response.data) { return; }
       if (response.data.newTableData) {
         const newTableData = response.data.newTableData;
         if (newTableData.monster) {
