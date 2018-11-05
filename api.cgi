@@ -123,6 +123,7 @@ my %modes = (
   'monsterHistory' => \&mode_monster_history,
   'monsterHistoryDetails' => \&mode_monster_history_details,
   'updateSkill' => \&mode_update_skill,
+  'updateMonster' => \&mode_update_monster_data,
 );
 
 if (exists $modes{$mode}) {

@@ -21,7 +21,7 @@ const mtpadmdb = {
         params: params
       });
       break;
-    case '':
+    case 'updateMonster':
     case 'image':
     case 'updateSkill':
       axiosObj = axios.post(
@@ -1456,7 +1456,7 @@ const componentMonsterEdit = {
       // 超覚醒を昇順ソート
       this.monsterData.superAwakens.sort((a, b) => a - b);
 
-      mtpadmdb.api('', this.monsterData, (response) => {
+      mtpadmdb.api('updateMonster', this.monsterData, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
         clearTimeout(timeoutId);
 
