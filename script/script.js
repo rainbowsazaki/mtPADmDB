@@ -11,6 +11,10 @@ const mtpadmdb = {
 
     let axiosObj;
     switch (mode) {
+    case 'monsterDetails':
+      // APIではなくJSONファイルをリクエストする。
+      axiosObj = axios.get(`./monsterJson/${params.no}.json`);
+      break;
     case 'monsterHistory':
     case 'monsterHistoryDetails':
       axiosObj = axios.get('./api.cgi', {
