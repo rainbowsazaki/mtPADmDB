@@ -115,15 +115,7 @@ my @monster_data_pickup_keys = qw/ no name attributes_0 attributes_1 types_0 typ
 
 my $q = CGI->new();
 
-my $mode = $q->param('mode');
-if ($mode eq '') {
-  my $json = $q->param("POSTDATA");
-  if ($json ne "") {
-    my $data = JSON::PP::decode_json($json);
-    $mode = $data->{'mode'};
-  }
-}
-
+my ($mode) = $ENV{'PATH_INFO'} =~ m|^/([^/]+)/?|;
 
 my %modes = (
   'updateList' => \&mode_update_list,

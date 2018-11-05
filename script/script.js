@@ -17,15 +17,15 @@ const mtpadmdb = {
       break;
     case 'monsterHistory':
     case 'monsterHistoryDetails':
-      axiosObj = axios.get('./api.cgi', {
-        params: Object.assign({ mode: mode }, params)
+      axiosObj = axios.get(`./api.cgi/${mode}`, {
+        params: params
       });
       break;
     case '':
     case 'image':
     case 'updateSkill':
       axiosObj = axios.post(
-        './api.cgi', params, option
+        `./api.cgi/${mode}`, params, option
       );
       break;
     default:
@@ -1719,7 +1719,6 @@ const componentPic = {
       const blobImage = toBlob(this.imageResultSrc);
 
       const formData = new FormData();
-      formData.append('mode', 'image');
       formData.append('no', this.monsterNo);
       formData.append('icon', blobIcon);
       formData.append('image', blobImage);

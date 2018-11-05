@@ -345,7 +345,6 @@ window.componentSkillDetails = {
       this.$store.commit('setMessages', ['送信中...']);
 
       mtpadmdb.api('updateSkill', {
-        mode: 'updateSkill',
         isLeaderSkill: this.isLeaderSkill,
         updateData: this.editData
       }, (response) => {
