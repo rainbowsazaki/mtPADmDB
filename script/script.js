@@ -51,19 +51,17 @@ const mtpadmdb = {
       }
       store.commit('clearErrors');
       store.commit('clearMessages');
-      const messages = response.data.messages || response.data.message || response.data.success;
-      const errors = response.data.errors || response.data.error;
-      if (messages) {
-        store.commit('setMessages', messages);
+      if (response.data._messages) {
+        store.commit('setMessages', response.data._messages);
       }
-      if (errors) {
-        store.commit('setErrors', errors);
+      if (response.data._errors) {
+        store.commit('setErrors', response.data._errors);
       }
     };
 
     axiosObj.then(response => {
       commonWork(response);
-      if (response.data.errors || response.data.error) {
+      if (response.data._errors) {
         onError && onError(response);
       } else {
         onSuccess(response);

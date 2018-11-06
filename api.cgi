@@ -127,7 +127,33 @@ my %modes = (
 );
 
 if (exists $modes{$mode}) {
-  $modes{$mode}->($q);
+  my $response = {
+    errors => [],
+    messages => [],
+    data => undef,
+  };
+  eval {
+    $modes{$mode}->($q, $response);
+  };
+  # 例外が発生した場合の処理
+  if ($@) {
+    push @{$response->{errors}}, "Exception occur: $@";
+    print "Status: 500 Internal Server Error\n";
+  }
+
+  my $response_ref = {};
+  if (ref $response->{data} eq 'ARRAY') {
+    $response_ref = $response->{data};
+  } else {
+    if (ref $response->{data} eq 'HASH') {
+      $response_ref = { %{$response->{data}} };
+    }
+    if (@{$response->{messages}}) { $response_ref->{_messages} = $response->{messages}; }
+    if (@{$response->{errors}}) { $response_ref->{_errors} = $response->{errors}; }
+  }
+
+  print "Content-Type: application/json\n\n", JSON::PP::encode_json($response_ref);
+
 } else {
   &mode_update_monster_data($q);
 }
@@ -171,7 +197,7 @@ sub mode_update_list {
 
 # 画像受信モード
 sub mode_image {
-  my ($q) = @_;
+  my ($q, $response) = @_;
 
   my @error;
   my %newImageTable;
@@ -263,17 +289,17 @@ EOS
     }
   }
 
-  my %outputData;
   if (@error) {
-    $outputData{'errors'} = \@error;
+    $response->{errors} = \@error;
   } else {
-    $outputData{'success'} = [ '投稿を受け付けました。ありがとうございました。' ];
-    $outputData{'newTableData'} = {
-      'imageTable' => \%newImageTable
+    $response->{messages} = [ '投稿を受け付けました。ありがとうございました。' ];
+    $response->{data} = {
+      'newTableData' => {
+        'imageTable' => \%newImageTable
+      }
     };
     $dbh->commit;
   }
-  print "Content-Type: application/json\n\n", JSON::PP::encode_json(\%outputData);
   
   $dbh->disconnect;
   
@@ -284,7 +310,7 @@ EOS
 # パラメータ
 #   no - 取得対象のモンスターの番号。
 sub mode_monster_history {
-  my ($q) = @_;
+  my ($q, $response) = @_;
   my $monster_no = $q->param('no');
   
   my @columns = (
@@ -300,7 +326,7 @@ sub mode_monster_history {
 
   my $data_ref = &table_to_array($dbh, "monster_data", \@columns, \%where, { order => 'createdDatetime DESC', limit => 50 });
 
-  print "Content-Type: application/json\n\n", JSON::PP::encode_json($data_ref);
+  $response->{data} = $data_ref;
   $dbh->disconnect;
 }
 
@@ -309,7 +335,7 @@ sub mode_monster_history {
 # パラメータ
 #   id - 取得対象の記録のID。
 sub mode_monster_history_details {
-  my ($q) = @_;
+  my ($q, $response) = @_;
   my $id = $q->param('id');
   
   my $dbh = &create_monster_db_dbh();
@@ -322,36 +348,18 @@ sub mode_monster_history_details {
     $data_ref = [ {} ];
     print "Status: 404 Not Found\n";
   }
-  print "Content-Type: application/json\n\n", JSON::PP::encode_json($data_ref->[0]);
+  
+  $response->{data} = $data_ref->[0];
   $dbh->disconnect;
 }
 
 # スキル更新モード
 sub mode_update_skill {
-  my $response = {
-    error => [],
-    message => [],
-    response => undef,
-  };
-  eval {
-    mode_update_skill_(@_, $response);
-  };
-  # 例外が発生した場合の処理
-  if ($@) {
-    push @{$response->{error}}, "Exception occur: $@";
-    print "Status: 500 Internal Server Error\n";
-  }
-  if (!@{$response->{message}}) { delete $response->{message}; }
-  if (!@{$response->{error}}) { delete $response->{error}; }
-  print "Content-Type: application/json\n\n", JSON::PP::encode_json($response);
-}
-
-sub mode_update_skill_ {
   my ($q, $response) = @_;
 
   my $json = $q->param("POSTDATA");
   if ($json eq "") {
-    push @{$response->{error}}, 'データなし';
+    push @{$response->{errors}}, 'データなし';
     return;
   }
 
@@ -400,7 +408,7 @@ sub mode_update_skill_ {
   &check_range('スキル最大レベル', $data->{updateData}{maxLevel}, 1, 99, 0);
 
   if (@error) {
-    push @{$response->{error}}, @error;
+    push @{$response->{errors}}, @error;
     return;
   }
 
@@ -419,7 +427,7 @@ sub mode_update_skill_ {
 
   my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, \@get_columns, ( no => $data->{updateData}{no}, state => 1 ) );
   if (!$tbl_ary_ref) {
-    push @{$response->{error}}, "指定された番号の${type_name}は存在していません。";
+    push @{$response->{errors}}, "指定された番号の${type_name}は存在していません。";
     return;
   }
   
@@ -434,7 +442,7 @@ sub mode_update_skill_ {
   }
   # 　同じ場合は更新しない。
   if ($is_equal) {
-    push @{$response->{error}}, '同じデータで登録されています。';
+    push @{$response->{errors}}, '同じデータで登録されています。';
     return;
   }
 
@@ -456,8 +464,12 @@ sub mode_update_skill_ {
   &update_disable_state($dbh, $table_name, (no => $update_data{no}, state => 1));
   &insert_table_data($dbh, $table_name, %update_data, %common_insert_data);
   
-  $response->{newTableData}{$response_propaty_name} = {
-    $update_data{no} => \%update_data
+  $response->{data} = {
+    newTableData=> {
+      $response_propaty_name => {
+        $update_data{no} => \%update_data
+      }
+    }
   };
 
   if ($is_leader_skill) {
@@ -467,7 +479,7 @@ sub mode_update_skill_ {
   }
 
   $dbh->commit;
-  push @{$response->{message}}, "${type_name}データを更新しました。";
+  push @{$response->{messages}}, "${type_name}データを更新しました。";
 
 }
 
@@ -518,7 +530,7 @@ sub to_hankaku_with_key {
 
 # モンスター情報更新モード
 sub mode_update_monster_data {
-  my ($q) = @_;
+  my ($q, $response) = @_;
 
   my $json = $q->param("POSTDATA");
 
@@ -852,7 +864,7 @@ sub mode_update_monster_data {
 
         $dbh->commit;
 
-        $outputData{message} = [ 'モンスターデータを更新しました。' ];
+        push @{$response->{messages}}, 'モンスターデータを更新しました。';
         $outputData{newTableData} = {};
 
         if ($is_update_monster_data) {
@@ -885,10 +897,10 @@ sub mode_update_monster_data {
   }
 
   if (@error) {
-    $outputData{error} = \@error;
+    $response->{errors} = \@error;
   }
 
-  print "Content-Type: application/json\n\n", JSON::PP::encode_json(\%outputData);
+  $response->{data} = \%outputData;
 }
 
 
