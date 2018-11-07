@@ -31,7 +31,7 @@ EOS
     my @row_ary = $dbh->selectrow_array($sql);
     $title = "No.${no} ${row_ary[0]}";
   };
-  {
+  eval {
     my $sql = <<"EOS";
 SELECT count(id) FROM monster_image
   WHERE monster_image.no == ${quoted_no} AND monster_image.state == 1
