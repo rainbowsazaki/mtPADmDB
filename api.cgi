@@ -123,6 +123,7 @@ my %modes = (
   'monsterHistory' => \&mode_monster_history,
   'monsterHistoryDetails' => \&mode_monster_history_details,
   'updateSkill' => \&mode_update_skill,
+  'skillHistory' => \&mode_skill_history,
   'updateMonster' => \&mode_update_monster_data,
 );
 
@@ -459,6 +460,31 @@ sub mode_update_skill {
   $dbh->commit;
   $response_data->add_message("${type_name}データを更新しました。");
 
+}
+
+# スキル情報編集履歴取得モード
+# パラメータ
+#   no - 取得対象のスキルの番号。
+sub mode_skill_history {
+  my ($q, $response_data) = @_;
+  my $skill_no = $q->param('no');
+  my $is_leader_skill = $q->param('isLeaderSkill');
+  my $table_name = ($is_leader_skill) ? 'leader_skill' : 'skill';
+  
+  my @columns = (
+    'id', 'name', 'description', 'comment', [ 'datetime', 'createdDatetime' ], 'state'
+  );
+  my %where;
+  if (defined $skill_no) {
+    $where{no} = $skill_no;
+  } else {
+    push @columns, 'no';
+  }
+
+  my $dbh = &create_monster_db_dbh();
+  my $data_ref = &table_to_array($dbh, $table_name, \@columns, \%where, { order => 'createdDatetime DESC', limit => 50 });
+  $dbh->disconnect;
+  $response_data->set_data($data_ref);
 }
 
 # 第１引数に与えられた値を数値型に変換して返す。
