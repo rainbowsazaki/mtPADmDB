@@ -127,25 +127,25 @@ my %modes = (
 );
 
 if (exists $modes{$mode}) {
-  my $response = ResponseData->new;
+  my $response_data = ResponseData->new;
   eval {
-    $modes{$mode}->($q, $response);
+    $modes{$mode}->($q, $response_data);
   };
   # 例外が発生した場合の処理
   if ($@) {
-    $response->add_error("Exception occur: $@");
+    $response_data->add_error("Exception occur: $@");
     print "Status: 500 Internal Server Error\n";
   }
 
   my $response_ref = {};
-  if (ref $response->{data} eq 'ARRAY') {
-    $response_ref = $response->{data};
+  if (ref $response_data->{data} eq 'ARRAY') {
+    $response_ref = $response_data->{data};
   } else {
-    if (ref $response->{data} eq 'HASH') {
-      $response_ref = { %{$response->{data}} };
+    if (ref $response_data->{data} eq 'HASH') {
+      $response_ref = { %{$response_data->{data}} };
     }
-    if (@{$response->{messages}}) { $response_ref->{_messages} = $response->{messages}; }
-    if (@{$response->{errors}}) { $response_ref->{_errors} = $response->{errors}; }
+    if (@{$response_data->{messages}}) { $response_ref->{_messages} = $response_data->{messages}; }
+    if (@{$response_data->{errors}}) { $response_ref->{_errors} = $response_data->{errors}; }
   }
 
   print "Content-Type: application/json\n\n", JSON::PP::encode_json($response_ref);
@@ -193,7 +193,7 @@ sub mode_update_list {
 
 # 画像受信モード
 sub mode_image {
-  my ($q, $response) = @_;
+  my ($q, $response_data) = @_;
 
   my %newImageTable;
   
@@ -205,17 +205,17 @@ sub mode_image {
   my $check_sql = 'SELECT COUNT(*) FROM monster_image WHERE no = ? AND state = 2';
   my $sth = $dbh->prepare($check_sql);
   if (!$sth) {
-    $response->add_error('画像情報確認エラー:' . $dbh->errstr);
+    $response_data->add_error('画像情報確認エラー:' . $dbh->errstr);
   } else {
     $sth->execute($no);
 
     my $tbl_ary_ref = $sth->fetchrow_arrayref;
     if ($tbl_ary_ref->[0] > 0) {
-      $response->add_error('このモンスターの画像はロックされています。');
+      $response_data->add_error('このモンスターの画像はロックされています。');
     }
   }
 
-  if (!$response->has_error) {
+  if (!$response_data->has_error) {
     # 既存の画像を無効化
     $dbh->do('UPDATE monster_image SET state = 0 WHERE no = ? AND state = 1', undef, $no);
 
@@ -231,7 +231,7 @@ EOS
 
     my $id = -1;
     if (!$sth) {
-      $response->add_error('画像情報登録エラー:' .  $dbh->errstr);
+      $response_data->add_error('画像情報登録エラー:' .  $dbh->errstr);
     } else {
       my $ret = $sth->execute($no, $ip_address, '', 1);
 
@@ -242,7 +242,7 @@ EOS
         $id = $tbl_ary_ref->[0];
         
       } else {
-        $response->add_error('モンスター情報登録エラー:' .  $sth->errstr);
+        $response_data->add_error('モンスター情報登録エラー:' .  $sth->errstr);
       }
     }
 
@@ -274,8 +274,8 @@ EOS
       close($imageFileName); #ファイルハンドルをcloseしています。
 
       # ログとしてID付きで保存
-      copy("./monsterIcons/icon_${no}.jpg","./monsterIconsLog/icon_${no}_${id}.jpg") or $response->add_error("error: $!");
-      copy("./monsterImages/${no}.jpg","./monsterImagesLog/${no}_${id}.jpg") or $response->add_error("error: $!");
+      copy("./monsterIcons/icon_${no}.jpg","./monsterIconsLog/icon_${no}_${id}.jpg") or $response_data->add_error("error: $!");
+      copy("./monsterImages/${no}.jpg","./monsterImagesLog/${no}_${id}.jpg") or $response_data->add_error("error: $!");
 
       # 投稿画像情報の一覧を作成する。
       &save_image_list_json($dbh);
@@ -284,9 +284,9 @@ EOS
     }
   }
 
-  if (!$response->has_error) {
-    $response->add_message('投稿を受け付けました。ありがとうございました。');
-    $response->set_data({
+  if (!$response_data->has_error) {
+    $response_data->add_message('投稿を受け付けました。ありがとうございました。');
+    $response_data->set_data({
       'newTableData' => {
         'imageTable' => \%newImageTable
       }
@@ -303,7 +303,7 @@ EOS
 # パラメータ
 #   no - 取得対象のモンスターの番号。
 sub mode_monster_history {
-  my ($q, $response) = @_;
+  my ($q, $response_data) = @_;
   my $monster_no = $q->param('no');
   
   my @columns = (
@@ -319,7 +319,7 @@ sub mode_monster_history {
 
   my $data_ref = &table_to_array($dbh, "monster_data", \@columns, \%where, { order => 'createdDatetime DESC', limit => 50 });
 
-  $response->set_data($data_ref);
+  $response_data->set_data($data_ref);
   $dbh->disconnect;
 }
 
@@ -328,7 +328,7 @@ sub mode_monster_history {
 # パラメータ
 #   id - 取得対象の記録のID。
 sub mode_monster_history_details {
-  my ($q, $response) = @_;
+  my ($q, $response_data) = @_;
   my $id = $q->param('id');
   
   my $dbh = &create_monster_db_dbh();
@@ -342,17 +342,17 @@ sub mode_monster_history_details {
     print "Status: 404 Not Found\n";
   }
   
-  $response->set_data($data_ref->[0]);
+  $response_data->set_data($data_ref->[0]);
   $dbh->disconnect;
 }
 
 # スキル更新モード
 sub mode_update_skill {
-  my ($q, $response) = @_;
+  my ($q, $response_data) = @_;
 
   my $json = $q->param("POSTDATA");
   if ($json eq "") {
-    $response->add_error('データなし');
+    $response_data->add_error('データなし');
     return;
   }
 
@@ -364,11 +364,11 @@ sub mode_update_skill {
 
     if ($value == undef) {
       if ($is_not_null) { return 1; }
-      $response->add_error("${name} の値が入力されていません。");
+      $response_data->add_error("${name} の値が入力されていません。");
       return 0;
     }
     if ($value < $min || $value > $max) {
-      $response->add_error("${name} の値が不正(${value})");
+      $response_data->add_error("${name} の値が不正(${value})");
       return 0;
     }
     return 1;
@@ -378,14 +378,14 @@ sub mode_update_skill {
     my $length = length $_[1];
     if ($length < $_[2]) {
       if ($length == 0) {
-        $response->add_error("${_[0]}が未入力");
+        $response_data->add_error("${_[0]}が未入力");
       } else {
-        $response->add_error("${_[0]}が短すぎます。(${_[2]}文字以上)");
+        $response_data->add_error("${_[0]}が短すぎます。(${_[2]}文字以上)");
       }
       return 0;
     }
     if ($length > $_[3]) {
-      $response->add_error("${_[0]}が長すぎます。(${_[3]}文字以内)");
+      $response_data->add_error("${_[0]}が長すぎます。(${_[3]}文字以内)");
       return 0;
     }
     return 1;
@@ -398,7 +398,7 @@ sub mode_update_skill {
   &check_range('スキルLv1ターン', $data->{updateData}{baseTurn}, 1, 199, 0);
   &check_range('スキル最大レベル', $data->{updateData}{maxLevel}, 1, 99, 0);
 
-  if ($response->has_error) {
+  if ($response_data->has_error) {
     return;
   }
 
@@ -417,7 +417,7 @@ sub mode_update_skill {
 
   my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, \@get_columns, ( no => $data->{updateData}{no}, state => 1 ) );
   if (!$tbl_ary_ref) {
-    $response->add_error("指定された番号の${type_name}は存在していません。");
+    $response_data->add_error("指定された番号の${type_name}は存在していません。");
     return;
   }
   
@@ -432,7 +432,7 @@ sub mode_update_skill {
   }
   # 　同じ場合は更新しない。
   if ($is_equal) {
-    $response->add_error('同じデータで登録されています。');
+    $response_data->add_error('同じデータで登録されています。');
     return;
   }
 
@@ -454,7 +454,7 @@ sub mode_update_skill {
   &update_disable_state($dbh, $table_name, (no => $update_data{no}, state => 1));
   &insert_table_data($dbh, $table_name, %update_data, %common_insert_data);
   
-  $response->set_data({
+  $response_data->set_data({
     newTableData=> {
       $response_propaty_name => {
         $update_data{no} => \%update_data
@@ -469,7 +469,7 @@ sub mode_update_skill {
   }
 
   $dbh->commit;
-  $response->add_message("${type_name}データを更新しました。");
+  $response_data->add_message("${type_name}データを更新しました。");
 
 }
 
@@ -520,7 +520,7 @@ sub to_hankaku_with_key {
 
 # モンスター情報更新モード
 sub mode_update_monster_data {
-  my ($q, $response) = @_;
+  my ($q, $response_data) = @_;
 
   my $json = $q->param("POSTDATA");
 
@@ -538,11 +538,11 @@ sub mode_update_monster_data {
 
     if ($value == undef) {
       if ($is_not_null) { return 1; }
-      $response->add_error("${name} の値が入力されていません。");
+      $response_data->add_error("${name} の値が入力されていません。");
       return 0;
     }
     if ($value < $min || $value > $max) {
-      $response->add_error("${name} の値が不正(${value})");
+      $response_data->add_error("${name} の値が不正(${value})");
       return 0;
     }
     return 1;
@@ -552,14 +552,14 @@ sub mode_update_monster_data {
     my $length = length $_[1];
     if ($length < $_[2]) {
       if ($length == 0) {
-        $response->add_error("${_[0]}が未入力");
+        $response_data->add_error("${_[0]}が未入力");
       } else {
-        $response->add_error("${_[0]}が短すぎます。(${_[2]}文字以上)");
+        $response_data->add_error("${_[0]}が短すぎます。(${_[2]}文字以上)");
       }
       return 0;
     }
     if ($length > $_[3]) {
-      $response->add_error("${_[0]}が長すぎます。(${_[3]}文字以内)");
+      $response_data->add_error("${_[0]}が長すぎます。(${_[3]}文字以内)");
       return 0;
     }
     return 1;
@@ -648,7 +648,7 @@ sub mode_update_monster_data {
 
   my %outputData;
   
-  if ($response->has_error) {
+  if ($response_data->has_error) {
   } else {
     my $dbh = &create_monster_db_dbh();
 
@@ -696,13 +696,13 @@ sub mode_update_monster_data {
           $data->{skill} = $skill_no;
           $is_update_skill_table = 1;
         } else {
-          $response->add_error('スキル登録エラー');
+          $response_data->add_error('スキル登録エラー');
         }
       }
     } else {
       # 指定された番号のスキルが有るか確認
       if (!&check_same_table_data($dbh, 'skill', (no => $data->{skill}, state => 1))) {
-        $response->add_error('スキル番号指定が不正');
+        $response_data->add_error('スキル番号指定が不正');
       }
     }
 
@@ -746,17 +746,17 @@ sub mode_update_monster_data {
           $data->{leaderSkill} = $leader_skill_no;
           $is_update_leader_skill_table = 1;
         } else {
-          $response->add_error('リーダースキル登録エラー');
+          $response_data->add_error('リーダースキル登録エラー');
         }
       }
     } else {
       # 指定された番号のリーダースキルがあるか確認
       if (!&check_same_table_data($dbh, 'leader_skill', (no => $data->{leaderSkill}, state => 1))) {
-        $response->add_error('リーダースキル番号指定が不正');
+        $response_data->add_error('リーダースキル番号指定が不正');
       }
     }
 
-    if ($response->has_error) {
+    if ($response_data->has_error) {
     
     } else {
       # 各テーブルの同データ確認・登録
@@ -807,7 +807,7 @@ sub mode_update_monster_data {
       $is_update_monster_data = !&check_same_table_data($dbh, 'monster_data', %monster_data_table_data);
 
       if (!($is_update_monster_data || $is_update_skill_table || $is_update_leader_skill_table)) {
-        $response->add_error('同一内容で登録されています');
+        $response_data->add_error('同一内容で登録されています');
       } else {
         # データ更新。
         my %to_json_data;
@@ -852,7 +852,7 @@ sub mode_update_monster_data {
 
         $dbh->commit;
 
-        $response->add_message('モンスターデータを更新しました。');
+        $response_data->add_message('モンスターデータを更新しました。');
         $outputData{newTableData} = {};
 
         if ($is_update_monster_data) {
@@ -884,7 +884,7 @@ sub mode_update_monster_data {
     $dbh->disconnect;
   }
 
-  $response->set_data(\%outputData);
+  $response_data->set_data(\%outputData);
 }
 
 
