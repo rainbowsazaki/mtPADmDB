@@ -252,7 +252,7 @@ window.componentSkillList = {
  */
 window.componentSkillDetails = {
   name: 'skillList',
-  pageTitle: function () { return this.skillDetails.name || `${this.targetName}詳細`; },
+  pageTitle: function () { return `${this.targetName}詳細 ${this.skillDetails.name}`; },
   middleOfBreadcrumbs: function () {
     if (this.isLeaderSkill) {
       return {
@@ -282,7 +282,7 @@ window.componentSkillDetails = {
     skillTable () { return this.isLeaderSkill ? this.$store.state.leaderSkillTable : this.$store.state.skillTable; },
     /** 現在のページで表示するスキルの情報。 */
     skillDetails: function () {
-      return this.skillTable[this.$route.params.no] || {};
+      return this.skillTable[this.$route.params.no] || { name: '' };
     },
     /** 最小ターン */
     minTurn: function () {
