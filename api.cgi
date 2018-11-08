@@ -136,19 +136,7 @@ if (exists $modes{$mode}) {
     $response_data->add_error("Exception occur: $@");
     print "Status: 500 Internal Server Error\n";
   }
-
-  my $response_ref = {};
-  if (ref $response_data->{data} eq 'ARRAY') {
-    $response_ref = $response_data->{data};
-  } else {
-    if (ref $response_data->{data} eq 'HASH') {
-      $response_ref = { %{$response_data->{data}} };
-    }
-    if (@{$response_data->{messages}}) { $response_ref->{_messages} = $response_data->{messages}; }
-    if (@{$response_data->{errors}}) { $response_ref->{_errors} = $response_data->{errors}; }
-  }
-
-  print "Content-Type: application/json\n\n", JSON::PP::encode_json($response_ref);
+  print "Content-Type: application/json\n\n", $response_data->to_json;
 
 } else {
   &mode_update_monster_data($q);
@@ -1332,4 +1320,22 @@ sub has_error {
   my $self = shift;
   return @{$self->{errors}};
 }
+
+# 格納されているデータをもとに JSON を作成する。
+sub to_json {
+  my $self = shift;
+  my $hash_ref = {};
+  if (ref $self->{data} eq 'ARRAY') {
+    $hash_ref = $self->{data};
+  } else {
+    if (ref $self->{data} eq 'HASH') {
+      $hash_ref = { %{$self->{data}} };
+    }
+    if (@{$self->{messages}}) { $hash_ref->{_messages} = $self->{messages}; }
+    if (@{$self->{errors}}) { $hash_ref->{_errors} = $self->{errors}; }
+  }
+
+  return JSON::PP::encode_json($hash_ref);
+}
+
 __END__
