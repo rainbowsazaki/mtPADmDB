@@ -465,8 +465,11 @@ sub mode_update_skill {
 # スキル情報編集履歴取得モード
 # パラメータ
 #   no - 取得対象のスキルの番号。
+#   id - 取得対象のスキル履歴のID。
+#   isLeaderSkill - 取得対象がリーダースキルかどうか。
 sub mode_skill_history {
   my ($q, $response_data) = @_;
+  my $skill_id = $q->param('id');
   my $skill_no = $q->param('no');
   my $is_leader_skill = $q->param('isLeaderSkill');
   my $table_name = ($is_leader_skill) ? 'leader_skill' : 'skill';
@@ -475,7 +478,9 @@ sub mode_skill_history {
     'id', 'name', 'description', 'comment', [ 'datetime', 'createdDatetime' ], 'state'
   );
   my %where;
-  if (defined $skill_no) {
+  if (defined $skill_id) {
+    $where{id} = $skill_id;
+  } elsif (defined $skill_no) {
     $where{no} = $skill_no;
   } else {
     push @columns, 'no';
