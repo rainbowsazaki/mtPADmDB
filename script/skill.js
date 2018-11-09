@@ -267,11 +267,13 @@ window.componentSkillDetails = {
     }
   },
   watch: {
-    skillDetails: '$_mixinForPage_updateTitle'
+    skillDetails: '$_mixinForPage_updateTitle',
+    '$route': 'update'
   },
+  mounted: function () { this.update(); },
   computed: {
     /** リーダースキルの表示かどうか。 */
-    isLeaderSkill () { return this.$route.name === 'leaderSkillDetails'; },
+    isLeaderSkill () { return this.$route.name.indexOf('leaderSkill') !== -1; },
     /** 現在の条件で表示する情報の名前。 */
     targetName () { return (this.isLeaderSkill) ? 'リーダースキル' : 'スキル'; },
     /** モンスター情報のテーブル。 */
@@ -282,7 +284,11 @@ window.componentSkillDetails = {
     skillTable () { return this.isLeaderSkill ? this.$store.state.leaderSkillTable : this.$store.state.skillTable; },
     /** 現在のページで表示するスキルの情報。 */
     skillDetails: function () {
-      return this.skillTable[this.$route.params.no] || { name: '' };
+      if (this.isHistory) {
+        return this.skillDetailsHistory;
+      } else {
+        return this.skillTable[this.$route.params.no] || { name: '' };
+      }
     },
     /** 最小ターン */
     minTurn: function () {
@@ -327,10 +333,35 @@ window.componentSkillDetails = {
       /** 履歴情報の読み込み中かどうか。 */
       isLoadingHistory: false,
       /** 履歴情報 */
-      histories: null
+      histories: null,
+      skillDetailsHistory: null
     };
   },
   methods: {
+    /** 現在のルートに合わせて表示内容を更新する。 */
+    update: function () {
+      if (this.isHistory) {
+        this.skillDetailsHistory = null;
+        // 履歴一覧情報がある場合は、その一覧からリンクしてきた可能性が高いのでそこからデータの取得を試みる。
+        if (this.histories) {
+          this.skillDetailsHistory = this.histories.find((o) => o.id === this.$route.params.id);
+        }
+        // データがない場合はサーバーから取得する。
+        if (!this.skillDetailsHistory) {
+          mtpadmdb.api('skillHistory', { isLeaderSkill: this.isLeaderSkill ? 1 : 0, id: this.$route.params.id },
+            (response) => {
+              this.skillDetailsHistory = response.data[0];
+            });
+          this.skillDetailsHistory = {};
+        }
+      }
+      // プロパティの初期化
+      this.isEditing = false;
+      this.histories = null;
+      this.isLoadingHistory = false;
+      this.isSubmitted = false;
+    },
+
     /** リーダースキル情報を元に、リーダースキルの説明文をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
     getLeaderSkillDescriptionHtml: function (leaderSkillData) {
       return leaderSkillDescriptionToDecoratedHtml(leaderSkillData.description);
@@ -380,8 +411,10 @@ window.componentSkillDetails = {
     },
     /** 履歴リストを取得する。 */
     loadHistories: function () {
+      const skillNo = (this.isHistory) ? this.skillDetails.no : this.$route.params.no;
+      if (skillNo === undefined) { return; }
       this.isLoadingHistory = true;
-      mtpadmdb.api('skillHistory', { isLeaderSkill: this.isLeaderSkill, no: this.$route.params.no },
+      mtpadmdb.api('skillHistory', { isLeaderSkill: this.isLeaderSkill ? 1 : 0, no: skillNo },
         (response) => {
           this.histories = response.data;
         });

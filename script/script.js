@@ -1865,6 +1865,11 @@ const router = new VueRouter({
       component: componentSkillDetails
     },
     {
+      path: '/skillHistory/:id',
+      name: 'skillDetailsHistory',
+      component: componentSkillDetails
+    },
+    {
       path: '/leaderSkill',
       name: 'leaderSkillList',
       component: componentSkillList
@@ -1872,6 +1877,11 @@ const router = new VueRouter({
     {
       path: '/leaderSkill/:no',
       name: 'leaderSkillDetails',
+      component: componentSkillDetails
+    },
+    {
+      path: '/leaderSkillHistory/:id',
+      name: 'leaderSkillDetailsHistory',
       component: componentSkillDetails
     },
     
