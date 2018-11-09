@@ -477,6 +477,9 @@ sub mode_skill_history {
   my @columns = (
     'id', 'name', 'description', 'comment', [ 'datetime', 'createdDatetime' ], 'state'
   );
+  if (!$is_leader_skill) {
+    push @columns, 'baseTurn', 'maxLevel';
+  }
   my %where;
   if (defined $skill_id) {
     $where{id} = $skill_id;
