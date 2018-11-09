@@ -475,7 +475,7 @@ sub mode_skill_history {
   my $table_name = ($is_leader_skill) ? 'leader_skill' : 'skill';
   
   my @columns = (
-    'id', 'name', 'description', 'comment', [ 'datetime', 'createdDatetime' ], 'state'
+    'id', 'no', 'name', 'description', 'comment', [ 'datetime', 'createdDatetime' ], 'state'
   );
   if (!$is_leader_skill) {
     push @columns, 'baseTurn', 'maxLevel';
@@ -485,8 +485,6 @@ sub mode_skill_history {
     $where{id} = $skill_id;
   } elsif (defined $skill_no) {
     $where{no} = $skill_no;
-  } else {
-    push @columns, 'no';
   }
 
   my $dbh = &create_monster_db_dbh();
