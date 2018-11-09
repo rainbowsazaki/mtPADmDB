@@ -252,7 +252,10 @@ window.componentSkillList = {
  */
 window.componentSkillDetails = {
   name: 'skillList',
-  pageTitle: function () { return `${this.targetName}詳細 ${this.skillDetails.name}`; },
+  pageTitle: function () {
+    if (this.isHistory) { return `${this.targetName}履歴詳細 ${this.skillDetails.name} (${this.skillDetails.datetime})`; }
+    return `${this.targetName}詳細 ${this.skillDetails.name}`;
+  },
   middleOfBreadcrumbs: function () {
     if (this.isLeaderSkill) {
       return {
@@ -434,7 +437,7 @@ window.componentSkillDetails = {
   },
   template: `
 <div>
-  <h2 class="h6">{{targetName}}詳細</h2>
+  <h2 class="h6">{{targetName}}{{isHistory ? '履歴' : ''}}詳細</h2>
   <template v-if="!isEditing">
     <h3>{{skillDetails.name}}</h3>
     <div><tweet-button /></div>
@@ -460,7 +463,7 @@ window.componentSkillDetails = {
     </ul>
     <div v-else>なし</div>
     <hr>
-    <button type="button" class="btn btn-secondary" @click="startEdit">編集する</button>
+    <button type="button" class="btn btn-secondary" @click="startEdit">{{isHistory ? '履歴をもとに編集する': '編集する'}}</button>
   </template>
 
   <form v-else onsubmit="return false;" @submit="submit">
