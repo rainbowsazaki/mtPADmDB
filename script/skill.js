@@ -306,6 +306,13 @@ window.componentSkillDetails = {
       const turn = this.editData.baseTurn - this.editData.maxLevel + 1;
       if (turn < 0) { return NaN; }
       return turn;
+    },
+    /** 編集履歴の表示かどうか。 */
+    isHistory: function () {
+      return (this.$route.name.indexOf('History') !== -1);
+    },
+    historyRouteName: function () {
+      return (this.isLeaderSkill) ? 'leaderSkillDetailsHistory' : 'skillDetailsHistory';
     }
   },
   data: function () {
@@ -315,7 +322,12 @@ window.componentSkillDetails = {
       /** 編集中データ。 */
       editData: {},
       /** 送信中かどうか。 */
-      isSubmitted: false
+      isSubmitted: false,
+
+      /** 履歴情報の読み込み中かどうか。 */
+      isLoadingHistory: false,
+      /** 履歴情報 */
+      histories: null
     };
   },
   methods: {
@@ -365,6 +377,26 @@ window.componentSkillDetails = {
         // 再度送信可能にする。
         this.isSubmitted = false;
       });
+    },
+    /** 履歴リストを取得する。 */
+    loadHistories: function () {
+      this.isLoadingHistory = true;
+      mtpadmdb.api('skillHistory', { isLeaderSkill: this.isLeaderSkill, no: this.$route.params.no },
+        (response) => {
+          this.histories = response.data;
+        });
+    },
+    /** 指定された履歴情報が今有効なデータかどうかを取得する。 */
+    isActiveHistory: function (history) {
+      return history.state === 1;
+    },
+    /** 指定された履歴情報が現在表示している */
+    isShowHistory: function (history) {
+      if (this.isHistory) {
+        return history.id === this.$route.params.id;
+      } else {
+        return this.isActiveHistory(history);
+      }
     }
   },
   template: `
@@ -453,6 +485,23 @@ window.componentSkillDetails = {
     <button type="button" class="btn btn-secondary" :disabled="isSubmitted" @click="endEdit">キャンセル</button>
     <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' :'送信する'}}</button>
   </form>
+
+  <div style="margin-top: 1rem;">
+    <h3 class="h4">編集履歴</h3>
+    <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
+      {{isLoadingHistory ? '読み込み中…' : '編集履歴を確認する'}}
+    </button>
+    <ul v-if="histories">
+      <li v-for="history in histories">
+        <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="{ name: historyRouteName, params: { id: history.id } }">
+          {{history.datetime}} - 
+          <span v-if="history.comment">{{history.comment}}</span>
+          <span v-else style="opacity: 0.6;">（コメントなし）</span>
+        </component>
+        <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>
+      </li>
+    </ul>
+  </div>
 </div>
   `
 };

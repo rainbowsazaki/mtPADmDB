@@ -17,6 +17,7 @@ const mtpadmdb = {
       break;
     case 'monsterHistory':
     case 'monsterHistoryDetails':
+    case 'skillHistory':
       axiosObj = axios.get(`./api.cgi/${mode}`, {
         params: params
       });
