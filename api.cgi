@@ -10,8 +10,9 @@ use DBI;
 
 use File::Copy;
 
-use lib qw(./modules);
-use Data::MessagePack;
+# MessagePack の保存は休止中
+# use lib qw(./modules);
+# use Data::MessagePack;
 
 # ローカルでの動作でなく x-requested-with が指定されていない場合は CSRF 対策として弾く。
 if (!$ENV{'HTTP_X_REQUESTED_WITH'} &&
@@ -160,11 +161,12 @@ sub save_json_and_msgpack {
   print DATAFILE JSON::PP::encode_json($data_ref);
   close(DATAFILE);
 
-  my $mp = Data::MessagePack->new;
-  $mp->prefer_integer(1);
-  open(DATAFILE, "> ${path_base}.mpac") or die("error :$!");
-  print DATAFILE $mp->encode($data_ref);
-  close(DATAFILE);
+  # MessagePack での保存は休止中
+  # my $mp = Data::MessagePack->new;
+  # $mp->prefer_integer(1);
+  # open(DATAFILE, "> ${path_base}.mpac") or die("error :$!");
+  # print DATAFILE $mp->encode($data_ref);
+  # close(DATAFILE);
 }
 
 # テーブルJSON更新モード
