@@ -1120,10 +1120,6 @@ sub save_monster_list_json {
 
   my $data_ref = &table_to_array($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.state' => 1 }, { 'order' => 'no' });
 
-  # サイトマップ作成。
-  my @sitemap_url_paths = ( '/', '/about', '/compare', map { '/' . $_->{no} } sort {$a->{no} <=> $b->{no} } @$data_ref );
-  save_sitemap('sitemap_monster', \@sitemap_url_paths);
-
   # モンスター番号をキーとしたハッシュにしてJSON/MessagePackでファイルに保存する。
   my %full_data = map {
     $_->{no} => $_;
@@ -1173,6 +1169,10 @@ sub save_monster_list_json {
 
   # JSON/MessagePackでファイルに保存。
   &save_json_and_msgpack('./listJson/monster_list', \%pickup_data);
+
+  # サイトマップ作成。
+  my @sitemap_url_paths = ( '/', '/about', '/compare', map { '/' . $_->{no} } sort {$a->{no} <=> $b->{no} } @$data_ref );
+  save_sitemap('sitemap_monster', \@sitemap_url_paths);
 }
 
 
@@ -1255,11 +1255,11 @@ sub save_skill_list_json {
   my @keys = qw/ no name description baseTurn maxLevel /;
   my $data = table_to_hash($dbh, 'skill', \@keys, { state => 1 });
 
+  &save_json_and_msgpack('./listJson/leader_skill_list', $data);
+
   # サイトマップ作成。
   my @sitemap_url_paths = ( '/skill', map { '/skill/' . $_->{no} } sort {$a->{no} <=> $b->{no} } values %$data );
   save_sitemap('sitemap_skill', \@sitemap_url_paths);
-
-  &save_json_and_msgpack('./listJson/skill_list', $data);
 }
 
 
@@ -1268,11 +1268,11 @@ sub save_leader_skill_list_json {
   my @keys = qw/ no name description /;
   my $data = table_to_hash($dbh, 'leader_skill', \@keys, { state => 1 });
 
+  &save_json_and_msgpack('./listJson/leader_skill_list', $data);
+
   # サイトマップ作成。
   my @sitemap_url_paths = ( '/leaderSkill', map { '/leaderSkill/' . $_->{no} } sort {$a->{no} <=> $b->{no} } values %$data );
   save_sitemap('sitemap_leader_skill', sort {$a <=> $b} \@sitemap_url_paths);
-
-  &save_json_and_msgpack('./listJson/leader_skill_list', $data);
 }
 
 # 進化前のモンスター番号キーとして進化情報の配列を格納したJSONを保存する。
