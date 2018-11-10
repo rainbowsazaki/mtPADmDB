@@ -1,4 +1,4 @@
-/*global componentCompare componentSkillList componentSkillDetails */
+/*global escapeRegExp componentCompare componentSkillList componentSkillDetails */
 
 /** このウェブサービス固有の情報関連。 */
 const mtpadmdb = {
@@ -1015,11 +1015,16 @@ const componentMonsterList = {
       }
       return array;
     },
+    /** 検索条件を満たすモンスターデータの配列。 */
     searchedMonsterTableArray: function () {
       const searchWord = this.$route.query.searchWord;
       if (!searchWord) { return this.monsterTableArray; }
+      const searchWords = searchWord.split(/\s+/g);
+      // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
+      const regexp = new RegExp('^(?=.*' + searchWords.map(escapeRegExp).join(')(?=.*') + ').*$', 's');
+
       return this.monsterTableArray.filter(monsterData => {
-        return monsterData.name.indexOf(searchWord) !== -1;
+        return regexp.test(monsterData.name);
       });
     },
     monsterTableInPage () {
