@@ -1296,10 +1296,11 @@ sub save_evolution_list_json {
   # 進化前番号をキーとして情報の配列を持つハッシュを作成する。
   my %to_evolution_hash;
   for my $data (@$data_ref) {
-    if (!exists $to_evolution_hash{$data->{baseNo}}) {
-      $to_evolution_hash{$data->{baseNo}} = [];
+    my $key = $data->{baseNo};
+    if (!exists $to_evolution_hash{$key}) {
+      $to_evolution_hash{$key} = [];
     }
-    push @{$to_evolution_hash{$data->{baseNo}}}, $data;
+    push @{$to_evolution_hash{$key}}, $data;
   }
 
   &save_json_and_msgpack('./listJson/evolution_list', \%to_evolution_hash);
