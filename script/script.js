@@ -1119,7 +1119,7 @@ const componentMonsterData = {
     /** 指定された履歴情報が現在表示している */
     isShowHistory: function (history) {
       if (this.isHistory) {
-        return history.id === this.$route.params.id;
+        return history.id === parseInt(this.$route.params.id);
       } else {
         return this.isActiveHistory(history);
       }
