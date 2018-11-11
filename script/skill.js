@@ -438,6 +438,9 @@ window.componentSkillDetails = {
   },
   template: `
 <div>
+  <div v-if="isHistory" class="alert alert-primary" role="alert">
+      {{skillDetails.datetime}} 時点のデータです
+  </div>
   <h2 class="h6">{{targetName}}{{isHistory ? '履歴' : ''}}詳細</h2>
   <template v-if="!isEditing">
     <h3>{{skillDetails.name}}</h3>
