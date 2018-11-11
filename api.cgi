@@ -1255,7 +1255,7 @@ sub save_skill_list_json {
   my @keys = qw/ no name description baseTurn maxLevel /;
   my $data = table_to_hash($dbh, 'skill', \@keys, { state => 1 });
 
-  &save_json_and_msgpack('./listJson/leader_skill_list', $data);
+  &save_json_and_msgpack('./listJson/skill_list', $data);
 
   # サイトマップ作成。
   my @sitemap_url_paths = ( '/skill', map { '/skill/' . $_->{no} } sort {$a->{no} <=> $b->{no} } values %$data );
