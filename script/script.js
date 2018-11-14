@@ -1416,7 +1416,7 @@ const componentMonsterEdit = {
   methods: {
     /** 指定されたJSONテキストをもとに情報を設定する。 */
     inputFromJson: function (json) {
-      this.monsterData = jQuery.extend(true, {}, constData.monsterClearData, JSON.parse(json));
+      this.monsterData = jQuery.extend(true, {}, this.monsterData, JSON.parse(json));
       this.monsterData.comment = '新規登録';
     },
     fetchData: function () {
