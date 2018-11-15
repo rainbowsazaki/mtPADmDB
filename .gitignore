@@ -3,7 +3,7 @@ TestImage/
 listJson/
 monsterJson/
 monsterImages/
-monster.db
+db/*.db
 monsterImagesLog/
 monsterIcons/
 monsterIconsLog/
