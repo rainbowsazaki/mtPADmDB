@@ -1113,7 +1113,7 @@ const componentMonsterData = {
     /** モンスター評価ページへのリンク情報を更新する。 */
     updateEvaluationOfMonsterLinks: function () {
       this.evaluationOfMonsterLinks = null;
-      if (!this.isHistory && this.monsterData.name) {
+      if (this.isShowEvaluationLinks && this.monsterData.name) {
         axios.get('evaluation_of_monster_links.cgi', {
           params: { name: this.monsterData.name }
         }).then(response => {
@@ -1212,6 +1212,10 @@ const componentMonsterData = {
       // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
       const type = this.monsterData.types[0];
       return !((type >= 9 && type <= 12) || type === 99);
+    },
+    /** 現在表示しているのがモンスター評価ページのリストを表示する情報かどうかを返す。 */
+    isShowEvaluationLinks: function () {
+      return !this.isHistory && this.canAddPlus;
     },
 
     /** 最大レベル時のパラメータが登録されているかどうかを取得する。 */
