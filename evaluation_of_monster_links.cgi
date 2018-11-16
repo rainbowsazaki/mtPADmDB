@@ -81,14 +81,13 @@ if (!$ret_json || $is_old) {
     my @a = map { { title => $_->{title}, link => $_->{link}, snippet => $_->{snippet}, formattedUrl => $_->{formattedUrl} } } @{$hash_ref->{items}};
     $ret_json = JSON::PP::encode_json(\@a);
     my $quoted_digest = $dbh->quote($ret_json);
-    my $quoted_raw = $dbh->quote($raw_json);
     # 古いデータを削除する。
     if ($is_old) {
       $dbh->do("DELETE FROM search_result WHERE name == ${quoted_name};") || die $dbh->errstr;
     }
     $dbh->do(<<"EOT");
-INSERT INTO search_result (name, digest, raw)
-  VALUES (${quoted_name}, ${quoted_digest}, ${quoted_raw});
+INSERT INTO search_result (name, digest)
+  VALUES (${quoted_name}, ${quoted_digest});
 EOT
     $dbh->commit;
   } else {
