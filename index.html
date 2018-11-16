@@ -426,11 +426,6 @@
         進化後{{evolutionTable[monsterData.no].length}}種類のパラメータ比較へ
       </router-link>
     </div>
-    <div v-if="monsterData.comment">
-      <h3 class="h4">編集コメント</h3>
-      <div>{{monsterData.comment}}</div>
-    </div>
-
     <div v-if="!isHistory">
       <h3 class="h4">外部サイトのモンスター評価ページへのリンク</h3>
       <scoped-style>
@@ -449,6 +444,10 @@
           </a>
         </li>
       </ul>
+    </div>
+    <div v-if="monsterData.comment">
+      <h3 class="h4">編集コメント</h3>
+      <div>{{monsterData.comment}}</div>
     </div>
 
     <hr />
