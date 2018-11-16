@@ -1060,6 +1060,8 @@ const componentMonsterData = {
       evolutionTypeTable: constData.evolutionTypeTable,
       awakenTable: constData.awakenTable,
 
+      /** モンスター評価ページへのリンク情報の配列 */
+      evaluationOfMonsterLinks: null,
       /** 履歴情報の読み込み中かどうか。 */
       isLoadingHistory: false,
       /** 履歴情報 */
@@ -1068,13 +1070,14 @@ const componentMonsterData = {
   },
   created: function () {
     this.fetchData();
+    this.updateEvaluationOfMonsterLinks();
   },
 
   watch: {
     '$route': function () {
       this.fetchData();
     },
-    'monsterData': '$_mixinForPage_updateTitle'
+    'monsterData': ['$_mixinForPage_updateTitle', 'updateEvaluationOfMonsterLinks']
   },
   
   methods: {
@@ -1107,7 +1110,24 @@ const componentMonsterData = {
       obj.total = obj.hp + obj.attack + obj.recovery;
       return obj;
     },
-    
+    /** モンスター評価ページへのリンク情報を更新する。 */
+    updateEvaluationOfMonsterLinks: function () {
+      this.evaluationOfMonsterLinks = null;
+      if (!this.isHistory && this.monsterData.name) {
+        axios.get('evaluation_of_monster_links.cgi', {
+          params: { name: this.monsterData.name }
+        }).then(response => {
+          // 何らかの問題があってテキストが帰ってきた場合の対策。
+          if (response.data.length > 100) {
+            this.evaluationOfMonsterLinks = [];
+          } else {
+            this.evaluationOfMonsterLinks = response.data;
+          }
+        }).catch(response => {
+          this.evaluationOfMonsterLinks = [];
+        });
+      }
+    },
     /** 履歴リストを取得する。 */
     loadHistories: function () {
       this.isLoadingHistory = true;

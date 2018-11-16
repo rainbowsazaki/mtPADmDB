@@ -430,6 +430,27 @@
       <h3 class="h4">編集コメント</h3>
       <div>{{monsterData.comment}}</div>
     </div>
+
+    <div v-if="!isHistory">
+      <h3 class="h4">外部サイトのモンスター評価ページへのリンク</h3>
+      <scoped-style>
+        a { display: block; }
+        li li { color: #060; font-size: 90%; }
+        li { margin-bottom: 0.5em; }
+      </scoped-style>
+      <div v-if="!evaluationOfMonsterLinks">読み込み中...</div>
+      <div v-else-if="evaluationOfMonsterLinks.length === 0">なし</div>
+      <ul v-else class="list-unstyled">
+        <li v-for="link in evaluationOfMonsterLinks">
+          <a target="_blank" :href="link.link">{{link.title}}
+          <ul class="list-unstyled ml-3">
+            <li>{{link.formattedUrl}}</li>
+          </ul>
+          </a>
+        </li>
+      </ul>
+    </div>
+
     <hr />
     <router-link v-if="isHistory" :to=" `/history/${$route.params.id}/edit`" class="btn btn-primary">履歴をもとに編集する</router-link>
     <router-link v-else :to="`/${monsterData.no}/edit`" class="btn btn-primary">編集する</router-link>
