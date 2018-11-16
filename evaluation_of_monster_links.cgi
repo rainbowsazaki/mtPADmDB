@@ -11,6 +11,7 @@ use LWP::UserAgent;
 use HTTP::Request;
 use URI::Escape;
 use JSON::PP ();
+use Time::Piece;
 
 # サブのデータベースに接続する dbh を作成する。
 sub create_sub_db_dbh {
@@ -31,17 +32,24 @@ if (!$chara_name) {
 my $dbh = create_sub_db_dbh();
 my $quoted_name = $dbh->quote($chara_name);
 my $sql = <<"EOS";
-SELECT digest FROM search_result 
+SELECT digest, createdDatetime FROM search_result 
   WHERE name == ${quoted_name}
 EOS
 
 my @row_ary = $dbh->selectrow_array($sql);
 my $ret_json;
+my $is_old = 0;
 
-if (@row_ary) { $ret_json = $row_ary[0]; }
+if (@row_ary) { 
+  $ret_json = $row_ary[0];
 
-# データがない場合
-if (!$ret_json) {
+  my $t_now = localtime;
+  my $t = Time::Piece->strptime($row_ary[1], '%Y-%m-%d %H:%M:%S');
+  my $sec = $t_now - $t;
+  if ($sec->days > 1) { $is_old = 1; }
+}
+# データがないか古い場合
+if (!$ret_json || $is_old) {
   # Google Custom Search API を利用して取得する。
   my $secret_data = {};
   eval {
@@ -74,14 +82,17 @@ if (!$ret_json) {
     $ret_json = JSON::PP::encode_json(\@a);
     my $quoted_digest = $dbh->quote($ret_json);
     my $quoted_raw = $dbh->quote($raw_json);
-
+    # 古いデータを削除する。
+    if ($is_old) {
+      $dbh->do("DELETE FROM search_result WHERE name == ${quoted_name};") || die $dbh->errstr;
+    }
     $dbh->do(<<"EOT");
 INSERT INTO search_result (name, digest, raw)
   VALUES (${quoted_name}, ${quoted_digest}, ${quoted_raw});
 EOT
     $dbh->commit;
   } else {
-    $ret_json = '[]';
+    if (!$ret_json) { $ret_json = '[]'; }
   }
 }
 
