@@ -68,8 +68,8 @@ if (!$ret_json || $is_old) {
   utf8::decode($chara_name_copy);
   my $query = "パズドラ 評価 ${chara_name_copy}";
 
-  # my $url = "https://www.googleapis.com/customsearch/v1?&cx=${search_engine_id}&key=${api_key}&q=" . uri_escape_utf8($query);
-  my $url = "https://www.googleapis.com/customsearch/v1/siterestrict?cx=${search_engine_id}&key=${api_key}&q=" . uri_escape_utf8($query);
+  my $url = "https://www.googleapis.com/customsearch/v1?&cx=${search_engine_id}&key=${api_key}&q=" . uri_escape_utf8($query);
+  # my $url = "https://www.googleapis.com/customsearch/v1/siterestrict?cx=${search_engine_id}&key=${api_key}&q=" . uri_escape_utf8($query);
 
   my $request = HTTP::Request->new(GET => $url);
   my $ua = LWP::UserAgent->new;
