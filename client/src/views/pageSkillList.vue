@@ -58,7 +58,7 @@
               <router-link v-if="n < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
                 <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
               </router-link>
-              <span v-else v-if="n == monsterIconCountMax">…</span>
+              <span v-else-if="n == monsterIconCountMax">…</span>
             </li>
           </ul>
         </div>
