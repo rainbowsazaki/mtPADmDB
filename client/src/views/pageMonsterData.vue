@@ -249,6 +249,7 @@
 </template>
 
 <script>
+import axois from 'axios';
 import mtpadmdb, { constData, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
 
 /**

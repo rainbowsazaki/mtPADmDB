@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 /** ツイートボタン表示のコンポーネント */
 export default {
   name: 'tweetButton',

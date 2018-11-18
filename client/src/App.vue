@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import { constData, gtagProductionOnly } from './mtpadmdb.js';
 
 export default {
