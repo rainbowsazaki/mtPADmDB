@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import $ from 'jquery';
+import BootstrapVue from 'bootstrap-vue'
 export default {
   name: 'monsterIncrementalInput',
   props: {

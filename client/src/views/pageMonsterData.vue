@@ -249,8 +249,8 @@
 </template>
 
 <script>
-import axois from 'axios';
-import mtpadmdb, { constData, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
+import axios from 'axios';
+import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
 
 /**
  * モンスター情報ページコンポーネント
