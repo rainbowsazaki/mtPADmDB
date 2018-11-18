@@ -12,7 +12,7 @@ import store from './store';
 
 Vue.config.productionTip = false;
 
-import { constData, gtagProductionOnly } from './mtpadmdb.js';
+import { constData } from './mtpadmdb.js';
 
 axios.interceptors.request.use(function (config) {
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
@@ -117,43 +117,5 @@ router.afterEach(() => {
 new Vue({
   router: router,
   store: store,
-  data: {
-    breadcrumbs: []
-  },
-  computed: {
-    errors: function () { return this.$store.state.errors; },
-    messages: function () { return this.$store.state.messages; },
-    navis: function () { return constData.navis; }
-  },
-  watch: {
-    '$route': function () {
-      this.sendGa();
-      // 元のページでのエラー表示を消す。
-      this.$store.commit('clearErrors');
-    }
-  },
-  created: function () {
-    this.$store.commit('fetchCommonData');
-  },
-  mounted: function () {
-    this.sendGa();
-  },
-  methods: {
-    /** Google Analytics のページビュートラッキングを送信する。 */
-    sendGa: function () {
-      // タイトルを変更させるために少しあとに実行する。
-      setTimeout(() => {
-        gtagProductionOnly('config', 'UA-124771141-1', {
-          'page_location': location.href
-        });
-      }, 1);
-    },
-
-    hideNavi: function () {
-      if ($('#navbarNav').hasClass('show')) {
-        $('button.navbar-toggler').click();
-      }
-    }
-  },
   render: h => h(App)
 }).$mount('#app');

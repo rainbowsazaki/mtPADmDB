@@ -50,6 +50,51 @@
   </div>
 </template>
 
+<script>
+import { constData, gtagProductionOnly } from './mtpadmdb.js';
+
+export default {
+  data: {
+    breadcrumbs: []
+  },
+  computed: {
+    errors: function () { return this.$store.state.errors; },
+    messages: function () { return this.$store.state.messages; },
+    navis: function () { return constData.navis; }
+  },
+  watch: {
+    '$route': function () {
+      this.sendGa();
+      // 元のページでのエラー表示を消す。
+      this.$store.commit('clearErrors');
+    }
+  },
+  created: function () {
+    this.$store.commit('fetchCommonData');
+  },
+  mounted: function () {
+    this.sendGa();
+  },
+  methods: {
+    /** Google Analytics のページビュートラッキングを送信する。 */
+    sendGa: function () {
+      // タイトルを変更させるために少しあとに実行する。
+      setTimeout(() => {
+        gtagProductionOnly('config', 'UA-124771141-1', {
+          'page_location': location.href
+        });
+      }, 1);
+    },
+
+    hideNavi: function () {
+      if ($('#navbarNav').hasClass('show')) {
+        $('button.navbar-toggler').click();
+      }
+    }
+  }
+};
+</script>
+
 <style>
 body {
   color: rgba(0, 0, 0, 0.8);
