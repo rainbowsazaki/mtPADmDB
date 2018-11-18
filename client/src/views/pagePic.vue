@@ -23,7 +23,7 @@
     <div v-if="!imageResultSrc" class="col-md-6">
       <p>下記のような画面のスクリーンショットを選択してください。</p>
       <p>アシストしていない状態のものをお願いします。</p>
-      <img src="./image/image_sample.jpg" alt="サンプル" />
+      <img src="../assets/image/image_sample.jpg" alt="サンプル" />
     </div>
 
     <div v-if="imageResultSrc" id="result" class="col-md-6">
