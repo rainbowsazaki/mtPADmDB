@@ -72,7 +72,7 @@
             <span v-if="data.types[0] === null">不明</span>
             <ul v-else-if="getSenzaiKillerNos(data).length" style="list-style: none; margin: 0px; padding: 0px;">
               <li v-for="senzaiKillerType in getSenzaiKillerNos(data)" style="display: inline-block" :key="senzaiKillerType">
-                <img :src="`./image/senzaiKiller/\${senzaiKillerType}.png`" :alt="`\${typeTable[senzaiKillerType].name}キラー`"style="width: auto; height: 1.5em;" />
+                <img :src="`./image/senzaiKiller/\${senzaiKillerType}.png`" :alt="`\${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 1.5em;" />
               </li>
             </ul>
             <span v-else>なし</span>

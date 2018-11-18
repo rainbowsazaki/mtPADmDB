@@ -61,7 +61,7 @@
                 <span v-if="monsterData.types[0] === null">不明</span>
                 <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
                   <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" :key="senzaiKillerType">
-                    <img :src="`./image/senzaiKiller/${senzaiKillerType}.png`" :alt="`${typeTable[senzaiKillerType].name}キラー`"style="width: auto; height: 24px;" />
+                    <img :src="`./image/senzaiKiller/${senzaiKillerType}.png`" :alt="`${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 24px;" />
                   </li>
                 </ul>
                 <span v-else>振れる潜在キラーはありません。</span>
