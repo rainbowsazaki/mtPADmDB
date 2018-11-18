@@ -90,7 +90,7 @@ export const commonData = {
   errors: []
 };
 
-const constData = {
+export const constData = {
   title: 'みんなで作るパズドラデータベース',
 
   /** ナビゲーションメニュー用データ */
