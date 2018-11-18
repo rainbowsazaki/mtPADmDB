@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import axios from 'axios'
-import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import $ from 'jquery'
@@ -117,5 +116,6 @@ router.afterEach(() => {
 new Vue({
   router: router,
   store: store,
+  data: { breadcrumbs: [] },
   render: h => h(App)
 }).$mount('#app');

@@ -33,7 +33,7 @@
       
       <nav aria-label="パンくずリスト">
         <ol class="breadcrumb">
-          <li v-for="breadcrumb in breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }">
+          <li v-for="breadcrumb in $root.breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }">
             <router-link v-if="breadcrumb.link" :to="breadcrumb.link" >{{breadcrumb.text}}</router-link>
             <template v-else>{{breadcrumb.text}}</template>
           </li>
@@ -57,7 +57,6 @@ import { constData, gtagProductionOnly } from './mtpadmdb.js';
 export default {
   data: function () {
     return {
-      breadcrumbs: []
     };
   },
   computed: {
