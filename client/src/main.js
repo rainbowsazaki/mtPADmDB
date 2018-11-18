@@ -154,5 +154,6 @@ new Vue({
         $('button.navbar-toggler').click();
       }
     }
-  }
+  },
+  render: h => h(App)
 }).$mount('#app');
