@@ -243,7 +243,7 @@
           <tr class="thead-light">
             <th colspan="12">素材</th>
           </tr>
-          <tr v-for="n in 5">
+          <tr v-for="n in 5" :key="n">
             <td colspan="12">
               <monster-incremental-search :id="`inputEvolutionMaterial${n}`" v-model.number="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :image-table="imageTable" :key="n"></monster-incremental-search>
             </td>
@@ -259,7 +259,7 @@
           </td>
         </tr>
         <tr>
-          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;"></td>
+          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="n"></td>
         </tr>    
       </table>  
       <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' :'送信する'}}</button>

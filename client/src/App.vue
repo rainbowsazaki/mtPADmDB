@@ -7,7 +7,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <li v-for="navi in navis" class="nav-item" @click="hideNavi">
+          <li v-for="(navi, n) in navis" class="nav-item" @click="hideNavi" :key="n">
             <router-link class="nav-link" :class="{ active: $route.path === navi.to }" :to="navi.to">{{navi.text}}</router-link>
           </li>
         </ul>
@@ -33,7 +33,7 @@
       
       <nav aria-label="パンくずリスト">
         <ol class="breadcrumb">
-          <li v-for="breadcrumb in $root.breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }">
+          <li v-for="breadcrumb in $root.breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }" :key="breadcrumb.link">
             <router-link v-if="breadcrumb.link" :to="breadcrumb.link" >{{breadcrumb.text}}</router-link>
             <template v-else>{{breadcrumb.text}}</template>
           </li>

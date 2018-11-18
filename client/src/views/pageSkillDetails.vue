@@ -21,7 +21,7 @@
         li { margin: 0; padding: 0; padding: 2.4px; }
       </scoped-style>
       <ul v-if="existsMonsterUsingThisSkill" class="list-inline">
-        <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item">
+        <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item" :key="monsterNo">
           <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
             <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
           </router-link>
@@ -81,7 +81,7 @@
           </td>
         </tr>
         <tr>
-          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;"></td>
+          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="n"></td>
         </tr>
       </table>
       <button type="button" class="btn btn-secondary" :disabled="isSubmitted" @click="endEdit">キャンセル</button>
@@ -94,7 +94,7 @@
         {{isLoadingHistory ? '読み込み中…' : '編集履歴を確認する'}}
       </button>
       <ul v-if="histories">
-        <li v-for="history in histories">
+        <li v-for="history in histories" :key="history.id">
           <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="{ name: historyRouteName, params: { id: history.id } }">
             {{history.datetime}} - 
             <span v-if="history.comment">{{history.comment}}</span>
