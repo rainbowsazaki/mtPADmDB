@@ -36,8 +36,7 @@
         <h3>アイコン画像</h3>
         <img :src="iconResultSrc" />
       </div>
-          
-      </table>
+
       <div style="margin-top: 1em;">
         <button @click="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' : 'この画像を送信する'}}</button>
       </div>

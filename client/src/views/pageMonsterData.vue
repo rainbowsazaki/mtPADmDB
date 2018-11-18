@@ -73,7 +73,7 @@
       <div class="col-md-6">
         <table class="table table-bordered table-sm">
           <template v-if="hasMaxParam">
-            <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr></td>
+            <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
             <tr><th style="width:auto;">HP</th><td style="width: 25%;" class="text-right">{{monsterData.maxParam.hp}}</td><td v-if="canAddPlus" style="width:25%;" class="text-right">{{monsterData.maxParam.hp + 10 * 99}}</td><td style="width: 25%;" class="text-right">{{plusCountParam.hp.toFixed(1)}}</td></tr>
             <tr><th>攻撃</th><td class="text-right">{{monsterData.maxParam.attack}}</td><td v-if="canAddPlus" class="text-right">{{monsterData.maxParam.attack + 5 * 99}}</td><td class="text-right">{{plusCountParam.attack.toFixed(1)}}</td></tr>
             <tr><th>回復</th>
@@ -86,7 +86,7 @@
           <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>          
           <template v-if="monsterData.overLimit === 1">
             <template v-if="hasOverLimitParam">
-              <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr></td>
+              <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
               <tr><th>HP</th><td class="text-right">{{monsterData.overLimitParam.hp}}</td><td v-if="canAddPlus" class="text-right">{{monsterData.overLimitParam.hp + 10 * 99}}</td><td class="text-right">{{plusCountOverlimitParam.hp.toFixed(1)}}</td></tr>
               <tr><th>攻撃</th><td class="text-right">{{monsterData.overLimitParam.attack}}</td><td v-if="canAddPlus" class="text-right">{{monsterData.overLimitParam.attack + 5 * 99}}</td><td class="text-right">{{plusCountOverlimitParam.attack.toFixed(1)}}</td></tr>
               <tr><th>回復</th>

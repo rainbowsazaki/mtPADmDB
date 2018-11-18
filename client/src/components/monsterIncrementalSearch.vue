@@ -12,10 +12,9 @@
       </div>
     </div>
     <div class="col-md-8">
-        <monster-incremental-input
-        :value="value"
-        @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
-      </div>
+      <monster-incremental-input
+      :value="value"
+      @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
     </div>
   </div>
 </template>
