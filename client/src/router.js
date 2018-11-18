@@ -1,6 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import PageAbout from './views/pageAbout.vue';
+import PageCompare from './views/pageCompare.vue';
+import PageHistory from './views/pageHistory.vue';
+import PageMonsterData from './views/pageMonsterData.vue';
+import PageMonsterEdit from './views/pageMonsterEdit.vue';
+import PageMonsterList from './views/pageMonsterList.vue';
+import PagePic from './views/pagePic.vue';
+import PageSkillDetails from './views/pageSkillDetails.vue';
+import PageSkillList from './views/pageSkillList.vue';
 
 Vue.use(Router)
 
@@ -13,103 +22,103 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: componentMonsterList,
+      component: PageMonsterList,
       props: true
     },
     {
       path: '/edit',
-      component: componentMonsterEdit,
+      component: PageMonsterEdit,
       props: true
     },
     {
       path: '/:no/edit/',
-      component: componentMonsterEdit,
+      component: PageMonsterEdit,
       props: true
     },
     {
       path: '/pic',
-      component: componentPic,
+      component: PagePic,
       props: true
     },
     {
       path: '/:no/pic',
-      component: componentPic,
+      component: PagePic,
       props: true
     },
     {
       path: '/about',
-      component: componentAbout
+      component: PageAbout
     },
     {
       path: '/history',
-      component: componentHistory,
+      component: PageHistory,
       props: true
     },
 
     {
       path: '/history/:id',
       name: 'history',
-      component: componentMonsterData,
+      component: PageMonsterData,
       props: true
     },
     {
       path: '/history/:id/edit/',
       name: 'historyEdit',
-      component: componentMonsterEdit,
+      component: PageMonsterEdit,
       props: true
     },
     
     {
       path: '/compare',
-      component: componentCompare,
+      component: PageCompare,
       props: true
     },
     {
       path: '/compare/:nos',
       name: 'compare',
-      component: componentCompare,
+      component: PageCompare,
       props: true
     },
     {
       path: '/compare/:no1/:no2',
       name: 'compare',
-      component: componentCompare
+      component: PageCompare
     },
     {
       path: '/skill',
       name: 'skillList',
-      component: componentSkillList
+      component: PageSkillList
     },
     {
       path: '/skill/:no',
       name: 'skillDetails',
-      component: componentSkillDetails
+      component: PageSkillDetails
     },
     {
       path: '/skillHistory/:id',
       name: 'skillDetailsHistory',
-      component: componentSkillDetails
+      component: PageSkillDetails
     },
     {
       path: '/leaderSkill',
       name: 'leaderSkillList',
-      component: componentSkillList
+      component: PageSkillList
     },
     {
       path: '/leaderSkill/:no',
       name: 'leaderSkillDetails',
-      component: componentSkillDetails
+      component: PageSkillDetails
     },
     {
       path: '/leaderSkillHistory/:id',
       name: 'leaderSkillDetailsHistory',
-      component: componentSkillDetails
+      component: PageSkillDetails
     },
     
     {
       path: '/:no',
       name: 'monsterDetails',
-      component: componentMonsterData,
+      component: PageMonsterData,
       props: true
     }
   ]
