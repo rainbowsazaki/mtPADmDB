@@ -3,6 +3,8 @@ import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import $ from 'jquery'
+let jQuery = $;
 
 import App from './App.vue';
 import router from './router';
