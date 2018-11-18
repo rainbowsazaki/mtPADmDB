@@ -12,7 +12,7 @@ import store from './store';
 
 Vue.config.productionTip = false;
 
-import { mtpadmdb, commonData, constData, gtagProductionOnly, escapeRegExp, leaderSkillDescriptionToDecoratedHtml, getRouterBase } from './mtpadmdb.js';
+import { constData, gtagProductionOnly } from './mtpadmdb.js';
 
 axios.interceptors.request.use(function (config) {
   config.headers['X-Requested-With'] = 'XMLHttpRequest';

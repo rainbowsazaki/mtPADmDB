@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 import PageAbout from './views/pageAbout.vue';
 import PageCompare from './views/pageCompare.vue';
 import PageHistory from './views/pageHistory.vue';
@@ -10,6 +9,8 @@ import PageMonsterList from './views/pageMonsterList.vue';
 import PagePic from './views/pagePic.vue';
 import PageSkillDetails from './views/pageSkillDetails.vue';
 import PageSkillList from './views/pageSkillList.vue';
+
+import { getRouterBase } from './mtpadmdb.js';
 
 Vue.use(Router)
 

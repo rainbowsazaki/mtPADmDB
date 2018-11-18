@@ -1,8 +1,9 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import axios from 'axios'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
+import $ from 'jquery';
 
-import { commonData } from './mtpadmdb.js';
+import { mtpadmdb, constData, commonData } from './mtpadmdb.js';
 
 Vue.use(Vuex)
 
