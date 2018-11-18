@@ -1,8 +1,28 @@
 <template>
-
+  <div class="form-row">
+    <div class="col-md-4">
+      <div class="input-group">
+        <monster-icon v-if="imageTable" :no="value" :monsterTable="monsterTable" :imageTable="imageTable" width="38px" height="38px" />
+        <div class="input-group-prepend">
+          <span class="input-group-text">No.</span>
+        </div>
+        <input :id="id" type="number" class="form-control"  
+        :value="value"
+        @input="updateValue(parseInt($event.target.value));" min="1" max="9999">
+      </div>
+    </div>
+    <div class="col-md-8">
+        <monster-incremental-input
+        :value="value"
+        @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import MonsterIncrementalInput from './monsterIncrementalInput.vue';
+
 export default {
   name: 'monsterIncrementalSearch',
   props: {
@@ -33,27 +53,9 @@ export default {
       this.$emit('input', value);
     }
   },
-  template: `
-<div class="form-row">
-  <div class="col-md-4">
-    <div class="input-group">
-      <monster-icon v-if="imageTable" :no="value" :monsterTable="monsterTable" :imageTable="imageTable" width="38px" height="38px" />
-      <div class="input-group-prepend">
-        <span class="input-group-text">No.</span>
-      </div>
-      <input :id="id" type="number" class="form-control"  
-      :value="value"
-      @input="updateValue(parseInt($event.target.value));" min="1" max="9999">
-    </div>
-  </div>
-  <div class="col-md-8">
-      <monster-incremental-input
-      :value="value"
-      @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
-    </div>
-  </div>
-</div>
-  `
+  components: {
+    'monster-incremental-input': MonsterIncrementalInput
+  }
 }
 </script>
 
