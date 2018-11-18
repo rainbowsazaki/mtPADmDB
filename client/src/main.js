@@ -51,6 +51,7 @@ Vue.filter('addComma', function (val) {
 
 
 import MonsterIcon from './components/monsterIcon.vue';
+import MonsterIncrementalSearch from './components/monsterIncrementalSearch.vue';
 import Pagination from './components/pagination.vue';
 import PdOption from './components/pdOption.vue';
 import PdSelect from './components/pdSelect.vue';
@@ -59,6 +60,7 @@ import SkillIncrementalInput from './components/skillIncrementalInput.vue';
 import TweetButton from './components/tweetButton.vue';
 
 Vue.component('monster-icon', MonsterIcon);
+Vue.component('monster-incremental-search', MonsterIncrementalSearch);
 Vue.component('pagination', Pagination);
 Vue.component('pd-option', PdOption);
 Vue.component('pd-select', PdSelect);
