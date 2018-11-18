@@ -54,8 +54,10 @@
 import { constData, gtagProductionOnly } from './mtpadmdb.js';
 
 export default {
-  data: {
-    breadcrumbs: []
+  data: function () {
+    return {
+      breadcrumbs: []
+    };
   },
   computed: {
     errors: function () { return this.$store.state.errors; },
