@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 
 /** このウェブサービス固有の情報関連。 */
 export const mtpadmdb = {
