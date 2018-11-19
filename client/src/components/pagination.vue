@@ -8,7 +8,7 @@
         </router-link>
       </li>
       
-      <li v-for="n in paginationNos" :class="{ 'page-item': 1, 'active': n === page }" style="min-width: 2.2em; text-align: center;">
+      <li v-for="n in paginationNos" :class="{ 'page-item': 1, 'active': n === page }" style="min-width: 2.2em; text-align: center;" :key="n">
         <router-link v-if="n !== page" class="page-link" style="padding:.25rem .2rem;" :to="createToObj(n)" append>{{n}}</router-link>
         <span v-else class="page-link" style="padding:.25rem .35rem;">{{n}}</span>
       </li>
