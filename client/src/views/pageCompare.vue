@@ -240,6 +240,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import $ from 'jquery';
 import { constData, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
 /**
  * モンスター同士の比較を行うページのコンポーネント。
