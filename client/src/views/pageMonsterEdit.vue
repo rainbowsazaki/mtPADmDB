@@ -206,7 +206,7 @@
           </tr>
           <tr>
             <td colspan="12">
-              <span class="col-md-12 form-check" style="display:inline-block;" >
+              <span class="col-md-12 form-check" style="display:inline-block;">
                 <input class="form-check-input" type="checkbox" :value="null" v-model="monsterData.superAwakens" id="superAwakenNull">
                 <label class="form-check-label" for="superAwakenNull">
                   不明
@@ -225,7 +225,7 @@
           <th colspan="12">このモンスターへの進化形式</th>
         </tr>
         <tr>
-          <td colspan="12"> 
+          <td colspan="12">
             <select class="custom-select" id="evolutionType" v-model.number="monsterData.evolutionType">
               <option v-for="(type, key) in evolutionTypeTable" :value="key" :key="key" v-once>{{type}}</option>
             </select>
@@ -260,8 +260,8 @@
         </tr>
         <tr>
           <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="n"></td>
-        </tr>    
-      </table>  
+        </tr>
+      </table>
       <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' :'送信する'}}</button>
     </form>
   </div>

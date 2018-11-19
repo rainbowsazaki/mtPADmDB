@@ -7,7 +7,7 @@
           <span class="input-group-text">No.</span>
         </div>
         <input
-          :id="id" type="number" class="form-control"  
+          :id="id" type="number" class="form-control"
           :value="value"
           @input="updateValue(parseInt($event.target.value));" min="1" max="9999">
       </div>

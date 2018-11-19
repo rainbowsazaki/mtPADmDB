@@ -41,7 +41,7 @@
             <th>属性</th>
             <td v-for="data in monsterDatas" :key="data.no">
               <span v-if="data.attributes[0] === null">不明</span>
-              <img  v-for="attr in data.attributes" v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="`./image/attribute/\${attr}.png`" :key="attr">
+              <img v-for="attr in data.attributes" v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="`./image/attribute/\${attr}.png`" :key="attr">
             </td>
           </tr>
 

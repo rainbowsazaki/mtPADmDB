@@ -67,7 +67,7 @@
                 <span v-else>振れる潜在キラーはありません。</span>
               </td>
             </tr>
-          </template> 
+          </template>
         </table>
       </div>
       <div class="col-md-6">
@@ -83,7 +83,7 @@
             </tr>
             <tr><td></td><td v-if="canAddPlus"></td><th class="text-right">＋合計</th><td class="text-right">{{plusCountParam.total.toFixed(1)}}</td></tr>
           </template>
-          <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>          
+          <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>
           <template v-if="monsterData.overLimit === 1">
             <template v-if="hasOverLimitParam">
               <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
@@ -114,7 +114,7 @@
             <router-link :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{leaderSkillDetails.name}}</router-link>
           </td></tr>
           <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml"></td></tr>
-        </table> 
+        </table>
       </div>
     </div>
 

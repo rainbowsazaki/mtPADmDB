@@ -30,7 +30,7 @@
       <h2>切り抜き結果</h2>
       <div>
         <h3>モンスター画像</h3>
-        <img :src="imageResultSrc" style="width: 100%;"/>
+        <img :src="imageResultSrc" style="width: 100%;" />
       </div>
       <div>
         <h3>アイコン画像</h3>
