@@ -4,7 +4,7 @@
       <canvas id="canvas" style="display:none;"></canvas>
       <div class="col-md-12">
         <template v-if="!this.$route.params.no">モンスター番号と</template>
-        <template v-else>No.{{this.monsterNo}} {{(monsterTable[monsterNo] || {}).name || 'のモンスター'}}の</template>
+        <template v-else>No.{{monsterNo}} {{(monsterTable[monsterNo] || {}).name || 'のモンスター'}}の</template>
         モンスター情報画面の画像ファイルを選択してください。</div>
       <div class="row">
         <div v-if="!this.$route.params.no" class="col-md-12">
