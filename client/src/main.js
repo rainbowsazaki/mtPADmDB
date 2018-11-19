@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import axios from 'axios'
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import $ from 'jquery'
+import $ from 'jquery';
 let jQuery = $;
 
 import App from './App.vue';

@@ -437,7 +437,7 @@ export default {
       return this.culcKakuseiRate(monsterData, 48);
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

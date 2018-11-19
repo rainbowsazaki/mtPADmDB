@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import PageAbout from './views/pageAbout.vue';
 import PageCompare from './views/pageCompare.vue';
 import PageHistory from './views/pageHistory.vue';
@@ -12,7 +12,7 @@ import PageSkillList from './views/pageSkillList.vue';
 
 import { getRouterBase } from './mtpadmdb.js';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   mode: 'history',

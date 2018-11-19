@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js'
+import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
 /**
  * スキル詳細のコンポーネント。
  */

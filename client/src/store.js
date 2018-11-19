@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import { mtpadmdb, constData, commonData } from './mtpadmdb.js';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: commonData,
