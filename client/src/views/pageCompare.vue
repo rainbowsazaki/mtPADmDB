@@ -238,6 +238,7 @@
 </template>
 
 <script>
+import { constData, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
 /**
  * モンスター同士の比較を行うページのコンポーネント。
  */

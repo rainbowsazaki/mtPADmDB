@@ -268,6 +268,7 @@
 </template>
 
 <script>
+import { mtpadmdb, constData, gtagProductionOnly } from '../mtpadmdb.js'
 /**
  * モンスター情報編集ページコンポーネント
  */

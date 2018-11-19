@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { escapeRegExp } from '../mtpadmdb.js';
 /**
  * スキル一覧のコンポーネント。
  */

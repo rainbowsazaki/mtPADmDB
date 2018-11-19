@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { mtpadmdb } from '../mtpadmdb.js';
 /**
  * モンスター情報変更履歴ページコンポーネント
  */
