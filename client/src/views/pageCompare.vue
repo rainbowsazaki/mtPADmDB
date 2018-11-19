@@ -33,7 +33,7 @@
             <td v-for="data in monsterDatas" :key="data.no">
               <span v-if="data.types[0] === null">不明</span>
               <span v-else>
-                <img v-for="type in data.types" v-if="type !== 0 && type !== null" :src="`./image/type/\${type}.png`" alt="" style="width:1.5em; height: 1.5em;" :key="type">
+                <template v-for="type in data.types"><img v-if="type !== 0 && type !== null" :src="`./image/type/\${type}.png`" alt="" style="width:1.5em; height: 1.5em;" :key="type" /></template>
               </span>
             </td>
           </tr>
@@ -41,7 +41,7 @@
             <th>属性</th>
             <td v-for="data in monsterDatas" :key="data.no">
               <span v-if="data.attributes[0] === null">不明</span>
-              <img v-for="attr in data.attributes" v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="`./image/attribute/\${attr}.png`" :key="attr">
+              <template v-for="attr in data.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="`./image/attribute/\${attr}.png`" :key="attr" /></template>
             </td>
           </tr>
 
@@ -51,10 +51,12 @@
               <span v-if="data.awakens[0] === 0">なし</span>
               <span v-else-if="data.awakens[0] === null">不明</span>
               <ul v-else style="list-style: none; margin: 0px; padding: 0px;">
-                <li v-for="(count, awaken) in data.awakenObj" v-if="awaken !== '0'" class="text-nowrap" :key="awaken">
-                  <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[awaken].name + '\\n\\n' + awakenTable[awaken].description" />
-                  × {{count}}
-                </li>
+                <template v-for="(count, awaken) in data.awakenObj">
+                  <li v-if="awaken !== '0'" class="text-nowrap" :key="awaken">
+                    <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[awaken].name + '\\n\\n' + awakenTable[awaken].description" />
+                    × {{count}}
+                  </li>
+                </template>
               </ul>
             </td>
           </tr>

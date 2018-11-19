@@ -212,12 +212,14 @@
                   不明
                 </label>
               </span>
-              <span v-for="(awaken, key) in awakenTable" v-if="key !== '0' && key !== 'null'" class="col-md-3 form-check" style="display:inline-block;" :key="key">
-                <input class="form-check-input" type="checkbox" :value="key" v-model.number="monsterData.superAwakens" :id="'superAwaken' + key" :disabled="isUnknownSuperAwaken">
-                <label class="form-check-label" :for="'superAwaken' + key">
-                  <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken.name}}
-                </label>
-              </span>
+              <template v-for="(awaken, key) in awakenTable">
+                <span v-if="key !== '0' && key !== 'null'" class="col-md-3 form-check" style="display:inline-block;" :key="key">
+                  <input class="form-check-input" type="checkbox" :value="key" v-model.number="monsterData.superAwakens" :id="'superAwaken' + key" :disabled="isUnknownSuperAwaken">
+                  <label class="form-check-label" :for="'superAwaken' + key">
+                    <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken.name}}
+                  </label>
+                </span>
+              </template>
             </td>
           </tr>
         </template>

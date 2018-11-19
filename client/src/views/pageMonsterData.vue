@@ -17,10 +17,10 @@
             <th colspan="2">タイプ</th><th>属性</th>
           </tr>
           <tr>
-            <td colspan="2"><span v-for="type in monsterData.types" v-if="type !== 0" class="slash-join" :key="type"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></td>
+            <td colspan="2"><template v-for="type in monsterData.types"><span v-if="type !== 0" class="slash-join" :key="type"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></template></td>
             <td>
               <span v-if="monsterData.attributes[0] === null">不明</span>
-              <img v-for="attr in monsterData.attributes" v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`" :key="attr">
+              <template v-for="attr in monsterData.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`" :key="attr" /></template>
             </td>
           </tr>
           <tr class="thead-light">
@@ -151,11 +151,13 @@
           </td></tr>
           <tr class="thead-light"><th style="width: 3em;">素材</th><td>
             <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
-              <li v-for="material in monsterData.evolution.materials" v-if="material" style="margin-right: 2px;" :key="material">
-                <router-link :to="`/${material}`">
-                  <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-                </router-link>
-              </li>
+              <template v-for="material in monsterData.evolution.materials">
+                <li v-if="material" style="margin-right: 2px;" :key="material">
+                  <router-link :to="`/${material}`">
+                    <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
+                  </router-link>
+                </li>
+              </template>
             </ul>
             <span v-else>不明</span>
           </td></tr>
@@ -181,11 +183,13 @@
         </td></tr>
         <tr class="thead-light"><th style="width: 3em;">素材</th><td>
           <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
-            <li v-for="material in evolution.materials" v-if="material" style="margin-right: 2px;" :key="material">
-              <router-link :to="`/${material}`">
-                <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-              </router-link>
-            </li>
+            <template v-for="material in evolution.materials">
+              <li v-if="material" style="margin-right: 2px;" :key="material">
+                <router-link :to="`/${material}`">
+                  <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
+                </router-link>
+              </li>
+            </template>
           </ul>
           <span v-else>不明</span>
         </td></tr>
