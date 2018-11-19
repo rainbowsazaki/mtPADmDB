@@ -7,9 +7,9 @@
         <template v-else>No.{{this.monsterNo}} {{(monsterTable[monsterNo] || {}).name || 'のモンスター'}}の</template>
         モンスター情報画面の画像ファイルを選択してください。</div>
       <div class="row">
-          <div v-if="!this.$route.params.no" class="col-md-12">
-            <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-search>
-          </div>
+        <div v-if="!this.$route.params.no" class="col-md-12">
+          <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-search>
+        </div>
         <div class="col-md-12">
           <div class="custom-file">
             <input type="file" class="custom-file-input" id="monsterImageFile" @change="loadLocalImage">

@@ -36,25 +36,25 @@
           <th colspan="3">コスト</th>
         </tr>
         <tr>
-            <td colspan="3">
-                <select class="custom-select" id="selectAttribute0" v-model.number="monsterData.attributes[0]">
-                  <option v-for="(attribute, key) in attributeTable" :disabled="key === '0'" :value="key" :key="key" v-once>{{attribute}}</option>
-                </select></td>
-            <td colspan="3">
-                <select class="custom-select" id="selectAttribute1" v-model.number="monsterData.attributes[1]">
-                  <option v-for="(attribute, key) in attributeTable" :disabled="key === 'null'" :value="key" :key="key" v-once>{{attribute}}</option>
-                </select></td>
-            <td colspan="3">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" style="padding: 0.375rem; font-size: 80%;">★</span>
-                </div>
-                <input type="number" class="form-control" id="inputRare" v-model.number="monsterData.rare" min="1" max="99">
+          <td colspan="3">
+            <select class="custom-select" id="selectAttribute0" v-model.number="monsterData.attributes[0]">
+              <option v-for="(attribute, key) in attributeTable" :disabled="key === '0'" :value="key" :key="key" v-once>{{attribute}}</option>
+            </select></td>
+          <td colspan="3">
+            <select class="custom-select" id="selectAttribute1" v-model.number="monsterData.attributes[1]">
+              <option v-for="(attribute, key) in attributeTable" :disabled="key === 'null'" :value="key" :key="key" v-once>{{attribute}}</option>
+            </select></td>
+          <td colspan="3">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="padding: 0.375rem; font-size: 80%;">★</span>
               </div>
-            </td>
-            <td colspan="3">
-              <input type="number" class="form-control" id="inputCost" v-model.number="monsterData.cost" min="1" max="999">
-            </td>
+              <input type="number" class="form-control" id="inputRare" v-model.number="monsterData.rare" min="1" max="99">
+            </div>
+          </td>
+          <td colspan="3">
+            <input type="number" class="form-control" id="inputCost" v-model.number="monsterData.cost" min="1" max="999">
+          </td>
         </tr>
         <tr class="thead-light">
           <th colspan="4">最大レベル</th>
@@ -86,7 +86,7 @@
           <td colspan="12">
             <pd-select v-model.number="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
               <div v-for="(awaken, key) in awakenTable" :key="key" v-once>
-              <pd-option v-if="n === 1 || key !== 'null'" :value="key" v-once><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once /> {{awaken.name}}</pd-option>
+                <pd-option v-if="n === 1 || key !== 'null'" :value="key" v-once><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once /> {{awaken.name}}</pd-option>
               </div>
             </pd-select>
           </td>

@@ -46,23 +46,23 @@
       </scoped-style>
 
       <template v-for="(skill, n) in skillArrayInPage">
-      <div v-if="skill.hit && (n === 0 || skill.isGroupHead)" class="col-md-12" :key="n">
-        <h3>{{skill.hit}}</h3>
-      </div>
-      <div class="col-md-6" :key="n">
-        <div class="box">
-          <div><router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{skill.name}}</router-link></div>
-          <div class="skillDescription">{{skill.description}}</div>
-          <ul class="list-inline monsterUsingSkillIcons">
-            <li v-for="(monsterNo, n) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="n">
-              <router-link v-if="n < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
-                <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
-              </router-link>
-              <span v-else-if="n == monsterIconCountMax">…</span>
-            </li>
-          </ul>
+        <div v-if="skill.hit && (n === 0 || skill.isGroupHead)" class="col-md-12" :key="n">
+          <h3>{{skill.hit}}</h3>
         </div>
-      </div>
+        <div class="col-md-6" :key="n">
+          <div class="box">
+            <div><router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{skill.name}}</router-link></div>
+            <div class="skillDescription">{{skill.description}}</div>
+            <ul class="list-inline monsterUsingSkillIcons">
+              <li v-for="(monsterNo, n) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="n">
+                <router-link v-if="n < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
+                  <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
+                </router-link>
+                <span v-else-if="n == monsterIconCountMax">…</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </template>
     </div>
 

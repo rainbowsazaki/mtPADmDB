@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="isHistory" class="alert alert-primary" role="alert">
-        {{monsterData.datetime}} 時点のデータです
+      {{monsterData.datetime}} 時点のデータです
     </div>
     <div class="row">
       <div class="col-12">
@@ -46,9 +46,9 @@
           </tr>
           <tr class="thead-light"><th colspan="3">覚醒</th></tr>
           <tr><td colspan="3">
-              <span v-if="monsterData.awakens[0] === 0">なし</span>
-              <span v-else-if="monsterData.awakens[0] === null">不明</span>
-              <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex; justify-content: space-between;">
+            <span v-if="monsterData.awakens[0] === 0">なし</span>
+            <span v-else-if="monsterData.awakens[0] === null">不明</span>
+            <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex; justify-content: space-between;">
               <li v-for="awaken in monsterData.awakens" style="flex-grow: 1; width: 24px;" :key="awaken">
                 <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 24px; height: 24px;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description" />
               </li>
@@ -100,21 +100,21 @@
         </table>
 
         <table class="table table-bordered table-sm">
-            <tr class="thead-light"><th>スキル</th></tr>
-            <tr v-if="!skillDetails.name"><td>不明</td></tr>
-            <tr v-if="skillDetails.name"><td>
-              <router-link :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{skillDetails.name}}</router-link>
-              <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillDetails.baseTurn}} 最大Lv.<span v-if="skillDetails.maxLevel">{{skillDetails.maxLevel}} ターン:{{skillDetails.baseTurn - skillDetails.maxLevel + 1}}</span><span v-else>不明</span>)</span>
-            </td></tr>
-            <tr v-if="skillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDetails.description}}</td></tr>
-  
-            <tr class="thead-light"><th>リーダースキル</th></tr>
-            <tr v-if="!leaderSkillDetails.name"><td>不明</td></tr>
-            <tr v-if="leaderSkillDetails.name"><td>
-              <router-link :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{leaderSkillDetails.name}}</router-link>
-            </td></tr>
-            <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml"></td></tr>
-          </table> 
+          <tr class="thead-light"><th>スキル</th></tr>
+          <tr v-if="!skillDetails.name"><td>不明</td></tr>
+          <tr v-if="skillDetails.name"><td>
+            <router-link :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{skillDetails.name}}</router-link>
+            <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillDetails.baseTurn}} 最大Lv.<span v-if="skillDetails.maxLevel">{{skillDetails.maxLevel}} ターン:{{skillDetails.baseTurn - skillDetails.maxLevel + 1}}</span><span v-else>不明</span>)</span>
+          </td></tr>
+          <tr v-if="skillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDetails.description}}</td></tr>
+
+          <tr class="thead-light"><th>リーダースキル</th></tr>
+          <tr v-if="!leaderSkillDetails.name"><td>不明</td></tr>
+          <tr v-if="leaderSkillDetails.name"><td>
+            <router-link :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{leaderSkillDetails.name}}</router-link>
+          </td></tr>
+          <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml"></td></tr>
+        </table> 
       </div>
     </div>
 
@@ -123,12 +123,12 @@
         <table class="table table-bordered table-sm">
           <tr class="thead-light"><th>超覚醒</th></tr>
           <tr><td>
-              <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
-                <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;" :key="superAwaken">
-                  <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
-                  <span v-else>不明</span>
-                </li>
-              </ul>
+            <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
+              <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;" :key="superAwaken">
+                <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
+                <span v-else>不明</span>
+              </li>
+            </ul>
           </td></tr>
         </table>
       </div>
@@ -138,32 +138,32 @@
       <table class="table table-bordered table-sm">
         <tr class="thead-light"><th colspan="2">{{evolutionTypeTable[monsterData.evolutionType]}}</th></tr>
         <template v-if="monsterData.evolutionType !== null">
-        <tr><td colspan="2">
-          <template v-if="monsterData.evolution.baseNo">
-            <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
-            ←
-            <router-link :to="`/${monsterData.evolution.baseNo}`">
-              <monster-icon :no="monsterData.evolution.baseNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
-              No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}
-            </router-link>
-          </template>
-          <span v-else>進化元不明</span>
-        </td></tr>
-        <tr class="thead-light"><th style="width: 3em;">素材</th><td>
-          <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
-            <li v-for="material in monsterData.evolution.materials" v-if="material" style="margin-right: 2px;" :key="material">
-              <router-link :to="`/${material}`">
-                <monster-icon :no="material" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+          <tr><td colspan="2">
+            <template v-if="monsterData.evolution.baseNo">
+              <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
+              ←
+              <router-link :to="`/${monsterData.evolution.baseNo}`">
+                <monster-icon :no="monsterData.evolution.baseNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+                No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}
               </router-link>
-            </li>
-          </ul>
-          <span v-else>不明</span>
-        </td></tr>
-        <tr><td colspan="2">
+            </template>
+            <span v-else>進化元不明</span>
+          </td></tr>
+          <tr class="thead-light"><th style="width: 3em;">素材</th><td>
+            <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
+              <li v-for="material in monsterData.evolution.materials" v-if="material" style="margin-right: 2px;" :key="material">
+                <router-link :to="`/${material}`">
+                  <monster-icon :no="material" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+                </router-link>
+              </li>
+            </ul>
+            <span v-else>不明</span>
+          </td></tr>
+          <tr><td colspan="2">
             <router-link :to="{ name: 'compare', params: { nos: `${monsterData.evolution.baseNo},${monsterData.no}` } }">
               進化前と進化後のパラメータ比較へ
             </router-link>
-        </td></tr>
+          </td></tr>
         </template>
       </table>
     </div>
@@ -195,7 +195,8 @@
           </router-link>
         </td></tr>
       </table>
-      <router-link v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
+      <router-link
+        v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
         :to="{ name: 'compare', params: { nos: evolutionTable[monsterData.no].map(e => e.no).join(',') } }">
         進化後{{evolutionTable[monsterData.no].length}}種類のパラメータ比較へ
       </router-link>
@@ -212,9 +213,9 @@
       <ul v-else class="list-unstyled">
         <li v-for="link in evaluationOfMonsterLinks" :key="link.link">
           <a target="_blank" :href="link.link">{{link.title}}
-          <ul class="list-unstyled ml-3">
-            <li>{{link.formattedUrl}}</li>
-          </ul>
+            <ul class="list-unstyled ml-3">
+              <li>{{link.formattedUrl}}</li>
+            </ul>
           </a>
         </li>
       </ul>
