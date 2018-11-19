@@ -52,9 +52,11 @@
 
 <script>
 import $ from 'jquery';
+import store from './store';
 import { constData, gtagProductionOnly } from './mtpadmdb.js';
 
 export default {
+  store,
   data: function () {
     return {
     };
