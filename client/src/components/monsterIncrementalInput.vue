@@ -14,7 +14,7 @@
 import $ from 'jquery';
 import BootstrapVue from 'bootstrap-vue';
 export default {
-  name: 'monsterIncrementalInput',
+  name: 'MonsterIncrementalInput',
   props: {
     'value': {
       type: Number,

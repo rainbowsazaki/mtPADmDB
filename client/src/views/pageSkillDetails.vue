@@ -113,7 +113,7 @@ import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js'
  * スキル詳細のコンポーネント。
  */
 export default {
-  name: 'pageSkillDetails',
+  name: 'PageSkillDetails',
   pageTitle: function () {
     if (this.isHistory) { return `${this.targetName}履歴詳細 ${this.skillDetails.name} (${this.skillDetails.datetime})`; }
     return `${this.targetName}詳細 ${this.skillDetails.name}`;

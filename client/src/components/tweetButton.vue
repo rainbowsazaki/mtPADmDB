@@ -6,7 +6,7 @@
 import $ from 'jquery';
 /** ツイートボタン表示のコンポーネント */
 export default {
-  name: 'tweetButton',
+  name: 'TweetButton',
   props: {
     'hashtags': {
       type: String,

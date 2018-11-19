@@ -257,7 +257,7 @@ import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml } from '../m
  * モンスター情報ページコンポーネント
  */
 export default {
-  name: 'pageMonsterData',
+  name: 'PageMonsterData',
   pageTitle: function () {
     let str = `No.${this.$route.params.no || this.monsterData.no} ${this.monsterData.name}`;
     if (this.isHistory) { str += ` (${this.monsterData.datetime})`; }

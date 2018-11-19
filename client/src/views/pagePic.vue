@@ -49,7 +49,7 @@
  * 画像投稿ページコンポーネント
  */
 export default {
-  name: 'pagePic',
+  name: 'PagePic',
   pageTitle: function () {
     if (this.$route.params.no) {
       return `画像投稿 No.${this.$route.params.no} ${this.selectMonsterName}`;

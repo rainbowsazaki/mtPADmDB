@@ -42,7 +42,7 @@ import { constData, escapeRegExp } from '../mtpadmdb.js';
  * モンスター一覧ページコンポーネント
  */
 export default {
-  name: 'pageMonsterList',
+  name: 'PageMonsterList',
   pageTitle: null,
   data: function () {
     return {

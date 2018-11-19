@@ -242,7 +242,7 @@
  * モンスター同士の比較を行うページのコンポーネント。
  */
 export default {
-  name: 'pageCompare',
+  name: 'PageCompare',
   pageTitle: function () {
     if (!this.isEnableMonsterDatas) { return 'モンスター比較'; }
     return 'モンスター比較 ' + this.targets.map(no => (this.monsterTable[no] || {}).name).join(',');

@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'skillIncrementalInput',
+  name: 'SkillIncrementalInput',
   props: {
     'id': {
       type: String,

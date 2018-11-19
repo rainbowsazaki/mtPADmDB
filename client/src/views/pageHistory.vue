@@ -24,7 +24,7 @@
  * モンスター情報変更履歴ページコンポーネント
  */
 export default {
-  name: 'pageHistory',
+  name: 'PageHistory',
   pageTitle: function () {
     return '履歴一覧';
   },

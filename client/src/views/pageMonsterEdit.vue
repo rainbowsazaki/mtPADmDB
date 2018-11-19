@@ -272,7 +272,7 @@
  * モンスター情報編集ページコンポーネント
  */
 export default {
-  name: 'pageMonsterEdit',
+  name: 'PageMonsterEdit',
   pageTitle: function () {
     if (this.isHistory) { return '履歴をもとに編集'; }
     if (this.$route.params.no) {

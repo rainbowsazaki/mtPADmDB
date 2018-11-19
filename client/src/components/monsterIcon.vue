@@ -12,7 +12,7 @@
 <script>
 /** モンスターアイコンを表示するコンポーネント。 */
 export default {
-  name: 'monsterIcon',
+  name: 'MonsterIcon',
   props: {
     'no': {
       type: Number,

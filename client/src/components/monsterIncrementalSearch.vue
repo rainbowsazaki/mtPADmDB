@@ -24,7 +24,7 @@
 import MonsterIncrementalInput from './monsterIncrementalInput.vue';
 
 export default {
-  name: 'monsterIncrementalSearch',
+  name: 'MonsterIncrementalSearch',
   props: {
     'id': {
       type: String,

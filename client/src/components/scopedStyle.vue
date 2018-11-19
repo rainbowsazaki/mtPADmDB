@@ -5,7 +5,7 @@
 <script>
 /** 親要素および親要素の子要素にのみ適用されるスタイル情報要素のコンポーネントです。 */
 export default {
-  name: 'scopedStyle',
+  name: 'ScopedStyle',
   common: { inc: 0 },
   mounted: function () {
     const className = 'scopedStyle' + this.$options.common.inc++;

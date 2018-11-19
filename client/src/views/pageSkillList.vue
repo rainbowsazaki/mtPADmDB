@@ -75,7 +75,7 @@
  * スキル一覧のコンポーネント。
  */
 export default {
-  name: 'pageSkillList',
+  name: 'PageSkillList',
   pageTitle: function () {
     if (!this.$route.query.searchWord) { return this.targetName + '一覧'; }
     return this.targetName + '検索 ' + (this.$route.query.title || this.$route.query.searchWord);

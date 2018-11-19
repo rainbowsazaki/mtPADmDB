@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'pdOption',
+  name: 'PdOption',
   props: {
     value: {
       type: String,

@@ -28,7 +28,7 @@
  * ページ送りのコンポーネント
  */
 export default {
-  name: 'pagination',
+  name: 'Pagination',
   props: {
     'page': {
       type: Number,
