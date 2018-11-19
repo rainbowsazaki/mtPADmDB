@@ -54,11 +54,11 @@
             <div><router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{skill.name}}</router-link></div>
             <div class="skillDescription">{{skill.description}}</div>
             <ul class="list-inline monsterUsingSkillIcons">
-              <li v-for="(monsterNo, n) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="n">
-                <router-link v-if="n < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
+              <li v-for="(monsterNo, m) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="m">
+                <router-link v-if="m < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
                   <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
                 </router-link>
-                <span v-else-if="n == monsterIconCountMax">…</span>
+                <span v-else-if="m == monsterIconCountMax">…</span>
               </li>
             </ul>
           </div>
