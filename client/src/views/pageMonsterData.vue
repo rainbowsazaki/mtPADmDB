@@ -238,7 +238,7 @@
       <ul v-if="histories">
         <li v-for="history in histories" :key="history.id">
           <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="`/history/${history.id}`">
-            {{history.datetime}} - 
+            {{history.datetime}} -
             <span v-if="history.comment">{{history.comment}}</span>
             <span v-else style="opacity: 0.6;">（コメントなし）</span>
           </component>

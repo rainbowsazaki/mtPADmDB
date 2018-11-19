@@ -18,7 +18,7 @@
       <div style="position:fixed; z-index: 2;">
         <transition-group name="error">
           <div v-for="error in errors" :key="error" class="alert alert-warning alert-dismissible fade show" role="alert">
-            <strong>注意!</strong>　{{error}}
+            <strong>注意!</strong> {{error}}
             <button type="button" @click="$store.commit('deleteError', error)" class="close" aria-label="閉じる">
               <span aria-hidden="true">&times;</span>
             </button>
