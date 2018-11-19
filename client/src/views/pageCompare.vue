@@ -21,7 +21,7 @@
           <tr class="thead-light">
             <th style="width: 5em;"></th>
             <td v-for="data in monsterDatas" style="width: 4.3em;" :key="data.no">
-              <monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+              <monster-icon :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
             </td>
           </tr>
           <tr class="thead-light">
@@ -206,7 +206,7 @@
       <table class="table table-bordered table-sm">
         <template v-for="data in monsterDatas">
           <tr class="thead-light" :key="data.no">
-            <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
+            <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" /></th>
             <td v-if="data.skill === null">不明</td>
             <td v-else>
               <router-link :to="{ name: 'skillDetails', params: { no: data.skill }}">{{getSkillData(data.skill).name}}</router-link>
@@ -222,7 +222,7 @@
       <table class="table table-bordered table-sm">
         <template v-for="data in monsterDatas">
           <tr class="thead-light" :key="data.no">
-            <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" /></th>
+            <th rowspan="2" style="width: 2em;"><monster-icon :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" /></th>
             <td v-if="data.leaderSkill === null">不明</td>
             <td v-else>
               <router-link :to="{ name: 'leaderSkillDetails', params: { no: data.leaderSkill }}">{{getLeaderSkillData(data.leaderSkill).name}}</router-link>

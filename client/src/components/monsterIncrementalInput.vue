@@ -3,7 +3,7 @@
     <input v-model="filter" placeholder="モンスター名で検索" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
     <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
       <a v-for="value in filteredMonsterTable" class="dropdown-item" @click="updateValue(value.no)" href="javascript:void(0)" :key="value.no">
-        <monster-icon v-if="imageTable" :no="value.no" :monsterTable="monsterTable" :imageTable="imageTable" width="1.6em" height="1.6em" />
+        <monster-icon v-if="imageTable" :no="value.no" :monster-table="monsterTable" :image-table="imageTable" width="1.6em" height="1.6em" />
         {{value.name}}
       </a>
     </div>

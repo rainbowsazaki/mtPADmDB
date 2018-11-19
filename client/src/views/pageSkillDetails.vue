@@ -23,7 +23,7 @@
       <ul v-if="existsMonsterUsingThisSkill" class="list-inline">
         <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item" :key="monsterNo">
           <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
-            <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+            <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
           </router-link>
         </li>
       </ul>

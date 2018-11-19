@@ -140,10 +140,10 @@
         <template v-if="monsterData.evolutionType !== null">
           <tr><td colspan="2">
             <template v-if="monsterData.evolution.baseNo">
-              <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
+              <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
               ←
               <router-link :to="`/${monsterData.evolution.baseNo}`">
-                <monster-icon :no="monsterData.evolution.baseNo" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+                <monster-icon :no="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                 No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}
               </router-link>
             </template>
@@ -153,7 +153,7 @@
             <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
               <li v-for="material in monsterData.evolution.materials" v-if="material" style="margin-right: 2px;" :key="material">
                 <router-link :to="`/${material}`">
-                  <monster-icon :no="material" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+                  <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                 </router-link>
               </li>
             </ul>
@@ -172,10 +172,10 @@
       <table v-for="(evolution, n) in evolutionTable[monsterData.no]" class="table table-bordered table-sm" :key="n">
         <tr class="thead-light"><th colspan="2">{{evolutionTypeTable[evolution.type]}}</th></tr>
         <tr><td colspan="2">
-          <monster-icon :no="monsterData.no" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
+          <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
           →
           <router-link v-if="evolution.no" :to="`/${evolution.no}`">
-            <monster-icon :no="evolution.no" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+            <monster-icon :no="evolution.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
             No. {{evolution.no}} {{monsterTable[evolution.no] && monsterTable[evolution.no].name}}
           </router-link>
         </td></tr>
@@ -183,7 +183,7 @@
           <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
             <li v-for="material in evolution.materials" v-if="material" style="margin-right: 2px;" :key="material">
               <router-link :to="`/${material}`">
-                <monster-icon :no="material" :monsterTable="monsterTable" :imageTable="imageTable" width="3em" height="3em" />
+                <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
               </router-link>
             </li>
           </ul>

@@ -2,7 +2,7 @@
   <div class="form-row">
     <div class="col-md-4">
       <div class="input-group">
-        <monster-icon v-if="imageTable" :no="value" :monsterTable="monsterTable" :imageTable="imageTable" width="38px" height="38px" />
+        <monster-icon v-if="imageTable" :no="value" :monster-table="monsterTable" :image-table="imageTable" width="38px" height="38px" />
         <div class="input-group-prepend">
           <span class="input-group-text">No.</span>
         </div>
@@ -15,7 +15,7 @@
     <div class="col-md-8">
       <monster-incremental-input
         :value="value"
-        @input="updateValue($event);" :monster-table="monsterTable" :imageTable="imageTable"></monster-incremental-input>
+        @input="updateValue($event);" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-input>
     </div>
   </div>
 </template>

@@ -16,7 +16,7 @@
       </div>
     </form>
     <div><tweet-button /></div>
-    <pagination :page="page" :pageCount="pageCount" />
+    <pagination :page="page" :page-count="pageCount" />
     
     <div class="row" style="margin-bottom: 1rem;">
       <scoped-style>
@@ -56,7 +56,7 @@
             <ul class="list-inline monsterUsingSkillIcons">
               <li v-for="(monsterNo, n) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="n">
                 <router-link v-if="n < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
-                  <monster-icon v-if="imageTable" :no="monsterNo" :monsterTable="monsterTable" :imageTable="imageTable" width="2em" height="2em" />
+                  <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
                 </router-link>
                 <span v-else-if="n == monsterIconCountMax">…</span>
               </li>
@@ -66,7 +66,7 @@
       </template>
     </div>
 
-    <pagination :page="page" :pageCount="pageCount" />
+    <pagination :page="page" :page-count="pageCount" />
   </div>
 </template>
 
