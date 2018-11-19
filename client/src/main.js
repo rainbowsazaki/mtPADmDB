@@ -41,14 +41,12 @@ jQuery.fn.scrollParentShowThis = function () {
   return this;
 };
 
-
 // 数字をカンマ区切りにする。
 Vue.filter('addComma', function (val) {
   const arr = String(val).split('.');
   arr[0] = arr[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
   return arr.join('.');
 });
-
 
 import MonsterIcon from './components/monsterIcon.vue';
 import MonsterIncrementalSearch from './components/monsterIncrementalSearch.vue';

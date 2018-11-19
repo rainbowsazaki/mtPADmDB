@@ -284,7 +284,6 @@ export const constData = {
 /** 本番環境でのみ gtag を実行する関数 */
 export const gtagProductionOnly = (document.domain === 'localhost') ? function () {} : gtag;
 
-
 /** HTMLエスケープを行う。 */
 export function escapeHtml (str) {
   if (typeof str !== 'string') { return; }
