@@ -33,7 +33,7 @@
             <td v-for="data in monsterDatas" :key="data.no">
               <span v-if="data.types[0] === null">不明</span>
               <span v-else>
-                <template v-for="type in data.types"><img v-if="type !== 0 && type !== null" :src="`./image/type/\${type}.png`" alt="" style="width:1.5em; height: 1.5em;" :key="type" /></template>
+                <template v-for="type in data.types"><img v-if="type !== 0 && type !== null" :src="`./image/type/${type}.png`" alt="" style="width:1.5em; height: 1.5em;" :key="type" /></template>
               </span>
             </td>
           </tr>
@@ -41,7 +41,7 @@
             <th>属性</th>
             <td v-for="data in monsterDatas" :key="data.no">
               <span v-if="data.attributes[0] === null">不明</span>
-              <template v-for="attr in data.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="`./image/attribute/\${attr}.png`" :key="attr" /></template>
+              <template v-for="attr in data.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="`./image/attribute/${attr}.png`" :key="attr" /></template>
             </td>
           </tr>
 
@@ -53,7 +53,7 @@
               <ul v-else style="list-style: none; margin: 0px; padding: 0px;">
                 <template v-for="(count, awaken) in data.awakenObj">
                   <li v-if="awaken !== '0'" class="text-nowrap" :key="awaken">
-                    <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[awaken].name + '\\n\\n' + awakenTable[awaken].description" />
+                    <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description" />
                     × {{count}}
                   </li>
                 </template>
@@ -64,7 +64,7 @@
             <th>超覚醒</th>
             <td v-for="data in monsterDatas" :key="data.no">
               <span v-for="superAwaken in data.superAwakens" :key="superAwaken">
-                <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[superAwaken].name + '\\n\\n' + awakenTable[superAwaken].description" />
+                <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description" />
               </span>
             </td>
           </tr>
@@ -74,7 +74,7 @@
               <span v-if="data.types[0] === null">不明</span>
               <ul v-else-if="getSenzaiKillerNos(data).length" style="list-style: none; margin: 0px; padding: 0px;">
                 <li v-for="senzaiKillerType in getSenzaiKillerNos(data)" style="display: inline-block" :key="senzaiKillerType">
-                  <img :src="`./image/senzaiKiller/\${senzaiKillerType}.png`" :alt="`\${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 1.5em;" />
+                  <img :src="`./image/senzaiKiller/${senzaiKillerType}.png`" :alt="`${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 1.5em;" />
                 </li>
               </ul>
               <span v-else>なし</span>
