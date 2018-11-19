@@ -268,7 +268,8 @@
 </template>
 
 <script>
-import { mtpadmdb, constData, gtagProductionOnly } from '../mtpadmdb.js'
+import $ from 'jquery';
+import { mtpadmdb, constData, gtagProductionOnly } from '../mtpadmdb.js';
 /**
  * モンスター情報編集ページコンポーネント
  */
@@ -409,11 +410,11 @@ export default {
   methods: {
     /** 指定されたJSONテキストをもとに情報を設定する。 */
     inputFromJson: function (json) {
-      this.monsterData = jQuery.extend(true, {}, this.monsterData, JSON.parse(json));
+      this.monsterData = $.extend(true, {}, this.monsterData, JSON.parse(json));
       this.monsterData.comment = '新規登録';
     },
     fetchData: function () {
-      this.monsterData = jQuery.extend(true, {}, constData.monsterClearData);
+      this.monsterData = $.extend(true, {}, constData.monsterClearData);
       this.$_mixinForPage_updateTitle();
 
       let commitParam = null;

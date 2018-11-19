@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import { mtpadmdb, gtagProductionOnly } from '../mtpadmdb.js';
 /**
  * 画像投稿ページコンポーネント
