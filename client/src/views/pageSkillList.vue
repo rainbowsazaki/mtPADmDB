@@ -141,7 +141,7 @@ export default {
       /** １ページに表示するデータの個数。 */
       inPageCount: 50,
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
-      monsterIconCountMax: 10,
+      monsterIconCountMax: 10
     };
   },
   computed: {

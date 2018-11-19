@@ -9,13 +9,15 @@
         <input
           :id="id" type="number" class="form-control"
           :value="value"
-          @input="updateValue(parseInt($event.target.value));" min="1" max="9999">
+          @input="updateValue(parseInt($event.target.value));" min="1" max="9999"
+        >
       </div>
     </div>
     <div class="col-md-8">
       <monster-incremental-input
         :value="value"
-        @input="updateValue($event);" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-input>
+        @input="updateValue($event);" :monster-table="monsterTable" :image-table="imageTable"
+      ></monster-incremental-input>
     </div>
   </div>
 </template>
