@@ -247,20 +247,6 @@ export default {
     if (!this.isEnableMonsterDatas) { return 'モンスター比較'; }
     return 'モンスター比較 ' + this.targets.map(no => (this.monsterTable[no] || {}).name).join(',');
   },
-  data: function () {
-    return {
-      monsterDatas: [],
-
-      targets: [0, 0]
-    };
-  },
-  created: function () { this.load(); },
-  watch: {
-    '$route': function () { this.load(); },
-    monsterTable: ['$_mixinForPage_updateTitle', 'load'],
-    isEnableMonsterDatas: '$_mixinForPage_updateTitle'
-  },
-
   filters: {
     /** 少数点以下を切り上げるフィルタ */
     ceil: Math.ceil,
@@ -269,7 +255,13 @@ export default {
       return (val === null || isNaN(val)) ? '不明' : val;
     }
   },
+  data: function () {
+    return {
+      monsterDatas: [],
 
+      targets: [0, 0]
+    };
+  },
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
     skillTable () { return this.$store.state.skillTable; },
@@ -313,7 +305,14 @@ export default {
       return this.GetAwakenMonsterCount(48) >= 2;
     }
   },
+  watch: {
+    '$route': function () { this.load(); },
+    monsterTable: ['$_mixinForPage_updateTitle', 'load'],
+    isEnableMonsterDatas: '$_mixinForPage_updateTitle'
+  },
 
+  created: function () { this.load(); },
+  
   methods: {
     /** 比較表示するモンスターを現在している番号のものに変更する。 */
     updateCompareMonster: function () {

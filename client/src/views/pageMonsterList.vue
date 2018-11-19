@@ -50,12 +50,6 @@ export default {
       inPageCount: 50
     };
   },
-
-  created: function () {
-    this.$store.commit('fetchCommonData');
-    this.searchWord = this.$route.query.searchWord;
-  },
-
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
     imageTable () { return this.$store.state.imageTable; },
@@ -89,6 +83,10 @@ export default {
     monsterTableInPage () {
       return this.searchedMonsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
     }
+  },
+  created: function () {
+    this.$store.commit('fetchCommonData');
+    this.searchWord = this.$route.query.searchWord;
   },
   methods: {
 

@@ -75,17 +75,21 @@ export default {
       isSubmitted: false
     };
   },
-
-  created: function () {
-    this.udpateMonsterNo();
+  computed: {
+    monsterTable: function () { return this.$store.state.monsterTable; },
+    imageTable: function () { return this.$store.state.imageTable; },
+    selectMonsterName: function () {
+      return (this.monsterTable[this.$route.params.no] || {}).name || '';
+    }
   },
-
   watch: {
     '$route.params.no': function () {
       this.udpateMonsterNo();
     }
   },
-
+  created: function () {
+    this.udpateMonsterNo();
+  },
   methods: {
     udpateMonsterNo: function () {
       if (this.$route.params.no) {
@@ -328,14 +332,6 @@ export default {
         // 再度送信可能にする。
         this.isSubmitted = false;
       });
-    }
-  },
-
-  computed: {
-    monsterTable: function () { return this.$store.state.monsterTable; },
-    imageTable: function () { return this.$store.state.imageTable; },
-    selectMonsterName: function () {
-      return (this.monsterTable[this.$route.params.no] || {}).name || '';
     }
   }
 };

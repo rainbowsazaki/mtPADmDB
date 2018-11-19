@@ -35,10 +35,18 @@ export default {
       histories: null
     };
   },
+  computed: {
+    monsterTable: function () { return this.$store.state.monsterTable; },
+    imageTable: function () { return this.$store.state.imageTable; },
+
+    /** 編集履歴の表示かどうか。 */
+    isHistory: function () {
+      return (this.$route.name === 'history');
+    }
+  },
   created: function () {
     this.loadHistories();
   },
-  
   methods: {
     /** 履歴リストを取得する。 */
     loadHistories: function () {
@@ -56,16 +64,6 @@ export default {
     /** 指定された番号のモンスターの名前を取得する。 */
     monsterName: function (no) {
       return (this.monsterTable[no] || { name: '' }).name;
-    }
-  },
-
-  computed: {
-    monsterTable: function () { return this.$store.state.monsterTable; },
-    imageTable: function () { return this.$store.state.imageTable; },
-
-    /** 編集履歴の表示かどうか。 */
-    isHistory: function () {
-      return (this.$route.name === 'history');
     }
   }
 };

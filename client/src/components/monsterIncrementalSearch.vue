@@ -25,6 +25,9 @@ import MonsterIncrementalInput from './monsterIncrementalInput.vue';
 
 export default {
   name: 'MonsterIncrementalSearch',
+  components: {
+    'monster-incremental-input': MonsterIncrementalInput
+  },
   props: {
     'id': {
       type: String,
@@ -47,14 +50,10 @@ export default {
     return {
     };
   },
-  
   methods: {
     updateValue: function (value) {
       this.$emit('input', value);
     }
-  },
-  components: {
-    'monster-incremental-input': MonsterIncrementalInput
   }
 };
 </script>

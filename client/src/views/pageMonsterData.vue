@@ -280,89 +280,6 @@ export default {
       histories: null
     };
   },
-  created: function () {
-    this.fetchData();
-    this.updateEvaluationOfMonsterLinks();
-  },
-
-  watch: {
-    '$route': function () {
-      this.fetchData();
-    },
-    'monsterData': ['$_mixinForPage_updateTitle', 'updateEvaluationOfMonsterLinks']
-  },
-  
-  methods: {
-    fetchData: function () {
-      this.$store.state.monsterData = constData.monsterClearData;
-      this.histories = null;
-      this.isLoadingHistory = false;
-
-      // 現在のデータの取得の場合は読み込み処理は行わず、monsterTable 内から取得する処理が computed の monsterData で行われる。
-
-      if (this.isHistory) {
-        const param = {
-          callback: () => {
-            this.$_mixinForPage_updateTitle();
-          },
-          historyId: this.$route.params.id
-        };
-        this.$store.commit('loadMonsterData', param);
-      }
-      this.$store.commit('fetchCommonData');
-    },
-    
-    /** パラメータをプラス換算に変換する。 */
-    culcPlusCountParam: function (param) {
-      const obj = {
-        hp: param.hp / 10,
-        attack: param.attack / 5,
-        recovery: param.recovery / 3
-      };
-      obj.total = obj.hp + obj.attack + obj.recovery;
-      return obj;
-    },
-    /** モンスター評価ページへのリンク情報を更新する。 */
-    updateEvaluationOfMonsterLinks: function () {
-      this.evaluationOfMonsterLinks = null;
-      if (this.isShowEvaluationLinks && this.monsterData.name) {
-        axios.get('evaluation_of_monster_links.cgi', {
-          params: { name: this.monsterData.name }
-        }).then(response => {
-          // 何らかの問題があってテキストが帰ってきた場合の対策。
-          if (response.data.length > 100) {
-            this.evaluationOfMonsterLinks = [];
-          } else {
-            this.evaluationOfMonsterLinks = response.data;
-          }
-        }).catch(response => {
-          this.evaluationOfMonsterLinks = [];
-        });
-      }
-    },
-    /** 履歴リストを取得する。 */
-    loadHistories: function () {
-      this.isLoadingHistory = true;
-      mtpadmdb.api('monsterHistory', { no: this.monsterData.no },
-        (response) => {
-          this.histories = response.data;
-        });
-    },
-
-    /** 指定された履歴情報が今有効なデータかどうかを取得する。 */
-    isActiveHistory: function (history) {
-      return history.state === 1;
-    },
-    /** 指定された履歴情報が現在表示している */
-    isShowHistory: function (history) {
-      if (this.isHistory) {
-        return history.id === parseInt(this.$route.params.id);
-      } else {
-        return this.isActiveHistory(history);
-      }
-    }
-  },
-
   computed: {
     monsterTable: function () { return this.$store.state.monsterTable; },
     skillTable: function () { return this.$store.state.skillTable; },
@@ -452,6 +369,86 @@ export default {
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
       return (this.$route.name === 'history');
+    }
+  },
+  watch: {
+    '$route': function () {
+      this.fetchData();
+    },
+    'monsterData': ['$_mixinForPage_updateTitle', 'updateEvaluationOfMonsterLinks']
+  },
+  created: function () {
+    this.fetchData();
+    this.updateEvaluationOfMonsterLinks();
+  },
+  methods: {
+    fetchData: function () {
+      this.$store.state.monsterData = constData.monsterClearData;
+      this.histories = null;
+      this.isLoadingHistory = false;
+
+      // 現在のデータの取得の場合は読み込み処理は行わず、monsterTable 内から取得する処理が computed の monsterData で行われる。
+
+      if (this.isHistory) {
+        const param = {
+          callback: () => {
+            this.$_mixinForPage_updateTitle();
+          },
+          historyId: this.$route.params.id
+        };
+        this.$store.commit('loadMonsterData', param);
+      }
+      this.$store.commit('fetchCommonData');
+    },
+    
+    /** パラメータをプラス換算に変換する。 */
+    culcPlusCountParam: function (param) {
+      const obj = {
+        hp: param.hp / 10,
+        attack: param.attack / 5,
+        recovery: param.recovery / 3
+      };
+      obj.total = obj.hp + obj.attack + obj.recovery;
+      return obj;
+    },
+    /** モンスター評価ページへのリンク情報を更新する。 */
+    updateEvaluationOfMonsterLinks: function () {
+      this.evaluationOfMonsterLinks = null;
+      if (this.isShowEvaluationLinks && this.monsterData.name) {
+        axios.get('evaluation_of_monster_links.cgi', {
+          params: { name: this.monsterData.name }
+        }).then(response => {
+          // 何らかの問題があってテキストが帰ってきた場合の対策。
+          if (response.data.length > 100) {
+            this.evaluationOfMonsterLinks = [];
+          } else {
+            this.evaluationOfMonsterLinks = response.data;
+          }
+        }).catch(response => {
+          this.evaluationOfMonsterLinks = [];
+        });
+      }
+    },
+    /** 履歴リストを取得する。 */
+    loadHistories: function () {
+      this.isLoadingHistory = true;
+      mtpadmdb.api('monsterHistory', { no: this.monsterData.no },
+        (response) => {
+          this.histories = response.data;
+        });
+    },
+
+    /** 指定された履歴情報が今有効なデータかどうかを取得する。 */
+    isActiveHistory: function (history) {
+      return history.state === 1;
+    },
+    /** 指定された履歴情報が現在表示している */
+    isShowHistory: function (history) {
+      if (this.isHistory) {
+        return history.id === parseInt(this.$route.params.id);
+      } else {
+        return this.isActiveHistory(history);
+      }
     }
   }
 };

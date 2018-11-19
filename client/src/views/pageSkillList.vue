@@ -143,15 +143,6 @@ export default {
       monsterIconCountMax: 10,
     };
   },
-  created: function () {
-    this.updateSearchWordFromUrl();
-  },
-  watch: {
-    '$route': [
-      'updateSearchWordFromUrl',
-      '$_mixinForPage_updateTitle'
-    ]
-  },
   computed: {
     /** リーダースキルの表示かどうか。 */
     isLeaderSkill () { return this.$route.name === 'leaderSkillList'; },
@@ -233,6 +224,15 @@ export default {
       return this.searchedSkillArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
     }
   },
+  watch: {
+    '$route': [
+      'updateSearchWordFromUrl',
+      '$_mixinForPage_updateTitle'
+    ]
+  },
+  created: function () {
+    this.updateSearchWordFromUrl();
+  },
   methods: {
     /** URLで指定された検索ワードで searchWord を更新する。 */
     updateSearchWordFromUrl: function () {
@@ -246,7 +246,7 @@ export default {
     monsterNosUsingThisSkill: function (no) {
       return (this.skillToMonsterNosTable[no] || []).slice().reverse();
     }
-  },
+  }
 };
 </script>
 

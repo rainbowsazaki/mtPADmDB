@@ -310,22 +310,6 @@ export default {
       isSubmitted: false
     };
   },
-
-  created: function () {
-    this.fetchData();
-    window._inputFromJson = (json) => { this.inputFromJson(json); };
-  },
-
-  destroyed: function () {
-    delete window._inputFromJson;
-  },
-
-  watch: {
-    '$route.params.no': function () {
-      this.fetchData();
-    }
-  },
-
   computed: {
     monsterTable: function () { return this.$store.state.monsterTable; },
     skillTable: function () { return this.$store.state.skillTable; },
@@ -408,7 +392,19 @@ export default {
       return this.monsterData.superAwakens.indexOf(null) !== -1;
     }
   },
-  
+  watch: {
+    '$route.params.no': function () {
+      this.fetchData();
+    }
+  },
+  created: function () {
+    this.fetchData();
+    window._inputFromJson = (json) => { this.inputFromJson(json); };
+  },
+
+  destroyed: function () {
+    delete window._inputFromJson;
+  },
   methods: {
     /** 指定されたJSONテキストをもとに情報を設定する。 */
     inputFromJson: function (json) {

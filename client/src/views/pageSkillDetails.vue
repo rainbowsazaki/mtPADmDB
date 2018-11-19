@@ -131,11 +131,22 @@ export default {
       };
     }
   },
-  watch: {
-    skillDetails: '$_mixinForPage_updateTitle',
-    '$route': 'update'
+  data: function () {
+    return {
+      /** 編集モードかどうか。 */
+      isEditing: false,
+      /** 編集中データ。 */
+      editData: {},
+      /** 送信中かどうか。 */
+      isSubmitted: false,
+
+      /** 履歴情報の読み込み中かどうか。 */
+      isLoadingHistory: false,
+      /** 履歴情報 */
+      histories: null,
+      skillDetailsHistory: null
+    };
   },
-  mounted: function () { this.update(); },
   computed: {
     /** リーダースキルの表示かどうか。 */
     isLeaderSkill () { return this.$route.name.indexOf('leaderSkill') !== -1; },
@@ -186,22 +197,11 @@ export default {
       return (this.isLeaderSkill) ? 'leaderSkillDetailsHistory' : 'skillDetailsHistory';
     }
   },
-  data: function () {
-    return {
-      /** 編集モードかどうか。 */
-      isEditing: false,
-      /** 編集中データ。 */
-      editData: {},
-      /** 送信中かどうか。 */
-      isSubmitted: false,
-
-      /** 履歴情報の読み込み中かどうか。 */
-      isLoadingHistory: false,
-      /** 履歴情報 */
-      histories: null,
-      skillDetailsHistory: null
-    };
+  watch: {
+    skillDetails: '$_mixinForPage_updateTitle',
+    '$route': 'update'
   },
+  mounted: function () { this.update(); },
   methods: {
     /** 現在のルートに合わせて表示内容を更新する。 */
     update: function () {
