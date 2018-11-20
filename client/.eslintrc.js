@@ -44,6 +44,9 @@ module.exports = {
             {"skipBlankLines": true }
         ],
         "no-whitespace-before-property": "error",
-        "arrow-spacing": "error"
+        "arrow-spacing": "error",
+        "vue/max-attributes-per-line": 'off',
+        "vue/attributes-order": 'off',
+        "vue/no-v-html": 'off'
     }
 };
