@@ -27,7 +27,7 @@ export default {
   },
   mounted: function () {
     $(this.$el).on('shown.bs.dropdown', () => {
-      $(this.$el).children('div.dropdown-menu').children('.active').focus().scrollParentShowThis();
+      $(this.$el).children('div.dropdown-menu').find('.active').focus().scrollParentShowThis();
     });
     this.$on('clickOption', this.clickOption);
     this.changeDisp(this.value);
@@ -40,7 +40,7 @@ export default {
     changeDisp: function (value) {
       // html要素上では null の値はなく文字列になっているため、値が null の場合は文字列にする。
       value = (value === null) ? 'null' : value.toString();
-      $(this.$el).children('.dropdown-menu').children().each((index, elem) => {
+      $(this.$el).children('.dropdown-menu').find('.pd-option').each((index, elem) => {
         if (elem.getAttribute('data-value') === value) {
           $(elem).addClass('active');
           this.html = $(elem).html();
@@ -55,4 +55,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .dropdown-menu > div {
+    width: 8em;
+    overflow-x: hidden;
+    display: inline-flex;
+  }
 </style>
