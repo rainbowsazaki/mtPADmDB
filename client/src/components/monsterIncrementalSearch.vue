@@ -17,7 +17,7 @@
       <monster-incremental-input
         :value="value"
         @input="updateValue($event);" :monster-table="monsterTable" :image-table="imageTable"
-      ></monster-incremental-input>
+      />
     </div>
   </div>
 </template>

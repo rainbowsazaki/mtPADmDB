@@ -81,7 +81,7 @@
               <td v-if="canAddPlus" class="text-right" :style="{ color: monsterData.maxParam.recovery + 3 * 99 < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.maxParam.recovery + 3 * 99 }}</td>
               <td class="text-right">{{ plusCountParam.recovery.toFixed(1) }}</td>
             </tr>
-            <tr><td></td><td v-if="canAddPlus"></td><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) }}</td></tr>
+            <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) }}</td></tr>
           </template>
           <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>
           <template v-if="monsterData.overLimit === 1">
@@ -93,7 +93,7 @@
                 <td class="text-right" :style="{ color: monsterData.overLimitParam.recovery < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.overLimitParam.recovery }}</td>
                 <td v-if="canAddPlus" class="text-right" :style="{ color: monsterData.overLimitParam.recovery + 3 * 99 < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.overLimitParam.recovery + 3 * 99 }}</td>
                 <td class="text-right">{{ plusCountOverlimitParam.recovery.toFixed(1) }}</td></tr>
-              <tr><td></td><td v-if="canAddPlus"></td><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) }}</td></tr>
+              <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) }}</td></tr>
             </template>
             <tr v-else class="thead-light"><th colspan="4">限界突破時パラメータ不明</th></tr>
           </template>
@@ -113,7 +113,7 @@
           <tr v-if="leaderSkillDetails.name"><td>
             <router-link :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
           </td></tr>
-          <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml"></td></tr>
+          <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml" /></tr>
         </table>
       </div>
     </div>

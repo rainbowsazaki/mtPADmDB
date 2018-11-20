@@ -120,7 +120,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <skill-incremental-input id="inputSkillName" placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillName" :skill-table="skillTable" :required="skillDescription.length > 0"></skill-incremental-input>
+            <skill-incremental-input id="inputSkillName" placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillName" :skill-table="skillTable" :required="skillDescription.length > 0" />
           </td>
         </tr>
         <tr>
@@ -147,7 +147,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="skillDescription" maxLength="200"></textarea>
+            <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="skillDescription" maxLength="200" />
           </td>
         </tr>
         <tr class="thead-light">
@@ -158,7 +158,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <skill-incremental-input id="inputLeaderSkillname" placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillName" :skill-table="leaderSkillTable" :required="leaderSkillDescription.length > 0"></skill-incremental-input>
+            <skill-incremental-input id="inputLeaderSkillname" placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillName" :skill-table="leaderSkillTable" :required="leaderSkillDescription.length > 0" />
           </td>
         </tr>
         <tr class="">
@@ -166,7 +166,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <textarea class="form-control" id="textareaLeaderSkillDescription" rows="2" v-model="leaderSkillDescription" maxLength="200"></textarea>
+            <textarea class="form-control" id="textareaLeaderSkillDescription" rows="2" v-model="leaderSkillDescription" maxLength="200" />
           </td>
         </tr>
         <tr class="thead-light">
@@ -239,7 +239,7 @@
           </tr>
           <tr>
             <td colspan="12">
-              <monster-incremental-search id="inputEvolutionBaseNo" v-model.number="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
+              <monster-incremental-search id="inputEvolutionBaseNo" v-model.number="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable" />
             </td>
           </tr>
           <tr class="thead-light">
@@ -247,7 +247,7 @@
           </tr>
           <tr v-for="n in 5" :key="n">
             <td colspan="12">
-              <monster-incremental-search :id="`inputEvolutionMaterial${n}`" v-model.number="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :image-table="imageTable" :key="n"></monster-incremental-search>
+              <monster-incremental-search :id="`inputEvolutionMaterial${n}`" v-model.number="monsterData.evolution.materials[n - 1]" :monster-table="monsterTable" :image-table="imageTable" :key="n" />
             </td>
           </tr>
         </template>
@@ -257,11 +257,11 @@
         <tr>
           <td colspan="12">
             編集理由などを書いてください。（例：パラメータの更新）
-            <textarea class="form-control" id="textareaComment" rows="3" v-model="monsterData.comment" minLength="0" maxLength="1000"></textarea>
+            <textarea class="form-control" id="textareaComment" rows="3" v-model="monsterData.comment" minLength="0" maxLength="1000" />
           </td>
         </tr>
         <tr>
-          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="n"></td>
+          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="n" />
         </tr>
       </table>
       <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{ isSubmitted ? '送信中' :'送信する' }}</button>

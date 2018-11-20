@@ -68,7 +68,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="editData.description" maxLength="200"></textarea>
+            <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="editData.description" maxLength="200" />
           </td>
         </tr>
         <tr class="thead-light">
@@ -77,11 +77,11 @@
         <tr>
           <td colspan="12">
             編集理由などを書いてください。（例：説明を更新）
-            <textarea class="form-control" id="textareaComment" rows="3" v-model="editData.comment" minLength="0" maxLength="1000"></textarea>
+            <textarea class="form-control" id="textareaComment" rows="3" v-model="editData.comment" minLength="0" maxLength="1000" />
           </td>
         </tr>
         <tr>
-          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="n"></td>
+          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="n" />
         </tr>
       </table>
       <button type="button" class="btn btn-secondary" :disabled="isSubmitted" @click="endEdit">キャンセル</button>

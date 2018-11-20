@@ -1,5 +1,5 @@
 <template>
-  <span :id="id" style="width: 61px; height:20px; display: inline-block;"></span>
+  <span :id="id" style="width: 61px; height:20px; display: inline-block;" />
 </template>
 
 <script>

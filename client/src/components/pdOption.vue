@@ -1,6 +1,6 @@
 <template>
   <a class="dropdown-item pd-option" href="javascript:void(0);" @click="click" :data-value="value" style="width: 8em; overflow-x: hidden; display: inline-flex; padding: 4px;">
-    <slot></slot>
+    <slot />
   </a>
 </template>
 

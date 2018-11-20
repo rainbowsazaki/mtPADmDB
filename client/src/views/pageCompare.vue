@@ -5,7 +5,7 @@
     <form @submit="$event.preventDefault(); updateCompareMonster();">
       <div class="row" style="margin-bottom: 4px;">
         <div class="col-md-12" v-for="(target, i) in targets" :key="i">
-          <monster-incremental-search v-model="targets[i]" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
+          <monster-incremental-search v-model="targets[i]" :monster-table="monsterTable" :image-table="imageTable" />
         </div>
       </div>
       <button type="submit" class="btn btn-primary">{{ isEnableMonsterDatas ? '比較表を更新する' : '比較表を表示する' }}</button>
@@ -19,7 +19,7 @@
       <div style="overflow: auto;">
         <table class="table table-bordered table-sm" style="table-layout: fixed;">
           <tr class="thead-light">
-            <th style="width: 5em;"></th>
+            <th style="width: 5em;" />
             <td v-for="data in monsterDatas" style="width: 4.3em;" :key="data.no">
               <monster-icon :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
             </td>
@@ -216,7 +216,7 @@
             </td>
           </tr>
           <tr v-if="data.skill" :key="data.no"><td style="font-size: 90%; padding-left: 1em;">{{ getSkillData(data.skill).description }}</td></tr>
-          <tr v-else :key="data.no"><td></td></tr>
+          <tr v-else :key="data.no"><td /></tr>
         </template>
       </table>
 
@@ -230,8 +230,8 @@
               <router-link :to="{ name: 'leaderSkillDetails', params: { no: data.leaderSkill }}">{{ getLeaderSkillData(data.leaderSkill).name }}</router-link>
             </td>
           </tr>
-          <tr v-if="data.leaderSkill" :key="data.no"><td style="font-size: 90%; padding-left: 1em;" v-html="getLeaderSkillDescriptionHtml(getLeaderSkillData(data.leaderSkill))"></td></tr>
-          <tr v-else :key="data.no"><td></td></tr>
+          <tr v-if="data.leaderSkill" :key="data.no"><td style="font-size: 90%; padding-left: 1em;" v-html="getLeaderSkillDescriptionHtml(getLeaderSkillData(data.leaderSkill))" /></tr>
+          <tr v-else :key="data.no"><td /></tr>
         </template>
       </table>
 

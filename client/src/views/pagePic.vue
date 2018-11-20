@@ -1,14 +1,14 @@
 <template>
   <div class="row">
     <div class="col-md-6">
-      <canvas id="canvas" style="display:none;"></canvas>
+      <canvas id="canvas" style="display:none;" />
       <div class="col-md-12">
         <template v-if="!this.$route.params.no">モンスター番号と</template>
         <template v-else>No.{{ monsterNo }} {{ (monsterTable[monsterNo] || {}).name || 'のモンスター' }}の</template>
         モンスター情報画面の画像ファイルを選択してください。</div>
       <div class="row">
         <div v-if="!this.$route.params.no" class="col-md-12">
-          <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable" :image-table="imageTable"></monster-incremental-search>
+          <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable" :image-table="imageTable" />
         </div>
         <div class="col-md-12">
           <div class="custom-file">
