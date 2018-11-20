@@ -3,14 +3,14 @@
     <table class="table table-sm">
       <tr v-for="history in histories" :key="history.id">
         <td>
-          <router-link :to="`/history/${history.id}`">{{history.datetime}}</router-link>
+          <router-link :to="`/history/${history.id}`">{{ history.datetime }}</router-link>
         </td>
         <td><router-link :to="`/${history.no}`">
           <monster-icon :no="history.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
-          No.{{history.no}} {{monsterName(history.no)}}
+          No.{{ history.no }} {{ monsterName(history.no) }}
         </router-link></td>
         <td>
-          <span v-if="history.comment">{{history.comment}}</span>
+          <span v-if="history.comment">{{ history.comment }}</span>
           <span v-else style="opacity: 0.6;">（コメントなし）</span>
         </td>
         <td><span v-if="isActiveHistory(history)">（現在のデータ）</span></td>

@@ -1,11 +1,11 @@
 <template>
   <div>
     <div v-if="isHistory" class="alert alert-primary" role="alert">
-      {{monsterData.datetime}} 時点のデータです
+      {{ monsterData.datetime }} 時点のデータです
     </div>
     <div class="row">
       <div class="col-12">
-        <h2>No. {{monsterData.no}} {{monsterData.name}}</h2>
+        <h2>No. {{ monsterData.no }} {{ monsterData.name }}</h2>
       </div>
     </div>
     <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
@@ -17,7 +17,7 @@
             <th colspan="2">タイプ</th><th>属性</th>
           </tr>
           <tr>
-            <td colspan="2"><template v-for="type in monsterData.types"><span v-if="type !== 0" class="slash-join" :key="type"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{typeTable[type].name}}</span></template></td>
+            <td colspan="2"><template v-for="type in monsterData.types"><span v-if="type !== 0" class="slash-join" :key="type"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{ typeTable[type].name }}</span></template></td>
             <td>
               <span v-if="monsterData.attributes[0] === null">不明</span>
               <template v-for="attr in monsterData.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`" :key="attr" /></template>
@@ -27,22 +27,22 @@
             <th>コスト</th><th>レア</th><th>アシスト</th>
           </tr>
           <tr>
-            <td v-if="monsterData.cost" class="text-right">{{monsterData.cost }}</td>
+            <td v-if="monsterData.cost" class="text-right">{{ monsterData.cost }}</td>
             <td v-else>不明</td>
-            <td v-if="monsterData.rare" class="text-right">{{monsterData.rare}}</td>
+            <td v-if="monsterData.rare" class="text-right">{{ monsterData.rare }}</td>
             <td v-else>不明</td>
-            <td>{{booleanTable[monsterData.assist]}}</td>
+            <td>{{ booleanTable[monsterData.assist] }}</td>
           </tr>
           
           <tr class="thead-light">
             <th>最大レベル</th><th>必要経験値</th><th>限界突破</th>
           </tr>
           <tr>
-            <td v-if="monsterData.maxLevel" class="text-right">{{monsterData.maxLevel}}</td>
+            <td v-if="monsterData.maxLevel" class="text-right">{{ monsterData.maxLevel }}</td>
             <td v-else>不明</td>
-            <td v-if="monsterData.maxExp !== null" class="text-right">{{monsterData.maxExp | addComma}}</td>
+            <td v-if="monsterData.maxExp !== null" class="text-right">{{ monsterData.maxExp | addComma }}</td>
             <td v-else>不明</td>
-            <td>{{booleanTable[monsterData.overLimit]}}</td>
+            <td>{{ booleanTable[monsterData.overLimit] }}</td>
           </tr>
           <tr class="thead-light"><th colspan="3">覚醒</th></tr>
           <tr><td colspan="3">
@@ -74,26 +74,26 @@
         <table class="table table-bordered table-sm">
           <template v-if="hasMaxParam">
             <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
-            <tr><th style="width:auto;">HP</th><td style="width: 25%;" class="text-right">{{monsterData.maxParam.hp}}</td><td v-if="canAddPlus" style="width:25%;" class="text-right">{{monsterData.maxParam.hp + 10 * 99}}</td><td style="width: 25%;" class="text-right">{{plusCountParam.hp.toFixed(1)}}</td></tr>
-            <tr><th>攻撃</th><td class="text-right">{{monsterData.maxParam.attack}}</td><td v-if="canAddPlus" class="text-right">{{monsterData.maxParam.attack + 5 * 99}}</td><td class="text-right">{{plusCountParam.attack.toFixed(1)}}</td></tr>
+            <tr><th style="width:auto;">HP</th><td style="width: 25%;" class="text-right">{{ monsterData.maxParam.hp }}</td><td v-if="canAddPlus" style="width:25%;" class="text-right">{{ monsterData.maxParam.hp + 10 * 99 }}</td><td style="width: 25%;" class="text-right">{{ plusCountParam.hp.toFixed(1) }}</td></tr>
+            <tr><th>攻撃</th><td class="text-right">{{ monsterData.maxParam.attack }}</td><td v-if="canAddPlus" class="text-right">{{ monsterData.maxParam.attack + 5 * 99 }}</td><td class="text-right">{{ plusCountParam.attack.toFixed(1) }}</td></tr>
             <tr><th>回復</th>
-              <td class="text-right" :style="{ color: monsterData.maxParam.recovery < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{monsterData.maxParam.recovery}}</td>
-              <td v-if="canAddPlus" class="text-right" :style="{ color: monsterData.maxParam.recovery + 3 * 99 < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{monsterData.maxParam.recovery + 3 * 99}}</td>
-              <td class="text-right">{{plusCountParam.recovery.toFixed(1)}}</td>
+              <td class="text-right" :style="{ color: monsterData.maxParam.recovery < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.maxParam.recovery }}</td>
+              <td v-if="canAddPlus" class="text-right" :style="{ color: monsterData.maxParam.recovery + 3 * 99 < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.maxParam.recovery + 3 * 99 }}</td>
+              <td class="text-right">{{ plusCountParam.recovery.toFixed(1) }}</td>
             </tr>
-            <tr><td></td><td v-if="canAddPlus"></td><th class="text-right">＋合計</th><td class="text-right">{{plusCountParam.total.toFixed(1)}}</td></tr>
+            <tr><td></td><td v-if="canAddPlus"></td><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) }}</td></tr>
           </template>
           <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>
           <template v-if="monsterData.overLimit === 1">
             <template v-if="hasOverLimitParam">
               <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
-              <tr><th>HP</th><td class="text-right">{{monsterData.overLimitParam.hp}}</td><td v-if="canAddPlus" class="text-right">{{monsterData.overLimitParam.hp + 10 * 99}}</td><td class="text-right">{{plusCountOverlimitParam.hp.toFixed(1)}}</td></tr>
-              <tr><th>攻撃</th><td class="text-right">{{monsterData.overLimitParam.attack}}</td><td v-if="canAddPlus" class="text-right">{{monsterData.overLimitParam.attack + 5 * 99}}</td><td class="text-right">{{plusCountOverlimitParam.attack.toFixed(1)}}</td></tr>
+              <tr><th>HP</th><td class="text-right">{{ monsterData.overLimitParam.hp }}</td><td v-if="canAddPlus" class="text-right">{{ monsterData.overLimitParam.hp + 10 * 99 }}</td><td class="text-right">{{ plusCountOverlimitParam.hp.toFixed(1) }}</td></tr>
+              <tr><th>攻撃</th><td class="text-right">{{ monsterData.overLimitParam.attack }}</td><td v-if="canAddPlus" class="text-right">{{ monsterData.overLimitParam.attack + 5 * 99 }}</td><td class="text-right">{{ plusCountOverlimitParam.attack.toFixed(1) }}</td></tr>
               <tr><th>回復</th>
-                <td class="text-right" :style="{ color: monsterData.overLimitParam.recovery < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{monsterData.overLimitParam.recovery}}</td>
-                <td v-if="canAddPlus" class="text-right" :style="{ color: monsterData.overLimitParam.recovery + 3 * 99 < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{monsterData.overLimitParam.recovery + 3 * 99}}</td>
-                <td class="text-right">{{plusCountOverlimitParam.recovery.toFixed(1)}}</td></tr>
-              <tr><td></td><td v-if="canAddPlus"></td><th class="text-right">＋合計</th><td class="text-right">{{plusCountOverlimitParam.total.toFixed(1)}}</td></tr>
+                <td class="text-right" :style="{ color: monsterData.overLimitParam.recovery < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.overLimitParam.recovery }}</td>
+                <td v-if="canAddPlus" class="text-right" :style="{ color: monsterData.overLimitParam.recovery + 3 * 99 < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.overLimitParam.recovery + 3 * 99 }}</td>
+                <td class="text-right">{{ plusCountOverlimitParam.recovery.toFixed(1) }}</td></tr>
+              <tr><td></td><td v-if="canAddPlus"></td><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) }}</td></tr>
             </template>
             <tr v-else class="thead-light"><th colspan="4">限界突破時パラメータ不明</th></tr>
           </template>
@@ -103,15 +103,15 @@
           <tr class="thead-light"><th>スキル</th></tr>
           <tr v-if="!skillDetails.name"><td>不明</td></tr>
           <tr v-if="skillDetails.name"><td>
-            <router-link :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{skillDetails.name}}</router-link>
-            <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{skillDetails.baseTurn}} 最大Lv.<span v-if="skillDetails.maxLevel">{{skillDetails.maxLevel}} ターン:{{skillDetails.baseTurn - skillDetails.maxLevel + 1}}</span><span v-else>不明</span>)</span>
+            <router-link :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{ skillDetails.name }}</router-link>
+            <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{ skillDetails.baseTurn }} 最大Lv.<span v-if="skillDetails.maxLevel">{{ skillDetails.maxLevel }} ターン:{{ skillDetails.baseTurn - skillDetails.maxLevel + 1 }}</span><span v-else>不明</span>)</span>
           </td></tr>
-          <tr v-if="skillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{skillDetails.description}}</td></tr>
+          <tr v-if="skillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{ skillDetails.description }}</td></tr>
 
           <tr class="thead-light"><th>リーダースキル</th></tr>
           <tr v-if="!leaderSkillDetails.name"><td>不明</td></tr>
           <tr v-if="leaderSkillDetails.name"><td>
-            <router-link :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{leaderSkillDetails.name}}</router-link>
+            <router-link :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
           </td></tr>
           <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml"></td></tr>
         </table>
@@ -136,7 +136,7 @@
     <div v-if="monsterData.evolutionType !== 0">
       <h3 class="h4">このモンスターへの進化</h3>
       <table class="table table-bordered table-sm">
-        <tr class="thead-light"><th colspan="2">{{evolutionTypeTable[monsterData.evolutionType]}}</th></tr>
+        <tr class="thead-light"><th colspan="2">{{ evolutionTypeTable[monsterData.evolutionType] }}</th></tr>
         <template v-if="monsterData.evolutionType !== null">
           <tr><td colspan="2">
             <template v-if="monsterData.evolution.baseNo">
@@ -144,7 +144,7 @@
               ←
               <router-link :to="`/${monsterData.evolution.baseNo}`">
                 <monster-icon :no="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-                No. {{monsterData.evolution.baseNo}} {{monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name}}
+                No. {{ monsterData.evolution.baseNo }} {{ monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name }}
               </router-link>
             </template>
             <span v-else>進化元不明</span>
@@ -172,13 +172,13 @@
     <div v-if="evolutionTable[monsterData.no]">
       <h3 class="h4">このモンスターからの進化</h3>
       <table v-for="(evolution, n) in evolutionTable[monsterData.no]" class="table table-bordered table-sm" :key="n">
-        <tr class="thead-light"><th colspan="2">{{evolutionTypeTable[evolution.type]}}</th></tr>
+        <tr class="thead-light"><th colspan="2">{{ evolutionTypeTable[evolution.type] }}</th></tr>
         <tr><td colspan="2">
           <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
           →
           <router-link v-if="evolution.no" :to="`/${evolution.no}`">
             <monster-icon :no="evolution.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-            No. {{evolution.no}} {{monsterTable[evolution.no] && monsterTable[evolution.no].name}}
+            No. {{ evolution.no }} {{ monsterTable[evolution.no] && monsterTable[evolution.no].name }}
           </router-link>
         </td></tr>
         <tr class="thead-light"><th style="width: 3em;">素材</th><td>
@@ -203,7 +203,7 @@
         v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
         :to="{ name: 'compare', params: { nos: evolutionTable[monsterData.no].map(e => e.no).join(',') } }"
       >
-        進化後{{evolutionTable[monsterData.no].length}}種類のパラメータ比較へ
+        進化後{{ evolutionTable[monsterData.no].length }}種類のパラメータ比較へ
       </router-link>
     </div>
     <div v-if="isShowEvaluationLinks">
@@ -217,9 +217,9 @@
       <div v-else-if="evaluationOfMonsterLinks.length === 0">なし</div>
       <ul v-else class="list-unstyled">
         <li v-for="link in evaluationOfMonsterLinks" :key="link.link">
-          <a target="_blank" :href="link.link">{{link.title}}
+          <a target="_blank" :href="link.link">{{ link.title }}
             <ul class="list-unstyled ml-3">
-              <li>{{link.formattedUrl}}</li>
+              <li>{{ link.formattedUrl }}</li>
             </ul>
           </a>
         </li>
@@ -227,7 +227,7 @@
     </div>
     <div v-if="monsterData.comment">
       <h3 class="h4">編集コメント</h3>
-      <div>{{monsterData.comment}}</div>
+      <div>{{ monsterData.comment }}</div>
     </div>
 
     <hr />
@@ -238,13 +238,13 @@
     <div style="margin-top: 1rem;">
       <h3 class="h4">編集履歴</h3>
       <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
-        {{isLoadingHistory ? '読み込み中…' : '編集履歴を確認する'}}
+        {{ isLoadingHistory ? '読み込み中…' : '編集履歴を確認する' }}
       </button>
       <ul v-if="histories">
         <li v-for="history in histories" :key="history.id">
           <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="`/history/${history.id}`">
-            {{history.datetime}} -
-            <span v-if="history.comment">{{history.comment}}</span>
+            {{ history.datetime }} -
+            <span v-if="history.comment">{{ history.comment }}</span>
             <span v-else style="opacity: 0.6;">（コメントなし）</span>
           </component>
           <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>

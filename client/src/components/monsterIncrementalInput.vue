@@ -4,7 +4,7 @@
     <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
       <a v-for="monsterData in filteredMonsterTable" class="dropdown-item" @click="updateValue(monsterData.no)" href="javascript:void(0)" :key="monsterData.no">
         <monster-icon v-if="imageTable" :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="1.6em" height="1.6em" />
-        {{monsterData.name}}
+        {{ monsterData.name }}
       </a>
     </div>
   </div>

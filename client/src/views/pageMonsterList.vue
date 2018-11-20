@@ -5,7 +5,7 @@
     <div><tweet-button /></div>
 
     <div v-if="isLoadingMonsterList">データの読み込み中です ...</div>
-    <div v-else>現在の登録数：{{monsterCount}}種類</div>
+    <div v-else>現在の登録数：{{ monsterCount }}種類</div>
     
     <form @submit="$event.preventDefault(); search();">
       <div class="input-group mb-3">
@@ -23,8 +23,8 @@
           <monster-icon
             :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em"
           /><div style="display: inline-block; padding-left: 4px; vertical-align:bottom; height: 3em;">
-            <span style="font-size: 80%;">No.{{data.no}}</span><br>
-            {{data.name}}
+            <span style="font-size: 80%;">No.{{ data.no }}</span><br>
+            {{ data.name }}
           </div>
         </router-link>
       </div>

@@ -25,7 +25,7 @@
         <tr>
           <td v-for="n in 3" colspan="4" :key="n">
             <select class="custom-select" :id="'selectType' + n" v-model.number="monsterData.types[n - 1]">
-              <option v-for="(type, key) in typeTable" :disabled="key === ((n === 1) ? '0' : 'null')" :value="key" :key="key" v-once>{{type.name}}</option>
+              <option v-for="(type, key) in typeTable" :disabled="key === ((n === 1) ? '0' : 'null')" :value="key" :key="key" v-once>{{ type.name }}</option>
             </select>
           </td>
         </tr>
@@ -38,11 +38,11 @@
         <tr>
           <td colspan="3">
             <select class="custom-select" id="selectAttribute0" v-model.number="monsterData.attributes[0]">
-              <option v-for="(attribute, key) in attributeTable" :disabled="key === '0'" :value="key" :key="key" v-once>{{attribute}}</option>
+              <option v-for="(attribute, key) in attributeTable" :disabled="key === '0'" :value="key" :key="key" v-once>{{ attribute }}</option>
             </select></td>
           <td colspan="3">
             <select class="custom-select" id="selectAttribute1" v-model.number="monsterData.attributes[1]">
-              <option v-for="(attribute, key) in attributeTable" :disabled="key === 'null'" :value="key" :key="key" v-once>{{attribute}}</option>
+              <option v-for="(attribute, key) in attributeTable" :disabled="key === 'null'" :value="key" :key="key" v-once>{{ attribute }}</option>
             </select></td>
           <td colspan="3">
             <div class="input-group">
@@ -75,7 +75,7 @@
           </td>
           <td colspan="4">
             <select class="custom-select" id="selectAssist" v-model.number="monsterData.assist">
-              <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{type}}</option>
+              <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{ type }}</option>
             </select>
           </td>
         </tr>
@@ -86,7 +86,7 @@
           <td colspan="12">
             <pd-select v-model.number="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
               <div v-for="(awaken, key) in awakenTable" :key="key" v-once>
-                <pd-option v-if="n === 1 || key !== 'null'" :value="key" v-once><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once /> {{awaken.name}}</pd-option>
+                <pd-option v-if="n === 1 || key !== 'null'" :value="key" v-once><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once /> {{ awaken.name }}</pd-option>
               </div>
             </pd-select>
           </td>
@@ -140,7 +140,7 @@
               <input type="number" class="form-control" id="inputSkillMaxLevel" v-model.number="skillMaxLevel" min="1" max="99">
             </div>
           </td>
-          <td colspan="4">{{(minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
+          <td colspan="4">{{ (minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
         </tr>
         <tr>
           <th colspan="12">説明</th>
@@ -175,7 +175,7 @@
         <tr>
           <td colspan="12">
             <select class="custom-select" id="selectOverLimit" v-model.number="monsterData.overLimit">
-              <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{type}}</option>
+              <option v-for="(type, key) in booleanTable" :value="key" :key="key" v-once>{{ type }}</option>
             </select>
           </td>
         </tr>
@@ -216,7 +216,7 @@
                 <span v-if="key !== '0' && key !== 'null'" class="col-md-3 form-check" style="display:inline-block;" :key="key">
                   <input class="form-check-input" type="checkbox" :value="key" v-model.number="monsterData.superAwakens" :id="'superAwaken' + key" :disabled="isUnknownSuperAwaken">
                   <label class="form-check-label" :for="'superAwaken' + key">
-                    <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{awaken.name}}
+                    <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{ awaken.name }}
                   </label>
                 </span>
               </template>
@@ -229,7 +229,7 @@
         <tr>
           <td colspan="12">
             <select class="custom-select" id="evolutionType" v-model.number="monsterData.evolutionType">
-              <option v-for="(type, key) in evolutionTypeTable" :value="key" :key="key" v-once>{{type}}</option>
+              <option v-for="(type, key) in evolutionTypeTable" :value="key" :key="key" v-once>{{ type }}</option>
             </select>
           </td>
         </tr>
@@ -264,7 +264,7 @@
           <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="n"></td>
         </tr>
       </table>
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' :'送信する'}}</button>
+      <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{ isSubmitted ? '送信中' :'送信する' }}</button>
     </form>
   </div>
 </template>

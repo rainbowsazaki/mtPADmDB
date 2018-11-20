@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown pd-select" style="width: 100%">
-    <div class="custom-select" tabindex="0" data-toggle="dropdown" v-html="html">{{html}}</div>
+    <div class="custom-select" tabindex="0" data-toggle="dropdown" v-html="html">{{ html }}</div>
     <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden; -webkit-overflow-scrolling: touch; width: 100%;">
       <slot></slot>
     </div>

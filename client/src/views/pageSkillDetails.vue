@@ -1,22 +1,22 @@
 <template>
   <div>
     <div v-if="isHistory" class="alert alert-primary" role="alert">
-      {{skillDetails.datetime}} 時点のデータです
+      {{ skillDetails.datetime }} 時点のデータです
     </div>
-    <h2 class="h6">{{targetName}}{{isHistory ? '履歴' : ''}}詳細</h2>
+    <h2 class="h6">{{ targetName }}{{ isHistory ? '履歴' : '' }}詳細</h2>
     <template v-if="!isEditing">
-      <h3>{{skillDetails.name}}</h3>
+      <h3>{{ skillDetails.name }}</h3>
       <div><tweet-button /></div>
       <template v-if="!isLeaderSkill">
         <h4 class="p-2 mt-3 bg-light">ターン</h4>
-        <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{skillDetails.baseTurn}}</span><span v-else>不明</span></div>
-        <div v-if="skillDetails.maxLevel">最大Lv.{{skillDetails.maxLevel}} ターン:<span v-if="skillDetails.baseTurn">{{minTurn}}</span><span v-else>不明</span></div>
+        <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{ skillDetails.baseTurn }}</span><span v-else>不明</span></div>
+        <div v-if="skillDetails.maxLevel">最大Lv.{{ skillDetails.maxLevel }} ターン:<span v-if="skillDetails.baseTurn">{{ minTurn }}</span><span v-else>不明</span></div>
         <div v-else>最大lv.不明</div>
       </template>
       <h4 class="p-2 mt-3 bg-light">説明</h4>
-      <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{skillDetails.description}}</div>
+      <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{ skillDetails.description }}</div>
       <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
-      <h4 class="p-2 mt-3 bg-light">{{targetName}}所持モンスター</h4>
+      <h4 class="p-2 mt-3 bg-light">{{ targetName }}所持モンスター</h4>
       <scoped-style>
         li { margin: 0; padding: 0; padding: 2.4px; }
       </scoped-style>
@@ -29,7 +29,7 @@
       </ul>
       <div v-else>なし</div>
       <hr>
-      <button type="button" class="btn btn-secondary" @click="startEdit">{{isHistory ? '履歴をもとに編集する': '編集する'}}</button>
+      <button type="button" class="btn btn-secondary" @click="startEdit">{{ isHistory ? '履歴をもとに編集する': '編集する' }}</button>
     </template>
 
     <form v-else onsubmit="return false;" @submit="submit">
@@ -60,7 +60,7 @@
                 <input type="number" class="form-control" id="inputSkillMaxLevel" v-model.number="editData.maxLevel" min="1" max="99">
               </div>
             </td>
-            <td colspan="4">{{(minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
+            <td colspan="4">{{ (minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
           </tr>
         </template>
         <tr>
@@ -85,19 +85,19 @@
         </tr>
       </table>
       <button type="button" class="btn btn-secondary" :disabled="isSubmitted" @click="endEdit">キャンセル</button>
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{isSubmitted ? '送信中' :'送信する'}}</button>
+      <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{ isSubmitted ? '送信中' :'送信する' }}</button>
     </form>
 
     <div style="margin-top: 1rem;">
       <h3 class="h4">編集履歴</h3>
       <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
-        {{isLoadingHistory ? '読み込み中…' : '編集履歴を確認する'}}
+        {{ isLoadingHistory ? '読み込み中…' : '編集履歴を確認する' }}
       </button>
       <ul v-if="histories">
         <li v-for="history in histories" :key="history.id">
           <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="{ name: historyRouteName, params: { id: history.id } }">
-            {{history.datetime}} -
-            <span v-if="history.comment">{{history.comment}}</span>
+            {{ history.datetime }} -
+            <span v-if="history.comment">{{ history.comment }}</span>
             <span v-else style="opacity: 0.6;">（コメントなし）</span>
           </component>
           <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>
