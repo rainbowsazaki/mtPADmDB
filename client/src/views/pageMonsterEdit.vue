@@ -86,7 +86,7 @@
           <td colspan="12">
             <pd-select v-model.number="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
               <div v-for="(awaken, key) in awakenTable" :key="key" v-once>
-                <pd-option v-if="n === 1 || key !== 'null'" :value="key" v-once><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once /> {{ awaken.name }}</pd-option>
+                <pd-option v-if="n === 1 || key !== 'null'" :value="key" v-once><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once> {{ awaken.name }}</pd-option>
               </div>
             </pd-select>
           </td>
@@ -216,7 +216,7 @@
                 <span v-if="key !== '0' && key !== 'null'" class="col-md-3 form-check" style="display:inline-block;" :key="key">
                   <input class="form-check-input" type="checkbox" :value="key" v-model.number="monsterData.superAwakens" :id="'superAwaken' + key" :disabled="isUnknownSuperAwaken">
                   <label class="form-check-label" :for="'superAwaken' + key">
-                    <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24" />{{ awaken.name }}
+                    <img v-if="key !== 'null'" :src="'./image/awaken/' + key + '.png'" width="24" height="24">{{ awaken.name }}
                   </label>
                 </span>
               </template>

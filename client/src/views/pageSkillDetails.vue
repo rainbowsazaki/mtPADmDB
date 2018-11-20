@@ -39,7 +39,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <input v-model="editData.name" class="form-control dropdown-toggle" required minLength="1" maxLength="50" />
+            <input v-model="editData.name" class="form-control dropdown-toggle" required minLength="1" maxLength="50">
           </td>
         </tr>
         <template v-if="!isLeaderSkill">

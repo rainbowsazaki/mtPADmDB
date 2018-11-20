@@ -18,23 +18,23 @@
         </div>
       
       </div>
-      <img :src="uploadImgSrc" style="width: 100%; height: auto;" />
+      <img :src="uploadImgSrc" style="width: 100%; height: auto;">
     </div>
     <div v-if="!imageResultSrc" class="col-md-6">
       <p>下記のような画面のスクリーンショットを選択してください。</p>
       <p>アシストしていない状態のものをお願いします。</p>
-      <img src="../assets/image/image_sample.jpg" alt="サンプル" />
+      <img src="../assets/image/image_sample.jpg" alt="サンプル">
     </div>
 
     <div v-if="imageResultSrc" id="result" class="col-md-6">
       <h2>切り抜き結果</h2>
       <div>
         <h3>モンスター画像</h3>
-        <img :src="imageResultSrc" style="width: 100%;" />
+        <img :src="imageResultSrc" style="width: 100%;">
       </div>
       <div>
         <h3>アイコン画像</h3>
-        <img :src="iconResultSrc" />
+        <img :src="iconResultSrc">
       </div>
 
       <div style="margin-top: 1em;">
