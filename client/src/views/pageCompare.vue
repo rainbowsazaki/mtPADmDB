@@ -33,7 +33,7 @@
             <td v-for="(data, n) in monsterDatas" :key="`monsterNo${n}`">
               <span v-if="data.types[0] === null">不明</span>
               <span v-else>
-                <template v-for="type in data.types"><img v-if="type !== 0 && type !== null" :src="`./image/type/${type}.png`" alt="" style="width:1.5em; height: 1.5em;" :key="`type${type}`"></template>
+                <template v-for="(type, n) in data.types"><img v-if="type !== 0 && type !== null" :src="`./image/type/${type}.png`" alt="" style="width:1.5em; height: 1.5em;" :key="`typeNo${n}`"></template>
               </span>
             </td>
           </tr>
@@ -41,7 +41,7 @@
             <th>属性</th>
             <td v-for="(data, n) in monsterDatas" :key="`monsterNo${n}`">
               <span v-if="data.attributes[0] === null">不明</span>
-              <template v-for="attr in data.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="`./image/attribute/${attr}.png`" :key="`attr${attr}`"></template>
+              <template v-for="(attr, n) in data.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 1.5em; height: 1.5em;" :src="`./image/attribute/${attr}.png`" :key="`attrNo${n}`"></template>
             </td>
           </tr>
 

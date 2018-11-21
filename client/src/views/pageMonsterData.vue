@@ -17,10 +17,10 @@
             <th colspan="2">タイプ</th><th>属性</th>
           </tr>
           <tr>
-            <td colspan="2"><template v-for="type in monsterData.types"><span v-if="type !== 0" class="slash-join" :key="`type${type}`"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{ typeTable[type].name }}</span></template></td>
+            <td colspan="2"><template v-for="(type, n) in monsterData.types"><span v-if="type !== 0" class="slash-join" :key="`typeNo${n}`"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{ typeTable[type].name }}</span></template></td>
             <td>
               <span v-if="monsterData.attributes[0] === null">不明</span>
-              <template v-for="attr in monsterData.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`" :key="`attr${attr}`"></template>
+              <template v-for="(attr, n) in monsterData.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`" :key="`attrNo${n}`"></template>
             </td>
           </tr>
           <tr class="thead-light">
