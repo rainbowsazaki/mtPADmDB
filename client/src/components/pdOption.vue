@@ -1,5 +1,5 @@
 <template>
-  <a class="dropdown-item pd-option" href="javascript:void(0);" @click="click" :data-value="value" style="display: inline-flex; padding: 4px;">
+  <a class="dropdown-item pd-option" href="javascript:void(0);" @click="click" :data-value="value">
     <slot />
   </a>
 </template>
@@ -24,4 +24,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  a.pd-option {
+    width: 8em;
+    overflow-x: hidden;
+    display: inline-flex;
+    padding: 4px;
+  }
 </style>

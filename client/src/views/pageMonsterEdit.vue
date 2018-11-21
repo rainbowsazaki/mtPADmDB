@@ -85,9 +85,9 @@
         <tr v-for="n in 9" :key="`awakenNo${n}`">
           <td colspan="12">
             <pd-select v-model.number="monsterData.awakens[n - 1]" :id="`selectAwaken${n}`">
-              <div v-for="(awaken, key) in awakenTable" :key="`awaken${key}`">
-                <pd-option v-if="n === 1 || key !== 'null'" :value="key" v-once><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24" v-once> {{ awaken.name }}</pd-option>
-              </div>
+              <template v-for="(awaken, key) in awakenTable">
+                <pd-option v-if="n === 1 || key !== 'null'" :value="key" :key="`awaken${key}`"><img :src="(key === '0' || key === 'null') ? undefined : `./image/awaken/${key}.png`" width="24" height="24"> {{ awaken.name }}</pd-option>
+              </template>
             </pd-select>
           </td>
         </tr>
