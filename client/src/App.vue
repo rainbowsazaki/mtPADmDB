@@ -7,7 +7,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <li v-for="(navi, n) in navis" class="nav-item" @click="hideNavi" :key="n">
+          <li v-for="(navi, n) in navis" class="nav-item" @click="hideNavi" :key="`navi${n}`">
             <router-link class="nav-link" :class="{ active: $route.path === navi.to }" :to="navi.to">{{ navi.text }}</router-link>
           </li>
         </ul>

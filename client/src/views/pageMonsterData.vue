@@ -17,10 +17,10 @@
             <th colspan="2">タイプ</th><th>属性</th>
           </tr>
           <tr>
-            <td colspan="2"><template v-for="type in monsterData.types"><span v-if="type !== 0" class="slash-join" :key="type"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{ typeTable[type].name }}</span></template></td>
+            <td colspan="2"><template v-for="type in monsterData.types"><span v-if="type !== 0" class="slash-join" :key="`type${type}`"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{ typeTable[type].name }}</span></template></td>
             <td>
               <span v-if="monsterData.attributes[0] === null">不明</span>
-              <template v-for="attr in monsterData.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`" :key="attr"></template>
+              <template v-for="attr in monsterData.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`" :key="`attr${attr}`"></template>
             </td>
           </tr>
           <tr class="thead-light">
@@ -49,7 +49,7 @@
             <span v-if="monsterData.awakens[0] === 0">なし</span>
             <span v-else-if="monsterData.awakens[0] === null">不明</span>
             <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex; justify-content: space-between;">
-              <li v-for="awaken in monsterData.awakens" style="flex-grow: 1; width: 24px;" :key="awaken">
+              <li v-for="awaken in monsterData.awakens" style="flex-grow: 1; width: 24px;" :key="`awaken${awaken}`">
                 <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 24px; height: 24px;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
               </li>
             </ul>
@@ -60,7 +60,7 @@
               <td colspan="3">
                 <span v-if="monsterData.types[0] === null">不明</span>
                 <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
-                  <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" :key="senzaiKillerType">
+                  <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" :key="`killer${senzaiKillerType}`">
                     <img :src="`./image/senzaiKiller/${senzaiKillerType}.png`" :alt="`${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 24px;">
                   </li>
                 </ul>
@@ -124,7 +124,7 @@
           <tr class="thead-light"><th>超覚醒</th></tr>
           <tr><td>
             <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
-              <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;" :key="superAwaken">
+              <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;" :key="`superAwaken${superAwaken}`">
                 <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
                 <span v-else>不明</span>
               </li>
@@ -152,7 +152,7 @@
           <tr class="thead-light"><th style="width: 3em;">素材</th><td>
             <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
               <template v-for="material in monsterData.evolution.materials">
-                <li v-if="material" style="margin-right: 2px;" :key="material">
+                <li v-if="material" style="margin-right: 2px;" :key="`material${material}`">
                   <router-link :to="`/${material}`">
                     <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                   </router-link>
@@ -171,7 +171,7 @@
     </div>
     <div v-if="evolutionTable[monsterData.no]">
       <h3 class="h4">このモンスターからの進化</h3>
-      <table v-for="(evolution, n) in evolutionTable[monsterData.no]" class="table table-bordered table-sm" :key="n">
+      <table v-for="(evolution, n) in evolutionTable[monsterData.no]" class="table table-bordered table-sm" :key="`evolution${n}`">
         <tr class="thead-light"><th colspan="2">{{ evolutionTypeTable[evolution.type] }}</th></tr>
         <tr><td colspan="2">
           <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
@@ -184,7 +184,7 @@
         <tr class="thead-light"><th style="width: 3em;">素材</th><td>
           <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
             <template v-for="material in evolution.materials">
-              <li v-if="material" style="margin-right: 2px;" :key="material">
+              <li v-if="material" style="margin-right: 2px;" :key="`material${material}`">
                 <router-link :to="`/${material}`">
                   <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                 </router-link>
@@ -241,7 +241,7 @@
         {{ isLoadingHistory ? '読み込み中…' : '編集履歴を確認する' }}
       </button>
       <ul v-if="histories">
-        <li v-for="history in histories" :key="history.id">
+        <li v-for="history in histories" :key="`history${history.id}`">
           <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="`/history/${history.id}`">
             {{ history.datetime }} -
             <span v-if="history.comment">{{ history.comment }}</span>

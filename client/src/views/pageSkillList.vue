@@ -46,15 +46,15 @@
       </scoped-style>
 
       <template v-for="(skill, n) in skillArrayInPage">
-        <div v-if="skill.hit && (n === 0 || skill.isGroupHead)" class="col-md-12" :key="n">
+        <div v-if="skill.hit && (n === 0 || skill.isGroupHead)" class="col-md-12" :key="`skillHeader${n}`">
           <h3>{{ skill.hit }}</h3>
         </div>
-        <div class="col-md-6" :key="n">
+        <div class="col-md-6" :key="`skillList${n}`">
           <div class="box">
             <div><router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{ skill.name }}</router-link></div>
             <div class="skillDescription">{{ skill.description }}</div>
             <ul class="list-inline monsterUsingSkillIcons">
-              <li v-for="(monsterNo, m) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="m">
+              <li v-for="(monsterNo, m) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="`hasMonster${m}`">
                 <router-link v-if="m < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
                   <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
                 </router-link>

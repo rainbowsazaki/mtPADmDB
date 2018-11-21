@@ -1,7 +1,7 @@
 <template>
   <div>
     <table class="table table-sm">
-      <tr v-for="history in histories" :key="history.id">
+      <tr v-for="history in histories" :key="`history${history.id}`">
         <td>
           <router-link :to="`/history/${history.id}`">{{ history.datetime }}</router-link>
         </td>
