@@ -49,7 +49,7 @@
             <span v-if="monsterData.awakens[0] === 0">なし</span>
             <span v-else-if="monsterData.awakens[0] === null">不明</span>
             <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex; justify-content: space-between;">
-              <li v-for="awaken in monsterData.awakens" style="flex-grow: 1; width: 24px;" :key="`awaken${awaken}`">
+              <li v-for="(awaken, n) in monsterData.awakens" style="flex-grow: 1; width: 24px;" :key="`awakenNo${n}`">
                 <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 24px; height: 24px;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
               </li>
             </ul>
@@ -151,8 +151,8 @@
           </td></tr>
           <tr class="thead-light"><th style="width: 3em;">素材</th><td>
             <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
-              <template v-for="material in monsterData.evolution.materials">
-                <li v-if="material" style="margin-right: 2px;" :key="`material${material}`">
+              <template v-for="(material, n) in monsterData.evolution.materials">
+                <li v-if="material" style="margin-right: 2px;" :key="`materialNo${n}`">
                   <router-link :to="`/${material}`">
                     <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                   </router-link>
@@ -171,7 +171,7 @@
     </div>
     <div v-if="evolutionTable[monsterData.no]">
       <h3 class="h4">このモンスターからの進化</h3>
-      <table v-for="(evolution, n) in evolutionTable[monsterData.no]" class="table table-bordered table-sm" :key="`evolution${n}`">
+      <table v-for="(evolution, n) in evolutionTable[monsterData.no]" class="table table-bordered table-sm" :key="`evolutionNo${n}`">
         <tr class="thead-light"><th colspan="2">{{ evolutionTypeTable[evolution.type] }}</th></tr>
         <tr><td colspan="2">
           <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
@@ -183,8 +183,8 @@
         </td></tr>
         <tr class="thead-light"><th style="width: 3em;">素材</th><td>
           <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
-            <template v-for="material in evolution.materials">
-              <li v-if="material" style="margin-right: 2px;" :key="`material${material}`">
+            <template v-for="(material, m) in evolution.materials">
+              <li v-if="material" style="margin-right: 2px;" :key="`materialNo${m}`">
                 <router-link :to="`/${material}`">
                   <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                 </router-link>
