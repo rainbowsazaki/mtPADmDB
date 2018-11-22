@@ -74,14 +74,14 @@ close(DATAFILE);
 # html 内容置き換え
 if ($title) {
   $html =~ s|(<title>)(.*?)(</title>)|$1${title} - $2$3|;
-  $html =~ s|(<meta property="og:title" content=")(.*?)(".*?>)|$1${title} - $2$3|;
+  $html =~ s|(<meta property="?og:title"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"${title} - $2"$3|;
 }
 if ($image_url) {
-  $html =~ s|(<meta property="og:image" content=")(.*?)(".*?>)|$1${image_url}$3|;
+  $html =~ s|(<meta property="?og:image"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"${image_url}"$3|;
 }
 if ($description) {
-  $html =~ s|(<meta name="description" content=")(.*?)(".*?>)|$1${description}$3|;
-  $html =~ s|(<meta property="og:description" content=")(.*?)(".*?>)|$1${description}$3|;
+  $html =~ s|(<meta name="?description"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"${description}"$3|;
+  $html =~ s|(<meta property="?og:description"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"${description}"$3|;
 }
 
 print "Content-Type: text/html\n\n";
