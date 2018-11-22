@@ -131,6 +131,16 @@ export default {
       };
     }
   },
+  props: {
+    no: {
+      type: [String, Number],
+      default: null
+    },
+    id: {
+      type: [String, Number],
+      default: null
+    }
+  },
   data: function () {
     return {
       /** 編集モードかどうか。 */
@@ -163,7 +173,7 @@ export default {
       if (this.isHistory) {
         return this.skillDetailsHistory;
       } else {
-        return this.skillTable[this.$route.params.no] || { name: '' };
+        return this.skillTable[this.no] || { name: '' };
       }
     },
     /** 最小ターン */
@@ -209,11 +219,11 @@ export default {
         this.skillDetailsHistory = null;
         // 履歴一覧情報がある場合は、その一覧からリンクしてきた可能性が高いのでそこからデータの取得を試みる。
         if (this.histories) {
-          this.skillDetailsHistory = this.histories.find((o) => o.id === this.$route.params.id);
+          this.skillDetailsHistory = this.histories.find((o) => o.id === this.id);
         }
         // データがない場合はサーバーから取得する。
         if (!this.skillDetailsHistory) {
-          mtpadmdb.api('skillHistory', { isLeaderSkill: this.isLeaderSkill ? 1 : 0, id: this.$route.params.id },
+          mtpadmdb.api('skillHistory', { isLeaderSkill: this.isLeaderSkill ? 1 : 0, id: this.id },
             (response) => {
               this.skillDetailsHistory = response.data[0];
             });
@@ -261,7 +271,7 @@ export default {
 
         // Google Analiticsにイベントを送信。
         let action = 'skillDataPost';
-        if (this.$route.params.no) { action = 'skillDataUpdate'; }
+        if (this.no) { action = 'skillDataUpdate'; }
         gtagProductionOnly('event', action, {
           'event_category': 'monsterData',
           'event_label': `No.${this.editData.no}`
@@ -276,7 +286,7 @@ export default {
     },
     /** 履歴リストを取得する。 */
     loadHistories: function () {
-      const skillNo = (this.isHistory) ? this.skillDetails.no : this.$route.params.no;
+      const skillNo = (this.isHistory) ? this.skillDetails.no : this.no;
       if (skillNo === undefined) { return; }
       this.isLoadingHistory = true;
       mtpadmdb.api('skillHistory', { isLeaderSkill: this.isLeaderSkill ? 1 : 0, no: skillNo },
@@ -291,7 +301,7 @@ export default {
     /** 指定された履歴情報が現在表示している */
     isShowHistory: function (history) {
       if (this.isHistory) {
-        return history.id === parseInt(this.$route.params.id);
+        return history.id === parseInt(this.id);
       } else {
         return this.isActiveHistory(history);
       }

@@ -264,11 +264,20 @@ import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml } from '../m
 export default {
   name: 'PageMonsterData',
   pageTitle: function () {
-    let str = `No.${this.$route.params.no || this.monsterData.no} ${this.monsterData.name}`;
+    let str = `No.${this.no || this.monsterData.no} ${this.monsterData.name}`;
     if (this.isHistory) { str += ` (${this.monsterData.datetime})`; }
     return str;
   },
-  props: ['no'],
+  props: {
+    no: {
+      type: [String, Number],
+      default: null
+    },
+    id: {
+      type: [String, Number],
+      default: null
+    }
+  },
   data: function () {
     return {
       booleanTable: constData.booleanTable,
@@ -292,7 +301,7 @@ export default {
     evolutionTable: function () { return this.$store.state.evolutionTable; },
     imageTable: function () { return this.$store.state.imageTable; },
     monsterData: function () {
-      return this.isHistory ? this.$store.state.monsterData : this.monsterTable[this.$route.params.no];
+      return this.isHistory ? this.$store.state.monsterData : this.monsterTable[this.no];
     },
 
     monsterImagePath: function () {
@@ -399,7 +408,7 @@ export default {
           callback: () => {
             this.$_mixinForPage_updateTitle();
           },
-          historyId: this.$route.params.id
+          historyId: this.id
         };
         this.$store.commit('loadMonsterData', param);
       }
@@ -450,7 +459,7 @@ export default {
     /** 指定された履歴情報が現在表示している */
     isShowHistory: function (history) {
       if (this.isHistory) {
-        return history.id === parseInt(this.$route.params.id);
+        return history.id === parseInt(this.id);
       } else {
         return this.isActiveHistory(history);
       }

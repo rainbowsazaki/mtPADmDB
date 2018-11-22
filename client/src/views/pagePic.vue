@@ -3,11 +3,11 @@
     <div class="col-md-6">
       <canvas id="canvas" style="display:none;" />
       <div class="col-md-12">
-        <template v-if="!this.$route.params.no">モンスター番号と</template>
+        <template v-if="!no">モンスター番号と</template>
         <template v-else>No.{{ monsterNo }} {{ (monsterTable[monsterNo] || {}).name || 'のモンスター' }}の</template>
         モンスター情報画面の画像ファイルを選択してください。</div>
       <div class="row">
-        <div v-if="!this.$route.params.no" class="col-md-12">
+        <div v-if="!no" class="col-md-12">
           <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable" :image-table="imageTable" />
         </div>
         <div class="col-md-12">
@@ -53,20 +53,26 @@ import { mtpadmdb, gtagProductionOnly } from '../mtpadmdb.js';
 export default {
   name: 'PagePic',
   pageTitle: function () {
-    if (this.$route.params.no) {
-      return `画像投稿 No.${this.$route.params.no} ${this.selectMonsterName}`;
+    if (this.no) {
+      return `画像投稿 No.${this.no} ${this.selectMonsterName}`;
     } else {
       return '画像投稿';
     }
   },
   middleOfBreadcrumbs: function () {
-    if (this.$route.params.no) {
-      return { text: `No.${this.$route.params.no} ${this.selectMonsterName}`, link: '/' + this.$route.params.no };
+    if (this.no) {
+      return { text: `No.${this.no} ${this.selectMonsterName}`, link: '/' + this.no };
     } else {
       return undefined;
     }
   },
 
+  props: {
+    no: {
+      type: [String, Number],
+      default: null
+    }
+  },
   data: function () {
     return {
       monsterNo: null,
@@ -81,7 +87,7 @@ export default {
     monsterTable: function () { return this.$store.state.monsterTable; },
     imageTable: function () { return this.$store.state.imageTable; },
     selectMonsterName: function () {
-      return (this.monsterTable[this.$route.params.no] || {}).name || '';
+      return (this.monsterTable[this.no] || {}).name || '';
     }
   },
   watch: {
@@ -94,8 +100,8 @@ export default {
   },
   methods: {
     udpateMonsterNo: function () {
-      if (this.$route.params.no) {
-        this.monsterNo = this.$route.params.no;
+      if (this.no) {
+        this.monsterNo = this.no;
       } else {
         this.monsterNo = null;
       }
@@ -316,8 +322,8 @@ export default {
           'event_label': `No.${this.monsterNo}`
         });
 
-        if (this.$route.params.no) {
-          this.$router.push({ path: `/${this.$route.params.no}` });
+        if (this.no) {
+          this.$router.push({ path: `/${this.no}` });
         } else {
           this.monsterNo = null;
           this.uploadImgSrc = '';

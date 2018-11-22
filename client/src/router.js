@@ -88,32 +88,38 @@ export default new Router({
     {
       path: '/skill',
       name: 'skillList',
-      component: PageSkillList
+      component: PageSkillList,
+      props: true
     },
     {
       path: '/skill/:no',
       name: 'skillDetails',
-      component: PageSkillDetails
+      component: PageSkillDetails,
+      props: true
     },
     {
       path: '/skillHistory/:id',
       name: 'skillDetailsHistory',
-      component: PageSkillDetails
+      component: PageSkillDetails,
+      props: true
     },
     {
       path: '/leaderSkill',
       name: 'leaderSkillList',
-      component: PageSkillList
+      component: PageSkillList,
+      props: true
     },
     {
       path: '/leaderSkill/:no',
       name: 'leaderSkillDetails',
-      component: PageSkillDetails
+      component: PageSkillDetails,
+      props: true
     },
     {
       path: '/leaderSkillHistory/:id',
       name: 'leaderSkillDetailsHistory',
-      component: PageSkillDetails
+      component: PageSkillDetails,
+      props: true
     },
     
     {

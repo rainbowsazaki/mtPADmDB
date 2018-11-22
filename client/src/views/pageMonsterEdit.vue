@@ -279,8 +279,8 @@ export default {
   name: 'PageMonsterEdit',
   pageTitle: function () {
     if (this.isHistory) { return '履歴をもとに編集'; }
-    if (this.$route.params.no) {
-      return `編集 No.${this.$route.params.no} ${this.monsterData.name}`;
+    if (this.no) {
+      return `編集 No.${this.no} ${this.monsterData.name}`;
     } else {
       return '新規登録';
     }
@@ -289,18 +289,27 @@ export default {
     if (this.isHistory) {
       return {
         text: `No.${this.monsterData.no} ${this.monsterData.name} (${this.monsterData.datetime})`,
-        link: `/history/${this.$route.params.id}`
+        link: `/history/${this.id}`
       };
-    } else if (this.$route.params.no) {
+    } else if (this.no) {
       return {
-        text: `No.${this.$route.params.no} ${this.monsterData.name}`,
-        link: `/${this.$route.params.no}`
+        text: `No.${this.no} ${this.monsterData.name}`,
+        link: `/${this.no}`
       };
     } else {
       return undefined;
     }
   },
-  props: ['no'],
+  props: {
+    no: {
+      type: [String, Number],
+      default: null
+    },
+    id: {
+      type: [String, Number],
+      default: null
+    }
+  },
   data: function () {
     return {
       booleanTable: constData.booleanTable,
@@ -421,10 +430,10 @@ export default {
 
       let commitParam = null;
       if (this.isHistory) {
-        commitParam = { historyId: this.$route.params.id };
+        commitParam = { historyId: this.id };
       }
-      if (this.$route.params.no) {
-        commitParam = { no: this.$route.params.no };
+      if (this.no) {
+        commitParam = { no: this.no };
       }
       if (commitParam) {
         commitParam.callback = () => {
@@ -462,7 +471,7 @@ export default {
 
         // Google Analiticsにイベントを送信。
         let action = 'monsterDataPost';
-        if (this.$route.params.no) { action = 'monsterDataUpdate'; } // 現在のデータを元した編集の場合
+        if (this.no) { action = 'monsterDataUpdate'; } // 現在のデータを元した編集の場合
         if (this.isHistory) { action = 'monsterDataUpdateFromHistory'; } // 編集履歴をもとにした編集の場合
         gtagProductionOnly('event', action, {
           'event_category': 'monsterData',

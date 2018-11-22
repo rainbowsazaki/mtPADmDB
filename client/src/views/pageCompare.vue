@@ -260,6 +260,12 @@ export default {
       return (val === null || isNaN(val)) ? '不明' : val;
     }
   },
+  props: {
+    nos: {
+      type: String,
+      default: ''
+    }
+  },
   data: function () {
     return {
       monsterDatas: [],
@@ -329,11 +335,11 @@ export default {
     },
 
     load: function () {
-      this.targets = (this.$route.params.nos || '').split(/,/g).map(s => { let n = parseInt(s); if (isNaN(n)) { n = null; } return n; });
+      this.targets = (this.nos || '').split(/,/g).map(s => { let n = parseInt(s); if (isNaN(n)) { n = null; } return n; });
       while (this.targets.length < 2) { this.targets.push(null); }
       
       this.monsterDatas = [];
-      if (this.$route.params.nos) {
+      if (this.nos) {
         for (let i = 0; i < this.targets.length; i++) {
           if (this.targets[i] !== null) { this._load(i, this.targets[i]); }
         }
