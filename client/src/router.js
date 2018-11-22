@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import PageAbout from './views/pageAbout.vue';
-import PageCompare from './views/pageCompare.vue';
-import PageHistory from './views/pageHistory.vue';
-import PageMonsterData from './views/pageMonsterData.vue';
-import PageMonsterEdit from './views/pageMonsterEdit.vue';
-import PageMonsterList from './views/pageMonsterList.vue';
-import PagePic from './views/pagePic.vue';
-import PageSkillDetails from './views/pageSkillDetails.vue';
-import PageSkillList from './views/pageSkillList.vue';
+const PageAbout = () => import('./views/pageAbout.vue');
+const PageCompare = () => import('./views/pageCompare.vue');
+const PageHistory = () => import('./views/pageHistory.vue');
+const PageMonsterData = () => import('./views/pageMonsterData.vue');
+const PageMonsterEdit = () => import('./views/pageMonsterEdit.vue');
+const PageMonsterList = () => import('./views/pageMonsterList.vue');
+const PagePic = () => import('./views/pagePic.vue');
+const PageSkillDetails = () => import('./views/pageSkillDetails.vue');
+const PageSkillList = () => import('./views/pageSkillList.vue');
 
 import { getRouterBase } from './mtpadmdb.js';
 

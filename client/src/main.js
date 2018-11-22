@@ -49,14 +49,14 @@ Vue.filter('addComma', function (val) {
   return arr.join('.');
 });
 
-import MonsterIcon from './components/monsterIcon.vue';
-import MonsterIncrementalSearch from './components/monsterIncrementalSearch.vue';
-import Pagination from './components/pagination.vue';
-import PdOption from './components/pdOption.vue';
-import PdSelect from './components/pdSelect.vue';
-import ScopedStyle from './components/scopedStyle.vue';
-import SkillIncrementalInput from './components/skillIncrementalInput.vue';
 import TweetButton from './components/tweetButton.vue';
+import MonsterIcon from './components/monsterIcon.vue';
+const MonsterIncrementalSearch = () => import('./components/monsterIncrementalSearch.vue');
+const Pagination = () => import('./components/pagination.vue');
+const PdOption = () => import('./components/pdOption.vue');
+const PdSelect = () => import('./components/pdSelect.vue');
+const ScopedStyle = () => import('./components/scopedStyle.vue');
+const SkillIncrementalInput = () => import('./components/skillIncrementalInput.vue');
 
 Vue.component('monster-icon', MonsterIcon);
 Vue.component('monster-incremental-search', MonsterIncrementalSearch);
