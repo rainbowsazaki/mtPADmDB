@@ -81,11 +81,6 @@ export default new Router({
       props: true
     },
     {
-      path: '/compare/:no1/:no2',
-      name: 'compare',
-      component: PageCompare
-    },
-    {
       path: '/skill',
       name: 'skillList',
       component: PageSkillList,
