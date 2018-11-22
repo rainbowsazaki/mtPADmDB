@@ -29,7 +29,6 @@ export default {
   pageTitle: function () {
     return '履歴一覧';
   },
-  props: ['no'],
   data: function () {
     return {
       /** 履歴情報 */
