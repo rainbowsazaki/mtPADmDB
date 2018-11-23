@@ -2,10 +2,10 @@ module.exports = {
   
   devServer: {
     proxy: {
-      '/*.cgi' : {
+      '/*.cgi': {
         target: 'http://localhost/~rainbowsazaki/mtPADmDB/'
       },
-      '/*.cgi/*' : {
+      '/*.cgi/*': {
         target: 'http://localhost/~rainbowsazaki/mtPADmDB/'
       },
       '/monster*/*': {
@@ -16,4 +16,4 @@ module.exports = {
       }
     }
   }
-}
+};
