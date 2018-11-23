@@ -8,13 +8,10 @@ module.exports = {
       '/*.cgi/*' : {
         target: 'http://localhost/~rainbowsazaki/mtPADmDB/'
       },
-      '/*/*.json' : {
+      '/monster*/*': {
         target: 'http://localhost/~rainbowsazaki/mtPADmDB/'
       },
-      '/*/*.jpg' : {
-        target: 'http://localhost/~rainbowsazaki/mtPADmDB/'
-      },
-      '/*/*.png' : {
+      '/listJson/*': {
         target: 'http://localhost/~rainbowsazaki/mtPADmDB/'
       }
     }
