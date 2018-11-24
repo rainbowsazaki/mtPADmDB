@@ -1,0 +1,269 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "booleanTable": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "enum": [
+        0,
+        1,
+        null
+      ],
+      "default": null
+    },
+    "awaken": {
+      "type": [ "integer", "null" ],
+      "default": null,
+      "minimum": 0,
+      "maximum": 64
+    },
+    "monsterNo": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9999
+    },
+    "monsterNoCanUndefined": {
+      "$ref": "#/definitions/monsterNo",
+      "type": [ "integer", "null"],
+      "default": null
+    },
+    "param": {
+      "required": [
+        "hp",
+        "attack",
+        "recovery"
+      ],
+      "properties": {
+        "hp": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "title": "HP",
+          "default": null,
+          "minimum": 1,
+          "maximum": 99999
+        },
+        "attack": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "title": "攻撃",
+          "default": 1,
+          "minimum": 1,
+          "maximum": 99999
+        },
+        "recovery": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "title": "回復",
+          "default": null,
+          "minimum": -99999,
+          "maximum": 99999
+        }
+      }
+    },
+    "monster": {
+      "type": "object",
+      "title": "モンスター情報",
+      "required": [
+        "no",
+        "name",
+        "attributes",
+        "cost",
+        "rare",
+        "types",
+        "awakens",
+        "maxExp",
+        "maxLevel",
+        "maxParam",
+        "skill",
+        "leaderSkill",
+        "assist",
+        "overLimit",
+        "overLimitParam",
+        "superAwakens",
+        "evolutionType",
+        "evolution"
+      ],
+      "properties": {
+        "no": {
+          "title": "モンスター番号",
+          "$ref": "#/definitions/monsterNo"
+        },
+        "name": {
+          "title": "モンスター名",
+          "type": "string",
+          "examples": [
+            "ティラ"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "attributes": {
+          "title": "属性",
+          "type": "array",
+          "maxItems": 2,
+          "minItems": 1,
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "title": "属性",
+            "minimum": 0,
+            "maximum": 5
+          }
+        },
+        "cost": {
+          "title": "コスト",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null,
+          "minimum": 1,
+          "maximum": 999
+        },
+        "rare": {
+          "title": "レアリティ",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null,
+          "minimum": 1,
+          "maximum": 99
+        },
+        "types": {
+          "title": "タイプ",
+          "type": "array",
+          "maxItems": 3,
+          "minItems": 1,
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "default": null,
+            "minimum": 0,
+            "maximum": 12
+          }
+        },
+        "awakens": {
+          "title": "覚醒",
+          "type": "array",
+          "maxItems": 9,
+          "minItems": 0,
+          "items": {
+            "$ref": "#/definitions/awaken"
+          }
+        },
+        "maxExp": {
+          "title": "最大レベルに必要な経験値",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null,
+          "minimum": 0,
+          "maximum": 999999999
+        },
+        "maxLevel": {
+          "title": "最大レベル",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null,
+          "minimum": 1,
+          "maximum": 99
+        },
+        "maxParam": {
+          "title": "レベル最大時パラメータ",
+          "$ref": "#/definitions/param"
+        },
+        "skill": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "title": "スキル番号",
+          "default": null,
+          "minimum": 1
+        },
+        "leaderSkill": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "title": "リーダースキル番号",
+          "default": null,
+          "minimum": 1
+        },
+        "assist": {
+          "title": "アシスト可不可",
+          "$ref": "#/definitions/booleanTable"
+        },
+        "overLimit": {
+          "title": "限界突破可不可",
+          "$ref": "#/definitions/booleanTable"
+        },
+        "overLimitParam": {
+          "title": "限界突破時最大パラメータ",
+          "$ref": "#/definitions/param"
+        },
+        "superAwakens": {
+          "title": "超覚醒",
+          "type": "array",
+          "maxItems": 9,
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/awaken"
+          }
+        },
+        "evolutionType": {
+          "title": "進化種類",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null,
+          "minimum": 0,
+          "maximum": 5
+        },
+        "evolution": {
+          "title": "進化情報",
+          "type": "object",
+          "required": [
+            "baseNo",
+            "materials"
+          ],
+          "properties": {
+            "baseNo": {
+              "title": "進化元モンスター情報",
+              "$ref": "#/definitions/monsterNoCanUndefined"
+            },
+            "materials": {
+              "type": "array",
+              "title": "進化素材",
+              "items": {
+                "title": "進化素材",
+                "$ref": "#/definitions/monsterNoCanUndefined"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "title": "モンスター情報リスト",
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/monster"
+  }
+}
