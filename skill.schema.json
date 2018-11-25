@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "スキル情報リスト",
+  "patternProperties": {
+    "^[0-9]{1,5}$": {
+      "type": "object",
+      "title": "スキル情報",
+      "required": [
+        "name",
+        "description",
+        "no",
+        "maxLevel",
+        "baseTurn"
+      ],
+      "properties": {
+        "no": {
+          "type": "integer",
+          "title": "スキル番号",
+          "minimum": 1,
+          "maximum:": 99999
+        },
+        "name": {
+          "type": "string",
+          "title": "スキル名",
+          "default": "",
+          "pattern": "^(.*)$",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "maxLevel": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "title": "最大スキルレベル",
+          "default": null,
+          "minimum": 0,
+          "maximum": 99
+        },
+        "baseTurn": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "title": "レベル１時ターン数",
+          "default": null,
+          "minimum": 0,
+          "maximum": 199
+        },
+        "description": {
+          "type": "string",
+          "title": "内容説明",
+          "default": "",
+          "minLength": 0,
+          "maxLength": 200
+        }
+      }
+    }
+  }
+}
