@@ -93,8 +93,8 @@ sub run_sql_file {
   }
 }
 
-&run_sql_file('./db/monster.db', 'table.sql');
-&run_sql_file('./db/sub.db', 'table_sub.sql');
+&run_sql_file('./db/monster.db', './db/table.sql');
+&run_sql_file('./db/sub.db', './db/table_sub.sql');
 
 
 
