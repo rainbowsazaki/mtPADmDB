@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "リーダースキル情報リスト",
+  "patternProperties": {
+    "^[0-9]{1,5}$": {
+      "type": "object",
+      "title": "リーダースキル情報",
+      "required": [
+        "name",
+        "description",
+        "no",
+        "maxLevel",
+        "baseTurn"
+      ],
+      "properties": {
+        "no": {
+          "type": "integer",
+          "title": "リーダースキル番号",
+          "minimum": 1,
+          "maximum:": 99999
+        },
+        "name": {
+          "type": "string",
+          "title": "リーダースキル名",
+          "default": "",
+          "pattern": "^(.*)$",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "description": {
+          "type": "string",
+          "title": "内容説明",
+          "default": "",
+          "minLength": 0,
+          "maxLength": 200
+        }
+      }
+    }
+  }
+}
