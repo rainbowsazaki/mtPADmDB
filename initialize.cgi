@@ -58,7 +58,7 @@ sub run_sql_file {
   my ($db_path, $sql_path) = @_;
 
   if (-e $db_path) {
-    &addSuccess('DB file is exist.');
+    &addSuccess("DB '${db_path}' is exist.");
   } else {
 
     my $dbh = DBI->connect("dbi:SQLite:dbname=${db_path}");
@@ -87,7 +87,7 @@ sub run_sql_file {
     }
       
     if ($sql_error == 0) {
-      &addSuccess("Create DB ${db_path} is success.");
+      &addSuccess("Create DB '${db_path}' is success.");
       $dbh->commit;
     }
   }
