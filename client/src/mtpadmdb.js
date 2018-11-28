@@ -171,7 +171,7 @@ export const constData = {
     8: { name: '回復', senzaiKiller: [2, 6, 9, 10, 11, 12] },
     9: { name: '進化用', senzaiKiller: [] },
     10: { name: '能力覚醒用', senzaiKiller: [] },
-    11: { name: '合成強化用', senzaiKiller: [] },
+    11: { name: '強化合成用', senzaiKiller: [] },
     12: { name: '売却用', senzaiKiller: [] },
 
     null: { name: '不明', senzaiKiller: [] }
