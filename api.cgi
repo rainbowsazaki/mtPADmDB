@@ -826,9 +826,7 @@ sub update_disable_state {
   my @target_keys = keys %target_data;
   my @target_values = map { $target_data{$_} } @target_keys;
 
-  my $update_sql = "UPDATE  ${table_name} SET state= 0 WHERE " .
-    join(' AND ', map { "$_ = ?" } @target_keys) . ';';
-  $dbh->do($update_sql, undef, @target_values);
+  &update_table_data($dbh, $table_name, \%target_data, state => 0);
 }
 
 # モンスター情報一覧に必要なすべての情報の取得用配列を作成する。
