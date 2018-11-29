@@ -179,51 +179,20 @@ sub mode_image {
   my $dbh = &create_monster_db_dbh();
 
   # 既存画像がロックされていないか確認する。
-  my $check_sql = 'SELECT COUNT(*) FROM monster_image WHERE no = ? AND state = 2';
-  my $sth = $dbh->prepare($check_sql);
-  if (!$sth) {
-    $response_data->add_error('画像情報確認エラー:' . $dbh->errstr);
-  } else {
-    $sth->execute($no);
-
-    my $tbl_ary_ref = $sth->fetchrow_arrayref;
-    if ($tbl_ary_ref->[0] > 0) {
-      $response_data->add_error('このモンスターの画像はロックされています。');
-    }
+  my $table_ary_ref = &get_one_row_data($dbh, 'monster_image', [ 'COUNT(*)' ], (no => $no, state => 2 ));
+  if ($table_ary_ref->[0] > 0) {
+    $response_data->add_error('このモンスターの画像はロックされています。');
   }
-
   if (!$response_data->has_error) {
     # 既存の画像を無効化
-    $dbh->do('UPDATE monster_image SET state = 0 WHERE no = ? AND state = 1', undef, $no);
-
+    &update_disable_state($dbh, 'monster_image', (no => $no, state => 1));
     # 今回の投稿の情報をDBに登録
     my $ip_address = $ENV{'REMOTE_ADDR'};
-    $sth = $dbh->prepare(<<'EOS');
-INSERT INTO monster_image (
-  no, ipAddress, accountName, state
-) VALUES (
-  ?, ?, ?, ?
-);
-EOS
+    &insert_table_data($dbh, 'monster_image', (no => $no, ipAddress => $ip_address, accountName => '', state => 1));
 
-    my $id = -1;
-    if (!$sth) {
-      $response_data->add_error('画像情報登録エラー:' .  $dbh->errstr);
-    } else {
-      my $ret = $sth->execute($no, $ip_address, '', 1);
-
-      $sth = $dbh->prepare('SELECT MAX(id) FROM monster_image;');
-      $ret = $sth->execute();
-      if ($ret) {
-        my $tbl_ary_ref = $sth->fetchrow_arrayref;
-        $id = $tbl_ary_ref->[0];
-        
-      } else {
-        $response_data->add_error('モンスター情報登録エラー:' .  $sth->errstr);
-      }
-    }
-
-    if ($id != -1) {
+    my $tbl_ary_ref = &get_one_row_data($dbh, 'monster_image', [ 'MAX(id)' ]);
+    my $id = $tbl_ary_ref->[0];
+    if ($id >= 0) {
       # 画像を保存
       my $iconFileName = $q->param('icon');
       my $imageFileName = $q->param('image');
