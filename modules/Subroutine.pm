@@ -174,6 +174,37 @@ sub insert_table_data {
   return 1;
 }
 
+# テーブルに指定された内容のデータを更新する。
+#
+sub update_table_data {
+  my ($dbh, $table_name, $where_hash_ref, %update_data) = @_;
+
+  my @update_keys = keys %update_data;
+  my @update_values = map { $update_data{$_} } @update_keys;
+
+  my $update_sql = "UPDATE ${table_name} SET " . 
+    join ' AND ', map { "'$_' = ?" } @update_keys;
+  
+  my $where_values_ref = [];
+  if ($where_hash_ref) {
+    my $where_strings_ref;
+    ($where_strings_ref, $where_values_ref) = &create_where_sql_and_value($where_hash_ref);
+    my $where_string = join ' AND ', @$where_strings_ref;
+    if ($where_string) { $update_sql .= " WHERE ${where_string}"; }
+  }
+
+  my $sth = $dbh->prepare($update_sql);
+  if (!$sth) {
+    die $dbh->errstr;
+    return 0;
+  }
+  if (!$sth->execute(@update_values, @$where_values_ref)) {
+    die $sth->errstr;
+    return 0;
+  }
+  return 1;
+}
+
 # ハッシュデータをDBに格納するためのハッシュデータに変更する。
 #
 sub hash_to_table_data {
