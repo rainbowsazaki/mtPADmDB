@@ -1,4 +1,5 @@
 use strict;
+use utf8;
 
 # JSON と MessagePack で指定データを保存する。
 sub save_json_and_msgpack {
