@@ -93,7 +93,7 @@ export const commonData = {
 };
 
 export const constData = {
-  title: 'みんなで作るパズドラデータベース',
+  title: 'みんなで作るパズドラモンスターデータベース',
 
   /** ナビゲーションメニュー用データ */
   navis: [
