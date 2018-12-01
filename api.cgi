@@ -664,38 +664,25 @@ sub mode_update_monster_data {
       # 各テーブルの同データ確認・登録
 
       # 基本情報
-      my $monster_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'monster_base_data'});
-      my $monster_base_data_id = &get_one_row_data($dbh, 'monster_base_data', [ 'id' ], %$monster_check_data_ref);
-      if (!$monster_base_data_id) {
-        &insert_table_data($dbh, 'monster_base_data', %$monster_check_data_ref);
-        $monster_base_data_id = &get_one_row_data($dbh, 'monster_base_data', [ 'id' ], %$monster_check_data_ref);
-      }
-      $monster_base_data_id = $monster_base_data_id->[0];
+      my $ret = &set_db_sub_table($dbh, 'monster_base_data', $data);
+      my $monster_base_data_id = $ret->{no};
       
       # 限界突破情報
       my $over_limit_id = 0;
       if ($data->{overLimit} == 1) {
-        my $over_limit_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'over_limit'});
-        $over_limit_id = &get_one_row_data($dbh, 'over_limit', [ 'id' ], %$over_limit_check_data_ref);
-        if (!$over_limit_id) {
-          &insert_table_data($dbh, 'over_limit', %$over_limit_check_data_ref);
-          $over_limit_id = &get_one_row_data($dbh, 'over_limit', [ 'id' ], %$over_limit_check_data_ref);
-        }
-        $over_limit_id = $over_limit_id->[0];
+        $ret = &set_db_sub_table($dbh, 'over_limit', $data);
+        $over_limit_id = $ret->{no};
       }
 
       # 進化情報
       my $evolution_id = 0;
       my $is_update_evolution_table = 0;
       if ($data->{evolutionType} != 0 && $data->{evolutionType} != 99) {
-        my $evolution_check_data_ref = &hash_to_table_data($data, $monster_data_db_info{'evolution'});
-        $evolution_id = &get_one_row_data($dbh, 'evolution', [ 'id' ], %$evolution_check_data_ref);
-        if (!$evolution_id) {
-          &insert_table_data($dbh, 'evolution', %$evolution_check_data_ref);          
+        $ret = &set_db_sub_table($dbh, 'evolution', $data);
+        $evolution_id = $ret->{no};
+        if ($ret->{ret} == 0) {
           $is_update_evolution_table = 1;
-          $evolution_id = &get_one_row_data($dbh, 'evolution', [ 'id' ], %$evolution_check_data_ref);
         }
-        $evolution_id = $evolution_id->[0];
       }
 
       my %monster_data_table_data = (
@@ -777,6 +764,23 @@ sub mode_update_monster_data {
   }
 
   $response_data->set_data(\%outputData);
+}
+
+# モンスター情報のサブテーブルの更新確認を行う。
+sub set_db_sub_table {
+  my ($dbh, $table_name, $data) = @_;
+
+  my $check_data_ref = &hash_to_table_data($data, $monster_data_db_info{$table_name});
+  my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, [ 'id' ], %$check_data_ref);
+  
+  my $ret = 1;
+  if (!$tbl_ary_ref) {
+    &insert_table_data($dbh, $table_name, %$check_data_ref);
+    $tbl_ary_ref = &get_one_row_data($dbh, $table_name, [ 'id' ], %$check_data_ref);
+    $ret = 0;
+  }
+
+  return { ret => $ret, no => $tbl_ary_ref->[0] };
 }
 
 # テーブル内の指定条件を満たすレコードの state を 0 にする。
