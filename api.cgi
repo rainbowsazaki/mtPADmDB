@@ -416,7 +416,70 @@ sub mode_update_skill {
 
   $dbh->commit;
   $response_data->add_message("${type_name}データを更新しました。");
+}
 
+# スキル（リーダースキル）の登録・更新を行う。
+# $data に no プロパティがある場合は更新。ない場合は同一の名前のものを探し、あれば更新、なければ追加。
+sub set_skill_data {
+  my ($dbh, $is_leader_skill, $data) = @_;
+
+  my $table_name = ($is_leader_skill) ? 'leader_skill' : 'skill';
+
+  my @target_columns = qw/ no name description /;
+  if (!$is_leader_skill) {
+    push @target_columns, qw/ baseTurn maxLevel /;
+  }
+
+  # テーブルにある項目のみを取り出したハッシュを作成する。
+  my %target_data = ();
+  for my $column (@target_columns) {
+    $target_data{$column} = $data->{$column} if (exists $data->{$column});
+  }
+  
+  my $specify_no = (exists $data->{no});  # no が指定されているかどうか
+  my $search_column_names = ($specify_no) ? [ 'no' ] : [ 'name' ];
+  my %search_data = map { $_ => $data->{$_} } @$search_column_names;
+  my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, \@target_columns, (%search_data, state => 1));
+
+  if ($tbl_ary_ref) {
+    $target_data{no} = $tbl_ary_ref->[0];
+      # 同一内容か確認
+    my $is_equal = 1;
+    for my $i (1 .. $#target_columns) {
+      if ($tbl_ary_ref->[$i] ne $data->{$target_columns[$i]}) {
+        $is_equal = 0;
+        last;
+      }
+    }
+    # 　同じ場合は更新しない。
+    if ($is_equal) {
+      return { result => -2, data => \%target_data };
+    }
+  } else {
+    if ($specify_no) {
+      # 存在しない no が指定されたのでエラー。
+      return { result => -1, data => \%target_data };
+    } else {
+      # 新たな no を割り振る。
+      $tbl_ary_ref = &get_one_row_data($dbh, $table_name, [ 'MAX(no)' ]);
+      $target_data{no} = $tbl_ary_ref->[0] + 1;
+    }
+  }
+
+  my $ip_address = $ENV{'REMOTE_ADDR'};
+  my $account_name = '';
+
+  my %common_insert_data = (
+    comment => $data->{comment},
+    ipAddress => $ip_address,
+    accountName => $account_name,
+    state => 1
+  );
+  
+  &update_disable_state($dbh, $table_name, (no => $target_data{no}, state => 1));
+  &insert_table_data($dbh, $table_name, %target_data, %common_insert_data);
+
+  return { result => 0, data => \%target_data };
 }
 
 # スキル情報編集履歴取得モード
