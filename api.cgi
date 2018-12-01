@@ -613,51 +613,22 @@ sub mode_update_monster_data {
     my $dbh = &create_monster_db_dbh();
 
     my $is_update_monster_data = 0;
-    my $is_update_skill_table = 0;
-    my $is_update_leader_skill_table = 0;
+    my $updated_skill_data = undef;
+    my $updated_leader_skill_data = undef;
 
     # スキル
     if (!defined $data->{skill}) {
       #そのまま
     } elsif ($data->{skill} == 0) {
-      my $sth;
-
-      my %skill_check_data = map {
-        $_ => $data->{skillDetails}{$_}
-      } qw/ name description baseTurn maxLevel /;
-      $skill_check_data{state} = 1;
-      
-      # 同じ名前のスキルが無いか確認する。
-      my @get_columns = qw/ no name description baseTurn maxLevel /;
-      my $tbl_ary_ref = &get_one_row_data($dbh, 'skill', \@get_columns, ( name => $data->{skillDetails}{name}, state => 1 ) );
-      if ($tbl_ary_ref) {
-        my $skill_no = $tbl_ary_ref->[0];
-        # 同一内容か確認
-        my $is_equal = 1;
-        for my $i (1 .. $#get_columns) {
-          if ($tbl_ary_ref->[$i] ne $data->{skillDetails}{$get_columns[$i]}) {
-            $is_equal = 0;
-            last;
-          }
-        }
-        # 異なる場合は更新する。
-        if (!$is_equal) {  
-          &update_disable_state($dbh, 'skill', (no => $skill_no, state => 1));
-          &insert_table_data($dbh, 'skill', %skill_check_data, %common_insert_data, no => $skill_no);
-          $is_update_skill_table = 1;
-        }
-        $data->{skill} = $skill_no;
+      # 登録 or 更新
+      my $ret = &set_skill_data($dbh, 0, $data->{skillDetails});
+      if ($ret->{result} < 0) {
+        $response_data->add_error('スキル登録エラー');
       } else {
-        # 新たに登録するスキルに割り振る番号を求める
-        my $tbl_ary_ref = &get_one_row_data($dbh, 'skill', [ 'MAX(no)' ]);
-        my $skill_no = $tbl_ary_ref->[0] + 1;
-        
-        if (&insert_table_data($dbh, 'skill', %skill_check_data, %common_insert_data, no => $skill_no)) {
-          $data->{skill} = $skill_no;
-          $is_update_skill_table = 1;
-        } else {
-          $response_data->add_error('スキル登録エラー');
+        if ($ret->{result} == 0) {
+          $updated_skill_data = $ret->{data};
         }
+        $data->{skill} = $ret->{data}{no};
       }
     } else {
       # 指定された番号のスキルが有るか確認
@@ -670,44 +641,15 @@ sub mode_update_monster_data {
     if (!defined $data->{leaderSkill}) {
       # そのまま
     } elsif ($data->{leaderSkill} == 0) {
-      my $sth;
-
-      my %leader_skill_check_data = map {
-        $_ => $data->{leaderSkillDetails}{$_}
-      } qw/ name description /;
-      $leader_skill_check_data{state} = 1;
-
-      # 同じ名前のスキルが無いか確認する。
-      my @get_columns = qw/ no name description /;
-      my $tbl_ary_ref = &get_one_row_data($dbh, 'leader_skill', \@get_columns, ( name => $data->{leaderSkillDetails}{name}, state => 1 ) );
-      if ($tbl_ary_ref) {
-        my $leader_skill_no = $tbl_ary_ref->[0];
-        # 同一内容か確認
-        my $is_equal = 1;
-        for my $i (1 .. $#get_columns) {
-          if ($tbl_ary_ref->[$i] ne $data->{leaderSkillDetails}{$get_columns[$i]}) {
-            $is_equal = 0;
-            last;
-          }
-        }
-        # 異なる場合は更新する。
-        if (!$is_equal) {  
-          &update_disable_state($dbh, 'leader_skill', (no => $leader_skill_no, state => 1));
-          &insert_table_data($dbh, 'leader_skill', %leader_skill_check_data, %common_insert_data, no => $leader_skill_no);
-          $is_update_leader_skill_table = 1;
-        }
-        $data->{leaderSkill} = $leader_skill_no;
+      # 登録 or 更新
+      my $ret = &set_skill_data($dbh, 1, $data->{leaderSkillDetails});
+      if ($ret->{result} < 0) {
+        $response_data->add_error('リーダースキル登録エラー');
       } else {
-        # 新たに登録するスキルに割り振る番号を求める
-        my $tbl_ary_ref = &get_one_row_data($dbh, 'leader_skill', [ 'MAX(no)' ]);
-        my $leader_skill_no = $tbl_ary_ref->[0] + 1;
-
-        if (&insert_table_data($dbh, 'leader_skill', %leader_skill_check_data, %common_insert_data, no => $leader_skill_no)) {
-          $data->{leaderSkill} = $leader_skill_no;
-          $is_update_leader_skill_table = 1;
-        } else {
-          $response_data->add_error('リーダースキル登録エラー');
+        if ($ret->{result} == 0) {
+          $updated_leader_skill_data = $ret->{data};
         }
+        $data->{leaderSkill} = $ret->{data}{no};
       }
     } else {
       # 指定された番号のリーダースキルがあるか確認
@@ -766,7 +708,7 @@ sub mode_update_monster_data {
 
       $is_update_monster_data = !&check_same_table_data($dbh, 'monster_data', %monster_data_table_data);
 
-      if (!($is_update_monster_data || $is_update_skill_table || $is_update_leader_skill_table)) {
+      if (!($is_update_monster_data || $updated_skill_data || $updated_leader_skill_data)) {
         $response_data->add_error('同一内容で登録されています');
       } else {
         # データ更新。
@@ -800,10 +742,10 @@ sub mode_update_monster_data {
 
           &save_monster_list_json($dbh);
         }
-        if ($is_update_skill_table) {
+        if ($updated_skill_data) {
           &save_skill_list_json($dbh);
         }
-        if ($is_update_leader_skill_table) {
+        if ($updated_leader_skill_data) {
           &save_leader_skill_list_json($dbh);
         }
         if ($is_update_evolution_table) {
@@ -819,24 +761,14 @@ sub mode_update_monster_data {
           $outputData{newTableData}{monster} = { $data->{no} => \%to_json_data };
         }
 
-        if ($is_update_skill_table) {
+        if ($updated_skill_data) {
           $outputData{newTableData}{skillDetails} = {
-            $data->{skill} => {
-              no => $data->{skill},
-              name => $data->{skillDetails}{name},
-              description => $data->{skillDetails}{description},
-              baseTurn => $data->{skillDetails}{baseTurn},
-              maxLevel => $data->{skillDetails}{maxLevel}
-            }
+            $updated_skill_data->{no} => $updated_skill_data
           };
         }
-        if ($is_update_leader_skill_table) {
+        if ($updated_leader_skill_data) {
           $outputData{newTableData}{leaderSkillDetails} = {
-            $data->{leaderSkill} => {
-              no => $data->{leaderSkill},
-              name => $data->{leaderSkillDetails}{name},
-              description => $data->{leaderSkillDetails}{description}
-            }
+            $updated_leader_skill_data->{no} => $updated_leader_skill_data
           };
         }
       }
