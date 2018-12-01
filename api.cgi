@@ -358,7 +358,7 @@ sub mode_update_skill {
   if ($ret->{result} == -1) {
     $response_data->add_error("指定された番号の${type_name}は存在していません。");
     return;
-  } elsif ($ret->{result} == -2) {
+  } elsif ($ret->{result} == 1) {
     $response_data->add_error('同じデータで登録されています。');
     return;
   }
@@ -417,7 +417,7 @@ sub set_skill_data {
     }
     # 　同じ場合は更新しない。
     if ($is_equal) {
-      return { result => -2, data => \%target_data };
+      return { result => 1, data => \%target_data };
     }
   } else {
     if ($specify_no) {
