@@ -422,7 +422,7 @@ sub set_skill_data {
   } else {
     if ($specify_no) {
       # 存在しない no が指定されたのでエラー。
-      return { result => -1, data => \%target_data };
+      return { result => -1 };
     } else {
       # 新たな no を割り振る。
       $tbl_ary_ref = &get_one_row_data($dbh, $table_name, [ 'MAX(no)' ]);
