@@ -350,60 +350,24 @@ sub mode_update_skill {
 
   my $is_leader_skill = $data->{isLeaderSkill};
 
-  my $table_name = ($is_leader_skill) ? 'leader_skill' : 'skill';
   my $type_name = ($is_leader_skill) ? 'リーダースキル' : 'スキル';
-  my $response_propaty_name = ($is_leader_skill) ? 'leaderSkillDetails' : 'skillDetails';
   my $dbh = &create_monster_db_dbh();
 
-  my @get_columns = qw/ no name description /;
-  
-  if (!$is_leader_skill) {
-    push @get_columns, qw/ baseTurn maxLevel /;
-  }
+  my $ret = &set_skill_data($dbh, $is_leader_skill, $data->{updateData});
 
-  my $tbl_ary_ref = &get_one_row_data($dbh, $table_name, \@get_columns, ( no => $data->{updateData}{no}, state => 1 ) );
-  if (!$tbl_ary_ref) {
+  if ($ret->{result} == -1) {
     $response_data->add_error("指定された番号の${type_name}は存在していません。");
     return;
-  }
-  
-  my $skill_no = $tbl_ary_ref->[0];
-  # 同一内容か確認
-  my $is_equal = 1;
-  for my $i (1 .. $#get_columns) {
-    if ($tbl_ary_ref->[$i] ne $data->{updateData}{$get_columns[$i]}) {
-      $is_equal = 0;
-      last;
-    }
-  }
-  # 　同じ場合は更新しない。
-  if ($is_equal) {
+  } elsif ($ret->{result} == -2) {
     $response_data->add_error('同じデータで登録されています。');
     return;
   }
 
-  my $ip_address = $ENV{'REMOTE_ADDR'};
-  my $account_name = '';
-
-  my %common_insert_data = (
-    comment => $data->{updateData}{comment},
-    ipAddress => $ip_address,
-    accountName => $account_name,
-    state => 1
-  );
-  # テーブルにある項目のみを取り出したハッシュを作成する。
-  my %update_data = ();
-  for my $column (@get_columns) {
-    $update_data{$column} = $data->{updateData}{$column};
-  }
-  
-  &update_disable_state($dbh, $table_name, (no => $update_data{no}, state => 1));
-  &insert_table_data($dbh, $table_name, %update_data, %common_insert_data);
-  
+  my $response_propaty_name = ($is_leader_skill) ? 'leaderSkillDetails' : 'skillDetails';
   $response_data->set_data({
     newTableData=> {
       $response_propaty_name => {
-        $update_data{no} => \%update_data
+        $ret->{data}{no} => $ret->{data}
       }
     }
   });
