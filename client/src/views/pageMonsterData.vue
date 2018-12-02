@@ -54,6 +54,17 @@
               </li>
             </ul>
           </td></tr>
+          <template class="row" v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length">
+            <tr class="thead-light"><th colspan="3">超覚醒</th></tr>
+            <tr><td colspan="3">
+              <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
+                <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;" :key="`superAwaken${superAwaken}`">
+                  <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
+                  <span v-else>不明</span>
+                </li>
+              </ul>
+            </td></tr>
+          </template>
           <template>
             <tr class="thead-light"><th colspan="3">振れる潜在キラー</th></tr>
             <tr>
@@ -118,21 +129,6 @@
       </div>
     </div>
 
-    <div class="row" v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length">
-      <div class="col-12">
-        <table class="table table-bordered table-sm">
-          <tr class="thead-light"><th>超覚醒</th></tr>
-          <tr><td>
-            <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
-              <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;" :key="`superAwaken${superAwaken}`">
-                <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
-                <span v-else>不明</span>
-              </li>
-            </ul>
-          </td></tr>
-        </table>
-      </div>
-    </div>
     <div v-if="monsterData.evolutionType !== 0">
       <h3 class="h4">このモンスターへの進化</h3>
       <table class="table table-bordered table-sm">
