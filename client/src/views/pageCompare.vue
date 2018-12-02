@@ -80,126 +80,41 @@
               <span v-else>なし</span>
             </td>
           </tr>
-          
-          <tr class="thead-light">
-            <th>HP</th>
-            <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ data.maxParam.hp | nullToUndefined | addComma }}</td>
-          </tr>
-          <tr class="thead-light">
-            <th>攻撃</th>
-            <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ data.maxParam.attack | nullToUndefined | addComma }}</td>
-          </tr>
-          <tr class="thead-light">
-            <th>回復</th>
-            <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ data.maxParam.recovery | nullToUndefined | addComma }}</td>
-          </tr>
+          <compare-tr head="HP" :monster-datas="monsterDatas" :func="(data) => data.maxParam.hp" />
+          <compare-tr head="攻撃" :monster-datas="monsterDatas" :func="(data) => data.maxParam.attack" />
+          <compare-tr head="回復" :monster-datas="monsterDatas" :func="(data) => data.maxParam.recovery" />
           <template v-if="hasOverLimit">
             <tr class="thead-light">
               <th :colspan="monsterDatas.length + 1">限界突破時</th>
             </tr>
-            <tr class="thead-light">
-              <th>HP</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">
-                <span v-if="data.overLimit">{{ data.overLimitParam.hp | nullToUndefined | addComma }}</span>
-                <span v-else>−</span>
-              </td>
-            </tr>
-            <tr class="thead-light">
-              <th>攻撃</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">
-                <span v-if="data.overLimit">{{ data.overLimitParam.attack | nullToUndefined | addComma }}</span>
-                <span v-else>−</span>
-              </td>
-            </tr>
-            <tr class="thead-light">
-              <th>回復</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">
-                <span v-if="data.overLimit">{{ data.overLimitParam.recovery | nullToUndefined | addComma }}</span>
-                <span v-else>−</span>
-              </td>
-            </tr>
+            <compare-tr head="HP" :monster-datas="monsterDatas" :func="(data) => data.overLimit ? data.overLimitParam.hp : '-'" />
+            <compare-tr head="攻撃" :monster-datas="monsterDatas" :func="(data) => data.overLimit ? data.overLimitParam.attack : '-'" />
+            <compare-tr head="回復" :monster-datas="monsterDatas" :func="(data) => data.overLimit ? data.overLimitParam.recovery : '-'" />
           </template>
           <template v-if="hasWay || hasComboUp || hasSpComboUp || canA3x3Compare">
             <tr class="thead-light">
               <th :colspan="monsterDatas.length + 1">レベル最大 攻撃+99時 覚醒反映ダメージ （コンボ倍率除く）</th>
             </tr>
-            <tr v-if="hasWay" class="thead-light">
-              <th>4個消し</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasLJi" class="thead-light">
-              <th>L字消し</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasComboUp" class="thead-light">
-              <th>3個消し 7コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * eraseDropCountRate(3) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasSpComboUp" class="thead-light">
-              <th>3個消し 10コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * eraseDropCountRate(3) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasWay && hasComboUp" class="thead-light">
-              <th>4個消し 7コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasWay && hasSpComboUp" class="thead-light">
-              <th>4個消し 10コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasLJi && hasComboUp" class="thead-light">
-              <th>L字消し 7コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasLJi && hasSpComboUp" class="thead-light">
-              <th>L字消し 10コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="canA3x3Compare" class="thead-light">
-              <th>無効貫通</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">
-                <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) * a3x3AttackRate(data) | ceil | nullToUndefined | addComma }}</span>
-                <span v-else>−</span>
-              </td>
-            </tr>
-            <tr v-if="canA3x3Compare && hasComboUp" class="thead-light">
-              <th>無効貫通 7コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">
-                <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * eraseDropCountRate(9) * a3x3AttackRate(data) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</span>
-                <span v-else>−</span>
-              </td>
-            </tr>
+            <compare-tr v-if="hasWay" head="4個消し" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data)" />
+            <compare-tr v-if="hasLJi" head="L個消し" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data)" />
+            <compare-tr v-if="hasComboUp" head="3個消し 7コンボ" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * eraseDropCountRate(3) * comboUpAttackRate(data)" />
+            <compare-tr v-if="hasSpComboUp" head="3個消し 10コンボ" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * eraseDropCountRate(3) * comboUpAttackRate(data) * spComboUpAttackRate(data)" />
+            <compare-tr v-if="hasWay && hasComboUp" head="4個消し 7コンボ" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data) * comboUpAttackRate(data)" />
+            <compare-tr v-if="hasWay && hasSpComboUp" head="4個消し 10コンボ" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * eraseDropCountRate(4) * wayAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data)" />
+            <compare-tr v-if="hasLJi && hasComboUp" head="L個消し 7コンボ" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data) * comboUpAttackRate(data)" />
+            <compare-tr v-if="hasLJi && hasSpComboUp" head="L個消し 10コンボ" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * eraseDropCountRate(5) * lJiAttackRate(data) * comboUpAttackRate(data) * spComboUpAttackRate(data)" />
+            <compare-tr v-if="canA3x3Compare" head="無効貫通" :monster-datas="monsterDatas" :func="(data) => HasA3x3Awaken(data) ? maxAttack(data) * eraseDropCountRate(9) * a3x3AttackRate(data) : '-'" />
+            <compare-tr v-if="canA3x3Compare && hasComboUp" head="無効貫通 7コンボ" :monster-datas="monsterDatas" :func="(data) => HasA3x3Awaken(data) ? maxAttack(data) * eraseDropCountRate(9) * a3x3AttackRate(data) * comboUpAttackRate(data) : '-'" />
           </template>
           <template v-if="hasWay || canA3x3Compare">
             <tr class="thead-light">
               <th :colspan="monsterDatas.length + 1">レベル最大 攻撃+99時 覚醒反映複合消しダメージ （コンボ倍率除く）</th>
             </tr>
-            <tr v-if="hasWay" class="thead-light">
-              <th>4+3個消し</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasWay && hasComboUp" class="thead-light">
-              <th>4+3個消し 7コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="hasWay && hasSpComboUp" class="thead-light">
-              <th>4+3個消し 10コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">{{ maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) * spComboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</td>
-            </tr>
-            <tr v-if="canA3x3Compare" class="thead-light">
-              <th>無効貫通+3個</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">
-                <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) | ceil | nullToUndefined | addComma }}</span>
-                <span v-else>−</span>
-              </td>
-            </tr>
-            <tr v-if="canA3x3Compare && hasComboUp" class="thead-light">
-              <th>無効貫通+3個 7コンボ</th>
-              <td v-for="(data, n) in monsterDatas" class="text-right" :key="`monsterNo${n}`">
-                <span v-if="HasA3x3Awaken(data)">{{ maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) | ceil | nullToUndefined | addComma }}</span>
-                <span v-else>−</span>
-              </td>
-            </tr>
+            <compare-tr v-if="hasWay" head="4+3個消し" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3))" />
+            <compare-tr v-if="hasWay && hasComboUp" head="4+3個消し 7コンボ" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data)" />
+            <compare-tr v-if="hasWay && hasSpComboUp" head="4+3個消し 10コンボ" :monster-datas="monsterDatas" :func="(data) => maxAttack(data) * (eraseDropCountRate(4) * wayAttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) * spComboUpAttackRate(data)" />
+            <compare-tr v-if="canA3x3Compare" head="無効貫通+3個" :monster-datas="monsterDatas" :func="(data) => HasA3x3Awaken(data) ? maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) : '-'" />
+            <compare-tr v-if="canA3x3Compare && hasComboUp" head="無効貫通+3個 7コンボ" :monster-datas="monsterDatas" :func="(data) => HasA3x3Awaken(data) ? maxAttack(data) * (eraseDropCountRate(9) * a3x3AttackRate(data) + eraseDropCountRate(3)) * comboUpAttackRate(data) : '-'" />
           </template>
         </table>
       </div>
@@ -251,14 +166,6 @@ export default {
   pageTitle: function () {
     if (!this.isEnableMonsterDatas) { return 'モンスター比較'; }
     return 'モンスター比較 ' + this.targets.map(no => (this.monsterTable[no] || {}).name).join(',');
-  },
-  filters: {
-    /** 少数点以下を切り上げるフィルタ */
-    ceil: Math.ceil,
-    /** パラメータが null の場合に 不明 と表示するためのフィルタ */
-    nullToUndefined: function (val) {
-      return (val === null || isNaN(val)) ? '不明' : val;
-    }
   },
   components: {
     // 値比較の行用のコンポーネント。
