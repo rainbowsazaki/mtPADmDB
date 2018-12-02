@@ -260,6 +260,54 @@ export default {
       return (val === null || isNaN(val)) ? '不明' : val;
     }
   },
+  components: {
+    // 値比較の行用のコンポーネント。
+    compareTr: {
+      props: {
+        head: {
+          type: String,
+          required: true
+        },
+        monsterDatas: {
+          type: Array,
+          required: true
+        },
+        func: {
+          type: Function,
+          required: true
+        }
+      },
+      filters: {
+        /** 数値の少数点以下を切り上げるフィルタ */
+        ceil: function (val) {
+          if (typeof val !== 'number') { return val; }
+          return Math.ceil(val);
+        },
+        /** パラメータが null か NaN の場合に 不明 と表示するためのフィルタ */
+        nullToUndefined: function (val) {
+          return (val === null || (typeof val === 'number' && isNaN(val))) ? '不明' : val;
+        }
+      },
+      render: function (createElement) {
+        const elms = [createElement('th', this.head)];
+        for (const i in this.monsterDatas) {
+          const data = this.monsterDatas[i];
+          let text = this.func(data);
+          for (const filterName of ['nullToUndefined', 'ceil', 'addComma']) {
+            const filter = this.$options.filters[filterName] || Vue.filter(filterName);
+            if (filter) { text = filter(text); }
+          }
+          elms.push(createElement('td', {
+            attrs: {
+              class: 'text-right',
+              key: `monsterNos${i}`
+            }
+          }, text));
+        }
+        return createElement('tr', { attrs: { class: 'thead-light' }}, elms);
+      }
+    }
+  },
   props: {
     nos: {
       type: String,
