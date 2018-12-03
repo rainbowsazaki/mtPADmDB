@@ -9,6 +9,7 @@ const PageMonsterList = () => import('./views/pageMonsterList.vue');
 const PagePic = () => import('./views/pagePic.vue');
 const PageSkillDetails = () => import('./views/pageSkillDetails.vue');
 const PageSkillList = () => import('./views/pageSkillList.vue');
+const PageRaniking = () => import('./views/pageRanking.vue');
 
 import { getRouterBase } from './mtpadmdb.js';
 
@@ -114,6 +115,12 @@ export default new Router({
       path: '/leaderSkillHistory/:id',
       name: 'leaderSkillDetailsHistory',
       component: PageSkillDetails,
+      props: true
+    },
+    {
+      path: '/ranking',
+      name: 'ranking',
+      component: PageRaniking,
       props: true
     },
     
