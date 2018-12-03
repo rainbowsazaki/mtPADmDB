@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>{{ rankingSetting.title }}ランキング</h2>
+    <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
     <table class="table table-bordered table-sm">
       <tr class="thead-light">
@@ -36,6 +37,7 @@ export default {
     return {
       rankingSetting: {
         title: '最大レベル時HP',
+        description: 'モンスターのレベル最大時のHPのランキングです。',
         columns: [
           { name: 'HP', func: data => data.maxParam.hp },
           { name: '攻撃', func: data => data.maxParam.attack },
