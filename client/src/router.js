@@ -118,7 +118,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/ranking',
+      path: '/ranking/:id?',
       name: 'ranking',
       component: PageRaniking,
       props: true

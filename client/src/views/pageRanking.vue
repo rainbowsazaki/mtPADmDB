@@ -36,9 +36,16 @@ export default {
   pageTitle: function () {
     return this.rankingSetting.title + 'ランキング';
   },
+  props: {
+    id: {
+      type: String,
+      default: null
+    }
+  },
   /** ランキング設定の配列。 */
   rankingSettings: [
     {
+      id: 'hp',
       title: 'HP',
       description: 'モンスターのレベル最大時のHPのランキングです。',
       columns: [
@@ -49,6 +56,7 @@ export default {
       sortColumn: 0
     },
     {
+      id: 'attack',
       title: '攻撃',
       description: 'モンスターのレベル最大時の攻撃のランキングです。',
       columns: [
@@ -84,7 +92,30 @@ export default {
     }
   },
   watch: {
-    rankingSetting: '$_mixinForPage_updateTitle'
+    rankingSetting: '$_mixinForPage_updateTitle',
+    rankingSettingIndex: function () {
+      this.$router.push({ name: this.$route.name, params: { id: this.rankingSetting.id }});
+    },
+    '$route': 'selectSettingFromId'
+  },
+  created: function () {
+    this.selectSettingFromId();
+  },
+  methods: {
+    /** プロパティの id に指定された値を元に、使用するランキング設定を選択する。 */
+    selectSettingFromId: function () {
+      if (this.id === null) {
+        this.rankingSettingIndex = 0;
+      } else {
+        for (const i in this.rankingSettings) {
+          const setting = this.rankingSettings[i];
+          if (setting.id === this.id) {
+            this.rankingSettingIndex = i;
+            break;
+          }
+        }
+      }
+    }
   }
 };
 
