@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { constData } from '../mtpadmdb.js';
 
 /**
  * モンスターのパラメータなどのランク付けを行うページのコンポーネント。
@@ -76,19 +77,78 @@ export default {
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
     imageTable () { return this.$store.state.imageTable; },
+    awakenTable () { return constData.awakenTable; },
 
     /** 現在使用するランキング設定。 */
     rankingSetting () { return this.$options.rankingSettings[this.rankingSettingIndex]; },
     /** 現在の設定でのランキング結果を格納した配列。 */
     rankInfos () {
       const rankInfos = [];
-      for (const key in this.monsterTable) {
-        const data = this.monsterTable[key];
+      for (const key in this.wrapedMonsterDataArray) {
+        const data = this.wrapedMonsterDataArray[key];
         rankInfos.push({ columns: this.rankingSetting.columns.map(o => o.func(data)), data: data });
       }
       const sortColumn = this.rankingSetting.sortColumn;
       rankInfos.sort((a, b) => b.columns[sortColumn] - a.columns[sortColumn]);
       return rankInfos;
+    },
+    /** 覚醒発動時の効果のレートを取得する機能を追加したモンスター情報オブジェクトの配列。 */
+    wrapedMonsterDataArray: function () {
+      const awakenTable = this.awakenTable;
+      const getterBase = {
+        /** 指定された覚醒発動時のレートを算出する。 */
+        culcAwakenRate: function (awakenNo) {
+          return Math.pow(awakenTable[awakenNo].rate, this.awakenObj[awakenNo] | 0);
+        },
+        /** ２体攻撃発動時の攻撃力レートを取得する。 */
+        get wayAttackRate () {
+          return this.culcAwakenRate(27);
+        },
+        /** L字攻撃発動時の攻撃力レートを取得する。 */
+        get lJiAttackRate () {
+          return this.culcAwakenRate(60);
+        },
+        /** コンボ強化発動時の攻撃力レートを取得する。 */
+        get comboUpAttackRate () {
+          return this.culcAwakenRate(43);
+        },
+        /** 超コンボ強化発動時の攻撃力レートを取得する。 */
+        get spComboUpAttackRate () {
+          return this.culcAwakenRate(61);
+        },
+        /** ダメージ無効貫通発動時の攻撃力レートを取得する。 */
+        get a3x3AttackRate () {
+          return this.culcAwakenRate(48);
+        },
+        /** HP80%以上強化発動時の攻撃力レートを取得する。 */
+        get over80AttackRate () {
+          return this.culcAwakenRate(30);
+        },
+        /** HP50%以下強化発動時の攻撃力レートを取得する。 */
+        get under50AttackRate () {
+          return this.culcAwakenRate(30);
+        },
+        /** マルチブースト発動時のレートを取得する。 */
+        get multiBoostRate () {
+          return this.culcAwakenRate(30);
+        }
+      };
+      const array = [];
+      for (const key in this.monsterTable) {
+        const data = this.monsterTable[key];
+        const subData = Object.create(getterBase);
+        subData.awakenObj = {};
+        for (const awaken of data.awakens) {
+          subData.awakenObj[awaken] = (subData.awakenObj[awaken] || 0) + 1;
+        }
+        const handler = {
+          get: function (target, name) {
+            return (name in target) ? target[name] : subData[name];
+          }
+        };
+        array.push(new Proxy(data, handler));
+      }
+      return array;
     }
   },
   watch: {
