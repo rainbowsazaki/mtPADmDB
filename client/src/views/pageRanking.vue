@@ -167,8 +167,8 @@ export default {
       if (this.id === null) {
         this.rankingSettingIndex = 0;
       } else {
-        for (const i in this.rankingSettings) {
-          const setting = this.rankingSettings[i];
+        for (const i in this.$options.rankingSettings) {
+          const setting = this.$options.rankingSettings[i];
           if (setting.id === this.id) {
             this.rankingSettingIndex = i;
             break;
