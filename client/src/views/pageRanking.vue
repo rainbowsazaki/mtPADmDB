@@ -48,24 +48,68 @@ export default {
     {
       id: 'hp',
       title: 'HP',
-      description: 'モンスターのレベル最大時のHPのランキングです。',
+      description: 'モンスターのレベル最大・+297・全覚醒時のHPのランキングです。',
       columns: [
-        { name: 'HP', func: data => data.maxParam.hp },
-        { name: '攻撃', func: data => data.maxParam.attack },
-        { name: '回復', func: data => data.maxParam.recovery }
+        { name: 'HP', func: data => data.hyperMaxParam.hp },
+        { name: '攻撃', func: data => data.hyperMaxParam.attack },
+        { name: '回復', func: data => data.hyperMaxParam.recovery }
       ],
       sortColumn: 0
     },
     {
       id: 'attack',
       title: '攻撃',
-      description: 'モンスターのレベル最大時の攻撃のランキングです。',
+      description: 'モンスターのレベル最大・+297・全覚醒時の攻撃のランキングです。',
       columns: [
-        { name: 'HP', func: data => data.maxParam.hp },
-        { name: '攻撃', func: data => data.maxParam.attack },
-        { name: '回復', func: data => data.maxParam.recovery }
+        { name: 'HP', func: data => data.hyperMaxParam.hp },
+        { name: '攻撃', func: data => data.hyperMaxParam.attack },
+        { name: '回復', func: data => data.hyperMaxParam.recovery }
       ],
       sortColumn: 1
+    },
+    {
+      id: 'recovery',
+      title: '回復',
+      description: 'モンスターのレベル最大・+297・全覚醒時の回復のランキングです。',
+      columns: [
+        { name: 'HP', func: data => data.hyperMaxParam.hp },
+        { name: '攻撃', func: data => data.hyperMaxParam.attack },
+        { name: '回復', func: data => data.hyperMaxParam.recovery }
+      ],
+      sortColumn: 2
+    },
+    {
+      id: 'overLimitHp',
+      title: '限界突破 HP',
+      description: 'モンスターの限界突破orレベル最大・+297・全覚醒時のHPのランキングです。',
+      columns: [
+        { name: 'HP', func: data => data.hyperOverLimitParam.hp },
+        { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
+        { name: '回復', func: data => data.hyperOverLimitParam.recovery }
+      ],
+      sortColumn: 0
+    },
+    {
+      id: 'overLimitAttack',
+      title: '限界突破 攻撃',
+      description: 'モンスターの限界突破orレベル最大・+297・全覚醒時の攻撃のランキングです。',
+      columns: [
+        { name: 'HP', func: data => data.hyperOverLimitParam.hp },
+        { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
+        { name: '回復', func: data => data.hyperOverLimitParam.recovery }
+      ],
+      sortColumn: 1
+    },
+    {
+      id: 'overLimitRecovery',
+      title: '限界突破 回復',
+      description: 'モンスターの限界突破orレベル最大・+297・全覚醒時の回復のランキングです。',
+      columns: [
+        { name: 'HP', func: data => data.hyperOverLimitParam.hp },
+        { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
+        { name: '回復', func: data => data.hyperOverLimitParam.recovery }
+      ],
+      sortColumn: 2
     }
   ],
   data: function () {
