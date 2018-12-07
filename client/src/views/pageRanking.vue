@@ -131,12 +131,60 @@ export default {
         /** マルチブースト発動時のレートを取得する。 */
         get multiBoostRate () {
           return this.culcAwakenRate(30);
+        },
+        /** 指定されたベースのパラメータを、+297・全覚醒状ののものにする。 */
+        culcHyperParam: function (baseParam) {
+          let hp = NaN;
+          let attack = NaN;
+          let recovery = NaN;
+          if (baseParam.hp !== null) {
+            hp = baseParam.hp + 990 + (this.awakenObj[1] || 0) * awakenTable[1].value;
+          }
+          if (baseParam.attack !== null) {
+            attack = baseParam.attack + 495 + (this.awakenObj[2] || 0) * awakenTable[2].value;
+          }
+          if (baseParam.recovery != null) {
+            recovery = baseParam.recovery + 297 + (this.awakenObj[3] || 0) * awakenTable[3].value;
+          }
+          return {
+            hp: hp,
+            attack: attack,
+            recovery: recovery
+          };
+        },
+        /** 指定されたモンスターデータの、レベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
+        get hyperMaxParam () {
+          const propName = 'hyperMaxParam';
+          const cache = this.cache;
+          if (!cache[propName]) {
+            const param = this.baseData.maxParam;
+            cache[propName] = this.culcHyperParam(param);
+          }
+          return cache[propName];
+        },
+        /** 指定されたモンスターデータの、限界突破orレベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
+        get hyperOverLimitParam () {
+          const propName = 'hyperOverLimitParam';
+          const cache = this.cache;
+          if (!cache[propName]) {
+            const overLimitParam = this.baseData.overLimitParam;
+            if (this.baseData.overLimit &&
+                (overLimitParam.hp !== null || overLimitParam.attack !== null || overLimitParam.recovery !== null)
+            ) {
+              cache[propName] = this.culcHyperParam(overLimitParam);
+            } else {
+              cache[propName] = this.hyperMaxParam;
+            }
+          }
+          return cache[propName];
         }
       };
       const array = [];
       for (const key in this.monsterTable) {
         const data = this.monsterTable[key];
         const subData = Object.create(getterBase);
+        subData.baseData = data;
+        subData.cache = {};
         subData.awakenObj = {};
         for (const awaken of data.awakens) {
           subData.awakenObj[awaken] = (subData.awakenObj[awaken] || 0) + 1;
