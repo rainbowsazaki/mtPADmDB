@@ -212,7 +212,7 @@ export const constData = {
 
   awakenTable: {
     0: { name: 'なし', description: '' },
-    1: { name: 'HP強化', description: 'HPが500アップする', value: 50 },
+    1: { name: 'HP強化', description: 'HPが500アップする', value: 500 },
     2: { name: '攻撃強化', description: '攻撃力が100アップする', value: 100 },
     3: { name: '回復強化', description: '回復力が200アップする', value: 200 },
     4: { name: '火ダメージ軽減', description: '火属性の敵から\n受けるダメージを軽減する', rate: 0.05 },
