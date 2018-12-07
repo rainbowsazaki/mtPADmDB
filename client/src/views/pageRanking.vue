@@ -79,6 +79,18 @@ export default {
       sortColumn: 2
     },
     {
+      id: 'plus',
+      title: 'プラス換算値',
+      description: 'モンスターのレベル最大・全覚醒時のプラス換算値のランキングです。',
+      columns: [
+        { name: 'HP', func: data => data.hyperMaxParam.hp - 990 },
+        { name: '攻撃', func: data => data.hyperMaxParam.attack - 495 },
+        { name: '回復', func: data => data.hyperMaxParam.recovery - 297 },
+        { name: '+換算', func: data => (data.hyperMaxParam.hp / 10 + data.hyperMaxParam.attack / 5 + data.hyperMaxParam.recovery / 3 - 297).toFixed(1) }
+      ],
+      sortColumn: 3
+    },
+    {
       id: 'overLimitHp',
       title: '限界突破 HP',
       description: 'モンスターの限界突破orレベル最大・+297・全覚醒時のHPのランキングです。',
@@ -110,6 +122,18 @@ export default {
         { name: '回復', func: data => data.hyperOverLimitParam.recovery }
       ],
       sortColumn: 2
+    },
+    {
+      id: 'overLimitPlus',
+      title: '限界突破 プラス換算値',
+      description: 'モンスターの限界突破orレベル最大・全覚醒時のプラス換算値のランキングです。',
+      columns: [
+        { name: 'HP', func: data => data.hyperOverLimitParam.hp - 990 },
+        { name: '攻撃', func: data => data.hyperOverLimitParam.attack - 495 },
+        { name: '回復', func: data => data.hyperOverLimitParam.recovery - 297 },
+        { name: '+換算', func: data => (data.hyperOverLimitParam.hp / 10 + data.hyperOverLimitParam.attack / 5 + data.hyperOverLimitParam.recovery / 3 - 297).toFixed(1) }
+      ],
+      sortColumn: 3
     }
   ],
   data: function () {
