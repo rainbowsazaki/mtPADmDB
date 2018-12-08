@@ -6,6 +6,17 @@
     <h2>{{ rankingSetting.title }}ランキング</h2>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
+    <form>
+      <template v-for="(attrName, attr) in attributeTable">
+        <span v-if="attr !== '0'" style="margin-right: 1rem;" :key="`attr${attr}`">
+          <input type="checkbox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
+          <label :for="`check_mainAttr_${attr}`">
+            <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+            {{ attrName }}
+          </label>
+        </span>
+      </template>
+    </form>
     <table class="table table-bordered table-sm">
       <tr class="thead-light">
         <th />
@@ -139,12 +150,18 @@ export default {
   data: function () {
     return {
       /** 現在使用するランキング設定のインデックス。 */
-      rankingSettingIndex: 0
+      rankingSettingIndex: 0,
+      /** 表示するモンスターに対するフィルタ。 */
+      filter: {
+        /** 主属性。 */
+        attr: []
+      }
     };
   },
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
     imageTable () { return this.$store.state.imageTable; },
+    attributeTable () { return constData.attributeTable; },
     awakenTable () { return constData.awakenTable; },
 
     /** 現在使用するランキング設定。 */
@@ -159,6 +176,16 @@ export default {
       const sortColumn = this.rankingSetting.sortColumn;
       rankInfos.sort((a, b) => b.columns[sortColumn] - a.columns[sortColumn]);
       return rankInfos;
+    },
+    /** 現在のフィルタリング設定でフィルタリングされたモンスター情報の配列。 */
+    filteredMonsterArray () {
+      let monsterArray = Object.values(this.monsterTable);
+      if (this.filter.attr.length > 0) {
+        monsterArray = monsterArray.filter(
+          d => this.filter.attr.indexOf(d.attributes[0]) !== -1
+        );
+      }
+      return monsterArray;
     },
     /** 覚醒発動時の効果のレートを取得する機能を追加したモンスター情報オブジェクトの配列。 */
     wrapedMonsterDataArray: function () {
@@ -248,8 +275,8 @@ export default {
         }
       };
       const array = [];
-      for (const key in this.monsterTable) {
-        const data = this.monsterTable[key];
+      for (const key in this.filteredMonsterArray) {
+        const data = this.filteredMonsterArray[key];
         const subData = Object.create(getterBase);
         subData.baseData = data;
         subData.cache = {};
