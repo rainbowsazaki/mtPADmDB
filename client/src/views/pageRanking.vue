@@ -19,6 +19,18 @@
           </span>
         </template>
       </div>
+      <div>
+        複属性：
+        <template v-for="(attrName, attr) in attributeTable">
+          <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
+            <input type="checkbox" class="imageCheckBox" v-model.number="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
+            <label :for="`check_subAttr_${attr}`">
+              <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+              <span v-else>{{ attrName }}</span>
+            </label>
+          </span>
+        </template>
+      </div>
     </form>
     <table class="table table-bordered table-sm">
       <tr class="thead-light">
@@ -157,7 +169,9 @@ export default {
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
         /** 主属性。 */
-        attr: []
+        attr: [],
+        /** 複属性。 */
+        subAttr: []
       }
     };
   },
@@ -186,6 +200,11 @@ export default {
       if (this.filter.attr.length > 0) {
         monsterArray = monsterArray.filter(
           d => this.filter.attr.indexOf(d.attributes[0]) !== -1
+        );
+      }
+      if (this.filter.subAttr.length > 0) {
+        monsterArray = monsterArray.filter(
+          d => this.filter.subAttr.indexOf(d.attributes[1]) !== -1
         );
       }
       return monsterArray;
