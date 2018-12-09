@@ -7,15 +7,18 @@
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
     <form>
-      <template v-for="(attrName, attr) in attributeTable">
-        <span v-if="attr !== '0'" style="margin-right: 1rem;" :key="`attr${attr}`">
-          <input type="checkbox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
-          <label :for="`check_mainAttr_${attr}`">
-            <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
-            {{ attrName }}
-          </label>
-        </span>
-      </template>
+      <div>
+        主属性：
+        <template v-for="(attrName, attr) in attributeTable">
+          <span v-if="attr !== '0'" style="margin-right: 0.5rem;" :key="`attr${attr}`">
+            <input type="checkbox" class="imageCheckBox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
+            <label :for="`check_mainAttr_${attr}`">
+              <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+              <span v-else>{{ attrName }}</span>
+            </label>
+          </span>
+        </template>
+      </div>
     </form>
     <table class="table table-bordered table-sm">
       <tr class="thead-light">
@@ -323,3 +326,23 @@ export default {
 };
 
 </script>
+
+<style scoped>
+
+  input.imageCheckBox { display: none; }
+  input.imageCheckBox + label {
+    filter: opacity(50%) grayscale(75%);
+  }
+
+  input.imageCheckBox:checked + label {
+    filter: opacity(100%) grayscale(0%);
+  }
+
+  input.imageCheckBox + label span {
+    border: 1px solid #999;
+    border-radius: 0.5em;
+    background: #eee;
+    padding: 0.25rem;
+  }
+
+</style>
