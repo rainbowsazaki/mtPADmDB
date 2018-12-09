@@ -10,8 +10,8 @@
       <div>
         主属性：
         <template v-for="(attrName, attr) in attributeTable">
-          <span v-if="attr !== '0'" style="margin-right: 0.5rem;" :key="`attr${attr}`">
-            <input type="checkbox" class="imageCheckBox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
+          <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
+            <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
             <label :for="`check_mainAttr_${attr}`">
               <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
               <span v-else>{{ attrName }}</span>
