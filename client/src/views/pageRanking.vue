@@ -6,32 +6,40 @@
     <h2>{{ rankingSetting.title }}ランキング</h2>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
-    <form>
-      <div>
-        主属性：
-        <template v-for="(attrName, attr) in attributeTable">
-          <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
-            <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
-            <label :for="`check_mainAttr_${attr}`">
-              <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
-              <span v-else>{{ attrName }}</span>
-            </label>
-          </span>
-        </template>
-      </div>
-      <div>
-        複属性：
-        <template v-for="(attrName, attr) in attributeTable">
-          <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
-            <input type="checkbox" class="imageCheckBox" v-model.number="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
-            <label :for="`check_subAttr_${attr}`">
-              <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
-              <span v-else>{{ attrName }}</span>
-            </label>
-          </span>
-        </template>
-      </div>
-    </form>
+
+    <div style="margin-bottom: 4px;">
+      <span id="filterTrigger" :class="{ visible: isVisibleFilter }" @click="isVisibleFilter = !isVisibleFilter">
+        絞り込み
+        {{ isVisibleFilter ? '▲' : '▼' }}
+      </span>
+      <form id="filterForm" v-if="isVisibleFilter">
+        <div>
+          主属性：
+          <template v-for="(attrName, attr) in attributeTable">
+            <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
+              <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
+              <label :for="`check_mainAttr_${attr}`">
+                <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+                <span v-else>{{ attrName }}</span>
+              </label>
+            </span>
+          </template>
+        </div>
+        <div>
+          複属性：
+          <template v-for="(attrName, attr) in attributeTable">
+            <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
+              <input type="checkbox" class="imageCheckBox" v-model.number="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
+              <label :for="`check_subAttr_${attr}`">
+                <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+                <span v-else>{{ attrName }}</span>
+              </label>
+            </span>
+          </template>
+        </div>
+      </form>
+    </div>
+
     <table class="table table-bordered table-sm">
       <tr class="thead-light">
         <th />
@@ -166,6 +174,8 @@ export default {
     return {
       /** 現在使用するランキング設定のインデックス。 */
       rankingSettingIndex: 0,
+      /** フィルタリング設定領域を表示するかどうか。 */
+      isVisibleFilter: false,
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
         /** 主属性。 */
@@ -347,6 +357,26 @@ export default {
 </script>
 
 <style scoped>
+  #filterTrigger {
+    border: 1px solid #AAC;
+    border-radius: 8px;
+    padding: 4px 4px 2px 4px;
+    background: #FFF;
+    cursor: pointer;
+  }
+
+  #filterTrigger.visible {
+    border-bottom-style: none;
+    border-radius: 8px 8px 0 0;
+  }
+
+  #filterForm {
+    border: 1px solid #AAC;
+    border-radius: 0 8px 8px 8px;
+    background: #FFF;
+    margin-top: -2px;
+    padding: 8px 4px 4px 4px;
+  }
 
   input.imageCheckBox { display: none; }
   input.imageCheckBox + label {
