@@ -37,6 +37,18 @@
             </span>
           </template>
         </div>
+        <div>
+          タイプ：
+          <template v-for="(typeInfo, type) in typeTable">
+            <span v-if="type !== '0'" style="margin-right: 0.5rem" :key="`type${type}`">
+              <input type="checkbox" class="imageCheckBox" v-model.number="filter.type" :value="type" :id="`type_${type}`">
+              <label :for="`type_${type}`">
+                <img v-if="type !== 'null'" style="width: 24px; height: 24px;" :src="`./image/type/${type}.png`">
+                <span v-else>{{ typeInfo.name }}</span>
+              </label>
+            </span>
+          </template>
+        </div>
       </form>
     </div>
 
@@ -181,7 +193,9 @@ export default {
         /** 主属性。 */
         attr: [],
         /** 複属性。 */
-        subAttr: []
+        subAttr: [],
+        /** タイプ */
+        type: []
       }
     };
   },
@@ -189,6 +203,7 @@ export default {
     monsterTable () { return this.$store.state.monsterTable; },
     imageTable () { return this.$store.state.imageTable; },
     attributeTable () { return constData.attributeTable; },
+    typeTable () { return constData.typeTable; },
     awakenTable () { return constData.awakenTable; },
 
     /** 現在使用するランキング設定。 */
@@ -215,6 +230,13 @@ export default {
       if (this.filter.subAttr.length > 0) {
         monsterArray = monsterArray.filter(
           d => this.filter.subAttr.indexOf(d.attributes[1]) !== -1
+        );
+      }
+      if (this.filter.type.length > 0) {
+        monsterArray = monsterArray.filter(
+          d => d.types.some(
+            type => this.filter.type.some(compType => compType === type)
+          )
         );
       }
       return monsterArray;
