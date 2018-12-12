@@ -8,51 +8,53 @@
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
 
     <div style="margin-bottom: 4px;">
-      <span id="filterTrigger" :class="{ visible: isVisibleFilter }" @click="isVisibleFilter = !isVisibleFilter">
+      <span id="filterTrigger" :class="{ open: isOpenFilterTrigger }" @click="isVisibleFilter = !isVisibleFilter">
         絞り込み
         <svg viewBox="0 0 100 100" width="1em" height="1em">
           <path v-if="isVisibleFilter" d="M50 0 L10 75 L90 75 Z" style="fill:black;" />
           <path v-else d="M50 75 L10 0 L90 0 Z" style="fill:black;" />
         </svg>
       </span>
-      <form id="filterForm" v-if="isVisibleFilter">
-        <div>
-          主属性：
-          <template v-for="(attrName, attr) in attributeTable">
-            <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
-              <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
-              <label :for="`check_mainAttr_${attr}`">
-                <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
-                <span v-else>{{ attrName }}</span>
-              </label>
-            </span>
-          </template>
-        </div>
-        <div>
-          複属性：
-          <template v-for="(attrName, attr) in attributeTable">
-            <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
-              <input type="checkbox" class="imageCheckBox" v-model.number="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
-              <label :for="`check_subAttr_${attr}`">
-                <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
-                <span v-else>{{ attrName }}</span>
-              </label>
-            </span>
-          </template>
-        </div>
-        <div>
-          タイプ：
-          <template v-for="(typeInfo, type) in typeTable">
-            <span v-if="type !== '0'" style="margin-right: 0.5rem" :key="`type${type}`">
-              <input type="checkbox" class="imageCheckBox" v-model.number="filter.type" :value="type" :id="`type_${type}`">
-              <label :for="`type_${type}`">
-                <img v-if="type !== 'null'" style="width: 24px; height: 24px;" :src="`./image/type/${type}.png`">
-                <span v-else>{{ typeInfo.name }}</span>
-              </label>
-            </span>
-          </template>
-        </div>
-      </form>
+      <transition name="filter" @before-enter="isOpenFilterTrigger = true;" @after-leave="isOpenFilterTrigger = false;">
+        <form id="filterForm" v-if="isVisibleFilter">
+          <div>
+            主属性：
+            <template v-for="(attrName, attr) in attributeTable">
+              <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
+                <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
+                <label :for="`check_mainAttr_${attr}`">
+                  <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+                  <span v-else>{{ attrName }}</span>
+                </label>
+              </span>
+            </template>
+          </div>
+          <div>
+            複属性：
+            <template v-for="(attrName, attr) in attributeTable">
+              <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
+                <input type="checkbox" class="imageCheckBox" v-model.number="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
+                <label :for="`check_subAttr_${attr}`">
+                  <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+                  <span v-else>{{ attrName }}</span>
+                </label>
+              </span>
+            </template>
+          </div>
+          <div>
+            タイプ：
+            <template v-for="(typeInfo, type) in typeTable">
+              <span v-if="type !== '0'" style="margin-right: 0.5rem" :key="`type${type}`">
+                <input type="checkbox" class="imageCheckBox" v-model.number="filter.type" :value="type" :id="`type_${type}`">
+                <label :for="`type_${type}`">
+                  <img v-if="type !== 'null'" style="width: 24px; height: 24px;" :src="`./image/type/${type}.png`">
+                  <span v-else>{{ typeInfo.name }}</span>
+                </label>
+              </span>
+            </template>
+          </div>
+        </form>
+      </transition>
     </div>
 
     <table class="table table-bordered table-sm">
@@ -191,6 +193,8 @@ export default {
       rankingSettingIndex: 0,
       /** フィルタリング設定領域を表示するかどうか。 */
       isVisibleFilter: false,
+      /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
+      isOpenFilterTrigger: false,
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
         /** 主属性。 */
@@ -390,7 +394,7 @@ export default {
     cursor: pointer;
   }
 
-  #filterTrigger.visible {
+  #filterTrigger.open {
     border-bottom-style: none;
     border-radius: 8px 8px 0 0;
   }
@@ -417,6 +421,26 @@ export default {
     border-radius: 0.5em;
     background: #eee;
     padding: 0.25rem;
+  }
+
+  #filterForm {
+    height: 7.5em;
+    overflow: hidden;
+  }
+
+  .filter-enter-active {
+    animation: filter-in .3s;
+  }
+  .filter-leave-active {
+    animation: filter-in .3s reverse;
+  }
+  @keyframes filter-in {
+    0% {
+      height: 0em;
+    }
+    100% {
+      height: 7.5em;
+    }
   }
 
 </style>
