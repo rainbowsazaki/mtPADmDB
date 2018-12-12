@@ -224,12 +224,12 @@ export default {
       let monsterArray = Object.values(this.monsterTable);
       if (this.filter.attr.length > 0) {
         monsterArray = monsterArray.filter(
-          d => this.filter.attr.indexOf(d.attributes[0]) !== -1
+          d => this.filter.attr.some(attr => d.attributes[0] === attr)
         );
       }
       if (this.filter.subAttr.length > 0) {
         monsterArray = monsterArray.filter(
-          d => this.filter.subAttr.indexOf(d.attributes[1]) !== -1
+          d => this.filter.subAttr.some(attr => d.attributes[1] === attr)
         );
       }
       if (this.filter.type.length > 0) {
