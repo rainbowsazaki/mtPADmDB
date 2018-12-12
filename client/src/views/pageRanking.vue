@@ -10,7 +10,10 @@
     <div style="margin-bottom: 4px;">
       <span id="filterTrigger" :class="{ visible: isVisibleFilter }" @click="isVisibleFilter = !isVisibleFilter">
         絞り込み
-        {{ isVisibleFilter ? '▲' : '▼' }}
+        <svg viewBox="0 0 100 100" width="1em" height="1em">
+          <path v-if="isVisibleFilter" d="M50 0 L10 75 L90 75 Z" style="fill:black;" />
+          <path v-else d="M50 75 L10 0 L90 0 Z" style="fill:black;" />
+        </svg>
       </span>
       <form id="filterForm" v-if="isVisibleFilter">
         <div>
