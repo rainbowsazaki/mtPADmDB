@@ -185,6 +185,60 @@ export default {
         { name: '+換算', func: data => (data.hyperOverLimitParam.hp / 10 + data.hyperOverLimitParam.attack / 5 + data.hyperOverLimitParam.recovery / 3 - 297).toFixed(1) }
       ],
       sortColumn: 3
+    },
+    {
+      id: 'wayAttack',
+      title: '2体攻撃消し時攻撃力',
+      description: 'モンスターのレベル最大・+297・全覚醒時の2体攻撃消し時の攻撃力ランキングです。',
+      columns: [
+        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.wayAttackRate) | 0 }
+      ],
+      sortColumn: 0
+    },
+    {
+      id: 'lJiAttack',
+      title: 'L字消し攻撃時攻撃力',
+      description: 'モンスターのレベル最大・+297・全覚醒時のL字消し攻撃時の攻撃力ランキングです。',
+      columns: [
+        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate) | 0 }
+      ],
+      sortColumn: 0
+    },
+    {
+      id: '7comboAttack',
+      title: '7コンボ時攻撃力',
+      description: 'モンスターのレベル最大・+297・全覚醒時の7コンボ時の攻撃力ランキングです。',
+      columns: [
+        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.comboUpAttackRate) | 0 }
+      ],
+      sortColumn: 0
+    },
+    {
+      id: '10comboAttack',
+      title: '10コンボ時攻撃力',
+      description: 'モンスターのレベル最大・+297・全覚醒時の10コンボ時の攻撃力ランキングです。',
+      columns: [
+        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
+      ],
+      sortColumn: 0
+    },
+    {
+      id: 'way7comboAttack',
+      title: '2体攻撃消し7コンボ時攻撃力',
+      description: 'モンスターのレベル最大・+297・全覚醒時の2体消し攻撃7コンボ時の攻撃力ランキングです。',
+      columns: [
+        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.wayAttackRate * data.comboUpAttackRate) | 0 }
+      ],
+      sortColumn: 0
+    },
+    {
+      id: 'lJi7comboAttack',
+      title: 'L字消し攻撃7コンボ時攻撃力',
+      description: 'モンスターのレベル最大・+297・全覚醒時の消し7コンボ時の攻撃力ランキングです。',
+      columns: [
+        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
+      ],
+      sortColumn: 0
     }
   ],
   data: function () {
