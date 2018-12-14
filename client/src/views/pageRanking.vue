@@ -1,7 +1,11 @@
 <template>
   <div>
-    <select v-model.number="rankingSettingIndex">
-      <option v-for="(setting, n) in $options.rankingSettings" :value="n" :key="`rankingSetting${n}`">{{ setting.title }}ランキング</option>
+    <select :value="id" @change="changeRouteId($event.target.value)">
+      <template v-for="(group, n) in $options.rankingSettings">
+        <optgroup :label="group.label" :key="`group${n}`">
+          <option v-for="setting in group.settings" :value="setting.id" :key="`rankingSetting_${setting.id}`">{{ setting.title }}ランキング</option>
+        </optgroup>
+      </template>
     </select>
     <h2>{{ rankingSetting.title }}ランキング</h2>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
@@ -91,178 +95,191 @@ export default {
   props: {
     id: {
       type: String,
-      default: null
+      default: 'hp'
     }
   },
   /** ランキング設定の配列。 */
   rankingSettings: [
     {
-      id: 'hp',
-      title: 'HP',
-      description: 'モンスターのレベル最大・+297・全覚醒時のHPのランキングです。',
-      columns: [
-        { name: 'HP', func: data => data.hyperMaxParam.hp },
-        { name: '攻撃', func: data => data.hyperMaxParam.attack },
-        { name: '回復', func: data => data.hyperMaxParam.recovery }
-      ],
-      sortColumn: 0
+      label: 'ステータス',
+      settings: [
+        {
+          id: 'hp',
+          title: 'HP',
+          description: 'モンスターのレベル最大・+297・全覚醒時のHPのランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.hyperMaxParam.hp },
+            { name: '攻撃', func: data => data.hyperMaxParam.attack },
+            { name: '回復', func: data => data.hyperMaxParam.recovery }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: 'attack',
+          title: '攻撃',
+          description: 'モンスターのレベル最大・+297・全覚醒時の攻撃のランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.hyperMaxParam.hp },
+            { name: '攻撃', func: data => data.hyperMaxParam.attack },
+            { name: '回復', func: data => data.hyperMaxParam.recovery }
+          ],
+          sortColumn: 1
+        },
+        {
+          id: 'recovery',
+          title: '回復',
+          description: 'モンスターのレベル最大・+297・全覚醒時の回復のランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.hyperMaxParam.hp },
+            { name: '攻撃', func: data => data.hyperMaxParam.attack },
+            { name: '回復', func: data => data.hyperMaxParam.recovery }
+          ],
+          sortColumn: 2
+        },
+        {
+          id: 'plus',
+          title: 'プラス換算値',
+          description: 'モンスターのレベル最大・全覚醒時のプラス換算値のランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.hyperMaxParam.hp - 990 },
+            { name: '攻撃', func: data => data.hyperMaxParam.attack - 495 },
+            { name: '回復', func: data => data.hyperMaxParam.recovery - 297 },
+            { name: '+換算', func: data => (data.hyperMaxParam.hp / 10 + data.hyperMaxParam.attack / 5 + data.hyperMaxParam.recovery / 3 - 297).toFixed(1) }
+          ],
+          sortColumn: 3
+        },
+        {
+          id: 'overLimitHp',
+          title: '限界突破 HP',
+          description: 'モンスターの限界突破orレベル最大・+297・全覚醒時のHPのランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.hyperOverLimitParam.hp },
+            { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
+            { name: '回復', func: data => data.hyperOverLimitParam.recovery }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: 'overLimitAttack',
+          title: '限界突破 攻撃',
+          description: 'モンスターの限界突破orレベル最大・+297・全覚醒時の攻撃のランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.hyperOverLimitParam.hp },
+            { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
+            { name: '回復', func: data => data.hyperOverLimitParam.recovery }
+          ],
+          sortColumn: 1
+        },
+        {
+          id: 'overLimitRecovery',
+          title: '限界突破 回復',
+          description: 'モンスターの限界突破orレベル最大・+297・全覚醒時の回復のランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.hyperOverLimitParam.hp },
+            { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
+            { name: '回復', func: data => data.hyperOverLimitParam.recovery }
+          ],
+          sortColumn: 2
+        },
+        {
+          id: 'overLimitPlus',
+          title: '限界突破 プラス換算値',
+          description: 'モンスターの限界突破orレベル最大・全覚醒時のプラス換算値のランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.hyperOverLimitParam.hp - 990 },
+            { name: '攻撃', func: data => data.hyperOverLimitParam.attack - 495 },
+            { name: '回復', func: data => data.hyperOverLimitParam.recovery - 297 },
+            { name: '+換算', func: data => (data.hyperOverLimitParam.hp / 10 + data.hyperOverLimitParam.attack / 5 + data.hyperOverLimitParam.recovery / 3 - 297).toFixed(1) }
+          ],
+          sortColumn: 3
+        }
+      ]
     },
     {
-      id: 'attack',
-      title: '攻撃',
-      description: 'モンスターのレベル最大・+297・全覚醒時の攻撃のランキングです。',
-      columns: [
-        { name: 'HP', func: data => data.hyperMaxParam.hp },
-        { name: '攻撃', func: data => data.hyperMaxParam.attack },
-        { name: '回復', func: data => data.hyperMaxParam.recovery }
-      ],
-      sortColumn: 1
+      label: '覚醒反映',
+      settings: [
+        {
+          id: 'wayAttack',
+          title: '2体攻撃消し時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の2体攻撃消し時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.wayAttackRate) | 0 }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: 'lJiAttack',
+          title: 'L字消し攻撃時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時のL字消し攻撃時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate) | 0 }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: '7comboAttack',
+          title: '7コンボ時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の7コンボ時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.comboUpAttackRate) | 0 }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: '10comboAttack',
+          title: '10コンボ時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の10コンボ時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: 'way7comboAttack',
+          title: '2体攻撃消し7コンボ時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の2体消し攻撃7コンボ時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.wayAttackRate * data.comboUpAttackRate) | 0 }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: 'lJi7comboAttack',
+          title: 'L字消し攻撃7コンボ時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の消し7コンボ時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
+          ],
+          sortColumn: 0
+        }
+      ]
     },
     {
-      id: 'recovery',
-      title: '回復',
-      description: 'モンスターのレベル最大・+297・全覚醒時の回復のランキングです。',
-      columns: [
-        { name: 'HP', func: data => data.hyperMaxParam.hp },
-        { name: '攻撃', func: data => data.hyperMaxParam.attack },
-        { name: '回復', func: data => data.hyperMaxParam.recovery }
-      ],
-      sortColumn: 2
-    },
-    {
-      id: 'plus',
-      title: 'プラス換算値',
-      description: 'モンスターのレベル最大・全覚醒時のプラス換算値のランキングです。',
-      columns: [
-        { name: 'HP', func: data => data.hyperMaxParam.hp - 990 },
-        { name: '攻撃', func: data => data.hyperMaxParam.attack - 495 },
-        { name: '回復', func: data => data.hyperMaxParam.recovery - 297 },
-        { name: '+換算', func: data => (data.hyperMaxParam.hp / 10 + data.hyperMaxParam.attack / 5 + data.hyperMaxParam.recovery / 3 - 297).toFixed(1) }
-      ],
-      sortColumn: 3
-    },
-    {
-      id: 'overLimitHp',
-      title: '限界突破 HP',
-      description: 'モンスターの限界突破orレベル最大・+297・全覚醒時のHPのランキングです。',
-      columns: [
-        { name: 'HP', func: data => data.hyperOverLimitParam.hp },
-        { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
-        { name: '回復', func: data => data.hyperOverLimitParam.recovery }
-      ],
-      sortColumn: 0
-    },
-    {
-      id: 'overLimitAttack',
-      title: '限界突破 攻撃',
-      description: 'モンスターの限界突破orレベル最大・+297・全覚醒時の攻撃のランキングです。',
-      columns: [
-        { name: 'HP', func: data => data.hyperOverLimitParam.hp },
-        { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
-        { name: '回復', func: data => data.hyperOverLimitParam.recovery }
-      ],
-      sortColumn: 1
-    },
-    {
-      id: 'overLimitRecovery',
-      title: '限界突破 回復',
-      description: 'モンスターの限界突破orレベル最大・+297・全覚醒時の回復のランキングです。',
-      columns: [
-        { name: 'HP', func: data => data.hyperOverLimitParam.hp },
-        { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
-        { name: '回復', func: data => data.hyperOverLimitParam.recovery }
-      ],
-      sortColumn: 2
-    },
-    {
-      id: 'overLimitPlus',
-      title: '限界突破 プラス換算値',
-      description: 'モンスターの限界突破orレベル最大・全覚醒時のプラス換算値のランキングです。',
-      columns: [
-        { name: 'HP', func: data => data.hyperOverLimitParam.hp - 990 },
-        { name: '攻撃', func: data => data.hyperOverLimitParam.attack - 495 },
-        { name: '回復', func: data => data.hyperOverLimitParam.recovery - 297 },
-        { name: '+換算', func: data => (data.hyperOverLimitParam.hp / 10 + data.hyperOverLimitParam.attack / 5 + data.hyperOverLimitParam.recovery / 3 - 297).toFixed(1) }
-      ],
-      sortColumn: 3
-    },
-    {
-      id: 'wayAttack',
-      title: '2体攻撃消し時攻撃力',
-      description: 'モンスターのレベル最大・+297・全覚醒時の2体攻撃消し時の攻撃力ランキングです。',
-      columns: [
-        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.wayAttackRate) | 0 }
-      ],
-      sortColumn: 0
-    },
-    {
-      id: 'lJiAttack',
-      title: 'L字消し攻撃時攻撃力',
-      description: 'モンスターのレベル最大・+297・全覚醒時のL字消し攻撃時の攻撃力ランキングです。',
-      columns: [
-        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate) | 0 }
-      ],
-      sortColumn: 0
-    },
-    {
-      id: '7comboAttack',
-      title: '7コンボ時攻撃力',
-      description: 'モンスターのレベル最大・+297・全覚醒時の7コンボ時の攻撃力ランキングです。',
-      columns: [
-        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.comboUpAttackRate) | 0 }
-      ],
-      sortColumn: 0
-    },
-    {
-      id: '10comboAttack',
-      title: '10コンボ時攻撃力',
-      description: 'モンスターのレベル最大・+297・全覚醒時の10コンボ時の攻撃力ランキングです。',
-      columns: [
-        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
-      ],
-      sortColumn: 0
-    },
-    {
-      id: 'way7comboAttack',
-      title: '2体攻撃消し7コンボ時攻撃力',
-      description: 'モンスターのレベル最大・+297・全覚醒時の2体消し攻撃7コンボ時の攻撃力ランキングです。',
-      columns: [
-        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.wayAttackRate * data.comboUpAttackRate) | 0 }
-      ],
-      sortColumn: 0
-    },
-    {
-      id: 'lJi7comboAttack',
-      title: 'L字消し攻撃7コンボ時攻撃力',
-      description: 'モンスターのレベル最大・+297・全覚醒時の消し7コンボ時の攻撃力ランキングです。',
-      columns: [
-        { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
-      ],
-      sortColumn: 0
-    },
-    {
-      id: 'a3x3Attack',
-      title: '無効貫通時攻撃力',
-      description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
-      columns: [
-        { name: '攻撃力', func: data => data.awakenObj[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate) | 0 : null }
-      ],
-      sortColumn: 0
-    },
-    {
-      id: 'a3x37comboAttack',
-      title: '無効貫通７コンボ時攻撃力',
-      description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
-      columns: [
-        { name: '攻撃力', func: data => data.awakenObj[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
-      ],
-      sortColumn: 0
+      label: '無効貫通',
+      settings: [
+        {
+          id: 'a3x3Attack',
+          title: '無効貫通時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => data.awakenObj[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate) | 0 : null }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: 'a3x37comboAttack',
+          title: '無効貫通７コンボ時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => data.awakenObj[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
+          ],
+          sortColumn: 0
+        }
+      ]
     }
   ],
   data: function () {
     return {
-      /** 現在使用するランキング設定のインデックス。 */
-      rankingSettingIndex: 0,
       /** フィルタリング設定領域を表示するかどうか。 */
       isVisibleFilter: false,
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
@@ -284,9 +301,28 @@ export default {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
     awakenTable () { return constData.awakenTable; },
-
+    /** IDをキーとしてランキング設定を格納したオブジェクト。 */
+    rankingSettingObj () {
+      const obj = {};
+      for (const n in this.$options.rankingSettings) {
+        const group = this.$options.rankingSettings[n];
+        for (const m in group.settings) {
+          const setting = group.settings[m];
+          obj[setting.id] = setting;
+        }
+      }
+      return obj;
+    },
     /** 現在使用するランキング設定。 */
-    rankingSetting () { return this.$options.rankingSettings[this.rankingSettingIndex]; },
+    rankingSetting () {
+      let s = this.rankingSettingObj[this.id];
+      // IDに適合する設定がない場合はID指定なしの状態にする。
+      if (!s) {
+        this.changeRouteId(undefined);
+        s = { name: '' };
+      }
+      return s;
+    },
     /** 現在の設定でのランキング結果を格納した配列。 */
     rankInfos () {
       const rankInfos = [];
@@ -430,29 +466,12 @@ export default {
     }
   },
   watch: {
-    rankingSetting: '$_mixinForPage_updateTitle',
-    rankingSettingIndex: function () {
-      this.$router.push({ name: this.$route.name, params: { id: this.rankingSetting.id }});
-    },
-    '$route': 'selectSettingFromId'
-  },
-  created: function () {
-    this.selectSettingFromId();
+    rankingSetting: '$_mixinForPage_updateTitle'
   },
   methods: {
-    /** プロパティの id に指定された値を元に、使用するランキング設定を選択する。 */
-    selectSettingFromId: function () {
-      if (this.id === null) {
-        this.rankingSettingIndex = 0;
-      } else {
-        for (const i in this.$options.rankingSettings) {
-          const setting = this.$options.rankingSettings[i];
-          if (setting.id === this.id) {
-            this.rankingSettingIndex = i;
-            break;
-          }
-        }
-      }
+    /** ルート上のランキング設定IDを変更する。 */
+    changeRouteId: function (newId) {
+      this.$router.push({ name: this.$route.name, params: { id: newId }});
     }
   }
 };
