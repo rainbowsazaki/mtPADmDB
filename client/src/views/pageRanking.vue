@@ -239,6 +239,24 @@ export default {
         { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
       ],
       sortColumn: 0
+    },
+    {
+      id: 'a3x3Attack',
+      title: '無効貫通時攻撃力',
+      description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
+      columns: [
+        { name: '攻撃力', func: data => data.awakenObj[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate) | 0 : null }
+      ],
+      sortColumn: 0
+    },
+    {
+      id: 'a3x37comboAttack',
+      title: '無効貫通７コンボ時攻撃力',
+      description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
+      columns: [
+        { name: '攻撃力', func: data => data.awakenObj[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
+      ],
+      sortColumn: 0
     }
   ],
   data: function () {
@@ -272,11 +290,13 @@ export default {
     /** 現在の設定でのランキング結果を格納した配列。 */
     rankInfos () {
       const rankInfos = [];
+      const sortColumn = this.rankingSetting.sortColumn;
       for (const key in this.wrapedMonsterDataArray) {
         const data = this.wrapedMonsterDataArray[key];
-        rankInfos.push({ columns: this.rankingSetting.columns.map(o => o.func(data)), data: data });
+        const columns = this.rankingSetting.columns.map(o => o.func(data));
+        if (columns[sortColumn] === null) { continue; }
+        rankInfos.push({ columns: columns, data: data });
       }
-      const sortColumn = this.rankingSetting.sortColumn;
       rankInfos.sort((a, b) => b.columns[sortColumn] - a.columns[sortColumn]);
       return rankInfos;
     },
