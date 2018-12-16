@@ -63,14 +63,16 @@
       </transition>
     </div>
 
+    <pagination :page="page" :page-count="pageCount" />
+
     <table class="table table-bordered table-sm">
       <tr class="thead-light">
         <th />
         <th>名前</th>
         <th v-for="(column, n) in rankingSetting.columns" :key="`column${n}`">{{ column.name }}</th>
       </tr>
-      <tr v-for="(data, n) in rankInfos.slice(0, 20)" class="thead-light" :key="`monster${data.data.no}`">
-        <th class="text-right">{{ n + 1 }}</th>
+      <tr v-for="(data, n) in rankInfosInPage" class="thead-light" :key="`monster${data.data.no}`">
+        <th class="text-right">{{ (page - 1) * inPageCount + n + 1 }}</th>
         <td>
           <router-link :to="{ name: 'monsterDetails', params: { no: data.data.no }}">
             <monster-icon :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
@@ -293,6 +295,8 @@ export default {
       isOpenFilterTrigger: false,
       /** 限界突破時のパラメータを使用するかどうか。 */
       isOverLimit: false,
+      /** 1ページ内に表示するモンスターの件数。 */
+      inPageCount: 20,
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
         /** 主属性。 */
@@ -310,6 +314,10 @@ export default {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
     awakenTable () { return constData.awakenTable; },
+    /** 表示対象のモンスター数に対する、表示ページの枚数 */
+    pageCount () { return ((this.rankInfos.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+    /** 現在表示するページの番号。 1オリジン。 */
+    page () { return (this.$route.query.page * 1) || 1; },
     /** IDをキーとしてランキング設定を格納したオブジェクト。 */
     rankingSettingObj () {
       const obj = {};
@@ -331,6 +339,11 @@ export default {
         s = { name: '' };
       }
       return s;
+    },
+    /** 現在のページで表示するランキング結果を格納した配列。 */
+    rankInfosInPage () {
+      const beginIndex = (this.page - 1) * this.inPageCount;
+      return this.rankInfos.slice(beginIndex, beginIndex + this.inPageCount);
     },
     /** 現在の設定でのランキング結果を格納した配列。 */
     rankInfos () {
