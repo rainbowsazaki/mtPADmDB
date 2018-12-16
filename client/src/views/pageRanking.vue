@@ -233,6 +233,56 @@ export default {
           sortColumn: 0
         }
       ]
+    },
+    {
+      label: 'アシストボーナス',
+      settings: [
+        {
+          id: 'assistHp',
+          title: 'HPアシスト',
+          description: 'モンスターのレベル最大・+297・全覚醒時のHPアシストボーナスのランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.assistMaxParam.hp },
+            { name: '攻撃', func: data => data.assistMaxParam.attack },
+            { name: '回復', func: data => data.assistMaxParam.recovery }
+          ],
+          sortColumn: 0
+        },
+        {
+          id: 'assistAttack',
+          title: '攻撃アシスト',
+          description: 'モンスターのレベル最大・+297・全覚醒時の攻撃アシストボーナスのランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.assistMaxParam.hp },
+            { name: '攻撃', func: data => data.assistMaxParam.attack },
+            { name: '回復', func: data => data.assistMaxParam.recovery }
+          ],
+          sortColumn: 1
+        },
+        {
+          id: 'assistRecovery',
+          title: '回復アシスト',
+          description: 'モンスターのレベル最大・+297・全覚醒時の回復アシストボーナスのランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.assistMaxParam.hp },
+            { name: '攻撃', func: data => data.assistMaxParam.attack },
+            { name: '回復', func: data => data.assistMaxParam.recovery }
+          ],
+          sortColumn: 2
+        },
+        {
+          id: 'assistPlus',
+          title: 'プラス換算値',
+          description: 'モンスターのレベル最大・全覚醒時のアシストボーナス値のプラス換算値のランキングです。',
+          columns: [
+            { name: 'HP', func: data => data.assistMaxParam.hp },
+            { name: '攻撃', func: data => data.assistMaxParam.attack },
+            { name: '回復', func: data => data.assistMaxParam.recovery },
+            { name: '+換算', func: data => data.assist ? (data.assistMaxParam.hp / 10 + data.assistMaxParam.attack / 5 + data.assistMaxParam.recovery / 3).toFixed(1) : null }
+          ],
+          sortColumn: 3
+        }
+      ]
     }
   ],
   data: function () {
@@ -411,6 +461,44 @@ export default {
               param.recovery = baseParam.recovery + 297 + (this.awakenObj[3] || 0) * awakenTable[3].value;
             }
             cache[propName] = param;
+          }
+          return cache[propName];
+        },
+        /** レベル最大or限界突破・+297・全覚醒時のアシストボーナス値を取得する。 */
+        get assistMaxParam () {
+          let propName = 'assistMaxParam';
+          if (manageObj.isOverLimit) { propName += '_overLimit'; }
+          const cache = this.cache;
+          if (!cache[propName]) {
+            if (!this.baseData.assist) {
+              cache[propName] = {
+                hp: null,
+                attack: null,
+                recovery: null
+              };
+            } else {
+              const baseParam = this._targetParam;
+              const param = {
+                hp: NaN,
+                attack: NaN,
+                recovery: NaN
+              };
+              if (baseParam.hp !== null) {
+                param.hp = ((baseParam.hp + 10 * 99) * 0.1) | 0;
+              }
+              if (baseParam.attack !== null) {
+                param.attack = ((baseParam.attack + 5 * 99) * 0.05) | 0;
+              }
+              if (baseParam.recovery != null) {
+                param.recovery = ((baseParam.recovery + 3 * 99) * 0.15) | 0;
+              }
+              if (this.awakenObj[49]) {
+                param.hp += (this.awakenObj[1] || 0) * awakenTable[1].value;
+                param.attack += (this.awakenObj[2] || 0) * awakenTable[2].value;
+                param.recovery += (this.awakenObj[3] || 0) * awakenTable[3].value;
+              }
+              cache[propName] = param;
+            }
           }
           return cache[propName];
         }
