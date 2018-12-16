@@ -7,6 +7,8 @@
         </optgroup>
       </template>
     </select>
+    <input type="checkbox" id="isOverLimit" v-model="isOverLimit" value="1">
+    <label for="isOverLimit">限界突破時のパラメータを使用する</label>
     <h2>{{ rankingSetting.title }}ランキング</h2>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
@@ -147,51 +149,6 @@ export default {
             { name: '+換算', func: data => (data.hyperMaxParam.hp / 10 + data.hyperMaxParam.attack / 5 + data.hyperMaxParam.recovery / 3 - 297).toFixed(1) }
           ],
           sortColumn: 3
-        },
-        {
-          id: 'overLimitHp',
-          title: '限界突破 HP',
-          description: 'モンスターの限界突破orレベル最大・+297・全覚醒時のHPのランキングです。',
-          columns: [
-            { name: 'HP', func: data => data.hyperOverLimitParam.hp },
-            { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
-            { name: '回復', func: data => data.hyperOverLimitParam.recovery }
-          ],
-          sortColumn: 0
-        },
-        {
-          id: 'overLimitAttack',
-          title: '限界突破 攻撃',
-          description: 'モンスターの限界突破orレベル最大・+297・全覚醒時の攻撃のランキングです。',
-          columns: [
-            { name: 'HP', func: data => data.hyperOverLimitParam.hp },
-            { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
-            { name: '回復', func: data => data.hyperOverLimitParam.recovery }
-          ],
-          sortColumn: 1
-        },
-        {
-          id: 'overLimitRecovery',
-          title: '限界突破 回復',
-          description: 'モンスターの限界突破orレベル最大・+297・全覚醒時の回復のランキングです。',
-          columns: [
-            { name: 'HP', func: data => data.hyperOverLimitParam.hp },
-            { name: '攻撃', func: data => data.hyperOverLimitParam.attack },
-            { name: '回復', func: data => data.hyperOverLimitParam.recovery }
-          ],
-          sortColumn: 2
-        },
-        {
-          id: 'overLimitPlus',
-          title: '限界突破 プラス換算値',
-          description: 'モンスターの限界突破orレベル最大・全覚醒時のプラス換算値のランキングです。',
-          columns: [
-            { name: 'HP', func: data => data.hyperOverLimitParam.hp - 990 },
-            { name: '攻撃', func: data => data.hyperOverLimitParam.attack - 495 },
-            { name: '回復', func: data => data.hyperOverLimitParam.recovery - 297 },
-            { name: '+換算', func: data => (data.hyperOverLimitParam.hp / 10 + data.hyperOverLimitParam.attack / 5 + data.hyperOverLimitParam.recovery / 3 - 297).toFixed(1) }
-          ],
-          sortColumn: 3
         }
       ]
     },
@@ -284,6 +241,8 @@ export default {
       isVisibleFilter: false,
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
       isOpenFilterTrigger: false,
+      /** 限界突破時のパラメータを使用するかどうか。 */
+      isOverLimit: false,
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
         /** 主属性。 */
@@ -361,6 +320,7 @@ export default {
     /** 覚醒発動時の効果のレートを取得する機能を追加したモンスター情報オブジェクトの配列。 */
     wrapedMonsterDataArray: function () {
       const awakenTable = this.awakenTable;
+      const manageObj = this;
       const getterBase = {
         /** 指定された覚醒発動時のレートを算出する。 */
         culcAwakenRate: function (awakenNo) {
@@ -418,29 +378,39 @@ export default {
             recovery: recovery
           };
         },
-        /** 指定されたモンスターデータの、レベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
-        get hyperMaxParam () {
-          const propName = 'hyperMaxParam';
-          const cache = this.cache;
-          if (!cache[propName]) {
-            const param = this.baseData.maxParam;
-            cache[propName] = this.culcHyperParam(param);
-          }
-          return cache[propName];
-        },
-        /** 指定されたモンスターデータの、限界突破orレベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
-        get hyperOverLimitParam () {
-          const propName = 'hyperOverLimitParam';
-          const cache = this.cache;
-          if (!cache[propName]) {
+        /** 現在のランキング設定とモンスターの情報に基づき、レベル最大時のパラメータか限界突破時のパラメータのいずれかを取得する。 */
+        get _targetParam () {
+          if (manageObj.isOverLimit && this.baseData.overLimit) {
             const overLimitParam = this.baseData.overLimitParam;
-            if (this.baseData.overLimit &&
-                (overLimitParam.hp !== null || overLimitParam.attack !== null || overLimitParam.recovery !== null)
-            ) {
-              cache[propName] = this.culcHyperParam(overLimitParam);
-            } else {
-              cache[propName] = this.hyperMaxParam;
+            if (overLimitParam.hp !== null || overLimitParam.attack !== null || overLimitParam.recovery !== null) {
+              return overLimitParam;
             }
+          }
+          return this.baseData.maxParam;
+        },
+        /** 指定されたモンスターデータの、レベル最大or限界突破・攻撃+99・全覚醒時のパラメータを取得する。 */
+        get hyperMaxParam () {
+          let propName = 'hyperMaxParam';
+          if (manageObj.isOverLimit) { propName += '_overLimit'; }
+          const cache = this.cache;
+          if (!cache[propName]) {
+            cache[propName] = this.culcHyperParam(this._targetParam);
+            const baseParam = this._targetParam;
+            const param = {
+              hp: NaN,
+              attack: NaN,
+              recovery: NaN
+            };
+            if (baseParam.hp !== null) {
+              param.hp = baseParam.hp + 990 + (this.awakenObj[1] || 0) * awakenTable[1].value;
+            }
+            if (baseParam.attack !== null) {
+              param.attack = baseParam.attack + 495 + (this.awakenObj[2] || 0) * awakenTable[2].value;
+            }
+            if (baseParam.recovery != null) {
+              param.recovery = baseParam.recovery + 297 + (this.awakenObj[3] || 0) * awakenTable[3].value;
+            }
+            cache[propName] = param;
           }
           return cache[propName];
         }
