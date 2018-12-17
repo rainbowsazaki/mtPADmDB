@@ -362,20 +362,20 @@ export default {
     filteredMonsterArray () {
       let monsterArray = Object.values(this.monsterTable);
       if (this.filter.attr.length > 0) {
-        monsterArray = monsterArray.filter(
-          d => this.filter.attr.some(attr => d.attributes[0] === attr)
-        );
+        const filterObj = {};
+        for (const attr of this.filter.attr) { filterObj[attr] = true; }
+        monsterArray = monsterArray.filter(d => filterObj[d.attributes[0]]);
       }
       if (this.filter.subAttr.length > 0) {
-        monsterArray = monsterArray.filter(
-          d => this.filter.subAttr.some(attr => d.attributes[1] === attr)
-        );
+        const filterObj = {};
+        for (const attr of this.filter.subAttr) { filterObj[attr] = true; }
+        monsterArray = monsterArray.filter(d => filterObj[d.attributes[1]]);
       }
       if (this.filter.type.length > 0) {
+        const filterObj = {};
+        for (const type of this.filter.type) { filterObj[type] = true; }
         monsterArray = monsterArray.filter(
-          d => d.types.some(
-            type => this.filter.type.some(compType => compType === type)
-          )
+          d => d.types.some(type => filterObj[type])
         );
       }
       return monsterArray;
