@@ -537,9 +537,57 @@ export default {
     }
   },
   watch: {
-    rankingSetting: '$_mixinForPage_updateTitle'
+    rankingSetting: '$_mixinForPage_updateTitle',
+    'filter.attr': function () {
+      this.updateRouteQueryFromArray('attr', this.filter.attr);
+    },
+    '$route.query.attr': function () {
+      this.queryToFilter('attr');
+    },
+    'filter.subAttr': function () {
+      this.updateRouteQueryFromArray('subAttr', this.filter.subAttr);
+    },
+    '$route.query.subAttr': function () {
+      this.queryToFilter('subAttr');
+    },
+    'filter.type': function () {
+      this.updateRouteQueryFromArray('type', this.filter.type);
+    },
+    '$route.query.type': function () {
+      this.queryToFilter('type');
+    }
+  },
+  created: function () {
+    let isSetFilter = false;
+    isSetFilter |= this.queryToFilter('attr');
+    isSetFilter |= this.queryToFilter('subAttr');
+    isSetFilter |= this.queryToFilter('type');
+    if (isSetFilter) {
+      this.isVisibleFilter = this.isOpenFilterTrigger = true;
+    }
   },
   methods: {
+    /** ルートのクエリーを更新する。 */
+    updateRouteQuery: function (changeQuery) {
+      const margedQuery = Object.assign({}, this.$route.query, changeQuery);
+      this.$router.push({ name: this.$route.name, params: this.$route.params, query: margedQuery });
+    },
+    /** 配列をカンマで結合した値を使用してルートのクエリーを変更する。 */
+    updateRouteQueryFromArray: function (name, array) {
+      const obj = {};
+      obj[name] = array.length ? array.slice().sort().join(',') : undefined;
+      this.updateRouteQuery(obj);
+    },
+    /** 特定のルートクエリーを使用して、フィルタリング設定を変更する。 */
+    queryToFilter: function (name) {
+      let value = [];
+      const query = this.$route.query[name];
+      if (query) {
+        value = query.split(',').map(s => s * 1);
+      }
+      this.filter[name] = value;
+      return (value.length > 0);
+    },
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
       this.$router.push({ name: this.$route.name, params: { id: newId }});
