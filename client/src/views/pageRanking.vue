@@ -555,6 +555,12 @@ export default {
     },
     '$route.query.type': function () {
       this.queryToFilter('type');
+    },
+    'isOverLimit': function () {
+      this.updateRouteQuery({ 'useOverLimitParam': this.isOverLimit ? 1 : undefined });
+    },
+    '$route.query.useOverLimitParam': function (newValue) {
+      this.isOverLimit = !!newValue;
     }
   },
   created: function () {
