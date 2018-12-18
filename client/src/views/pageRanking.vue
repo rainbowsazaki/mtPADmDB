@@ -343,7 +343,7 @@ export default {
     /** 現在のページで表示するランキング結果を格納した配列。 */
     rankInfosInPage () {
       const beginIndex = (this.page - 1) * this.inPageCount;
-      return this.rankInfos.slice(beginIndex, beginIndex + this.inPageCount);
+      return this.filteredRankInfos.slice(beginIndex, beginIndex + this.inPageCount);
     },
     /** 現在の設定でのランキング結果を格納した配列。 */
     rankInfos () {
@@ -358,24 +358,24 @@ export default {
       rankInfos.sort((a, b) => b.columns[sortColumn] - a.columns[sortColumn]);
       return rankInfos;
     },
-    /** 現在のフィルタリング設定でフィルタリングされたモンスター情報の配列。 */
-    filteredMonsterArray () {
-      let monsterArray = Object.values(this.monsterTable);
+    /** 現在のフィルタリング設定でフィルタリングされた、ランキング結果の配列。 */
+    filteredRankInfos () {
+      let monsterArray = this.rankInfos;
       if (this.filter.attr.length > 0) {
         const filterObj = {};
         for (const attr of this.filter.attr) { filterObj[attr] = true; }
-        monsterArray = monsterArray.filter(d => filterObj[d.attributes[0]]);
+        monsterArray = monsterArray.filter(d => filterObj[d.data.attributes[0]]);
       }
       if (this.filter.subAttr.length > 0) {
         const filterObj = {};
         for (const attr of this.filter.subAttr) { filterObj[attr] = true; }
-        monsterArray = monsterArray.filter(d => filterObj[d.attributes[1]]);
+        monsterArray = monsterArray.filter(d => filterObj[d.data.attributes[1]]);
       }
       if (this.filter.type.length > 0) {
         const filterObj = {};
         for (const type of this.filter.type) { filterObj[type] = true; }
         monsterArray = monsterArray.filter(
-          d => d.types.some(type => filterObj[type])
+          d => d.data.types.some(type => filterObj[type])
         );
       }
       return monsterArray;
@@ -517,8 +517,8 @@ export default {
         }
       };
       const array = [];
-      for (const key in this.filteredMonsterArray) {
-        const data = this.filteredMonsterArray[key];
+      for (const key in this.monsterTable) {
+        const data = this.monsterTable[key];
         const subData = Object.create(getterBase);
         subData.baseData = data;
         subData.cache = {};
