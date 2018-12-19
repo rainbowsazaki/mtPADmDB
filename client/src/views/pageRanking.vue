@@ -59,6 +59,7 @@
               </span>
             </template>
           </div>
+          <button class="btn btn-primary btn-sm" type="button" @click="clearFilter">クリア</button>
         </form>
       </transition>
     </div>
@@ -594,6 +595,12 @@ export default {
       this.filter[name] = value;
       return (value.length > 0);
     },
+    /** フィルタリング設定を空にする。 */
+    clearFilter: function () {
+      for (const key in this.filter) {
+        this.filter[key] = [];
+      }
+    },
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
       this.$router.push({ name: this.$route.name, params: { id: newId }, query: this.$route.query });
@@ -642,7 +649,7 @@ export default {
   }
 
   #filterForm {
-    height: 7.5em;
+    height: 9.5em;
     overflow: hidden;
   }
 
