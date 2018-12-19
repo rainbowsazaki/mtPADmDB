@@ -596,7 +596,7 @@ export default {
     },
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
-      this.$router.push({ name: this.$route.name, params: { id: newId }});
+      this.$router.push({ name: this.$route.name, params: { id: newId }, query: this.$route.query });
     }
   }
 };
