@@ -27,7 +27,7 @@
             主属性：
             <template v-for="(attrName, attr) in attributeTable">
               <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
-                <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model.number="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
+                <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
                 <label :for="`check_mainAttr_${attr}`">
                   <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
                   <span v-else>{{ attrName }}</span>
@@ -39,7 +39,7 @@
             複属性：
             <template v-for="(attrName, attr) in attributeTable">
               <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
-                <input type="checkbox" class="imageCheckBox" v-model.number="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
+                <input type="checkbox" class="imageCheckBox" v-model="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
                 <label :for="`check_subAttr_${attr}`">
                   <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
                   <span v-else>{{ attrName }}</span>
@@ -51,7 +51,7 @@
             タイプ：
             <template v-for="(typeInfo, type) in typeTable">
               <span v-if="type !== '0'" style="margin-right: 0.5rem" :key="`type${type}`">
-                <input type="checkbox" class="imageCheckBox" v-model.number="filter.type" :value="type" :id="`type_${type}`">
+                <input type="checkbox" class="imageCheckBox" v-model="filter.type" :value="type" :id="`type_${type}`">
                 <label :for="`type_${type}`">
                   <img v-if="type !== 'null'" style="width: 24px; height: 24px;" :src="`./image/type/${type}.png`">
                   <span v-else>{{ typeInfo.name }}</span>
@@ -589,7 +589,7 @@ export default {
       let value = [];
       const query = this.$route.query[name];
       if (query) {
-        value = query.split(',').map(s => s * 1);
+        value = query.split(',');
       }
       this.filter[name] = value;
       return (value.length > 0);
