@@ -13,7 +13,7 @@
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
 
-    <div style="margin-bottom: 4px;">
+    <div id="filter" style="margin-bottom: 4px;">
       <span id="filterTrigger" :class="{ open: isOpenFilterTrigger }" @click="isVisibleFilter = !isVisibleFilter">
         絞り込み
         <svg viewBox="0 0 100 100" width="1em" height="1em">
@@ -21,7 +21,12 @@
           <path v-else d="M50 75 L10 0 L90 0 Z" style="fill:black;" />
         </svg>
       </span>
-      <transition name="filter" @before-enter="isOpenFilterTrigger = true;" @after-leave="isOpenFilterTrigger = false;">
+      <transition name="filter"
+                  @before-enter="setStyleHeight($event, 'filter'); isOpenFilterTrigger = true;"
+                  @after-enter="clearStyleHeight($event);"
+                  @before-leave="setStyleHeight($event);"
+                  @after-leave="isOpenFilterTrigger = false;"
+      >
         <form id="filterForm" v-if="isVisibleFilter">
           <div>
             主属性：
@@ -574,6 +579,21 @@ export default {
     }
   },
   methods: {
+    /** 指定要素の現在の高さを style に設定する。親要素がない場合は指定された ID の要素に一時的に登録して計測する。 */
+    setStyleHeight: function (elm, dummyParentId) {
+      let dummyParent;
+      const hasParent = !!elm.parentNode;
+      if (!hasParent) {
+        dummyParent = document.getElementById(dummyParentId);
+        dummyParent.appendChild(elm);
+      }
+      elm.style.height = elm.clientHeight + 'px';
+      if (!hasParent) { dummyParent.removeChild(elm); }
+    },
+    /** style に設定されている高さを空にする。 */
+    clearStyleHeight: function (elm) {
+      elm.style.height = '';
+    },
     /** ルートのクエリーを更新する。 */
     updateRouteQuery: function (changeQuery) {
       const margedQuery = Object.assign({}, this.$route.query, changeQuery);
@@ -649,7 +669,6 @@ export default {
   }
 
   #filterForm {
-    height: 9.5em;
     overflow: hidden;
   }
 
@@ -662,9 +681,6 @@ export default {
   @keyframes filter-in {
     0% {
       height: 0em;
-    }
-    100% {
-      height: 7.5em;
     }
   }
 
