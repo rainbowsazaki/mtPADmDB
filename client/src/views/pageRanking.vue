@@ -1,15 +1,20 @@
 <template>
   <div>
-    <select :value="id" @change="changeRouteId($event.target.value)">
-      <template v-for="(group, n) in $options.rankingSettings">
-        <optgroup :label="group.label" :key="`group${n}`">
-          <option v-for="setting in group.settings" :value="setting.id" :key="`rankingSetting_${setting.id}`">{{ setting.title }}ランキング</option>
-        </optgroup>
-      </template>
-    </select>
-    <input type="checkbox" id="isOverLimit" v-model="isOverLimit" value="1">
-    <label for="isOverLimit">限界突破時のパラメータを使用する</label>
-    <h2>{{ rankingSetting.title }}ランキング</h2>
+    <h2>モンスターランキング</h2>
+    <div>
+      <select :value="id" @change="changeRouteId($event.target.value)">
+        <template v-for="(group, n) in $options.rankingSettings">
+          <optgroup :label="group.label" :key="`group${n}`">
+            <option v-for="setting in group.settings" :value="setting.id" :key="`rankingSetting_${setting.id}`">{{ setting.title }}ランキング</option>
+          </optgroup>
+        </template>
+      </select>
+    </div>
+    <div>
+      <input type="checkbox" id="isOverLimit" v-model="isOverLimit" value="1">
+      <label for="isOverLimit">限界突破時のパラメータを使用する</label>
+    </div>
+    <h3>{{ rankingSetting.title }}ランキング</h3>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
 
