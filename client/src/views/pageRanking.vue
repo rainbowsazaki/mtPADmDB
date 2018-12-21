@@ -14,6 +14,10 @@
       <input type="checkbox" id="isOverLimit" v-model="isOverLimit" value="1">
       <label for="isOverLimit">限界突破時のパラメータを使用する</label>
     </div>
+    <div>
+      <input type="checkbox" id="useMultiBoost" v-model="useMultiBoost" value="1">
+      <label for="useMultiBoost">マルチブースト適用時のパラメータを使用する</label>
+    </div>
     <h3>{{ rankingSetting.title }}ランキング</h3>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
@@ -156,10 +160,10 @@ export default {
           title: 'プラス換算値',
           description: 'モンスターのレベル最大・全覚醒時のプラス換算値のランキングです。',
           columns: [
-            { name: 'HP', func: data => data.hyperMaxParam.hp - 990 },
-            { name: '攻撃', func: data => data.hyperMaxParam.attack - 495 },
-            { name: '回復', func: data => data.hyperMaxParam.recovery - 297 },
-            { name: '+換算', func: data => (data.hyperMaxParam.hp / 10 + data.hyperMaxParam.attack / 5 + data.hyperMaxParam.recovery / 3 - 297).toFixed(1) }
+            { name: 'HP', func: data => data.hyperPlusCount.hp },
+            { name: '攻撃', func: data => data.hyperPlusCount.attack },
+            { name: '回復', func: data => data.hyperPlusCount.recovery },
+            { name: '+換算', func: data => data.hyperPlusCount.plus }
           ],
           sortColumn: 3
         }
@@ -306,6 +310,8 @@ export default {
       isOpenFilterTrigger: false,
       /** 限界突破時のパラメータを使用するかどうか。 */
       isOverLimit: false,
+      /** マルチブースト適用時のパラメータを使用するかどうか。 */
+      useMultiBoost: false,
       /** 1ページ内に表示するモンスターの件数。 */
       inPageCount: 20,
       /** 表示するモンスターに対するフィルタ。 */
@@ -432,19 +438,19 @@ export default {
         get multiBoostRate () {
           return this.culcAwakenRate(30);
         },
-        /** 指定されたベースのパラメータを、+297・全覚醒状ののものにする。 */
-        culcHyperParam: function (baseParam) {
+        /** 指定されたベースのパラメータを全覚醒状態のものにする。 */
+        culcFullAwakenParam: function (baseParam) {
           let hp = NaN;
           let attack = NaN;
           let recovery = NaN;
           if (baseParam.hp !== null) {
-            hp = baseParam.hp + 990 + (this.awakenObj[1] || 0) * awakenTable[1].value;
+            hp = baseParam.hp + (this.awakenObj[1] || 0) * awakenTable[1].value;
           }
           if (baseParam.attack !== null) {
-            attack = baseParam.attack + 495 + (this.awakenObj[2] || 0) * awakenTable[2].value;
+            attack = baseParam.attack + (this.awakenObj[2] || 0) * awakenTable[2].value;
           }
           if (baseParam.recovery != null) {
-            recovery = baseParam.recovery + 297 + (this.awakenObj[3] || 0) * awakenTable[3].value;
+            recovery = baseParam.recovery + (this.awakenObj[3] || 0) * awakenTable[3].value;
           }
           return {
             hp: hp,
@@ -462,28 +468,43 @@ export default {
           }
           return this.baseData.maxParam;
         },
-        /** 指定されたモンスターデータの、レベル最大or限界突破・攻撃+99・全覚醒時のパラメータを取得する。 */
+        /** 指定されたモンスターデータの、レベル最大or限界突破・+297・全覚醒時のパラメータを取得する。 */
         get hyperMaxParam () {
           let propName = 'hyperMaxParam';
           if (manageObj.isOverLimit) { propName += '_overLimit'; }
+          if (manageObj.useMultiBoost) { propName += '_multiBoost'; }
           const cache = this.cache;
           if (!cache[propName]) {
-            cache[propName] = this.culcHyperParam(this._targetParam);
-            const baseParam = this._targetParam;
-            const param = {
-              hp: NaN,
-              attack: NaN,
-              recovery: NaN
-            };
-            if (baseParam.hp !== null) {
-              param.hp = baseParam.hp + 990 + (this.awakenObj[1] || 0) * awakenTable[1].value;
+            const param = this.culcFullAwakenParam(this._targetParam);
+            param.hp += 10 * 99;
+            param.attack += 5 * 99;
+            param.recovery += 3 * 99;
+            if (manageObj.useMultiBoost && this.awakenObj[30]) {
+              const rate = awakenTable[30].rate ** this.awakenObj[30];
+              param.hp = param.hp * rate | 0;
+              param.attack = param.attack * rate | 0;
+              param.recovery = param.recovery * rate | 0;
             }
-            if (baseParam.attack !== null) {
-              param.attack = baseParam.attack + 495 + (this.awakenObj[2] || 0) * awakenTable[2].value;
+            cache[propName] = param;
+          }
+          return cache[propName];
+        },
+        /** 指定されたモンスターデータの、レベル最大or限界突破・全覚醒時のパラメータ及びプラス換算値を取得する。 */
+        get hyperPlusCount () {
+          let propName = 'hyperPlusCount';
+          if (manageObj.isOverLimit) { propName += '_overLimit'; }
+          if (manageObj.useMultiBoost) { propName += '_multiBoost'; }
+          const cache = this.cache;
+          if (!cache[propName]) {
+            const param = this.culcFullAwakenParam(this._targetParam);
+            if (manageObj.useMultiBoost && this.awakenObj[30]) {
+              const rate = awakenTable[30].rate ** this.awakenObj[30];
+              param.hp = param.hp * rate | 0;
+              param.attack = param.attack * rate | 0;
+              param.recovery = param.recovery * rate | 0;
             }
-            if (baseParam.recovery != null) {
-              param.recovery = baseParam.recovery + 297 + (this.awakenObj[3] || 0) * awakenTable[3].value;
-            }
+            param.plus = (param.hp / 10 + param.attack / 5 + param.recovery / 3).toFixed(1);
+
             cache[propName] = param;
           }
           return cache[propName];
@@ -572,6 +593,12 @@ export default {
     },
     '$route.query.useOverLimitParam': function (newValue) {
       this.isOverLimit = !!newValue;
+    },
+    'useMultiBoost': function () {
+      this.updateRouteQuery({ 'useMultiBoost': this.useMultiBoost ? 1 : undefined });
+    },
+    '$route.query.useMultiBoost': function (newValue) {
+      this.useMultiBoost = !!newValue;
     }
   },
   created: function () {
@@ -579,6 +606,8 @@ export default {
     isSetFilter |= this.queryToFilter('attr');
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
+    isSetFilter |= this.queryToData('useMultiBoost');
+
     if (isSetFilter) {
       this.isVisibleFilter = this.isOpenFilterTrigger = true;
     }
@@ -609,6 +638,11 @@ export default {
       const obj = {};
       obj[name] = array.length ? array.slice().sort().join(',') : undefined;
       this.updateRouteQuery(obj);
+    },
+    /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
+    queryToData: function (name) {
+      this[name] = this.$route.query[name];
+      return true;
     },
     /** 特定のルートクエリーを使用して、フィルタリング設定を変更する。 */
     queryToFilter: function (name) {
