@@ -289,7 +289,7 @@ export default {
         },
         {
           id: 'assistPlus',
-          title: 'プラス換算値',
+          title: 'アシストボーナス プラス換算値',
           description: 'モンスターのレベル最大・全覚醒時のアシストボーナス値のプラス換算値のランキングです。',
           columns: [
             { name: 'HP', func: data => data.assistMaxParam.hp },
