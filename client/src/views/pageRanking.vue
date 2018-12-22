@@ -73,7 +73,7 @@
               </span>
             </template>
           </div>
-          <button class="btn btn-primary btn-sm" type="button" @click="clearFilter">クリア</button>
+          <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
         </form>
       </transition>
     </div>
