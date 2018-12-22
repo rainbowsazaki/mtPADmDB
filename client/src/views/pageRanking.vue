@@ -11,8 +11,8 @@
       </select>
     </div>
     <div>
-      <input type="checkbox" id="isOverLimit" v-model="isOverLimit" value="1">
-      <label for="isOverLimit">限界突破時のパラメータを使用する</label>
+      <input type="checkbox" id="useOverLimit" v-model="useOverLimit" value="1">
+      <label for="useOverLimit">限界突破時のパラメータを使用する</label>
     </div>
     <div>
       <input type="checkbox" id="useMultiBoost" v-model="useMultiBoost" value="1">
@@ -309,7 +309,7 @@ export default {
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
       isOpenFilterTrigger: false,
       /** 限界突破時のパラメータを使用するかどうか。 */
-      isOverLimit: false,
+      useOverLimit: false,
       /** マルチブースト適用時のパラメータを使用するかどうか。 */
       useMultiBoost: false,
       /** 1ページ内に表示するモンスターの件数。 */
@@ -460,7 +460,7 @@ export default {
         },
         /** 現在のランキング設定とモンスターの情報に基づき、レベル最大時のパラメータか限界突破時のパラメータのいずれかを取得する。 */
         get _targetParam () {
-          if (manageObj.isOverLimit && this.baseData.overLimit) {
+          if (manageObj.useOverLimit && this.baseData.overLimit) {
             const overLimitParam = this.baseData.overLimitParam;
             if (overLimitParam.hp !== null || overLimitParam.attack !== null || overLimitParam.recovery !== null) {
               return overLimitParam;
@@ -471,7 +471,7 @@ export default {
         /** 指定されたモンスターデータの、レベル最大or限界突破・+297・全覚醒時のパラメータを取得する。 */
         get hyperMaxParam () {
           let propName = 'hyperMaxParam';
-          if (manageObj.isOverLimit) { propName += '_overLimit'; }
+          if (manageObj.useOverLimit) { propName += '_overLimit'; }
           if (manageObj.useMultiBoost) { propName += '_multiBoost'; }
           const cache = this.cache;
           if (!cache[propName]) {
@@ -492,7 +492,7 @@ export default {
         /** 指定されたモンスターデータの、レベル最大or限界突破・全覚醒時のパラメータ及びプラス換算値を取得する。 */
         get hyperPlusCount () {
           let propName = 'hyperPlusCount';
-          if (manageObj.isOverLimit) { propName += '_overLimit'; }
+          if (manageObj.useOverLimit) { propName += '_overLimit'; }
           if (manageObj.useMultiBoost) { propName += '_multiBoost'; }
           const cache = this.cache;
           if (!cache[propName]) {
@@ -512,7 +512,7 @@ export default {
         /** レベル最大or限界突破・+297・全覚醒時のアシストボーナス値を取得する。 */
         get assistMaxParam () {
           let propName = 'assistMaxParam';
-          if (manageObj.isOverLimit) { propName += '_overLimit'; }
+          if (manageObj.useOverLimit) { propName += '_overLimit'; }
           const cache = this.cache;
           if (!cache[propName]) {
             if (!this.baseData.assist) {
@@ -588,11 +588,11 @@ export default {
     '$route.query.type': function () {
       this.queryToFilter('type');
     },
-    'isOverLimit': function () {
-      this.updateRouteQuery({ 'useOverLimitParam': this.isOverLimit ? 1 : undefined });
+    'useOverLimit': function () {
+      this.updateRouteQuery({ 'useOverLimit': this.useOverLimit ? 1 : undefined });
     },
-    '$route.query.useOverLimitParam': function (newValue) {
-      this.isOverLimit = !!newValue;
+    '$route.query.useOverLimit': function (newValue) {
+      this.useOverLimit = !!newValue;
     },
     'useMultiBoost': function () {
       this.updateRouteQuery({ 'useMultiBoost': this.useMultiBoost ? 1 : undefined });
@@ -606,6 +606,7 @@ export default {
     isSetFilter |= this.queryToFilter('attr');
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
+    isSetFilter |= this.queryToData('useOverLimit');
     isSetFilter |= this.queryToData('useMultiBoost');
 
     if (isSetFilter) {
