@@ -108,11 +108,6 @@ Vue.mixin({
   }
 });
 
-// ナビゲーション変更時に一番上にスクロールする。
-router.afterEach(() => {
-  $('html,body').scrollTop(0);
-});
-
 // ルーターのインスタンスをrootとなるVueインスタンスに渡します
 new Vue({
   router: router,

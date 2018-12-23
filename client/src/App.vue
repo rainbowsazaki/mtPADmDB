@@ -71,6 +71,9 @@ export default {
       this.sendGa();
       // 元のページでのエラー表示を消す。
       this.$store.commit('clearErrors');
+    },
+    '$route.path': function () {
+      $('html,body').scrollTop(0);
     }
   },
   created: function () {
