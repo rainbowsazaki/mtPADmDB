@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>モンスター情報比較</h2>
+    <h2>モンスター比較</h2>
     <h3>比較対象指定</h3>
     <form @submit="$event.preventDefault(); updateCompareMonster();">
       <div class="row" style="margin-bottom: 4px;">

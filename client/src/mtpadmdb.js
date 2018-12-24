@@ -100,7 +100,7 @@ export const constData = {
     { text: 'ホーム', to: '/' },
     { text: 'スキル一覧', to: '/skill' },
     { text: 'リーダースキル一覧', to: { name: 'leaderSkillList' }},
-    { text: 'パラメータ比較', to: '/compare' },
+    { text: 'モンスター比較', to: '/compare' },
     { text: 'ランキング', to: { name: 'ranking' }},
     { text: '新規登録', to: '/edit' },
     { text: '画像投稿', to: '/pic' },
