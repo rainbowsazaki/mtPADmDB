@@ -1,6 +1,7 @@
 <template>
 
   <div>
+    <h2>{{ pageTitle }}</h2>
     <p>※文字を入力するところで値が不明の場合は空欄にしておいてください。</p>
     <form onsubmit="return false;" @submit="submit">
       <table class="table table-bordered table-sm">
@@ -277,14 +278,7 @@ import { mtpadmdb, constData, gtagProductionOnly } from '../mtpadmdb.js';
  */
 export default {
   name: 'PageMonsterEdit',
-  pageTitle: function () {
-    if (this.isHistory) { return '履歴をもとに編集'; }
-    if (this.no) {
-      return `編集 No.${this.no} ${this.monsterData.name}`;
-    } else {
-      return '新規登録';
-    }
-  },
+  pageTitle: function () { return this.pageTitle; },
   middleOfBreadcrumbs: function () {
     if (this.isHistory) {
       return {
@@ -328,7 +322,15 @@ export default {
     skillTable: function () { return this.$store.state.skillTable; },
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
     imageTable: function () { return this.$store.state.imageTable; },
-
+    
+    pageTitle: function () { 
+      if (this.isHistory) { return '履歴をもとに編集'; }
+      if (this.no) {
+        return `編集 No.${this.no} ${this.monsterData.name}`;
+      } else {
+        return 'モンスター情報新規登録';
+      }
+    },
     /** スキルレベル最大時の（最短の）スキルターン */
     minimumSkillTurn: function () {
       if (!this.skillDetails.baseTurn || !this.skillDetails.maxLevel) { return NaN; }
