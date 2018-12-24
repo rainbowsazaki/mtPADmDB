@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <h1>みんなで作るパズドラモンスターデータベース</h1>
+    <h2>モンスター一覧</h2>
     <div><tweet-button /></div>
 
     <div v-if="isLoadingMonsterList">データの読み込み中です ...</div>

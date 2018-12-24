@@ -1,44 +1,47 @@
 <template>
-  <div class="row">
-    <div class="col-md-6">
-      <canvas id="canvas" style="display:none;" />
-      <div class="col-md-12">
-        <template v-if="!no">モンスター番号と</template>
-        <template v-else>No.{{ monsterNo }} {{ (monsterTable[monsterNo] || {}).name || 'のモンスター' }}の</template>
-        モンスター情報画面の画像ファイルを選択してください。</div>
-      <div class="row">
-        <div v-if="!no" class="col-md-12">
-          <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable" :image-table="imageTable" />
-        </div>
+  <div>
+    <h2>{{ pageTitle }}</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <canvas id="canvas" style="display:none;" />
         <div class="col-md-12">
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="monsterImageFile" @change="loadLocalImage">
-            <label class="custom-file-label" for="monsterImageFile" style="overflow:hidden;">モンスター情報画像選択</label>
+          <template v-if="!no">モンスター番号と</template>
+          <template v-else>No.{{ monsterNo }} {{ (monsterTable[monsterNo] || {}).name || 'のモンスター' }}の</template>
+          モンスター情報画面の画像ファイルを選択してください。</div>
+        <div class="row">
+          <div v-if="!no" class="col-md-12">
+            <monster-incremental-search v-model="monsterNo" :monster-table="monsterTable" :image-table="imageTable" />
           </div>
+          <div class="col-md-12">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="monsterImageFile" @change="loadLocalImage">
+              <label class="custom-file-label" for="monsterImageFile" style="overflow:hidden;">モンスター情報画像選択</label>
+            </div>
+          </div>
+        
         </div>
-      
+        <img :src="uploadImgSrc" style="width: 100%; height: auto;">
       </div>
-      <img :src="uploadImgSrc" style="width: 100%; height: auto;">
-    </div>
-    <div v-if="!imageResultSrc" class="col-md-6">
-      <p>下記のような画面のスクリーンショットを選択してください。</p>
-      <p>アシストしていない状態のものをお願いします。</p>
-      <img src="../assets/image/image_sample.jpg" alt="サンプル">
-    </div>
-
-    <div v-if="imageResultSrc" id="result" class="col-md-6">
-      <h2>切り抜き結果</h2>
-      <div>
-        <h3>モンスター画像</h3>
-        <img :src="imageResultSrc" style="width: 100%;">
-      </div>
-      <div>
-        <h3>アイコン画像</h3>
-        <img :src="iconResultSrc">
+      <div v-if="!imageResultSrc" class="col-md-6">
+        <p>下記のような画面のスクリーンショットを選択してください。</p>
+        <p>アシストしていない状態のものをお願いします。</p>
+        <img src="../assets/image/image_sample.jpg" alt="サンプル">
       </div>
 
-      <div style="margin-top: 1em;">
-        <button @click="submit" class="btn btn-primary" :disabled="isSubmitted">{{ isSubmitted ? '送信中' : 'この画像を送信する' }}</button>
+      <div v-if="imageResultSrc" id="result" class="col-md-6">
+        <h2>切り抜き結果</h2>
+        <div>
+          <h3>モンスター画像</h3>
+          <img :src="imageResultSrc" style="width: 100%;">
+        </div>
+        <div>
+          <h3>アイコン画像</h3>
+          <img :src="iconResultSrc">
+        </div>
+
+        <div style="margin-top: 1em;">
+          <button @click="submit" class="btn btn-primary" :disabled="isSubmitted">{{ isSubmitted ? '送信中' : 'この画像を送信する' }}</button>
+        </div>
       </div>
     </div>
   </div>
@@ -52,13 +55,7 @@ import { mtpadmdb, gtagProductionOnly } from '../mtpadmdb.js';
  */
 export default {
   name: 'PagePic',
-  pageTitle: function () {
-    if (this.no) {
-      return `画像投稿 No.${this.no} ${this.selectMonsterName}`;
-    } else {
-      return '画像投稿';
-    }
-  },
+  pageTitle: function () { return this.pageTitle; },
   middleOfBreadcrumbs: function () {
     if (this.no) {
       return { text: `No.${this.no} ${this.selectMonsterName}`, link: '/' + this.no };
@@ -88,6 +85,13 @@ export default {
     imageTable: function () { return this.$store.state.imageTable; },
     selectMonsterName: function () {
       return (this.monsterTable[this.no] || {}).name || '';
+    },
+    pageTitle: function () {
+      if (this.no) {
+        return `画像投稿 No.${this.no} ${this.selectMonsterName}`;
+      } else {
+        return '画像投稿';
+      }
     }
   },
   watch: {
