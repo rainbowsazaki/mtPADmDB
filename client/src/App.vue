@@ -39,6 +39,7 @@
           </li>
         </ol>
       </nav>
+      <h1 :class="{ h6: $route.path !== '/' }">{{ constData.title }}</h1>
       <router-view v-if="$store.state.monsterTable" />
       <div style="margin-top:2rem; display: flex; justify-content: space-between; flex-wrap: wrap;">
         <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=myfavoriteday-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B01CDP1DMS&linkId=2fde5a6504e57a723c17da60307b4591" />
@@ -64,7 +65,8 @@ export default {
   computed: {
     errors: function () { return this.$store.state.errors; },
     messages: function () { return this.$store.state.messages; },
-    navis: function () { return constData.navis; }
+    navis: function () { return constData.navis; },
+    constData: function () { return constData; }
   },
   watch: {
     '$route': function () {
