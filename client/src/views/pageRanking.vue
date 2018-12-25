@@ -607,8 +607,8 @@ export default {
     isSetFilter |= this.queryToFilter('attr');
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
-    isSetFilter |= this.queryToData('useOverLimit');
-    isSetFilter |= this.queryToData('useMultiBoost');
+    this.queryToData('useOverLimit');
+    this.queryToData('useMultiBoost');
 
     if (isSetFilter) {
       this.isVisibleFilter = this.isOpenFilterTrigger = true;
@@ -644,7 +644,7 @@ export default {
     /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
     queryToData: function (name) {
       this[name] = this.$route.query[name];
-      return true;
+      return (this[name] !== undefined);
     },
     /** 特定のルートクエリーを使用して、フィルタリング設定を変更する。 */
     queryToFilter: function (name) {
