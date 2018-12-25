@@ -80,6 +80,7 @@
 
     <pagination :page="page" :page-count="pageCount" />
 
+    <div><tweet-button /></div>
     <table class="table table-bordered table-sm">
       <tr class="thead-light">
         <th />
