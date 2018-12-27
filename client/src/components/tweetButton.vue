@@ -3,11 +3,6 @@
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 400 400" style="enable-background:new 0 0 400 400;" :width="width" :height="height" xml:space="preserve"
     >
-      <g id="Dark_Blue">
-        <path style="fill:#1DA1F2;" d="M350,400H50c-27.6,0-50-22.4-50-50V50C0,22.4,22.4,0,50,0h300c27.6,0,50,22.4,50,50v300
-          C400,377.6,377.6,400,350,400z"
-        />
-      </g>
       <g id="Logo__x2014__FIXED">
         <path style="fill:#FFFFFF;" d="M153.6,301.6c94.3,0,145.9-78.2,145.9-145.9c0-2.2,0-4.4-0.1-6.6c10-7.2,18.7-16.3,25.6-26.6
           c-9.2,4.1-19.1,6.8-29.5,8.1c10.6-6.3,18.7-16.4,22.6-28.4c-9.9,5.9-20.9,10.1-32.6,12.4c-9.4-10-22.7-16.2-37.4-16.2
@@ -17,7 +12,7 @@
           C97.7,293.1,124.7,301.6,153.6,301.6"
         />
       </g>
-    </svg>
+    </svg>ツイート
   </a>
 </template>
 
@@ -67,3 +62,16 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  a {
+    display: inline-block;
+    color: #FFFFFF;
+    text-decoration: none;
+    background: #1DA1F2;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 2px;
+    padding: 2px 4px 0px 0px;
+  }
+</style>
