@@ -63,6 +63,82 @@ EOS
       $description =~ s/\r?\n//g;
     };
   }
+
+# モンスターランキング
+} elsif ($ENV{'PATH_INFO'} =~ m!^/ranking(?:/([\w\d]*)/?)?$!) {
+  my $kind = $1 || 'hp';
+
+  my %ranking_infos = (
+    hp => {
+      title => 'HP',
+      description => 'モンスターのレベル最大・+297・全覚醒時のHPのランキングです。',
+    },
+    attack => {
+      title => '攻撃',
+      description => 'モンスターのレベル最大・+297・全覚醒時の攻撃のランキングです。',
+    },
+    recovery => {
+      title => '回復',
+      description => 'モンスターのレベル最大・+297・全覚醒時の回復のランキングです。',
+    },
+    plus => {
+      title => 'プラス換算値',
+      description => 'モンスターのレベル最大・全覚醒時のプラス換算値のランキングです。',
+    },
+    wayAttack => {
+      title => '2体攻撃消し時攻撃力',
+      description => 'モンスターのレベル最大・+297・全覚醒時の2体攻撃消し時の攻撃力ランキングです。',
+    },
+    lJiAttack => {
+      title => 'L字消し攻撃時攻撃力',
+      description => 'モンスターのレベル最大・+297・全覚醒時のL字消し攻撃時の攻撃力ランキングです。',
+    },
+    '7comboAttack' => {
+      title => '7コンボ時攻撃力',
+      description => 'モンスターのレベル最大・+297・全覚醒時の7コンボ時の攻撃力ランキングです。',
+    },
+    '10comboAttack' => {
+      title => '10コンボ時攻撃力',
+      description => 'モンスターのレベル最大・+297・全覚醒時の10コンボ時の攻撃力ランキングです。',
+    },
+    way7comboAttack => {
+      title => '2体攻撃消し7コンボ時攻撃力',
+      description => 'モンスターのレベル最大・+297・全覚醒時の2体消し攻撃7コンボ時の攻撃力ランキングです。',
+    },
+    lJi7comboAttack => {
+      title => 'L字消し攻撃7コンボ時攻撃力',
+      description => 'モンスターのレベル最大・+297・全覚醒時の消し7コンボ時の攻撃力ランキングです。',
+    },
+    a3x3Attack => {
+      title => '無効貫通時攻撃力',
+      description => 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
+    },
+    a3x37comboAttack => {
+      title => '無効貫通７コンボ時攻撃力',
+      description => 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
+    },
+    assistHp => {
+      title => 'HPアシスト',
+      description => 'モンスターのレベル最大・+297・全覚醒時のHPアシストボーナスのランキングです。',
+    },
+    assistAttack => {
+      title => '攻撃アシスト',
+      description => 'モンスターのレベル最大・+297・全覚醒時の攻撃アシストボーナスのランキングです。',
+    },
+    assistRecovery => {
+      title => '回復アシスト',
+      description => 'モンスターのレベル最大・+297・全覚醒時の回復アシストボーナスのランキングです。',
+    },
+    assistPlus => {
+      title => 'アシストボーナス プラス換算値',
+      description => 'モンスターのレベル最大・全覚醒時のアシストボーナス値のプラス換算値のランキングです。',
+    }
+  );
+  my $info = $ranking_infos{$kind};
+  if ($info) {
+    $title = $info->{title} . 'ランキング';
+    $description = $info->{description};
+  }
 }
 
 #html ファイル読み込み
