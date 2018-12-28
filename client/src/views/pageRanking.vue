@@ -73,6 +73,18 @@
               </span>
             </template>
           </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">スキルターン</label>
+            <div class="col-sm-10">
+              <input type="range" v-model.number="filter.skillTurnMin" min="1" max="99" step="1">
+              <input type="number" v-model.number="filter.skillTurnMin" required min="1" max="99">以上
+            </div>
+            <label class="col-sm-2 col-form-label" />
+            <div class="col-sm-10">
+              <input type="range" v-model.number="filter.skillTurnMax" min="1" max="99" step="1">
+              <input type="number" v-model.number="filter.skillTurnMax" required min="1" max="99">以下
+            </div>
+          </div>
           <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
         </form>
       </transition>
@@ -322,12 +334,25 @@ export default {
         /** 複属性。 */
         subAttr: [],
         /** タイプ */
-        type: []
+        type: [],
+        /** スキルターンの最小値。 */
+        skillTurnMin: 1,
+        /** スキルターンの最大値。 */
+        skillTurnMax: 99
+      },
+      /** filterの初期値。 */
+      filterDefault: {
+        attr: [],
+        subAttr: [],
+        type: [],
+        skillTurnMin: 1,
+        skillTurnMax: 99
       }
     };
   },
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
+    skillTable () { return this.$store.state.skillTable; },
     imageTable () { return this.$store.state.imageTable; },
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
@@ -336,6 +361,23 @@ export default {
     pageCount () { return ((this.rankInfos.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     /** 現在表示するページの番号。 1オリジン。 */
     page () { return (this.$route.query.page * 1) || 1; },
+    /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
+    skillTurnFilterStr: {
+      get: function () {
+        if (this.filter.skillTurnMin === this.filterDefault.skillTurnMin &
+            this.filter.skillTurnMax === this.filterDefault.skillTurnMax) { return undefined; }
+        return this.filter.skillTurnMin + '-' + this.filter.skillTurnMax;
+      },
+      set: function (val) {
+        if (/(\d+)-(\d+)/.test(val)) {
+          this.filter.skillTurnMin = RegExp.$1 | 0;
+          this.filter.skillTurnMax = RegExp.$2 | 0;
+        } else {
+          this.filter.skillTurnMin = this.filterDefault.skillTurnMin;
+          this.filter.skillTurnMax = this.filterDefault.skillTurnMax;
+        }
+      }
+    },
     /** IDをキーとしてランキング設定を格納したオブジェクト。 */
     rankingSettingObj () {
       const obj = {};
@@ -396,6 +438,18 @@ export default {
           d => d.data.types.some(type => filterObj[type])
         );
       }
+      if (this.filter.skillTurnMin !== this.filterDefault.skillTurnMin ||
+          this.filter.skillTurnMax !== this.filterDefault.skillTurnMax) {
+        monsterArray = monsterArray.filter(
+          d => {
+            const skill = this.skillTable[d.data.skill];
+            if (!skill) { return false; }
+            const minTurn = skill.baseTurn - skill.maxLevel + 1;
+            return minTurn >= this.filter.skillTurnMin && minTurn <= this.filter.skillTurnMax;
+          }
+        );
+      }
+
       return monsterArray;
     },
     /** 覚醒発動時の効果のレートを取得する機能を追加したモンスター情報オブジェクトの配列。 */
@@ -589,6 +643,12 @@ export default {
     '$route.query.type': function () {
       this.queryToFilter('type');
     },
+    'skillTurnFilterStr': function () {
+      this.updateRouteQuery({ 'skillTurn': this.skillTurnFilterStr });
+    },
+    '$route.query.skillTurn': function (newValue) {
+      this.skillTurnFilterStr = newValue;
+    },
     'useOverLimit': function () {
       this.updateRouteQuery({ 'useOverLimit': this.useOverLimit ? 1 : undefined });
     },
@@ -600,6 +660,17 @@ export default {
     },
     '$route.query.useMultiBoost': function (newValue) {
       this.useMultiBoost = !!newValue;
+    },
+
+    'filter.skillTurnMin': function () {
+      if (this.filter.skillTurnMax < this.filter.skillTurnMin) {
+        this.filter.skillTurnMax = this.filter.skillTurnMin;
+      }
+    },
+    'filter.skillTurnMax': function () {
+      if (this.filter.skillTurnMax < this.filter.skillTurnMin) {
+        this.filter.skillTurnMin = this.filter.skillTurnMax;
+      }
     }
   },
   created: function () {
@@ -607,6 +678,9 @@ export default {
     isSetFilter |= this.queryToFilter('attr');
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
+    this.skillTurnFilterStr = this.$route.query.skillTurn;
+    isSetFilter |= (this.skillTurnFilterStr !== undefined);
+    
     this.queryToData('useOverLimit');
     this.queryToData('useMultiBoost');
 
@@ -659,7 +733,16 @@ export default {
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
       for (const key in this.filter) {
-        this.filter[key] = [];
+        const defaultValue = this.filterDefault[key];
+        if (typeof defaultValue === 'object') {
+          if (Array.isArray(defaultValue)) {
+            this.filter[key] = defaultValue.concat();
+          } else {
+            this.filter[key] = Object.assign({}, defaultValue);
+          }
+        } else {
+          this.filter[key] = defaultValue;
+        }
       }
     },
     /** ルート上のランキング設定IDを変更する。 */
