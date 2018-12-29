@@ -37,41 +37,47 @@
                   @after-leave="isOpenFilterTrigger = false;"
       >
         <form id="filterForm" v-if="isVisibleFilter">
-          <div>
-            主属性：
-            <template v-for="(attrName, attr) in attributeTable">
-              <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
-                <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
-                <label :for="`check_mainAttr_${attr}`">
-                  <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
-                  <span v-else>{{ attrName }}</span>
-                </label>
-              </span>
-            </template>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">主属性</label>
+            <div class="col-sm-10">
+              <template v-for="(attrName, attr) in attributeTable">
+                <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
+                  <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
+                  <label :for="`check_mainAttr_${attr}`">
+                    <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+                    <span v-else>{{ attrName }}</span>
+                  </label>
+                </span>
+              </template>
+            </div>
           </div>
-          <div>
-            複属性：
-            <template v-for="(attrName, attr) in attributeTable">
-              <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
-                <input type="checkbox" class="imageCheckBox" v-model="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
-                <label :for="`check_subAttr_${attr}`">
-                  <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
-                  <span v-else>{{ attrName }}</span>
-                </label>
-              </span>
-            </template>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">複属性</label>
+            <div class="col-sm-10">
+              <template v-for="(attrName, attr) in attributeTable">
+                <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
+                  <input type="checkbox" class="imageCheckBox" v-model="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
+                  <label :for="`check_subAttr_${attr}`">
+                    <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+                    <span v-else>{{ attrName }}</span>
+                  </label>
+                </span>
+              </template>
+            </div>
           </div>
-          <div>
-            タイプ：
-            <template v-for="(typeInfo, type) in typeTable">
-              <span v-if="type !== '0'" style="margin-right: 0.5rem" :key="`type${type}`">
-                <input type="checkbox" class="imageCheckBox" v-model="filter.type" :value="type" :id="`type_${type}`">
-                <label :for="`type_${type}`">
-                  <img v-if="type !== 'null'" style="width: 24px; height: 24px;" :src="`./image/type/${type}.png`">
-                  <span v-else>{{ typeInfo.name }}</span>
-                </label>
-              </span>
-            </template>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">タイプ</label>
+            <div class="col-sm-10">
+              <template v-for="(typeInfo, type) in typeTable">
+                <span v-if="type !== '0'" style="margin-right: 0.5rem" :key="`type${type}`">
+                  <input type="checkbox" class="imageCheckBox" v-model="filter.type" :value="type" :id="`type_${type}`">
+                  <label :for="`type_${type}`">
+                    <img v-if="type !== 'null'" style="width: 24px; height: 24px;" :src="`./image/type/${type}.png`">
+                    <span v-else>{{ typeInfo.name }}</span>
+                  </label>
+                </span>
+              </template>
+            </div>
           </div>
           <div class="form-group row">
             <label class="col-sm-2 col-form-label">スキルターン</label>
