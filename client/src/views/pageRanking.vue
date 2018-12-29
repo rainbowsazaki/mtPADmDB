@@ -113,7 +113,7 @@
             {{ data.data.name }}
           </router-link>
         </td>
-        <td v-for="(column, m) in data.columns" class="text-right" :key="`column${m}`">{{ column }}</td>
+        <td v-for="(column, m) in data.columns" class="text-right" :key="`column${m}`">{{ column | addComma }}</td>
       </tr>
     </table>
   </div>
