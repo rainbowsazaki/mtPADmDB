@@ -784,7 +784,7 @@ export default {
 
   input.imageCheckBox { display: none; }
   input.imageCheckBox + label {
-    filter: opacity(50%) grayscale(75%);
+    filter: opacity(50%) grayscale(95%);
   }
 
   input.imageCheckBox:checked + label {
