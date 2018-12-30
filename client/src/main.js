@@ -57,6 +57,7 @@ const PdOption = () => import('./components/pdOption.vue');
 const PdSelect = () => import('./components/pdSelect.vue');
 const ScopedStyle = () => import('./components/scopedStyle.vue');
 const SkillIncrementalInput = () => import('./components/skillIncrementalInput.vue');
+const MonsterFilterSetting = () => import('./components/monsterFilterSetting.vue');
 
 Vue.component('monster-icon', MonsterIcon);
 Vue.component('monster-incremental-search', MonsterIncrementalSearch);
@@ -66,6 +67,7 @@ Vue.component('pd-select', PdSelect);
 Vue.component('scoped-style', ScopedStyle);
 Vue.component('skill-incremental-input', SkillIncrementalInput);
 Vue.component('tweet-button', TweetButton);
+Vue.component('monster-filter-setting', MonsterFilterSetting);
 
 // ページ用のコンポーネントで使用する処理のミックスイン
 Vue.mixin({
