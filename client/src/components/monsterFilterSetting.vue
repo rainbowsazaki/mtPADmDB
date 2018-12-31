@@ -76,7 +76,50 @@
 </template>
 
 <script>
-import { constData } from '../mtpadmdb.js';
+import { constData, commonData } from '../mtpadmdb.js';
+
+/** filterの初期値。 */
+const filterDefault = {
+  attr: [],
+  subAttr: [],
+  type: [],
+  skillTurnMin: 1,
+  skillTurnMax: 99
+};
+
+/** フィルタリング設定を使用してモンスター情報の配列から、フィルタリング情報の条件を満たすもののみ取り出した配列を作成する。 */
+export function filterMonsterDataArray (setting, target) {
+  let monsterArray = target;
+  if (setting.attr.length > 0) {
+    const filterObj = {};
+    for (const attr of setting.attr) { filterObj[attr] = true; }
+    monsterArray = monsterArray.filter(d => filterObj[d.data.attributes[0]]);
+  }
+  if (setting.subAttr.length > 0) {
+    const filterObj = {};
+    for (const attr of setting.subAttr) { filterObj[attr] = true; }
+    monsterArray = monsterArray.filter(d => filterObj[d.data.attributes[1]]);
+  }
+  if (setting.type.length > 0) {
+    const filterObj = {};
+    for (const type of setting.type) { filterObj[type] = true; }
+    monsterArray = monsterArray.filter(
+      d => d.data.types.some(type => filterObj[type])
+    );
+  }
+  if (setting.skillTurnMin !== filterDefault.skillTurnMin ||
+      setting.skillTurnMax !== filterDefault.skillTurnMax) {
+    monsterArray = monsterArray.filter(
+      d => {
+        const skill = commonData.skillTable[d.data.skill];
+        if (!skill) { return false; }
+        const minTurn = skill.baseTurn - skill.maxLevel + 1;
+        return minTurn >= setting.skillTurnMin && minTurn <= setting.skillTurnMax;
+      }
+    );
+  }
+  return monsterArray;
+}
 
 /** モンスター絞り込みの設定を行うコンポーネント。 */
 export default {
@@ -105,14 +148,6 @@ export default {
         skillTurnMin: 1,
         /** スキルターンの最大値。 */
         skillTurnMax: 99
-      },
-      /** filterの初期値。 */
-      filterDefault: {
-        attr: [],
-        subAttr: [],
-        type: [],
-        skillTurnMin: 1,
-        skillTurnMax: 99
       }
     };
   },
@@ -122,8 +157,8 @@ export default {
     /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillTurnFilterStr: {
       get: function () {
-        if (this.filter.skillTurnMin === this.filterDefault.skillTurnMin &
-            this.filter.skillTurnMax === this.filterDefault.skillTurnMax) { return undefined; }
+        if (this.filter.skillTurnMin === filterDefault.skillTurnMin &
+            this.filter.skillTurnMax === filterDefault.skillTurnMax) { return undefined; }
         return this.filter.skillTurnMin + '-' + this.filter.skillTurnMax;
       },
       set: function (val) {
@@ -131,8 +166,8 @@ export default {
           this.filter.skillTurnMin = RegExp.$1 | 0;
           this.filter.skillTurnMax = RegExp.$2 | 0;
         } else {
-          this.filter.skillTurnMin = this.filterDefault.skillTurnMin;
-          this.filter.skillTurnMax = this.filterDefault.skillTurnMax;
+          this.filter.skillTurnMin = filterDefault.skillTurnMin;
+          this.filter.skillTurnMax = filterDefault.skillTurnMax;
         }
       }
     }
@@ -242,7 +277,7 @@ export default {
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
       for (const key in this.filter) {
-        const defaultValue = this.filterDefault[key];
+        const defaultValue = filterDefault[key];
         if (typeof defaultValue === 'object') {
           if (Array.isArray(defaultValue)) {
             this.filter[key] = defaultValue.concat();

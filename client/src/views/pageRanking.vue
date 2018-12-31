@@ -49,6 +49,7 @@
 
 <script>
 import { constData } from '../mtpadmdb.js';
+import { filterMonsterDataArray } from '../components/monsterFilterSetting.vue';
 
 /**
  * モンスターのパラメータなどのランク付けを行うページのコンポーネント。
@@ -269,20 +270,11 @@ export default {
         skillTurnMin: 1,
         /** スキルターンの最大値。 */
         skillTurnMax: 99
-      },
-      /** filterの初期値。 */
-      filterDefault: {
-        attr: [],
-        subAttr: [],
-        type: [],
-        skillTurnMin: 1,
-        skillTurnMax: 99
       }
     };
   },
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
-    skillTable () { return this.$store.state.skillTable; },
     imageTable () { return this.$store.state.imageTable; },
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
@@ -333,37 +325,7 @@ export default {
     },
     /** 現在のフィルタリング設定でフィルタリングされた、ランキング結果の配列。 */
     filteredRankInfos () {
-      let monsterArray = this.rankInfos;
-      if (this.filterSetting.attr.length > 0) {
-        const filterObj = {};
-        for (const attr of this.filterSetting.attr) { filterObj[attr] = true; }
-        monsterArray = monsterArray.filter(d => filterObj[d.data.attributes[0]]);
-      }
-      if (this.filterSetting.subAttr.length > 0) {
-        const filterObj = {};
-        for (const attr of this.filterSetting.subAttr) { filterObj[attr] = true; }
-        monsterArray = monsterArray.filter(d => filterObj[d.data.attributes[1]]);
-      }
-      if (this.filterSetting.type.length > 0) {
-        const filterObj = {};
-        for (const type of this.filterSetting.type) { filterObj[type] = true; }
-        monsterArray = monsterArray.filter(
-          d => d.data.types.some(type => filterObj[type])
-        );
-      }
-      if (this.filterSetting.skillTurnMin !== this.filterDefault.skillTurnMin ||
-          this.filterSetting.skillTurnMax !== this.filterDefault.skillTurnMax) {
-        monsterArray = monsterArray.filter(
-          d => {
-            const skill = this.skillTable[d.data.skill];
-            if (!skill) { return false; }
-            const minTurn = skill.baseTurn - skill.maxLevel + 1;
-            return minTurn >= this.filterSetting.skillTurnMin && minTurn <= this.filterSetting.skillTurnMax;
-          }
-        );
-      }
-
-      return monsterArray;
+      return filterMonsterDataArray(this.filterSetting, this.rankInfos);
     },
     /** 覚醒発動時の効果のレートを取得する機能を追加したモンスター情報オブジェクトの配列。 */
     wrapedMonsterDataArray: function () {
