@@ -123,36 +123,8 @@ export function getFilterFunction (setting) {
 
 /** フィルタリング設定を使用してモンスター情報の配列から、フィルタリング情報の条件を満たすもののみ取り出した配列を作成する。 */
 export function filterMonsterDataArray (setting, target) {
-  let monsterArray = target;
-  if (setting.attr.length > 0) {
-    const filterObj = {};
-    for (const attr of setting.attr) { filterObj[attr] = true; }
-    monsterArray = monsterArray.filter(d => filterObj[d.data.attributes[0]]);
-  }
-  if (setting.subAttr.length > 0) {
-    const filterObj = {};
-    for (const attr of setting.subAttr) { filterObj[attr] = true; }
-    monsterArray = monsterArray.filter(d => filterObj[d.data.attributes[1]]);
-  }
-  if (setting.type.length > 0) {
-    const filterObj = {};
-    for (const type of setting.type) { filterObj[type] = true; }
-    monsterArray = monsterArray.filter(
-      d => d.data.types.some(type => filterObj[type])
-    );
-  }
-  if (setting.skillTurnMin !== filterDefault.skillTurnMin ||
-      setting.skillTurnMax !== filterDefault.skillTurnMax) {
-    monsterArray = monsterArray.filter(
-      d => {
-        const skill = commonData.skillTable[d.data.skill];
-        if (!skill) { return false; }
-        const minTurn = skill.baseTurn - skill.maxLevel + 1;
-        return minTurn >= setting.skillTurnMin && minTurn <= setting.skillTurnMax;
-      }
-    );
-  }
-  return monsterArray;
+  const func = getFilterFunction(setting);
+  return target.filter(d => func(d.data));
 }
 
 /** モンスター絞り込みの設定を行うコンポーネント。 */
