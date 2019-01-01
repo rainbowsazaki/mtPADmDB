@@ -87,6 +87,40 @@ const filterDefault = {
   skillTurnMax: 99
 };
 
+/** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
+export function getFilterFunction (setting) {
+  const functionArray = [];
+  if (setting.attr.length > 0) {
+    const filterObj = {};
+    for (const attr of setting.attr) { filterObj[attr] = true; }
+    functionArray.push(d => filterObj[d.attributes[0]]);
+  }
+  if (setting.subAttr.length > 0) {
+    const filterObj = {};
+    for (const attr of setting.subAttr) { filterObj[attr] = true; }
+    functionArray.push(d => filterObj[d.attributes[1]]);
+  }
+  if (setting.type.length > 0) {
+    const filterObj = {};
+    for (const type of setting.type) { filterObj[type] = true; }
+    functionArray.push(d => d.types.some(type => filterObj[type]));
+  }
+  if (setting.skillTurnMin !== filterDefault.skillTurnMin ||
+      setting.skillTurnMax !== filterDefault.skillTurnMax) {
+    functionArray.push(d => {
+      const skill = commonData.skillTable[d.skill];
+      if (!skill) { return false; }
+      const minTurn = skill.baseTurn - skill.maxLevel + 1;
+      return minTurn >= setting.skillTurnMin && minTurn <= setting.skillTurnMax;
+    });
+  }
+  // フィルタリングがない場合は常に true を返す関数を返す。
+  if (functionArray.length === 0) {
+    return d => true;
+  }
+  return d => functionArray.every(f => f(d));
+}
+
 /** フィルタリング設定を使用してモンスター情報の配列から、フィルタリング情報の条件を満たすもののみ取り出した配列を作成する。 */
 export function filterMonsterDataArray (setting, target) {
   let monsterArray = target;
