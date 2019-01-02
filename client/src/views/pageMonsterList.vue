@@ -15,6 +15,9 @@
         </div>
       </div>
     </form>
+
+    <monster-filter-setting v-model="filterSetting" />
+
     <pagination :page="page" :page-count="pageCount" />
 
     <div class="row">
@@ -38,6 +41,7 @@
 <script>
 
 import { constData, escapeRegExp } from '../mtpadmdb.js';
+import { filterMonsterDataArray } from '../components/monsterFilterSetting.vue';
 
 /**
  * モンスター一覧ページコンポーネント
@@ -48,7 +52,20 @@ export default {
   data: function () {
     return {
       searchWord: '',
-      inPageCount: 50
+      inPageCount: 50,
+      /** 表示するモンスターに対するフィルタ。 */
+      filterSetting: {
+        /** 主属性。 */
+        attr: [],
+        /** 複属性。 */
+        subAttr: [],
+        /** タイプ */
+        type: [],
+        /** スキルターンの最小値。 */
+        skillTurnMin: 1,
+        /** スキルターンの最大値。 */
+        skillTurnMax: 99
+      }
     };
   },
   computed: {
@@ -59,7 +76,7 @@ export default {
     monsterCount () { return this.monsterTableArray.length; },
     /** モンスター一覧情報を読込中かどうか。 現在の実装だとデータ未登録の場合、ずっと読み込み中判定となる。 */
     isLoadingMonsterList () { return this.monsterCount === 0; },
-    pageCount () { return ((this.searchedMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+    pageCount () { return ((this.filteredMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     page () { return (this.$route.query.page * 1) || 1; },
 
     monsterTableArray: function () {
@@ -81,8 +98,12 @@ export default {
         return regexp.test(monsterData.name);
       });
     },
+    /** フィルタリングを行ったモンスターデータの配列。 */
+    filteredMonsterTableArray: function () {
+      return filterMonsterDataArray(this.filterSetting, this.searchedMonsterTableArray);
+    },
     monsterTableInPage () {
-      return this.searchedMonsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
+      return this.filteredMonsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
     }
   },
   created: function () {

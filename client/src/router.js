@@ -24,6 +24,7 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'top',
       component: PageMonsterList,
       props: true
     },
