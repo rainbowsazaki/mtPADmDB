@@ -7,15 +7,6 @@
     <div v-if="isLoadingMonsterList">データの読み込み中です ...</div>
     <div v-else>現在の登録数：{{ monsterCount }}種類</div>
     
-    <form @submit="$event.preventDefault(); search();">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="モンスター名検索" v-model="searchWord">
-        <div class="input-group-append">
-          <button type="submit" class="btn btn-outline-secondary">検索</button>
-        </div>
-      </div>
-    </form>
-
     <monster-filter-setting v-model="filterSetting" />
 
     <pagination :page="page" :page-count="pageCount" />
@@ -40,7 +31,7 @@
 
 <script>
 
-import { constData, escapeRegExp } from '../mtpadmdb.js';
+import { constData } from '../mtpadmdb.js';
 import { filterMonsterDataArray } from '../components/monsterFilterSetting.vue';
 
 /**
@@ -51,7 +42,6 @@ export default {
   pageTitle: null,
   data: function () {
     return {
-      searchWord: '',
       inPageCount: 50,
       /** 表示するモンスターに対するフィルタ。 */
       filterSetting: {
@@ -86,21 +76,9 @@ export default {
       }
       return array;
     },
-    /** 検索条件を満たすモンスターデータの配列。 */
-    searchedMonsterTableArray: function () {
-      const searchWord = this.$route.query.searchWord;
-      if (!searchWord) { return this.monsterTableArray; }
-      const searchWords = searchWord.split(/\s+/g);
-      // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
-      const regexp = new RegExp('^(?=.*' + searchWords.map(escapeRegExp).join(')(?=.*') + ').*$', 's');
-
-      return this.monsterTableArray.filter(monsterData => {
-        return regexp.test(monsterData.name);
-      });
-    },
     /** フィルタリングを行ったモンスターデータの配列。 */
     filteredMonsterTableArray: function () {
-      return filterMonsterDataArray(this.filterSetting, this.searchedMonsterTableArray);
+      return filterMonsterDataArray(this.filterSetting, this.monsterTableArray);
     },
     monsterTableInPage () {
       return this.filteredMonsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
@@ -108,14 +86,6 @@ export default {
   },
   created: function () {
     this.$store.commit('fetchCommonData');
-    this.searchWord = this.$route.query.searchWord;
-  },
-  methods: {
-
-    search: function () {
-      this.$router.push({ path: this.$router.path, query: { searchWord: this.searchWord }});
-    }
-
   }
 };
 </script>
