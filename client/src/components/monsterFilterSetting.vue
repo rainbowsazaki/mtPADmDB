@@ -16,6 +16,12 @@
     >
       <form id="filterForm" v-if="isVisibleFilter">
         <div class="form-group row">
+          <label class="col-sm-2 col-form-label">モンスター名</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="モンスター名検索" v-model="filter.name">
+          </div>
+        </div>
+        <div class="form-group row">
           <label class="col-sm-2 col-form-label">主属性</label>
           <div class="col-sm-10">
             <template v-for="(attrName, attr) in attributeTable">
@@ -76,10 +82,11 @@
 </template>
 
 <script>
-import { constData, commonData } from '../mtpadmdb.js';
+import { constData, commonData, escapeRegExp } from '../mtpadmdb.js';
 
 /** filterの初期値。 */
 const filterDefault = {
+  name: '',
   attr: [],
   subAttr: [],
   type: [],
@@ -90,6 +97,12 @@ const filterDefault = {
 /** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
 export function getFilterFunction (setting) {
   const functionArray = [];
+  if (setting.name) {
+    const searchWords = setting.name.split(/\s+/g);
+    // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
+    const regexp = new RegExp('^(?=.*' + searchWords.map(escapeRegExp).join(')(?=.*') + ').*$', 's');
+    functionArray.push(d => { return regexp.test(d.name); });
+  }
   if (setting.attr.length > 0) {
     const filterObj = {};
     for (const attr of setting.attr) { filterObj[attr] = true; }
@@ -144,6 +157,8 @@ export default {
       isOpenFilterTrigger: false,
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
+        /** モンスター名。 */
+        name: '',
         /** 主属性。 */
         attr: [],
         /** 複属性。 */
@@ -181,6 +196,13 @@ export default {
   watch: {
     'filter': function () {
       this.emitInput();
+    },
+    'filter.name': function () {
+      this.updateRouteQuery({ name: this.filter.name });
+      this.emitInput();
+    },
+    '$route.query.name': function () {
+      this.queryToFilter('name');
     },
     'filter.attr': function () {
       this.updateRouteQueryFromArray('attr', this.filter.attr);
@@ -224,6 +246,7 @@ export default {
   },
   created: function () {
     let isSetFilter = false;
+    isSetFilter |= this.queryToFilter('name');
     isSetFilter |= this.queryToFilter('attr');
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
@@ -272,13 +295,16 @@ export default {
     },
     /** 特定のルートクエリーを使用して、フィルタリング設定を変更する。 */
     queryToFilter: function (name) {
-      let value = [];
+      let value;
       const query = this.$route.query[name];
-      if (query) {
-        value = query.split(',');
+      const isArray = Array.isArray(this.filter[name]);
+      if (isArray) {
+        value = query ? query.split(',') : [];
+      } else {
+        value = query;
       }
       this.filter[name] = value;
-      return (value.length > 0);
+      return isArray ? (value.length > 0) : value;
     },
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
