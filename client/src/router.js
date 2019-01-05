@@ -29,13 +29,25 @@ export default new Router({
       props: true
     },
     {
+      path: '/monster',
+      name: 'monsterList',
+      component: PageMonsterList,
+      props: true
+    },
+    {
+      path: '/monster/:no',
+      name: 'monsterDetails',
+      component: PageMonsterData,
+      props: true
+    },
+    {
       path: '/edit',
       name: 'monsterEdit',
       component: PageMonsterEdit,
       props: true
     },
     {
-      path: '/:no/edit/',
+      path: '/monster/:no/edit',
       name: 'monsterEditUpdate',
       component: PageMonsterEdit,
       props: true
@@ -47,7 +59,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/:no/pic',
+      path: '/monster/:no/pic',
       name: 'monsterPictureUpdate',
       component: PagePic,
       props: true
@@ -58,21 +70,21 @@ export default new Router({
       component: PageAbout
     },
     {
-      path: '/history',
-      name: 'historyList',
+      path: '/monster/history',
+      name: 'monsterHistoryList',
       component: PageHistory,
       props: true
     },
 
     {
-      path: '/history/:id',
-      name: 'history',
+      path: '/monster/history/:id',
+      name: 'monsterHistory',
       component: PageMonsterData,
       props: true
     },
     {
-      path: '/history/:id/edit/',
-      name: 'historyEdit',
+      path: '/monster/history/:id/edit/',
+      name: 'monsterHistoryEdit',
       component: PageMonsterEdit,
       props: true
     },
@@ -132,11 +144,8 @@ export default new Router({
       props: true
     },
     
-    {
-      path: '/:no',
-      name: 'monsterDetails',
-      component: PageMonsterData,
-      props: true
-    }
+    { path: '/:no', redirect: '/monster/:no' },
+    { path: '/:no/:sub?', redirect: '/monster/:no/:sub' },
+    { path: '/history/:no/:sub?', redirect: '/monster/history/:no/:sub' }
   ]
 });

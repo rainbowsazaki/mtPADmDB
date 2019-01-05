@@ -97,7 +97,7 @@ export const constData = {
 
   /** ナビゲーションメニュー用データ */
   navis: [
-    { text: 'モンスター一覧', to: { name: 'top' }},
+    { text: 'モンスター一覧', to: { name: 'monsterList' }},
     { text: 'スキル一覧', to: { name: 'skillList' }},
     { text: 'リーダースキル一覧', to: { name: 'leaderSkillList' }},
     { text: 'モンスター比較', to: { name: 'compareEmpty' }},
