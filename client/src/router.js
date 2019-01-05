@@ -30,30 +30,36 @@ export default new Router({
     },
     {
       path: '/edit',
+      name: 'monsterEdit',
       component: PageMonsterEdit,
       props: true
     },
     {
       path: '/:no/edit/',
+      name: 'monsterEditUpdate',
       component: PageMonsterEdit,
       props: true
     },
     {
       path: '/pic',
+      name: 'monsterPicture',
       component: PagePic,
       props: true
     },
     {
       path: '/:no/pic',
+      name: 'monsterPictureUpdate',
       component: PagePic,
       props: true
     },
     {
       path: '/about',
+      name: 'about',
       component: PageAbout
     },
     {
       path: '/history',
+      name: 'historyList',
       component: PageHistory,
       props: true
     },
@@ -73,6 +79,7 @@ export default new Router({
     
     {
       path: '/compare',
+      name: 'compareEmpty',
       component: PageCompare,
       props: true
     },
