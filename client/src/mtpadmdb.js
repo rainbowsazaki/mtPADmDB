@@ -97,14 +97,14 @@ export const constData = {
 
   /** ナビゲーションメニュー用データ */
   navis: [
-    { text: 'ホーム', to: '/' },
-    { text: 'スキル一覧', to: '/skill' },
+    { text: 'モンスター一覧', to: { name: 'top' }},
+    { text: 'スキル一覧', to: { name: 'skillList' }},
     { text: 'リーダースキル一覧', to: { name: 'leaderSkillList' }},
-    { text: 'モンスター比較', to: '/compare' },
+    { text: 'モンスター比較', to: { name: 'compareEmpty' }},
     { text: 'ランキング', to: { name: 'ranking' }},
-    { text: '新規登録', to: '/edit' },
-    { text: '画像投稿', to: '/pic' },
-    { text: 'これは何？', to: '/about' }
+    { text: '新規登録', to: { name: 'monsterEdit' }},
+    { text: '画像投稿', to: { name: 'monsterPicture' }},
+    { text: 'これは何？', to: { name: 'about' }}
   ],
 
   /** モンスター情報の空データ */
