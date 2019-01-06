@@ -19,7 +19,7 @@ my $description;
 my $url_base = 'https://padmdb.rainbowsite.net';
 
 # モンスター情報の場合
-if ($ENV{'PATH_INFO'} =~ m|^/(\d+)/?$|) {
+if ($ENV{'PATH_INFO'} =~ m|^/(?:monster/)?(\d+)/?$|) {
   my $no = $1;
   my $dbh = create_monster_db_dbh();
   my $quoted_no = $dbh->quote($no);
