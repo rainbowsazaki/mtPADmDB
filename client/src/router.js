@@ -35,6 +35,26 @@ export default new Router({
       props: true
     },
     {
+      path: '/monster/history',
+      name: 'monsterHistoryList',
+      component: PageHistory,
+      props: true
+    },
+
+    {
+      path: '/monster/history/:id',
+      name: 'monsterHistory',
+      component: PageMonsterData,
+      props: true
+    },
+    {
+      path: '/monster/history/:id/edit/',
+      name: 'monsterHistoryEdit',
+      component: PageMonsterEdit,
+      props: true
+    },
+    
+    {
       path: '/monster/:no',
       name: 'monsterDetails',
       component: PageMonsterData,
@@ -68,25 +88,6 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: PageAbout
-    },
-    {
-      path: '/monster/history',
-      name: 'monsterHistoryList',
-      component: PageHistory,
-      props: true
-    },
-
-    {
-      path: '/monster/history/:id',
-      name: 'monsterHistory',
-      component: PageMonsterData,
-      props: true
-    },
-    {
-      path: '/monster/history/:id/edit/',
-      name: 'monsterHistoryEdit',
-      component: PageMonsterEdit,
-      props: true
     },
     
     {
