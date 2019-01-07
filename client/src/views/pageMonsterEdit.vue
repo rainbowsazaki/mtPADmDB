@@ -399,7 +399,7 @@ export default {
 
     /** 編集履歴を元データとした編集かどうか。 */
     isHistory: function () {
-      return (this.$route.name === 'historyEdit');
+      return (this.$route.name === 'monsterHistoryEdit');
     },
 
     /** 超覚醒が 不明 かどうか */

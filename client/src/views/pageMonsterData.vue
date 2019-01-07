@@ -378,7 +378,7 @@ export default {
     },
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
-      return (this.$route.name === 'history');
+      return (this.$route.name === 'monsterHistory');
     }
   },
   watch: {
