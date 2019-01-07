@@ -138,7 +138,7 @@
             <template v-if="monsterData.evolution.baseNo">
               <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
               ←
-              <router-link :to="`/${monsterData.evolution.baseNo}`">
+              <router-link :to="{ name:'monsterDetails', params: { no: monsterData.evolution.baseNo }}">
                 <monster-icon :no="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                 No. {{ monsterData.evolution.baseNo }} {{ monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name }}
               </router-link>
@@ -149,7 +149,7 @@
             <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
               <template v-for="(material, n) in monsterData.evolution.materials">
                 <li v-if="material" style="margin-right: 2px;" :key="`materialNo${n}`">
-                  <router-link :to="`/${material}`">
+                  <router-link :to="{ name:'monsterDetails', params: { no: material }}">
                     <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                   </router-link>
                 </li>
@@ -172,7 +172,7 @@
         <tr><td colspan="2">
           <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
           →
-          <router-link v-if="evolution.no" :to="`/${evolution.no}`">
+          <router-link v-if="evolution.no" :to="{ name:'monsterDetails', params: { no: evolution.no }}">
             <monster-icon :no="evolution.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
             No. {{ evolution.no }} {{ monsterTable[evolution.no] && monsterTable[evolution.no].name }}
           </router-link>
@@ -181,7 +181,7 @@
           <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
             <template v-for="(material, m) in evolution.materials">
               <li v-if="material" style="margin-right: 2px;" :key="`materialNo${m}`">
-                <router-link :to="`/${material}`">
+                <router-link :to="{ name:'monsterDetails', params: { no: material }}">
                   <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                 </router-link>
               </li>
@@ -227,9 +227,9 @@
     </div>
 
     <hr>
-    <router-link v-if="isHistory" :to=" `/history/${$route.params.id}/edit`" class="btn btn-primary">履歴をもとに編集する</router-link>
-    <router-link v-else :to="`/${monsterData.no}/edit`" class="btn btn-primary">編集する</router-link>
-    <router-link :to="`/${monsterData.no}/pic`" class="btn btn-primary">モンスター画像投稿</router-link>
+    <router-link v-if="isHistory" :to="{ name:'monsterHistoryEdit', params: { id: $route.params.id }}" class="btn btn-primary">履歴をもとに編集する</router-link>
+    <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-primary">編集する</router-link>
+    <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-primary">モンスター画像投稿</router-link>
 
     <div style="margin-top: 1rem;">
       <h3 class="h4">編集履歴</h3>
@@ -238,7 +238,7 @@
       </button>
       <ul v-if="histories">
         <li v-for="history in histories" :key="`history${history.id}`">
-          <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="`/history/${history.id}`">
+          <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="{ name:'monsterHistory', params: { id: history.id }}">
             {{ history.datetime }} -
             <span v-if="history.comment">{{ history.comment }}</span>
             <span v-else style="opacity: 0.6;">（コメントなし）</span>

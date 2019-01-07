@@ -13,7 +13,7 @@
 
     <div class="row">
       <div v-for="data in monsterTableInPage" class="col-md-6" style="padding-bottom: 2px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" :key="`monster${data.no}`">
-        <router-link :to="'/' + data.no">
+        <router-link :to="{ name: 'monsterDetails', params: { no: data.no }}">
           <monster-icon
             :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em"
           /><div style="display: inline-block; padding-left: 4px; vertical-align:bottom; height: 3em;">

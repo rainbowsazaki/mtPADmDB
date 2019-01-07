@@ -1,7 +1,7 @@
 <template>
   <div id="app" v-cloak>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="box-shadow: 0px 0px 4px rgba(0,0,0,0.6);">
-      <router-link class="navbar-brand" to="/">mtPADmDB</router-link>
+      <router-link class="navbar-brand" :to="{ name: 'top' }">mtPADmDB</router-link>
       <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="ナビゲーションの切替">
         <span class="navbar-toggler-icon" />
       </button>

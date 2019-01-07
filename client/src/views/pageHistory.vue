@@ -3,9 +3,9 @@
     <table class="table table-sm">
       <tr v-for="history in histories" :key="`history${history.id}`">
         <td>
-          <router-link :to="`/history/${history.id}`">{{ history.datetime }}</router-link>
+          <router-link :to="{ name:'monsterHistory', params: { id: history.id }}">{{ history.datetime }}</router-link>
         </td>
-        <td><router-link :to="`/${history.no}`">
+        <td><router-link :to="{ name: 'monsterDetails', params: { no: history.no }}">
           <monster-icon :no="history.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
           No.{{ history.no }} {{ monsterName(history.no) }}
         </router-link></td>
