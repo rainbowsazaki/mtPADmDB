@@ -24,13 +24,42 @@ if ($ENV{'PATH_INFO'} =~ m|^/(?:monster/)?(\d+)/?$|) {
   my $dbh = create_monster_db_dbh();
   my $quoted_no = $dbh->quote($no);
   eval {
+    my $columns = join ', ' , map { "monster_base_data.${_}" } 
+      qw/ name attributes_0 attributes_1 types_0 types_1 types_2 
+          maxParam_hp maxParam_attack maxParam_recovery /;
     my $sql = <<"EOS";
-SELECT monster_base_data.name FROM monster_data 
+SELECT ${columns} FROM monster_data 
   LEFT JOIN monster_base_data ON monster_data.monster_base_data == monster_base_data.id
   WHERE monster_data.no == ${quoted_no} AND monster_data.state == 1
 EOS
     my @row_ary = $dbh->selectrow_array($sql);
     $title = "No.${no} ${row_ary[0]}";
+
+    sub number_array_to_names_string {
+      my ($name_table, @nos) = @_;
+      my @names = ();
+      for my $i (@nos) {
+        my $name = $name_table->[$i];
+        if (!defined $name) { last; }
+        push @names, $name;
+      }
+      my $str = join '/', @names;
+      if ($str eq '') { $str = '不明'; }
+      return $str;
+    }
+
+    my @attr_table = ( undef, '火', '水', '木', '光', '闇' );
+    my $attr_str = &number_array_to_names_string(\@attr_table, @row_ary[1..2]);
+
+    my @type_table = (
+      undef, '神', 'ドラゴン', '悪魔', 'マシン', 'バランス', '攻撃', '体力', '回復',
+      '進化用','能力覚醒用', '強化合成用', '売却用'
+    );
+    my $type_str = &number_array_to_names_string(\@type_table, @row_ary[3..5]);
+
+    my @params = map { (defined $_ ) ? $_ : '不明' } @row_ary[6..8];
+
+    $description = "タイプ:${type_str} 属性:${attr_str} HP:${params[0]} 攻撃:${params[1]} 回復:${params[2]}";
   };
   eval {
     my $sql = <<"EOS";
