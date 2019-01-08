@@ -24,11 +24,13 @@ if ($ENV{'PATH_INFO'} =~ m|^/(?:monster/)?(\d+)/?$|) {
   my $dbh = create_monster_db_dbh();
   my $quoted_no = $dbh->quote($no);
   eval {
-    my $columns = join ', ' , map { "monster_base_data.${_}" } 
+    my @columns = map { "monster_base_data.${_}" } 
       qw/ name attributes_0 attributes_1 types_0 types_1 types_2 
-          maxParam_hp maxParam_attack maxParam_recovery /;
+          maxParam_hp maxParam_attack maxParam_recovery overLimit/;
+    push @columns, 'monster_data.over_limit';
+    my $columns_str = join ', ' , @columns;
     my $sql = <<"EOS";
-SELECT ${columns} FROM monster_data 
+SELECT ${columns_str} FROM monster_data 
   LEFT JOIN monster_base_data ON monster_data.monster_base_data == monster_base_data.id
   WHERE monster_data.no == ${quoted_no} AND monster_data.state == 1
 EOS
@@ -57,9 +59,23 @@ EOS
     );
     my $type_str = &number_array_to_names_string(\@type_table, @row_ary[3..5]);
 
-    my @params = map { (defined $_ ) ? $_ : '不明' } @row_ary[6..8];
-
-    $description = "タイプ:${type_str} 属性:${attr_str} HP:${params[0]} 攻撃:${params[1]} 回復:${params[2]}";
+    sub array_to_param_string {
+      my @params = map { (defined $_ ) ? $_ : '不明' } @_;
+      return "HP:${params[0]} 攻撃:${params[1]} 回復:${params[2]}";
+    }
+    my $param_str = &array_to_param_string(@row_ary[6..8]);
+    $description = "タイプ:${type_str} 属性:${attr_str} ${param_str}";
+    
+    if ($row_ary[9]) {
+      my $quoted_over_limit = $dbh->quote($row_ary[10]);
+      my $sql2 = <<"EOS";
+SELECT param_hp, param_attack, param_recovery FROM over_limit 
+  WHERE id == ${quoted_over_limit};
+EOS
+      my @row_ary2 = $dbh->selectrow_array($sql2);
+      my $over_limit_param_string = &array_to_param_string(@row_ary2);
+      $description .= " (Lv110時 ${over_limit_param_string})";
+    }
   };
   eval {
     my $sql = <<"EOS";
