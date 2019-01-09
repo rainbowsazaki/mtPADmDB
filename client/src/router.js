@@ -118,22 +118,10 @@ export default new Router({
       component: PageAbout
     },
     {
-      path: '/compare',
-      component: RouterViewComponent,
-      children: [
-        {
-          path: '',
-          name: 'compareEmpty',
-          component: PageCompare,
-          props: true
-        },
-        {
-          path: ':nos',
-          name: 'compare',
-          component: PageCompare,
-          props: true
-        }
-      ]
+      path: '/compare/:nos?',
+      name: 'compare',
+      component: PageCompare,
+      props: true
     },
     {
       path: '/skill',
