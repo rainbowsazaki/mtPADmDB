@@ -150,14 +150,14 @@ export default new Router({
           name: 'skillDetails',
           component: PageSkillDetails,
           props: true
+        },
+        {
+          path: 'history/:id',
+          name: 'skillDetailsHistory',
+          component: PageSkillDetails,
+          props: true
         }
       ]
-    },
-    {
-      path: '/skillHistory/:id',
-      name: 'skillDetailsHistory',
-      component: PageSkillDetails,
-      props: true
     },
     {
       path: '/leaderSkill',
@@ -174,14 +174,14 @@ export default new Router({
           name: 'leaderSkillDetails',
           component: PageSkillDetails,
           props: true
+        },
+        {
+          path: 'history/:id',
+          name: 'leaderSkillDetailsHistory',
+          component: PageSkillDetails,
+          props: true
         }
       ]
-    },
-    {
-      path: '/leaderSkillHistory/:id',
-      name: 'leaderSkillDetailsHistory',
-      component: PageSkillDetails,
-      props: true
     },
     {
       path: '/ranking/:id?',
