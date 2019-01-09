@@ -11,6 +11,11 @@ const PageSkillDetails = () => import('./views/pageSkillDetails.vue');
 const PageSkillList = () => import('./views/pageSkillList.vue');
 const PageRaniking = () => import('./views/pageRanking.vue');
 
+/** router-view 要素のみのコンポーネント。 ネストされたルートの親要素で何も表示しない時用。 */
+const RouterViewComponent = {
+  render: h => h('router-view')
+};
+
 import { getRouterBase } from './mtpadmdb.js';
 
 Vue.use(Router);
@@ -30,45 +35,74 @@ export default new Router({
     },
     {
       path: '/monster',
-      name: 'monsterList',
-      component: PageMonsterList,
-      props: true
-    },
-    {
-      path: '/monster/history',
-      name: 'monsterHistoryList',
-      component: PageHistory,
-      props: true
+      component: RouterViewComponent,
+      children: [
+        {
+          path: '',
+          name: 'monsterList',
+          component: PageMonsterList,
+          props: true
+        },
+        {
+          path: ':no',
+          component: RouterViewComponent,
+          children: [
+            {
+              path: '',
+              name: 'monsterDetails',
+              component: PageMonsterData,
+              props: true
+            },
+            {
+              path: 'edit',
+              name: 'monsterEditUpdate',
+              component: PageMonsterEdit,
+              props: true
+            },
+            {
+              path: 'pic',
+              name: 'monsterPictureUpdate',
+              component: PagePic,
+              props: true
+            }
+          ]
+        },
+        {
+          path: '/history',
+          component: RouterViewComponent,
+          children: [
+            {
+              path: '',
+              name: 'monsterHistoryList',
+              component: PageHistory,
+              props: true
+            },
+            {
+              path: ':id',
+              component: RouterViewComponent,
+              children: [
+                {
+                  path: '',
+                  name: 'monsterHistory',
+                  component: PageMonsterData,
+                  props: true
+                },
+                {
+                  path: 'edit',
+                  name: 'monsterHistoryEdit',
+                  component: PageMonsterEdit,
+                  props: true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
 
     {
-      path: '/monster/history/:id',
-      name: 'monsterHistory',
-      component: PageMonsterData,
-      props: true
-    },
-    {
-      path: '/monster/history/:id/edit/',
-      name: 'monsterHistoryEdit',
-      component: PageMonsterEdit,
-      props: true
-    },
-    
-    {
-      path: '/monster/:no',
-      name: 'monsterDetails',
-      component: PageMonsterData,
-      props: true
-    },
-    {
       path: '/edit',
       name: 'monsterEdit',
-      component: PageMonsterEdit,
-      props: true
-    },
-    {
-      path: '/monster/:no/edit',
-      name: 'monsterEditUpdate',
       component: PageMonsterEdit,
       props: true
     },
@@ -79,40 +113,45 @@ export default new Router({
       props: true
     },
     {
-      path: '/monster/:no/pic',
-      name: 'monsterPictureUpdate',
-      component: PagePic,
-      props: true
-    },
-    {
       path: '/about',
       name: 'about',
       component: PageAbout
     },
-    
     {
       path: '/compare',
-      name: 'compareEmpty',
-      component: PageCompare,
-      props: true
-    },
-    {
-      path: '/compare/:nos',
-      name: 'compare',
-      component: PageCompare,
-      props: true
+      component: RouterViewComponent,
+      children: [
+        {
+          path: '',
+          name: 'compareEmpty',
+          component: PageCompare,
+          props: true
+        },
+        {
+          path: ':nos',
+          name: 'compare',
+          component: PageCompare,
+          props: true
+        }
+      ]
     },
     {
       path: '/skill',
-      name: 'skillList',
-      component: PageSkillList,
-      props: true
-    },
-    {
-      path: '/skill/:no',
-      name: 'skillDetails',
-      component: PageSkillDetails,
-      props: true
+      component: RouterViewComponent,
+      children: [
+        {
+          path: '',
+          name: 'skillList',
+          component: PageSkillList,
+          props: true
+        },
+        {
+          path: ':no',
+          name: 'skillDetails',
+          component: PageSkillDetails,
+          props: true
+        }
+      ]
     },
     {
       path: '/skillHistory/:id',
@@ -122,15 +161,21 @@ export default new Router({
     },
     {
       path: '/leaderSkill',
-      name: 'leaderSkillList',
-      component: PageSkillList,
-      props: true
-    },
-    {
-      path: '/leaderSkill/:no',
-      name: 'leaderSkillDetails',
-      component: PageSkillDetails,
-      props: true
+      component: RouterViewComponent,
+      children: [
+        {
+          path: '',
+          name: 'leaderSkillList',
+          component: PageSkillList,
+          props: true
+        },
+        {
+          path: ':no',
+          name: 'leaderSkillDetails',
+          component: PageSkillDetails,
+          props: true
+        }
+      ]
     },
     {
       path: '/leaderSkillHistory/:id',
