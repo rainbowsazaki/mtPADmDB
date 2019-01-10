@@ -23,6 +23,14 @@ Vue.use(Router);
 export default new Router({
   mode: 'history',
   base: getRouterBase(),
+  scrollBehavior: function (to, from, savedPosition) {
+    if (to.path === from.path) { return; }
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { x: 0, y: 0 };
+    }
+  },
   // 各ルートにコンポーネントをマッピングします
   // コンポーネントはVue.extend() によって作られたコンポーネントコンストラクタでも
   // コンポーネントオプションのオブジェクトでも構いません
