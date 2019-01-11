@@ -75,6 +75,17 @@
             <input type="number" v-model.number="filter.skillTurnMax" required min="1" max="99">以下
           </div>
         </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">覚醒</label>
+          <div class="col-sm-10">
+            <template v-for="(n, i) in awakenSortList">
+              <span v-if="n != 0" :key="`awakenList_${i}`">
+                <img style="width: 24px; height: 24px; margin: 0 12px 12px 0;" :src="`./image/awaken/${n}.png`">
+              </span>
+              <br v-else :key="`awakenList_${i}`">
+            </template>
+          </div>
+        </div>
         <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
       </form>
     </transition>
@@ -175,6 +186,19 @@ export default {
   computed: {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
+    /** ゲーム内の覚醒フィルタでの覚醒の並び順を示すテーブル。 0 は改行。 */
+    awakenSortList () {
+      return [
+        4, 5, 6, 7, 8, 1, 49, 57, 0,
+        14, 15, 16, 17, 18, 2, 50, 58, 0,
+        22, 23, 24, 25, 26, 3, 51, 59, 0,
+        9, 10, 20, 11, 12, 13, 52, 60, 0,
+        19, 21, 27, 28, 29, 30, 53, 61, 0,
+        32, 31, 33, 34, 35, 36, 54, 62, 0,
+        37, 38, 39, 40, 41, 42, 55, 63, 0,
+        43, 44, 45, 46, 47, 48, 56, 64
+      ];
+    },
     /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillTurnFilterStr: {
       get: function () {
