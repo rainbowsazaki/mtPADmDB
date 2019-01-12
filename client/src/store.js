@@ -42,6 +42,14 @@ export default new Vuex.Store({
       // モンスター情報と画像情報はモンスター一覧ページをいち早く表示するために他と分けて読み込み処理を行う。
       axios.get('./listJson/monster_list_full.json')
         .then(responce => {
+          for (const monsterNo in responce.data) {
+            const data = responce.data[monsterNo];
+            const awakenCount = {};
+            for (const awaken of data.awakens) {
+              awakenCount[awaken] = (awakenCount[awaken] || 0) + 1;
+            }
+            data.awakenCount = awakenCount;
+          }
           state.monsterTable = responce.data;
         });
       axios.get('./listJson/image_list.json')
