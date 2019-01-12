@@ -51,7 +51,7 @@
               <span v-if="data.awakens[0] === 0">なし</span>
               <span v-else-if="data.awakens[0] === null">不明</span>
               <ul v-else style="list-style: none; margin: 0px; padding: 0px;">
-                <template v-for="(count, awaken) in data.awakenObj">
+                <template v-for="(count, awaken) in data.awakenCount">
                   <li v-if="awaken !== '0'" class="text-nowrap" :key="`awaken${awaken}`">
                     <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
                     × {{ count }}
@@ -308,10 +308,6 @@ export default {
         const data = $.extend(true, {}, constData.monsterClearData, monsterData);
         if (!data.superAwakens) { data.superAwakens = []; }
 
-        data.awakenObj = {};
-        for (const awaken of data.awakens) {
-          data.awakenObj[awaken] = (data.awakenObj[awaken] || 0) + 1;
-        }
         Vue.set(this.monsterDatas, index, data);
         this.$store.commit('clearMessages');
       } else {
@@ -356,22 +352,22 @@ export default {
 
     /** 比較対象の中に指定された覚醒を持つモンスターが何体いるかを取得する。 */
     GetAwakenMonsterCount: function (awakenNo) {
-      return this.monsterDatas.filter((o) => o.awakenObj[awakenNo] > 0).length;
+      return this.monsterDatas.filter((o) => o.awakenCount[awakenNo] > 0).length;
     },
     /** 比較対象の中に指定された覚醒を持つモンスターがいるかどうかを取得する。 */
     HasAwakenMonster: function (awakenNo) {
-      return this.monsterDatas.find((o) => o.awakenObj[awakenNo] > 0);
+      return this.monsterDatas.find((o) => o.awakenCount[awakenNo] > 0);
     },
 
     /** 指定されたモンスターデータがダメージ無効貫通を持っているかどうかを取得する。 */
     HasA3x3Awaken: function (monsterData) {
-      return monsterData.awakenObj[48] > 0;
+      return monsterData.awakenCount[48] > 0;
     },
 
     /** 指定されたモンスターデータの、レベル最大・攻撃+99・攻撃強化覚醒 時の攻撃力を取得する。 */
     maxAttack: function (monsterData) {
       if (monsterData.maxParam.attack === null) { return NaN; }
-      return monsterData.maxParam.attack + 495 + (monsterData.awakenObj[2] || 0) * this.awakenTable[2].value;
+      return monsterData.maxParam.attack + 495 + (monsterData.awakenCount[2] || 0) * this.awakenTable[2].value;
     },
     /** 削除個数に応じてかかるダメージのレート */
     eraseDropCountRate: function (count) {
@@ -379,7 +375,7 @@ export default {
     },
     /** 指定されたモンスターデータの、指定された覚醒発動時のレートを算出する。 */
     culcKakuseiRate: function (monsterData, awakenNo) {
-      return Math.pow(this.awakenTable[awakenNo].rate, monsterData.awakenObj[awakenNo] | 0);
+      return Math.pow(this.awakenTable[awakenNo].rate, monsterData.awakenCount[awakenNo] | 0);
     },
     /** 指定されたモンスターデータの、２体攻撃発動時の攻撃力レートを取得する。 */
     wayAttackRate: function (monsterData) {

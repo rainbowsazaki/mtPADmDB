@@ -184,7 +184,7 @@ export default {
           title: '無効貫通時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenObj[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate) | 0 : null }
           ],
           sortColumn: 0
         },
@@ -193,7 +193,7 @@ export default {
           title: '無効貫通７コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenObj[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0
         }
@@ -334,7 +334,7 @@ export default {
       const getterBase = {
         /** 指定された覚醒発動時のレートを算出する。 */
         culcAwakenRate: function (awakenNo) {
-          return Math.pow(awakenTable[awakenNo].rate, this.awakenObj[awakenNo] | 0);
+          return Math.pow(awakenTable[awakenNo].rate, this.awakenCount[awakenNo] | 0);
         },
         /** ２体攻撃発動時の攻撃力レートを取得する。 */
         get wayAttackRate () {
@@ -374,13 +374,13 @@ export default {
           let attack = NaN;
           let recovery = NaN;
           if (baseParam.hp !== null) {
-            hp = baseParam.hp + (this.awakenObj[1] || 0) * awakenTable[1].value;
+            hp = baseParam.hp + (this.awakenCount[1] || 0) * awakenTable[1].value;
           }
           if (baseParam.attack !== null) {
-            attack = baseParam.attack + (this.awakenObj[2] || 0) * awakenTable[2].value;
+            attack = baseParam.attack + (this.awakenCount[2] || 0) * awakenTable[2].value;
           }
           if (baseParam.recovery != null) {
-            recovery = baseParam.recovery + (this.awakenObj[3] || 0) * awakenTable[3].value;
+            recovery = baseParam.recovery + (this.awakenCount[3] || 0) * awakenTable[3].value;
           }
           return {
             hp: hp,
@@ -409,8 +409,8 @@ export default {
             param.hp += 10 * 99;
             param.attack += 5 * 99;
             param.recovery += 3 * 99;
-            if (manageObj.useMultiBoost && this.awakenObj[30]) {
-              const rate = awakenTable[30].rate ** this.awakenObj[30];
+            if (manageObj.useMultiBoost && this.awakenCount[30]) {
+              const rate = awakenTable[30].rate ** this.awakenCount[30];
               param.hp = param.hp * rate | 0;
               param.attack = param.attack * rate | 0;
               param.recovery = param.recovery * rate | 0;
@@ -427,8 +427,8 @@ export default {
           const cache = this.cache;
           if (!cache[propName]) {
             const param = this.culcFullAwakenParam(this._targetParam);
-            if (manageObj.useMultiBoost && this.awakenObj[30]) {
-              const rate = awakenTable[30].rate ** this.awakenObj[30];
+            if (manageObj.useMultiBoost && this.awakenCount[30]) {
+              const rate = awakenTable[30].rate ** this.awakenCount[30];
               param.hp = param.hp * rate | 0;
               param.attack = param.attack * rate | 0;
               param.recovery = param.recovery * rate | 0;
@@ -467,10 +467,10 @@ export default {
               if (baseParam.recovery != null) {
                 param.recovery = ((baseParam.recovery + 3 * 99) * 0.15) | 0;
               }
-              if (this.awakenObj[49]) {
-                param.hp += (this.awakenObj[1] || 0) * awakenTable[1].value;
-                param.attack += (this.awakenObj[2] || 0) * awakenTable[2].value;
-                param.recovery += (this.awakenObj[3] || 0) * awakenTable[3].value;
+              if (this.awakenCount[49]) {
+                param.hp += (this.awakenCount[1] || 0) * awakenTable[1].value;
+                param.attack += (this.awakenCount[2] || 0) * awakenTable[2].value;
+                param.recovery += (this.awakenCount[3] || 0) * awakenTable[3].value;
               }
               cache[propName] = param;
             }
@@ -484,10 +484,7 @@ export default {
         const subData = Object.create(getterBase);
         subData.baseData = data;
         subData.cache = {};
-        subData.awakenObj = {};
-        for (const awaken of data.awakens) {
-          subData.awakenObj[awaken] = (subData.awakenObj[awaken] || 0) + 1;
-        }
+        subData.awakenCount = data.awakenCount;
         const handler = {
           get: function (target, name) {
             return (name in target) ? target[name] : subData[name];
