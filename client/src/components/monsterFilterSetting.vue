@@ -108,6 +108,7 @@ const filterDefault = {
   attr: [],
   subAttr: [],
   type: [],
+  awaken: {},
   skillTurnMin: 1,
   skillTurnMax: 99
 };
@@ -185,6 +186,8 @@ export default {
         subAttr: [],
         /** タイプ */
         type: [],
+        /** 覚醒 */
+        awaken: {},
         /** スキルターンの最小値。 */
         skillTurnMin: 1,
         /** スキルターンの最大値。 */
@@ -227,6 +230,13 @@ export default {
     }
   },
   watch: {
+    'selectedAwaken': function () {
+      const obj = {};
+      for (const n of this.selectedAwaken) {
+        obj[n] = (obj[n] || 0) + 1;
+      }
+      this.filter.awaken = obj;
+    },
     'filter': function () {
       this.emitInput();
     },
