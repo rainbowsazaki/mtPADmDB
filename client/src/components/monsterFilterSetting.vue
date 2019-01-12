@@ -78,12 +78,19 @@
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">覚醒</label>
           <div class="col-sm-10">
-            <template v-for="(n, i) in awakenSortList">
-              <span v-if="n != 0" :key="`awakenList_${i}`">
-                <img style="width: 24px; height: 24px; margin: 0 12px 12px 0;" :src="`./image/awaken/${n}.png`">
+            <div style="display: inline-block; margin-bottom: 24px; padding: 4px; border: solid #CCC 1px;">
+              <span v-for="i in 9" :key="`selectedAwaken_${i}`">
+                <img style="width: 24px; height: 24px; margin-right: 6px;" :class="{ cursor: selectedAwaken[i - 1] ? 'pointer' : undefined }" :src="selectedAwaken[i - 1] ? `./image/awaken/${selectedAwaken[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="selectedAwaken[i - 1] ? i : '0'">
               </span>
-              <br v-else :key="`awakenList_${i}`">
-            </template>
+            </div>
+            <div>
+              <template v-for="(n, i) in awakenSortList">
+                <span v-if="n != 0" :key="`awakenList_${i}`">
+                  <img style="width: 24px; height: 24px; margin: 0 12px 12px 0; cursor: pointer;" :src="`./image/awaken/${n}.png`" @click="addAwaken(n);">
+                </span>
+                <br v-else :key="`awakenList_${i}`">
+              </template>
+            </div>
           </div>
         </div>
         <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
@@ -166,6 +173,8 @@ export default {
       isVisibleFilter: false,
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
       isOpenFilterTrigger: false,
+      /** 選択中の覚醒。 */
+      selectedAwaken: [],
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
         /** モンスター名。 */
@@ -332,6 +341,8 @@ export default {
     },
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
+      this.selectedAwaken = [];
+
       for (const key in this.filter) {
         const defaultValue = filterDefault[key];
         if (typeof defaultValue === 'object') {
@@ -344,6 +355,15 @@ export default {
           this.filter[key] = defaultValue;
         }
       }
+    },
+    /** 選択中の覚醒を追加する。 */
+    addAwaken: function (no) {
+      if (this.selectedAwaken.length >= 9) { return; }
+      this.selectedAwaken.push(no);
+    },
+    /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
+    removeAwaken: function (index) {
+      this.selectedAwaken.splice(index, 1);
     }
   }
 };
