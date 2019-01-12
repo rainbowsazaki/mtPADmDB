@@ -137,6 +137,10 @@ export function getFilterFunction (setting) {
     for (const type of setting.type) { filterObj[type] = true; }
     functionArray.push(d => d.types.some(type => filterObj[type]));
   }
+  const awakenKeys = Object.keys(setting.awaken || {});
+  if (awakenKeys.length) {
+    functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= setting.awaken[key]));
+  }
   if (setting.skillTurnMin !== filterDefault.skillTurnMin ||
       setting.skillTurnMax !== filterDefault.skillTurnMax) {
     functionArray.push(d => {
