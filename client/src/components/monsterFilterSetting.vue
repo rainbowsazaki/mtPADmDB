@@ -267,6 +267,13 @@ export default {
     '$route.query.type': function () {
       this.queryToFilter('type');
     },
+    'filter.awaken': function () {
+      this.updateRouteQueryFromArray('awaken', this.filter.awaken);
+      this.emitInput();
+    },
+    '$route.query.awaken': function () {
+      this.queryToFilter('awaken');
+    },
     'skillTurnFilterStr': function () {
       this.updateRouteQuery({ 'skillTurn': this.skillTurnFilterStr });
       this.emitInput();
@@ -292,6 +299,7 @@ export default {
     isSetFilter |= this.queryToFilter('attr');
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
+    isSetFilter |= this.queryToFilter('awaken');
     this.skillTurnFilterStr = this.$route.query.skillTurn;
     isSetFilter |= (this.skillTurnFilterStr !== undefined);
     
