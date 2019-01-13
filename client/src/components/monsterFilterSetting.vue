@@ -330,7 +330,7 @@ export default {
     /** ルートのクエリーを更新する。 */
     updateRouteQuery: function (changeQuery) {
       const margedQuery = Object.assign({}, this.$route.query, changeQuery);
-      this.$router.push({ path: this.$route.path, params: this.$route.params, query: margedQuery });
+      this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
     },
     /** 配列をカンマで結合した値を使用してルートのクエリーを変更する。 */
     updateRouteQueryFromArray: function (name, array) {
