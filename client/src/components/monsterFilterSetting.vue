@@ -335,7 +335,7 @@ export default {
     /** 配列をカンマで結合した値を使用してルートのクエリーを変更する。 */
     updateRouteQueryFromArray: function (name, array) {
       const obj = {};
-      obj[name] = array.length ? array.slice().sort().join(',') : undefined;
+      obj[name] = array.length ? array.slice().sort((a, b) => a - b).join(',') : undefined;
       this.updateRouteQuery(obj);
     },
     /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
