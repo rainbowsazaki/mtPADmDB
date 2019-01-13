@@ -80,7 +80,7 @@
           <div class="col-sm-10">
             <div style="display: inline-block; margin-bottom: 24px; padding: 4px; border: solid #CCC 1px;">
               <span v-for="i in 9" :key="`selectedAwaken_${i}`">
-                <img style="width: 24px; height: 24px; margin-right: 6px;" :class="{ cursor: selectedAwaken[i - 1] ? 'pointer' : undefined }" :src="selectedAwaken[i - 1] ? `./image/awaken/${selectedAwaken[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="selectedAwaken[i - 1] ? i : '0'">
+                <img style="width: 24px; height: 24px; margin-right: 6px;" :class="{ cursor: filter.awaken[i - 1] ? 'pointer' : undefined }" :src="filter.awaken[i - 1] ? `./image/awaken/${filter.awaken[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="filter.awaken[i - 1] ? i : '0'">
               </span>
             </div>
             <div>
@@ -108,7 +108,7 @@ const filterDefault = {
   attr: [],
   subAttr: [],
   type: [],
-  awaken: {},
+  awaken: [],
   skillTurnMin: 1,
   skillTurnMax: 99
 };
@@ -137,9 +137,13 @@ export function getFilterFunction (setting) {
     for (const type of setting.type) { filterObj[type] = true; }
     functionArray.push(d => d.types.some(type => filterObj[type]));
   }
-  const awakenKeys = Object.keys(setting.awaken || {});
-  if (awakenKeys.length) {
-    functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= setting.awaken[key]));
+  if (setting.awaken && setting.awaken.length > 0) {
+    const awakenFilter = {};
+    for (const awaken of setting.awaken) {
+      awakenFilter[awaken] = (awakenFilter[awaken] || 0) + 1;
+    }
+    const awakenKeys = Object.keys(awakenFilter);
+    functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
   }
   if (setting.skillTurnMin !== filterDefault.skillTurnMin ||
       setting.skillTurnMax !== filterDefault.skillTurnMax) {
@@ -178,8 +182,6 @@ export default {
       isVisibleFilter: false,
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
       isOpenFilterTrigger: false,
-      /** 選択中の覚醒。 */
-      selectedAwaken: [],
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
         /** モンスター名。 */
@@ -191,7 +193,7 @@ export default {
         /** タイプ */
         type: [],
         /** 覚醒 */
-        awaken: {},
+        awaken: [],
         /** スキルターンの最小値。 */
         skillTurnMin: 1,
         /** スキルターンの最大値。 */
@@ -234,13 +236,6 @@ export default {
     }
   },
   watch: {
-    'selectedAwaken': function () {
-      const obj = {};
-      for (const n of this.selectedAwaken) {
-        obj[n] = (obj[n] || 0) + 1;
-      }
-      this.filter.awaken = obj;
-    },
     'filter': function () {
       this.emitInput();
     },
@@ -355,8 +350,6 @@ export default {
     },
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
-      this.selectedAwaken = [];
-
       for (const key in this.filter) {
         const defaultValue = filterDefault[key];
         if (typeof defaultValue === 'object') {
@@ -372,12 +365,12 @@ export default {
     },
     /** 選択中の覚醒を追加する。 */
     addAwaken: function (no) {
-      if (this.selectedAwaken.length >= 9) { return; }
-      this.selectedAwaken.push(no);
+      if (this.filter.awaken.length >= 9) { return; }
+      this.filter.awaken.push(no);
     },
     /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
     removeAwaken: function (index) {
-      this.selectedAwaken.splice(index, 1);
+      this.filter.awaken.splice(index, 1);
     }
   }
 };
