@@ -80,7 +80,7 @@
           <div class="col-sm-10">
             <div style="display: inline-block; margin-bottom: 24px; padding: 4px; border: solid #CCC 1px;">
               <span v-for="i in 9" :key="`selectedAwaken_${i}`">
-                <img style="width: 24px; height: 24px; margin-right: 6px;" :class="{ cursor: filter.awaken[i - 1] ? 'pointer' : undefined }" :src="filter.awaken[i - 1] ? `./image/awaken/${filter.awaken[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="filter.awaken[i - 1] ? i : '0'">
+                <img style="width: 24px; height: 24px; background: #DDD; border-radius: 4px; margin-right: 6px;" :class="{ cursor: filter.awaken[i - 1] ? 'pointer' : undefined }" :src="filter.awaken[i - 1] ? `./image/awaken/${filter.awaken[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="filter.awaken[i - 1] ? i : '0'">
               </span>
             </div>
             <div>
