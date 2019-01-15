@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div style="display: inline-block; margin-bottom: 24px; padding: 4px; border: solid #CCC 1px;">
+    <div class="selectedList">
       <span v-for="i in 9" :key="`selectedAwaken_${i}`">
-        <img style="width: 24px; height: 24px; background: #CCC; border-radius: 4px; margin-right: 6px;" :class="{ cursor: selectedArray[i - 1] ? 'pointer' : undefined }" :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="selectedArray[i - 1] ? i : '0'">
+        <img :class="{ hasItem: selectedArray[i - 1] }" :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="selectedArray[i - 1] ? i : '0'">
       </span>
     </div>
-    <div>
+    <div class="selectArea">
       <template v-for="(n, i) in awakenSortList">
-        <span v-if="n != 0" :key="`awakenList_${i}`">
-          <img style="width: 24px; height: 24px; margin: 0 12px 12px 0; cursor: pointer;" :src="`./image/awaken/${n}.png`" @click="addAwaken(n);">
+        <span v-if="n != 0" class="item" :key="`awakenList_${i}`">
+          <img :src="`./image/awaken/${n}.png`" @click="addAwaken(n);">
         </span>
         <br v-else :key="`awakenList_${i}`">
       </template>
@@ -77,3 +77,30 @@ export default {
 };
 
 </script>
+
+<style scoped>
+.selectedList {
+  display: inline-block;
+  margin-bottom: 24px;
+  padding: 4px;
+  border: solid #CCC 1px;
+}
+
+.selectedList img {
+  width: 24px;
+  height: 24px;
+  background: #CCC;
+  border-radius: 4px;
+  margin-right: 6px;
+}
+.selectedList img.hasItem {
+  cursor: pointer;
+}
+
+.selectArea .item img {
+  width: 24px;
+  height: 24px;
+  margin: 0 12px 12px 0;
+  cursor: pointer;
+}
+</style>
