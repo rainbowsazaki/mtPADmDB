@@ -7,6 +7,11 @@
       <div v-if="isUnknown" class="unknownMessage">不明</div>
     </div>
     <div class="selectArea">
+      <template v-if="useUnknown">
+        <button type="button" class="btn btn-secondary btn-sm" @click="setUnknown">不明</button>
+        <button type="button" class="btn btn-secondary btn-sm" @click="clear">なし</button>
+        <br>
+      </template>
       <template v-for="(n, i) in awakenSortList">
         <span v-if="n != 0" class="item" :key="`awakenList_${i}`">
           <img :src="`./image/awaken/${n}.png`" @click="addAwaken(n);">
@@ -23,6 +28,10 @@ export default {
     'value': {
       type: Array,
       default: () => []
+    },
+    'useUnknown': {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -66,12 +75,23 @@ export default {
     /** 選択中の覚醒を追加する。 */
     addAwaken: function (no) {
       if (this.selectedArray.length >= 9) { return; }
+      if (this.isUnknown) { this.selectedArray = []; }
       this.selectedArray.push(no);
       this.$emit('input', this.selectedArray);
     },
     /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
     removeAwaken: function (index) {
       this.selectedArray.splice(index, 1);
+      this.$emit('input', this.selectedArray);
+    },
+    /** 覚醒内容が不明であることを示す値を設定する。 */
+    setUnknown: function () {
+      this.selectedArray = [];
+      this.addAwaken(null);
+    },
+    /** 選択を空にする。 */
+    clear: function () {
+      this.selectedArray = [];
       this.$emit('input', this.selectedArray);
     }
   }
