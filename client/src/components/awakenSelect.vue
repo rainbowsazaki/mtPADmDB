@@ -45,10 +45,7 @@ export default {
     }
   },
   watch: {
-    'value': 'updateFromValue',
-    'selectedArray': function () {
-      this.$emit('input', this.selectedArray);
-    }
+    'value': 'updateFromValue'
   },
   created: function () {
     this.updateFromValue();
@@ -56,22 +53,18 @@ export default {
   methods: {
     /** value プロパティの値で現在の値を更新する。 */
     updateFromValue: function () {
-      function compareArray (a, b) {
-        if (!Array.isArray(a) || a.length !== b.length) { return false; }
-        return a.every((value, index) => value === b[index]);
-      }
-      if (!compareArray(this.selectedArray, this.value)) {
-        this.selectedArray = this.value.concat();
-      }
+      this.selectedArray = this.value.concat();
     },
     /** 選択中の覚醒を追加する。 */
     addAwaken: function (no) {
       if (this.selectedArray.length >= 9) { return; }
       this.selectedArray.push(no);
+      this.$emit('input', this.selectedArray);
     },
     /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
     removeAwaken: function (index) {
       this.selectedArray.splice(index, 1);
+      this.$emit('input', this.selectedArray);
     }
   }
 };
