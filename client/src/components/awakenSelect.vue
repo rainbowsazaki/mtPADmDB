@@ -4,6 +4,7 @@
       <span v-for="i in 9" :key="`selectedAwaken_${i}`">
         <img :class="{ hasItem: selectedArray[i - 1] }" :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="selectedArray[i - 1] ? i : '0'">
       </span>
+      <div v-if="isUnknown" class="unknownMessage">不明</div>
     </div>
     <div class="selectArea">
       <template v-for="(n, i) in awakenSortList">
@@ -42,6 +43,10 @@ export default {
         37, 38, 39, 40, 41, 42, 55, 63, 0,
         43, 44, 45, 46, 47, 48, 56, 64
       ];
+    },
+    /** 覚醒内容が不明であることを示す値が指定されているかどうか。 */
+    isUnknown () {
+      return this.selectedArray[0] === null;
     }
   },
   watch: {
@@ -76,6 +81,7 @@ export default {
 
 <style scoped>
 .selectedList {
+  position: relative;
   display: inline-block;
   margin-bottom: 24px;
   padding: 4px;
@@ -91,6 +97,19 @@ export default {
 }
 .selectedList img.hasItem {
   cursor: pointer;
+}
+
+.unknownMessage {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  padding-top: 4px;
+  color: white;
+  text-shadow: 0px -1px 1px black;
+  text-align: center;
 }
 
 .selectArea .item img {
