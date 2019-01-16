@@ -53,7 +53,10 @@ export default {
   methods: {
     /** value プロパティの値で現在の値を更新する。 */
     updateFromValue: function () {
-      this.selectedArray = this.value.concat();
+      // 末尾の 0（なし） は除いて処理する。
+      let length = this.value.length;
+      while (length > 1 && (this.value[length - 1] === 0 || this.value[length - 1] === null)) { length--; }
+      this.selectedArray = this.value.slice(0, length);
     },
     /** 選択中の覚醒を追加する。 */
     addAwaken: function (no) {
