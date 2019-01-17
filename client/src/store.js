@@ -91,8 +91,9 @@ export default new Vuex.Store({
       this.commit('setMessages', ['モンスター情報取得中']);
       
       mtpadmdb.api(mode, params, (response) => {
-        const data = $.extend(true, {}, constData.monsterClearData, response.data);
-        if (!data.superAwakens) { data.superAwakens = []; }
+        const data = $.extend(true, {}, constData.monsterClearData);
+        Object.assign(data, response.data);
+        if (data.superAwakens === null) { data.superAwakens = [null]; }
         state.monsterData = data;
         
         if (typeof param.callback === 'function') { param.callback(); }
