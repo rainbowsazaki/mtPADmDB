@@ -549,6 +549,10 @@ sub mode_update_monster_data {
   foreach my $i (0..3) {
     &check_range('タイプ${i}', $data->{types}[$i], 0, 99, 0);
   }
+  # 覚醒配列の長さが9に満たない場合は0(なし)で埋める。
+  while (scalar(@{$data->{awakens}}) < 9) {
+    push @{$data->{awakens}}, 0;
+  }
   foreach my $i (0..9) {
     &check_range('覚醒${i}', $data->{awakens}[$i], 0, 99, 0);
   }
