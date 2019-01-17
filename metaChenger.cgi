@@ -55,7 +55,7 @@ EOS
 
     my @type_table = (
       undef, '神', 'ドラゴン', '悪魔', 'マシン', 'バランス', '攻撃', '体力', '回復',
-      '進化用','能力覚醒用', '強化合成用', '売却用'
+      '進化用','能力覚醒用', '強化合成用', '売却用'
     );
     my $type_str = &number_array_to_names_string(\@type_table, @row_ary[3..5]);
 

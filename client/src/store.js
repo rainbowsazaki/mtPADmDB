@@ -99,7 +99,7 @@ export default new Vuex.Store({
       }, (response) => {
         let errorMessage = '';
         if (param.historyId) {
-          errorMessage = `モンスター編集履歴 ID:${param.historyId} の情報が見つかりませんでした。`;
+          errorMessage = `モンスター編集履歴 ID:${param.historyId} の情報が見つかりませんでした。`;
         } else {
           errorMessage = `モンスター No.${param.no} の情報が見つかりませんでした。`;
         }
