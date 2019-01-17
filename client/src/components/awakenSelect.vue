@@ -105,8 +105,9 @@ export default {
 .selectedList {
   position: relative;
   display: inline-block;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
   padding: 4px;
+  border-radius: 6px;
   border: solid #CCC 1px;
 }
 
@@ -115,7 +116,7 @@ export default {
   height: 24px;
   background: #CCC;
   border-radius: 4px;
-  margin-right: 6px;
+  margin: 3px;
 }
 .selectedList img.hasItem {
   cursor: pointer;
