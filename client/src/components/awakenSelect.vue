@@ -138,4 +138,21 @@ export default {
   margin: 0 12px 12px 0;
   cursor: pointer;
 }
+
+@media (max-width: 575px) {
+
+.selectedList img {
+  width: 8vw;
+  height: 8vw;
+  border-radius: 1.5vw;
+  margin: 0.6vw;
+}
+
+.selectArea .item img {
+  width: 8vw;
+  height: 8vw;
+  margin: 1.4vw;
+}
+
+}
 </style>
