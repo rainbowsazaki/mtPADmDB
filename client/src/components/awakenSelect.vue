@@ -67,9 +67,11 @@ export default {
   methods: {
     /** value プロパティの値で現在の値を更新する。 */
     updateFromValue: function () {
-      // 末尾の 0（なし） は除いて処理する。
+      // 末尾の 0（なし）と null は除いて処理する。
       let length = this.value.length;
       while (length > 1 && (this.value[length - 1] === 0 || this.value[length - 1] === null)) { length--; }
+      // 残ったのが 0（なし）の場合は全て無い状態にする。
+      if (length === 1 && this.value[length - 1] === 0) { length = 0; }
       this.selectedArray = this.value.slice(0, length);
     },
     /** 選択中の覚醒を追加する。 */
