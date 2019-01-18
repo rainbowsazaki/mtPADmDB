@@ -101,7 +101,8 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss">
+
 .selectedList {
   position: relative;
   display: inline-block;
@@ -109,17 +110,16 @@ export default {
   padding: 4px;
   border-radius: 6px;
   border: solid #CCC 1px;
-}
-
-.selectedList img {
-  width: 24px;
-  height: 24px;
-  background: #CCC;
-  border-radius: 4px;
-  margin: 3px;
-}
-.selectedList img.hasItem {
-  cursor: pointer;
+  img {
+    width: 24px;
+    height: 24px;
+    background: #CCC;
+    border-radius: 4px;
+    margin: 3px;
+  }
+  img.hasItem {
+    cursor: pointer;
+  }
 }
 
 .unknownMessage {
