@@ -7,17 +7,21 @@
       <div v-if="isUnknown" class="unknownMessage">不明</div>
     </div>
     <div class="selectArea">
-      <template v-if="useUnknown">
-        <button type="button" class="btn btn-secondary btn-sm" @click="setUnknown">不明</button>
-        <button type="button" class="btn btn-secondary btn-sm" @click="clear">なし</button>
-        <br>
-      </template>
-      <template v-for="(n, i) in awakenSortList">
-        <span v-if="n != 0" class="item" :key="`awakenList_${i}`">
-          <img :src="`./image/awaken/${n}.png`" @click="addAwaken(n);">
-        </span>
-        <br v-else :key="`awakenList_${i}`">
-      </template>
+      <table>
+        <tr v-if="useUnknown">
+          <td colspan="2">
+            <button type="button" class="btn btn-secondary btn-sm btn-block" @click="setUnknown">不明</button>
+          </td>
+          <td colspan="2">
+            <button type="button" class="btn btn-secondary btn-sm btn-block" @click="clear">なし</button>
+          </td>
+        </tr>
+        <tr v-for="(n, i) in awakenSortList" :key="`alTr_${i}`">
+          <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
+            <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m);">
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -43,14 +47,14 @@ export default {
     /** ゲーム内の覚醒フィルタでの覚醒の並び順を示すテーブル。 0 は改行。 */
     awakenSortList () {
       return [
-        4, 5, 6, 7, 8, 1, 49, 57, 0,
-        14, 15, 16, 17, 18, 2, 50, 58, 0,
-        22, 23, 24, 25, 26, 3, 51, 59, 0,
-        9, 10, 20, 11, 12, 13, 52, 60, 0,
-        19, 21, 27, 28, 29, 30, 53, 61, 0,
-        32, 31, 33, 34, 35, 36, 54, 62, 0,
-        37, 38, 39, 40, 41, 42, 55, 63, 0,
-        43, 44, 45, 46, 47, 48, 56, 64
+        [4, 5, 6, 7, 8, 1, 49, 57],
+        [14, 15, 16, 17, 18, 2, 50, 58],
+        [22, 23, 24, 25, 26, 3, 51, 59],
+        [9, 10, 20, 11, 12, 13, 52, 60],
+        [19, 21, 27, 28, 29, 30, 53, 61],
+        [32, 31, 33, 34, 35, 36, 54, 62],
+        [37, 38, 39, 40, 41, 42, 55, 63],
+        [43, 44, 45, 46, 47, 48, 56, 64]
       ];
     },
     /** 覚醒内容が不明であることを示す値が指定されているかどうか。 */
@@ -135,11 +139,19 @@ export default {
   text-align: center;
 }
 
-.selectArea .item img {
-  width: 24px;
-  height: 24px;
-  margin: 0 12px 12px 0;
-  cursor: pointer;
+.selectArea {
+  table, td, th {
+    border: none;
+    padding: 0px;
+  }
+  td {
+    padding: 5.4px;
+  }
+  .item img {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
 }
 
 @media (max-width: 575px) {
@@ -151,10 +163,15 @@ export default {
   margin: 0.6vw;
 }
 
-.selectArea .item img {
-  width: 8vw;
-  height: 8vw;
-  margin: 1.4vw;
+.selectArea {
+
+  td {
+    padding: 1.4vw;
+  }
+  .item img {
+    width: 8vw;
+    height: 8vw;
+  }
 }
 
 }
