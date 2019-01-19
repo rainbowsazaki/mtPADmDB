@@ -2,7 +2,7 @@
   <div>
     <div class="selectedList">
       <span v-for="i in 9" :key="`selectedAwaken_${i}`">
-        <img :class="{ hasItem: selectedArray[i - 1] }" :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1);" :key="selectedArray[i - 1] ? i : '0'">
+        <img :class="{ hasItem: selectedArray[i - 1] }" :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
       </span>
       <div v-if="isUnknown" class="unknownMessage">不明</div>
     </div>
@@ -18,7 +18,7 @@
         </tr>
         <tr v-for="(n, i) in awakenSortList" :key="`alTr_${i}`">
           <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
-            <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m);">
+            <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m, $event);">
           </td>
         </tr>
       </table>
@@ -79,24 +79,28 @@ export default {
       this.selectedArray = this.value.slice(0, length);
     },
     /** 選択中の覚醒を追加する。 */
-    addAwaken: function (no) {
+    addAwaken: function (no, event) {
+      if (event) { event.preventDefault(); }
       if (this.selectedArray.length >= 9) { return; }
       if (this.isUnknown) { this.selectedArray = []; }
       this.selectedArray.push(no);
       this.$emit('input', this.selectedArray);
     },
     /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
-    removeAwaken: function (index) {
+    removeAwaken: function (index, event) {
+      if (event) { event.preventDefault(); }
       this.selectedArray.splice(index, 1);
       this.$emit('input', this.selectedArray);
     },
     /** 覚醒内容が不明であることを示す値を設定する。 */
-    setUnknown: function () {
+    setUnknown: function (event) {
+      if (event) { event.preventDefault(); }
       this.selectedArray = [];
       this.addAwaken(null);
     },
     /** 選択を空にする。 */
-    clear: function () {
+    clear: function (event) {
+      if (event) { event.preventDefault(); }
       this.selectedArray = [];
       this.$emit('input', this.selectedArray);
     }
