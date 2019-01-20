@@ -118,6 +118,7 @@ export default {
   padding: 4px;
   border-radius: 6px;
   border: solid #CCC 1px;
+  overflow: hidden;
   img {
     width: 24px;
     height: 24px;
