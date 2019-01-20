@@ -18,7 +18,10 @@
         </tr>
         <tr v-for="(n, i) in awakenSortList" :key="`alTr_${i}`">
           <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
-            <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m, $event);">
+            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" :id="`awaken_${m}`" @change="$emit('input', selectedArray);">
+            <label :for="`awaken_${m}`">
+              <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m, $event);">
+            </label>
           </td>
         </tr>
       </table>
@@ -34,6 +37,10 @@ export default {
       default: () => []
     },
     'useUnknown': {
+      type: Boolean,
+      default: false
+    },
+    'checkboxStyle': {
       type: Boolean,
       default: false
     }
@@ -80,9 +87,12 @@ export default {
     },
     /** 選択中の覚醒を追加する。 */
     addAwaken: function (no, event) {
+      if (this.isUnknown) { this.selectedArray = []; }
+      // チェックボックス形式の場合、 checkbox の v-model と change イベントで更新反映されるので、 不明解除以外の処理は行わない。
+      // ただし、不明にする場合は除く。
+      if (this.checkboxStyle && no !== null) { return; }
       if (event) { event.preventDefault(); }
       if (this.selectedArray.length >= 9) { return; }
-      if (this.isUnknown) { this.selectedArray = []; }
       this.selectedArray.push(no);
       this.$emit('input', this.selectedArray);
     },
@@ -157,6 +167,18 @@ export default {
     height: 24px;
     cursor: pointer;
   }
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  input[type="checkbox"] + label {
+    filter: opacity(50%) grayscale(95%);
+  }
+
+  input[type="checkbox"]:checked + label {
+    filter: opacity(100%) grayscale(0%);
+  }
+  label { margin: 0; }
 }
 
 @media (max-width: 575px) {
