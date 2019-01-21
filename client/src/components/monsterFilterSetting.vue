@@ -109,7 +109,7 @@ import { constData, commonData, escapeRegExp } from '../mtpadmdb.js';
 
 /** filterの初期値。 */
 const filterDefault = {
-  name: '',
+  name: undefined,
   attr: [],
   subAttr: [],
   type: [],
@@ -191,7 +191,7 @@ export default {
       /** 表示するモンスターに対するフィルタ。 */
       filter: {
         /** モンスター名。 */
-        name: '',
+        name: undefined,
         /** 主属性。 */
         attr: [],
         /** 複属性。 */
