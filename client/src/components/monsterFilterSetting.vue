@@ -160,6 +160,9 @@ export function getFilterFunction (setting) {
       return minTurn >= setting.skillTurnMin && minTurn <= setting.skillTurnMax;
     });
   }
+  if (setting.assist !== undefined) {
+    functionArray.push(d => d.assist === setting.assist);
+  }
   // フィルタリングがない場合は常に true を返す関数を返す。
   if (functionArray.length === 0) {
     return d => true;
