@@ -81,6 +81,23 @@
             <awaken-select v-model="filter.awaken" />
           </div>
         </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">アシスト</label>
+          <div class="col-sm-10">
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="radioAssistAll" name="radioAssist" :value="undefined" v-model.number="filter.assist" class="custom-control-input">
+              <label class="custom-control-label" for="radioAssistAll">すべて</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="radioAssistOk" name="radioAssist" value="1" v-model.number="filter.assist" class="custom-control-input">
+              <label class="custom-control-label" for="radioAssistOk">○</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="radioAssistNg" name="radioAssist" value="0" v-model.number="filter.assist" class="custom-control-input">
+              <label class="custom-control-label" for="radioAssistNg">×</label>
+            </div>
+          </div>
+        </div>
         <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
       </form>
     </transition>
@@ -98,7 +115,8 @@ const filterDefault = {
   type: [],
   awaken: [],
   skillTurnMin: 1,
-  skillTurnMax: 99
+  skillTurnMax: 99,
+  assist: undefined
 };
 
 /** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
@@ -185,7 +203,9 @@ export default {
         /** スキルターンの最小値。 */
         skillTurnMin: 1,
         /** スキルターンの最大値。 */
-        skillTurnMax: 99
+        skillTurnMax: 99,
+        /** アシスト可不可 */
+        assist: undefined
       }
     };
   },
@@ -256,6 +276,13 @@ export default {
     '$route.query.skillTurn': function (newValue) {
       this.skillTurnFilterStr = newValue;
     },
+    'filter.assist': function () {
+      this.updateRouteQuery({ assist: this.filter.assist });
+      this.emitInput();
+    },
+    '$route.query.assist': function () {
+      this.queryToFilter('assist');
+    },
 
     'filter.skillTurnMin': function () {
       if (this.filter.skillTurnMax < this.filter.skillTurnMin) {
@@ -275,6 +302,7 @@ export default {
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
     isSetFilter |= this.queryToFilter('awaken');
+    isSetFilter |= this.queryToFilter('assist');
     this.skillTurnFilterStr = this.$route.query.skillTurn;
     isSetFilter |= (this.skillTurnFilterStr !== undefined);
     
