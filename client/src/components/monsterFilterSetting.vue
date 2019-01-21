@@ -357,7 +357,7 @@ export default {
         value = query;
       }
       this.filter[name] = value;
-      return isArray ? (value.length > 0) : value;
+      return isArray ? (value.length > 0) : value !== undefined;
     },
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
