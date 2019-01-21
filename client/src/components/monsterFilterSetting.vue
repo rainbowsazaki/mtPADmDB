@@ -284,7 +284,7 @@ export default {
       this.emitInput();
     },
     '$route.query.assist': function () {
-      this.queryToFilter('assist');
+      this.queryToFilter('assist', Number);
     },
 
     'filter.skillTurnMin': function () {
@@ -305,7 +305,7 @@ export default {
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
     isSetFilter |= this.queryToFilter('awaken');
-    isSetFilter |= this.queryToFilter('assist');
+    isSetFilter |= this.queryToFilter('assist', Number);
     this.skillTurnFilterStr = this.$route.query.skillTurn;
     isSetFilter |= (this.skillTurnFilterStr !== undefined);
     
@@ -350,7 +350,7 @@ export default {
       return (this[name] !== undefined);
     },
     /** 特定のルートクエリーを使用して、フィルタリング設定を変更する。 */
-    queryToFilter: function (name) {
+    queryToFilter: function (name, type) {
       let value;
       const query = this.$route.query[name];
       const isArray = Array.isArray(this.filter[name]);
@@ -358,6 +358,7 @@ export default {
         value = query ? query.split(',') : [];
       } else {
         value = query;
+        if (type === Number && value) { value *= 1; }
       }
       this.filter[name] = value;
       return isArray ? (value.length > 0) : value !== undefined;
