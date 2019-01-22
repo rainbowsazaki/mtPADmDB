@@ -114,6 +114,17 @@ export default {
             { name: '+換算', func: data => data.hyperPlusCount.plus }
           ],
           sortColumn: 3
+        },
+        {
+          id: 'overlimitOffset',
+          title: '限界突破時プラス換算値増加量',
+          description: '限界突破によるステータスプラス換算値の増加量のランキングです。',
+          columns: [
+            { name: 'Lv最大', func: data => data.hyper100PlusCount.plus },
+            { name: 'Lv110', func: data => data.hyper110PlusCount.plus },
+            { name: '増加量', func: data => data.overLimitOffset }
+          ],
+          sortColumn: 2
         }
       ]
     },
@@ -438,6 +449,34 @@ export default {
             cache[propName] = param;
           }
           return cache[propName];
+        },
+        /** 限界突破時パラメータを使用するかどうかの設定に問わず、レベル最大時・全覚醒時のパラメータ及びプラス換算値を取得する。 */
+        get hyper100PlusCount () {
+          const b = manageObj.useOverLimit;
+          manageObj.useOverLimit = false;
+          const p = this.hyperPlusCount;
+          manageObj.useOverLimit = b;
+          return p;
+        },
+        /** 限界突破時パラメータを使用するかどうかの設定に問わず、レベル110時・全覚醒時のパラメータ及びプラス換算値を取得する。 */
+        get hyper110PlusCount () {
+          const b = manageObj.useOverLimit;
+          manageObj.useOverLimit = true;
+          const p = this.hyperPlusCount;
+          manageObj.useOverLimit = b;
+          return p;
+        },
+        /** 限界突破前のプラス換算値と限界突破後のプラス換算値の差を主屋する。変化がない場合は null を返す。 */
+        get overLimitOffset () {
+          const b = manageObj.useOverLimit;
+          manageObj.useOverLimit = true;
+          const on = this.hyperPlusCount;
+          manageObj.useOverLimit = false;
+          const off = this.hyperPlusCount;
+          manageObj.useOverLimit = b;
+          const offset = on.plus - off.plus;
+          if (offset === 0) { return null; }
+          return offset.toFixed(1);
         },
         /** レベル最大or限界突破・+297・全覚醒時のアシストボーナス値を取得する。 */
         get assistMaxParam () {
