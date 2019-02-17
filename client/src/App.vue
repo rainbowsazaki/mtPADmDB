@@ -41,7 +41,7 @@
       </nav>
       <h1 :class="{ h6: $route.path !== '/' }">{{ constData.title }}</h1>
       <router-view v-if="$store.state.monsterTable" />
-      <div style="margin-top:2rem; display: flex; justify-content: space-between; flex-wrap: wrap;">
+      <div style="margin-top:2rem; display: flex; justify-content: space-around; flex-wrap: wrap;">
         <iframe src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=manga_anime&f=ifr&linkID=41a55731f8138e9b3d31a0f8071aa622&t=myfavoriteday-22&tracking_id=myfavoriteday-22" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0" />
         <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=myfavoriteday-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B01CDP1DMS&linkId=2fde5a6504e57a723c17da60307b4591" />
         <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=myfavoriteday-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4047333301&linkId=969a4d654c0891806ec194ae22c2d35d" />
