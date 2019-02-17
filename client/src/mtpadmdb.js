@@ -270,7 +270,7 @@ export const constData = {
     56: { name: 'スキルブースト+', description: 'チーム全体のスキルが\n2ターン溜まった状態で始まる', value: 2 },
     57: { name: 'HP80%以上強化', description: 'HP80%以上で攻撃力がアップする', rate: 1.5 },
     58: { name: 'HP50%以下強化', description: 'HP50%以下で攻撃力がアップする', rate: 2 },
-    59: { name: 'L字消し軽減', description: '回復ドロップ5個をL字型に消すと\n敵から受けるダメージを軽減する', rate: 0.05 },
+    59: { name: '回復L字消し', description: '回復ドロップ5個をL字型に消すと\n敵から受けるダメージを軽減し、\n攻撃力がアップする', rate: 0.05, rate2: 1.5 },
     60: { name: 'L字消し攻撃', description: '自分と同じ属性のドロップ5個を\nL字型に消すと攻撃力がアップし、\n盤面のロック状態を解除する', rate: 1.5 },
     61: { name: '超コンボ強化', description: '10コンボ以上で攻撃力がかなりアップする', rate: 5 },
     62: { name: 'コンボドロップ', description: '自分と同じ属性のドロップを12個つなげて消すと\nコンボドロップが1個落ちてくる(最大3個まで)' },
