@@ -23,6 +23,51 @@ my $q = CGI->new();
 my $dbh = create_sub_db_dbh();
 
 if ($ENV{'REQUEST_METHOD'} eq 'POST') {
+  my @errors = ();
+  my $json = $q->param("POSTDATA");
+  my $data;
+  if ($json eq "") {
+    push @errors ,'データなし'
+  } else {
+    $data = JSON::PP::decode_json($json);
+
+    my $page_url = $data->{'pageUrl'};
+    my $page_title = $data->{'pageTitle'};
+    my $name = $data->{'name'};
+    my $message = $data->{'message'};
+
+    if (!$page_url) {
+      push @errors, 'ページURLがありません。';
+    }
+    if ($name && length $name > 50) {
+      push @errors, '名前が長すぎます。';
+    }
+    if (!$message) {
+      push @errors, '本文がありません。';
+    } elsif (length $message > 5000) {
+      push @errors, '本文が長すぎます。';
+    }
+  }
+
+  if (@errors) {
+    $ret_ref = {
+      "result" => 'error',
+      "errors" => \@errors
+    };
+  } else {
+    my $sql_str = q/
+INSERT INTO bbs_entry
+  (pageUrl, pageTitle, name, message, ipAddress, state) 
+  VALUES (?, ?, ?, ?, ?, 1);
+    /;
+    my $ip_address = $ENV{'REMOTE_ADDR'};
+    $dbh->do($sql_str, undef, $data->{'pageUrl'}, $data->{'pageTitle'}, $data->{'name'}, $data->{'message'}, $ip_address);
+    $dbh->commit;
+
+    $ret_ref = {
+      "result" => 'success'
+    };
+  }
 
 } elsif ($ENV{'REQUEST_METHOD'} eq 'GET') {
   # 指定されたページURL、リミット、オフセットに基づいた書き込みログ情報をを返す。
