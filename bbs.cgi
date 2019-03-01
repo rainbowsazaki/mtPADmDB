@@ -105,7 +105,8 @@ INSERT INTO bbs_entry
     }
     push @data, \%hash;
   }
-
+  # 時系列を降順から昇順にする。
+  @data = reverse @data;
   $ret_ref = \@data;
 }
 
