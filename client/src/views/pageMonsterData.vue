@@ -202,6 +202,11 @@
         進化後{{ evolutionTable[monsterData.no].length }}種類のパラメータ比較へ
       </router-link>
     </div>
+    <div class="editButtons">
+      <router-link v-if="isHistory" :to="{ name:'monsterHistoryEdit', params: { id: $route.params.id }}" class="btn btn-primary">履歴をもとに編集する</router-link>
+      <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-primary">編集する</router-link>
+      <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-primary">モンスター画像投稿</router-link>
+    </div>
     <div v-if="isShowEvaluationLinks">
       <h3 class="h4">外部サイトのモンスター評価ページへのリンク</h3>
       <scoped-style>
@@ -225,11 +230,6 @@
       <h3 class="h4">編集コメント</h3>
       <div>{{ monsterData.comment }}</div>
     </div>
-
-    <hr>
-    <router-link v-if="isHistory" :to="{ name:'monsterHistoryEdit', params: { id: $route.params.id }}" class="btn btn-primary">履歴をもとに編集する</router-link>
-    <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-primary">編集する</router-link>
-    <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-primary">モンスター画像投稿</router-link>
 
     <div style="margin-top: 1rem;">
       <h3 class="h4">編集履歴</h3>
@@ -464,3 +464,14 @@ export default {
 };
 
 </script>
+
+<style lang="scss" scoped>
+
+.editButtons {
+  margin-top: 1rem;
+
+  a {
+    margin-right: 0.5rem;
+  }
+}
+</style>
