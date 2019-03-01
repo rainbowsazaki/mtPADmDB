@@ -6,6 +6,7 @@ CREATE TABLE search_result (
 );
 
 CREATE TABLE bbs_entry (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   pageUrl TEXT,
   pageTitle TEXT,
   name TEXT,

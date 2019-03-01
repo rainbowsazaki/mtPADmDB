@@ -76,7 +76,7 @@ INSERT INTO bbs_entry
   my $offset = $q->param('offset');
   if (!$limit) { $limit = 100; }
 
-  my @get_columns = qw/ pageUrl pageTitle name message timestamp /;
+  my @get_columns = qw/ id pageUrl pageTitle name message timestamp /;
   my $columns = join ', ', @get_columns;
 
   my @params = ();
