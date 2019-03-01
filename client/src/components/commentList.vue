@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div>
+    <div v-if="!entries">読み込み中...</div>
+    <div v-else-if="entries.length === 0">まだコメントはありません。</div>
+    <div v-else>
       <div
         v-for="(entry, i) in entries"
         :key="`entry${i}`"
@@ -37,7 +39,7 @@ export default {
   data: function () {
     return {
       /** 取得した書き込み情報。 */
-      entries: [],
+      entries: undefined,
       /** 現在送信中かどうか。 */
       isSubmitted: false,
       /** 入力中の名前。 */
@@ -48,7 +50,7 @@ export default {
   },
   watch: {
     '$route.path': function () {
-      this.entries = [];
+      this.entries = undefined;
       this.fetch();
     }
   },
