@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+const PageTop = () => import('./views/pageTop.vue');
 const PageAbout = () => import('./views/pageAbout.vue');
 const PageCompare = () => import('./views/pageCompare.vue');
 const PageHistory = () => import('./views/pageHistory.vue');
@@ -38,7 +39,7 @@ export default new Router({
     {
       path: '/',
       name: 'top',
-      component: PageMonsterList,
+      component: PageTop,
       props: true
     },
     {
