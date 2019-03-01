@@ -207,6 +207,10 @@
       <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-primary">編集する</router-link>
       <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-primary">モンスター画像投稿</router-link>
     </div>
+    <div v-if="!isHistory">
+      <h3 class="h4">コメント</h3>
+      <comment-list />
+    </div>
     <div v-if="isShowEvaluationLinks">
       <h3 class="h4">外部サイトのモンスター評価ページへのリンク</h3>
       <scoped-style>
@@ -473,5 +477,9 @@ export default {
   a {
     margin-right: 0.5rem;
   }
+}
+
+h3 {
+  margin-top: 1rem;
 }
 </style>
