@@ -30,6 +30,9 @@
       <div v-else>なし</div>
       <hr>
       <button type="button" class="btn btn-secondary" @click="startEdit">{{ isHistory ? '履歴をもとに編集する': '編集する' }}</button>
+
+      <h4 class="p-2 mt-3 bg-light">コメント</h4>
+      <comment-list />
     </template>
 
     <form v-else onsubmit="return false;" @submit="submit">
