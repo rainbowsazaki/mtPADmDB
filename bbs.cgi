@@ -99,7 +99,7 @@ INSERT INTO bbs_entry
   my @data;
   while (my $tbl_ary_ref = $sth->fetchrow_arrayref) {
     my %hash;
-    while (my ($i, $key) = each @get_columns) {
+    for (my $i = 0; $i < @get_columns; $i++) {
       my $key = $get_columns[$i];
       $hash{$key} = $tbl_ary_ref->[$i];
     }
