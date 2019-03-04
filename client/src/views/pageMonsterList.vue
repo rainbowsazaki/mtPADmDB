@@ -21,7 +21,7 @@ const MonsterList = () => import('../components/monsterList.vue');
  */
 export default {
   name: 'PageMonsterList',
-  pageTitle: null,
+  pageTitle: 'モンスター一覧',
   components: {
     'monster-list': MonsterList
   },
