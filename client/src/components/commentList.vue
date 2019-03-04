@@ -35,7 +35,7 @@ import axios from 'axios';
 
 /** コメントの投稿及び表示を行うコンポーネントです。 */
 export default {
-  name: 'ScopedStyle',
+  name: 'CommentList',
   data: function () {
     return {
       /** 取得した書き込み情報。 */
