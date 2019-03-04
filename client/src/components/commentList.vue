@@ -9,6 +9,7 @@
         class="entry"
       >
         {{ entry.message }} - <span class="name">{{ entry.name || '名無し' }}</span><span class="timestamp">({{ entry.timestamp }})</span>
+        <router-link v-if="allPage" class="link" :to="{ path: entry.pageUrl }"> {{ entry.pageTitle }}</router-link>
       </div>
     </div>
     <div class="input">
@@ -36,6 +37,13 @@ import axios from 'axios';
 /** コメントの投稿及び表示を行うコンポーネントです。 */
 export default {
   name: 'CommentList',
+  props: {
+    /** すべてのページのコメントを表示するかどうか。 */
+    'allPage': {
+      type: Boolean,
+      require: true
+    }
+  },
   data: function () {
     return {
       /** 取得した書き込み情報。 */
@@ -68,6 +76,9 @@ export default {
         pageUrl: this.$route.path,
         limit: 30
       };
+      if (this.allPage) {
+        params.pageUrl = undefined;
+      }
       axios.get('./bbs.cgi', { params: params })
         .then(response => {
           this.entries = response.data;
@@ -125,6 +136,9 @@ export default {
     padding-left: 0.5em;
     font-size: 70%;
     color: rgba(0, 0, 0, 0.7);
+  }
+  .link {
+    font-size: 70%;
   }
 }
 
