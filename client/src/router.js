@@ -4,6 +4,7 @@ const PageTop = () => import('./views/pageTop.vue');
 const PageAbout = () => import('./views/pageAbout.vue');
 const PageCompare = () => import('./views/pageCompare.vue');
 const PageHistory = () => import('./views/pageHistory.vue');
+const PageComment = () => import('./views/pageComment.vue');
 const PageMonsterData = () => import('./views/pageMonsterData.vue');
 const PageMonsterEdit = () => import('./views/pageMonsterEdit.vue');
 const PageMonsterList = () => import('./views/pageMonsterList.vue');
@@ -109,6 +110,12 @@ export default new Router({
       ]
     },
 
+    {
+      path: '/comment',
+      name: 'comment',
+      component: PageComment,
+      props: true
+    },
     {
       path: '/edit',
       name: 'monsterEdit',
