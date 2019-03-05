@@ -12,7 +12,7 @@
         <router-link v-if="allPage" class="link" :to="{ path: entry.pageUrl }"> {{ entry.pageTitle }}</router-link>
       </div>
     </div>
-    <div class="input">
+    <div v-if="!readOnly" class="input">
       <form onsubmit="return false;" @submit="submit">
         <div class="form-row align-items-center">
           <div class="col-3">
@@ -42,6 +42,10 @@ export default {
     'allPage': {
       type: Boolean,
       require: true
+    },
+    /** 書き込みログの表示のみにするかどうか。 */
+    'readOnly': {
+      type: Boolean
     }
   },
   data: function () {
