@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>コメント一覧</h2>
-    <comment-list all-page />
+    <comment-list all-page read-only />
   </div>
 </template>
 
