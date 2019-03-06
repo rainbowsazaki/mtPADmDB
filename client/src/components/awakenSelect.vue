@@ -172,11 +172,11 @@ export default {
   }
 
   input[type="checkbox"] + label {
-    filter: opacity(50%) grayscale(95%);
+    filter: opacity(35%) brightness(50%);
   }
 
   input[type="checkbox"]:checked + label {
-    filter: opacity(100%) grayscale(0%);
+    filter: none;
   }
   label { margin: 0; }
 }
