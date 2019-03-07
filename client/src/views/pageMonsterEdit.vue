@@ -325,6 +325,7 @@ export default {
     skillDetails: function () {
       if (this.monsterData.skill !== 0) {
         this.monsterData.skillDetails = $.extend(true, { name: '', description: '' }, this.skillTable[this.monsterData.skill]);
+        delete this.monsterData.skillDetails.no;
       }
       return this.monsterData.skillDetails;
     },
@@ -361,6 +362,7 @@ export default {
     leaderSkillDetails: function () {
       if (this.monsterData.leaderSkill !== 0) {
         this.monsterData.leaderSkillDetails = $.extend(true, { name: '', description: '' }, this.leaderSkillTable[this.monsterData.leaderSkill]);
+        delete this.monsterData.leaderSkillDetails.no;
       }
       return this.monsterData.leaderSkillDetails;
     },
