@@ -211,13 +211,8 @@
       <h3 class="h4">コメント</h3>
       <comment-list />
     </div>
-    <div v-if="isShowEvaluationLinks">
+    <div v-if="isShowEvaluationLinks" class="evaluationLink">
       <h3 class="h4">外部サイトのモンスター評価ページへのリンク</h3>
-      <scoped-style>
-        a { display: block; }
-        li li { color: #060; font-size: 90%; }
-        li { margin-bottom: 0.5em; }
-      </scoped-style>
       <div v-if="!evaluationOfMonsterLinks">読み込み中...</div>
       <div v-else-if="evaluationOfMonsterLinks.length === 0">なし</div>
       <ul v-else class="list-unstyled">
@@ -481,5 +476,11 @@ export default {
 
 h3 {
   margin-top: 1rem;
+}
+
+.evaluationLink {
+  a { display: block; }
+  li li { color: #060; font-size: 90%; }
+  li { margin-bottom: 0.5em; }
 }
 </style>

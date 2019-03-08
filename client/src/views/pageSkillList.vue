@@ -18,33 +18,7 @@
     <div><tweet-button /></div>
     <pagination :page="page" :page-count="pageCount" />
     
-    <div class="row" style="margin-bottom: 1rem;">
-      <scoped-style>
-        .box {
-          border: 1px solid #dee2e6;
-          margin-bottom: -1px;
-          padding: 4.8px;
-        }
-        .skillDescription {
-          font-size: 90%;
-          min-height: 3em;
-          padding-left: 1em;
-          white-space: pre;
-          overflow: scroll;
-        }
-        .monsterUsingSkillIcons {
-          min-height: 1.5rem;
-          padding-left: 0.9rem;
-          overflow: scroll;
-          white-space: nowrap;
-          margin: 0;
-        }
-        h3 {
-          font-size: 1.25rem;
-          margin-top: 1rem;
-        }
-      </scoped-style>
-
+    <div class="row skillList" style="margin-bottom: 1rem;">
       <template v-for="(skill, n) in skillArrayInPage">
         <div v-if="skill.hit && (n === 0 || skill.isGroupHead)" class="col-md-12" :key="`skillHeader${n}`">
           <h3>{{ skill.hit }}</h3>
@@ -250,3 +224,31 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.skillList {
+  .box {
+    border: 1px solid #dee2e6;
+    margin-bottom: -1px;
+    padding: 4.8px;
+  }
+  .skillDescription {
+    font-size: 90%;
+    min-height: 3em;
+    padding-left: 1em;
+    white-space: pre;
+    overflow: scroll;
+  }
+  .monsterUsingSkillIcons {
+    min-height: 1.5rem;
+    padding-left: 0.9rem;
+    overflow: scroll;
+    white-space: nowrap;
+    margin: 0;
+  }
+  h3 {
+    font-size: 1.25rem;
+    margin-top: 1rem;
+  }
+}
+</style>

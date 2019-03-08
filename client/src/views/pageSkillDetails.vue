@@ -17,10 +17,7 @@
       <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{ skillDetails.description }}</div>
       <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
       <h4 class="p-2 mt-3 bg-light">{{ targetName }}所持モンスター</h4>
-      <scoped-style>
-        li { margin: 0; padding: 0; padding: 2.4px; }
-      </scoped-style>
-      <ul v-if="existsMonsterUsingThisSkill" class="list-inline">
+      <ul v-if="existsMonsterUsingThisSkill" class="monsters list-inline">
         <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item" :key="`monster${monsterNo}`">
           <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
             <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
@@ -312,3 +309,11 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  .monsters li {
+    margin: 0;
+    padding: 0;
+    padding: 2.4px;
+  }
+</style>
