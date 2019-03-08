@@ -34,7 +34,7 @@ export default {
 
     monsterCount () { return Object.keys(this.monsterTable).length; },
     /** モンスター一覧情報を読込中かどうか。 現在の実装だとデータ未登録の場合、ずっと読み込み中判定となる。 */
-    isLoadingMonsterList () { return this.monsterCount === 0; },
+    isLoadingMonsterList () { return this.monsterCount === 0; }
 
   },
   created: function () {

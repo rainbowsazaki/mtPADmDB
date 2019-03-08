@@ -306,7 +306,7 @@ export default {
     leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
     imageTable: function () { return this.$store.state.imageTable; },
     
-    pageTitle: function () { 
+    pageTitle: function () {
       if (this.isHistory) { return '履歴をもとに編集'; }
       if (this.no) {
         return `編集 No.${this.no} ${this.monsterData.name}`;
