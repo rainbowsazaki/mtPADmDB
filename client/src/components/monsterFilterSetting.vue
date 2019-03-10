@@ -128,13 +128,22 @@ function hira2HiraKanaRegExp (str) {
   });
 }
 
+/** 検索ワードをあいまい検索のための正規表現に変更する。
+ * （検索対象の文字列において、検索ワードの文字と文字の間が2文字まで空いていてもヒットする検索形式）
+ */
+function toAimaiSearch (str) {
+  // 文字と文字の間に .{0,2} を入れるが、エスケープ文字の直後は除く。
+  return str.replace(/\\?./g, '$&.{0,2}');
+}
+
 /** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
 export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.name) {
     const searchWords = setting.name.split(/\s+/g);
+    const searchWordsRegText = searchWords.map(escapeRegExp).map(hira2HiraKanaRegExp).map(toAimaiSearch);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
-    const regexp = new RegExp('^(?=.*' + searchWords.map(escapeRegExp).map(hira2HiraKanaRegExp).join(')(?=.*') + ').*$', 's');
+    const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
     functionArray.push(d => { return regexp.test(d.name); });
   }
   if (setting.attr.length > 0) {
