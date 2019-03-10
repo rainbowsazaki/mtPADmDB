@@ -119,13 +119,22 @@ const filterDefault = {
   assist: undefined
 };
 
+/** 検索ワードのひらがなを、ひらがなとカタカナの両方にヒットする正規表現に変更する。 */
+function hira2HiraKanaRegExp (str) {
+  return str.replace(/[\u3041-\u3096]/g, function (hira) {
+    const kataCode = hira.charCodeAt(0) + 0x60;
+    const kata = String.fromCharCode(kataCode);
+    return `[${hira}${kata}]`;
+  });
+}
+
 /** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
 export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.name) {
     const searchWords = setting.name.split(/\s+/g);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
-    const regexp = new RegExp('^(?=.*' + searchWords.map(escapeRegExp).join(')(?=.*') + ').*$', 's');
+    const regexp = new RegExp('^(?=.*' + searchWords.map(escapeRegExp).map(hira2HiraKanaRegExp).join(')(?=.*') + ').*$', 's');
     functionArray.push(d => { return regexp.test(d.name); });
   }
   if (setting.attr.length > 0) {
