@@ -141,7 +141,7 @@ export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.name) {
     const searchWords = setting.name.split(/\s+/g);
-    const searchWordsRegText = searchWords.map(escapeRegExp).map(hira2HiraKanaRegExp).map(toAimaiSearch);
+    const searchWordsRegText = searchWords.map(escapeRegExp).map(toAimaiSearch).map(hira2HiraKanaRegExp);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
     const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
     functionArray.push(d => { return regexp.test(d.name); });
