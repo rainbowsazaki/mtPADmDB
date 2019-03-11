@@ -136,12 +136,30 @@ function toAimaiSearch (str) {
   return str.replace(/\\?./g, '$&.{0,2}');
 }
 
+/** 頻出する一部の漢字を、ひらがなでも検索できるようにする */
+function replaceKanjiWordToRegExp (str) {
+  const wordPairList = [
+    ['かくせい', '覚醒'],
+    ['てんせい', '転生'],
+    ['きょくせい|ごくせい', '極醒'],
+    ['ばんにん', '番人'],
+    ['かめん', '仮面'],
+    ['ほうぎょく', '宝玉'],
+    ['きせき', '希石']
+  ];
+
+  for (const wordPair of wordPairList) {
+    str = str.replace(new RegExp(wordPair[0]), `(?:${wordPair[1]}|$&)`);
+  }
+  return str;
+}
+
 /** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
 export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.name) {
     const searchWords = setting.name.split(/\s+/g);
-    const searchWordsRegText = searchWords.map(escapeRegExp).map(toAimaiSearch).map(hira2HiraKanaRegExp);
+    const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch).map(hira2HiraKanaRegExp);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
     const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
     functionArray.push(d => { return regexp.test(d.name); });
