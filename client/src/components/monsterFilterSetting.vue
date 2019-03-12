@@ -119,12 +119,25 @@ const filterDefault = {
   assist: undefined
 };
 
-/** 検索ワードのひらがなを、ひらがなとカタカナの両方にヒットする正規表現に変更する。 */
-function hira2HiraKanaRegExp (str) {
-  return str.replace(/[\u3041-\u3096]/g, function (hira) {
-    const kataCode = hira.charCodeAt(0) + 0x60;
+/**
+ * 検索ワードのひらがなカタカナを、ひらがなとカタカナの両方にヒットする正規表現に変更する。
+ * 小文字大文字のある文字の場合はその両方を含める。
+ */
+function toHiraKanaSearchRegExp (str) {
+  return str.replace(/[\u3041-\u3096\u30a1-\u30f6]/g, function (match) {
+    let hiraCode = match.charCodeAt(0);
+    if (hiraCode >= 0x30a1) { hiraCode -= 0x60; }
+    const kataCode = hiraCode + 0x60;
+    const hira = String.fromCharCode(hiraCode);
     const kata = String.fromCharCode(kataCode);
-    return `[${hira}${kata}]`;
+    let resizeChars = '';
+    if (/[あいうえおつやゆよわ]/.test(hira)) {
+      resizeChars = String.fromCharCode(hiraCode - 1) + String.fromCharCode(kataCode - 1);
+    }
+    if (/[ぁぃぅぇぉっゃゅょゎ]/.test(hira)) {
+      resizeChars = String.fromCharCode(hiraCode + 1) + String.fromCharCode(kataCode + 1);
+    }
+    return `[${hira}${kata}${resizeChars}]`;
   });
 }
 
@@ -160,7 +173,7 @@ export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.name) {
     const searchWords = setting.name.split(/\s+/g);
-    const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch).map(hira2HiraKanaRegExp);
+    const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch).map(toHiraKanaSearchRegExp);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
     const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
     functionArray.push(d => { return regexp.test(d.name); });
