@@ -140,6 +140,41 @@ function toHiraKanaSearchRegExp (str) {
     return `[${hira}${kata}${resizeChars}]`;
   });
 }
+/**
+ * ば行 と ヴァ行 を相互に検索可能な正規表現に置き換える。
+ * ば行 の場合は /ゔ.{1,2}ぁ/ をヒットさせたくないので、文字間に関するあいまい検索置き換えのあとに行う。
+ * そのため置き換え元の文字にも .{0,2} が入った状態でチェックする。
+ */
+function toBaVaAimaiRegExp (str) {
+  const aimai = '.{0,2}';
+  return str.replace(/[ばびぶべぼバビブベボ]|[ゔヴ](?:\.\{0,2\}([ぁあぃいぇえぉおァアィイェエォオ]))?/g, function (match) {
+    switch (match[0]) {
+    case 'ば': case 'バ':
+      return '(?:ゔぁ|ば)';
+    case 'び': case 'ビ':
+      return '(?:ゔぃ|び)';
+    case 'ぶ': case 'ブ':
+      return '(?:ゔ|ぶ)';
+    case 'べ': case 'ベ':
+      return '(?:ゔぇ|べ)';
+    case 'ぼ': case 'ボ':
+      return '(?:ゔぉ|ぼ)';
+    case 'ゔ': case 'ヴ':
+      switch (RegExp.$1) {
+      case 'ぁ': case 'あ': case 'ァ': case 'ア':
+        return `(?:ゔ${aimai}ぁ|ば)`;
+      case 'ぃ': case 'い': case 'ィ': case 'イ':
+        return `(?:ゔ${aimai}ぃ|び)`;
+      case undefined:
+        return '(?:ゔ|ぶ)';
+      case 'ぇ': case 'え': case 'ェ': case 'エ':
+        return `(?:ゔ${aimai}ぇ|べ)`;
+      case 'ぉ': case 'お': case 'ォ': case 'オ':
+        return `(?:ゔ${aimai}ぉ|ぼ)`;
+      }
+    }
+  }).replace();
+}
 
 /** 検索ワードをあいまい検索のための正規表現に変更する。
  * （検索対象の文字列において、検索ワードの文字と文字の間が2文字まで空いていてもヒットする検索形式）
@@ -173,7 +208,7 @@ export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.name) {
     const searchWords = setting.name.split(/\s+/g);
-    const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch).map(toHiraKanaSearchRegExp);
+    const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch).map(toBaVaAimaiRegExp).map(toHiraKanaSearchRegExp);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
     const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
     functionArray.push(d => { return regexp.test(d.name); });
