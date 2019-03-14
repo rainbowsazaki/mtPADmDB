@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { getFilterFunction } from '../components/monsterFilterSetting.vue';
 import $ from 'jquery';
 export default {
   name: 'MonsterIncrementalInput',
@@ -37,14 +38,15 @@ export default {
     filteredMonsterTable: function () {
       // 文字が入力されていない場合は表示しない。
       if (this.filter.length < 1) { return {}; }
-      const obj = {};
+      const func = getFilterFunction({ name: this.filter });
+      const array = [];
       for (const key in this.monsterTable) {
         const value = this.monsterTable[key];
-        if (value && value.name && value.name.indexOf(this.filter) !== -1) {
-          obj[key] = value;
+        if (func(value)) {
+          array.push(value);
         }
       }
-      return obj;
+      return array;
     }
   },
   watch: {
