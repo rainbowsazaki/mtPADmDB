@@ -1,8 +1,14 @@
 <template>
 
   <div id="filter" style="margin-bottom: 4px;">
+    <div class="row">
+      <div class="col-sm-12 mb-2">
+        <input type="text" class="form-control" placeholder="モンスター名検索" v-model="filter.name">
+      </div>
+    </div>
+
     <span id="filterTrigger" :class="{ open: isOpenFilterTrigger }" @click="isVisibleFilter = !isVisibleFilter">
-      絞り込み
+      その他絞り込み
       <svg viewBox="0 0 100 100" width="1em" height="1em">
         <path v-if="isVisibleFilter" d="M50 0 L10 75 L90 75 Z" style="fill:black;" />
         <path v-else d="M50 75 L10 0 L90 0 Z" style="fill:black;" />
@@ -15,12 +21,6 @@
                 @after-leave="isOpenFilterTrigger = false;"
     >
       <form id="filterForm" v-if="isVisibleFilter">
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">モンスター名</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" placeholder="モンスター名検索" v-model="filter.name">
-          </div>
-        </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">主属性</label>
           <div class="col-sm-10">
@@ -471,8 +471,8 @@ export default {
 
 <style scoped>
   #filterTrigger {
-    border: 1px solid #AAC;
-    border-radius: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
     padding: 4px 4px 2px 4px;
     background: #FFF;
     cursor: pointer;
@@ -480,12 +480,12 @@ export default {
 
   #filterTrigger.open {
     border-bottom-style: none;
-    border-radius: 8px 8px 0 0;
+    border-radius: 4px 4px 0 0;
   }
 
   #filterForm {
-    border: 1px solid #AAC;
-    border-radius: 0 8px 8px 8px;
+    border: 1px solid #ced4da;
+    border-radius: 0 4px 4px 4px;
     background: #FFF;
     margin-top: -2px;
     padding: 8px 4px 4px 4px;
