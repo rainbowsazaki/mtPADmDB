@@ -165,7 +165,7 @@ function toBaVaAimaiRegExp (str) {
         return `(?:ゔ${aimai}ぁ|ば)`;
       case 'ぃ': case 'い': case 'ィ': case 'イ':
         return `(?:ゔ${aimai}ぃ|び)`;
-      case undefined:
+      case '':
         return '(?:ゔ|ぶ)';
       case 'ぇ': case 'え': case 'ェ': case 'エ':
         return `(?:ゔ${aimai}ぇ|べ)`;
