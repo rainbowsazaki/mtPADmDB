@@ -325,7 +325,7 @@ export default {
       this.emitInput();
     },
     'filter.name': function () {
-      this.updateRouteQuery({ name: this.filter.name });
+      this.updateRouteQuery({ name: this.filter.name || undefined });
       this.emitInput();
     },
     '$route.query.name': function () {
