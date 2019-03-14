@@ -213,17 +213,17 @@ export function getFilterFunction (setting) {
     const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
     functionArray.push(d => { return regexp.test(d.name); });
   }
-  if (setting.attr.length > 0) {
+  if (setting.attr && setting.attr.length > 0) {
     const filterObj = {};
     for (const attr of setting.attr) { filterObj[attr] = true; }
     functionArray.push(d => filterObj[d.attributes[0]]);
   }
-  if (setting.subAttr.length > 0) {
+  if (setting.subAttr && setting.subAttr.length > 0) {
     const filterObj = {};
     for (const attr of setting.subAttr) { filterObj[attr] = true; }
     functionArray.push(d => filterObj[d.attributes[1]]);
   }
-  if (setting.type.length > 0) {
+  if (setting.type && setting.type.length > 0) {
     const filterObj = {};
     for (const type of setting.type) { filterObj[type] = true; }
     functionArray.push(d => d.types.some(type => filterObj[type]));
@@ -236,13 +236,15 @@ export function getFilterFunction (setting) {
     const awakenKeys = Object.keys(awakenFilter);
     functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
   }
-  if (setting.skillTurnMin !== filterDefault.skillTurnMin ||
-      setting.skillTurnMax !== filterDefault.skillTurnMax) {
+  const skillTurnMin = setting.skillTurnMin || filterDefault.skillTurnMin;
+  const skillTurnMax = setting.skillTurnMax || filterDefault.skillTurnMax;
+  if (skillTurnMin !== filterDefault.skillTurnMin ||
+      skillTurnMax !== filterDefault.skillTurnMax) {
     functionArray.push(d => {
       const skill = commonData.skillTable[d.skill];
       if (!skill) { return false; }
       const minTurn = skill.baseTurn - skill.maxLevel + 1;
-      return minTurn >= setting.skillTurnMin && minTurn <= setting.skillTurnMax;
+      return minTurn >= skillTurnMin && minTurn <= skillTurnMax;
     });
   }
   if (setting.assist !== undefined) {
