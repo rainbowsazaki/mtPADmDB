@@ -12,6 +12,7 @@ const PagePic = () => import('./views/pagePic.vue');
 const PageSkillDetails = () => import('./views/pageSkillDetails.vue');
 const PageSkillList = () => import('./views/pageSkillList.vue');
 const PageRaniking = () => import('./views/pageRanking.vue');
+const PageEvolutionMaterial = () => import('./views/pageEvolutionMaterial.vue');
 
 /** router-view 要素のみのコンポーネント。 ネストされたルートの親要素で何も表示しない時用。 */
 const RouterViewComponent = {
@@ -73,6 +74,12 @@ export default new Router({
               path: 'pic',
               name: 'monsterPictureUpdate',
               component: PagePic,
+              props: true
+            },
+            {
+              path: 'material',
+              name: 'evolutionMaterial',
+              component: PageEvolutionMaterial,
               props: true
             }
           ]
