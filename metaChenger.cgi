@@ -203,6 +203,7 @@ if ($title) {
 }
 if ($image_url) {
   $html =~ s|(<meta property="?og:image"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"${image_url}"$3|;
+  $html =~ s|(<meta name="?twitter:card"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"summary_large_image"$3|;
 }
 if ($description) {
   $html =~ s|(<meta name="?description"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"${description}"$3|;
