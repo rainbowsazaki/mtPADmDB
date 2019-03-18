@@ -4,14 +4,14 @@
     <template v-if="stoneBaseMonsterData">
       ← <monster-icon :no="stoneBaseMonsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
     </template>
-    <table v-if="materialTargetMonsterData.evolution.baseNo" class="table table-bordered">
+    <table v-if="hasEvolution" class="table table-bordered">
       <tr>
         <td>
-          <evolution-material :no="materialTargetMonsterData.evolution.baseNo" />
+          <evolution-material :no="materialTargetMonsterData.evolution.baseNo" @onTotalMaterialCounts="onTotalMaterialCounts" />
         </td>
         <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
           <td v-if="material" :key="`material_${i}`">
-            <evolution-material :no="material" />
+            <evolution-material :no="material" @onTotalMaterialCounts="onTotalMaterialCounts" />
           </td>
         </template>
       </tr>
@@ -34,6 +34,14 @@ export default {
       required: true
     }
   },
+  data: function () {
+    return {
+      /** このモンスターを作成するのに必要な元モンスター・素材の総数。キーがモンスター番号で値が必要数。 */
+      totalMaterialCounts: {},
+      /** このモンスターの元モンスター・必要素材から、そzれぞれの必要素材がが送られてきた回数。 */
+      returnedMeterialCountsCount: 0
+    };
+  },
   computed: {
     /** モンスター情報のテーブル。 */
     monsterTable () { return this.$store.state.monsterTable; },
@@ -52,6 +60,33 @@ export default {
     /** 素材確認の対象となるモンスターの情報。希石の元のモンスターか、指定モンスターそのもの。 */
     materialTargetMonsterData () {
       return this.stoneBaseMonsterData || this.monsterData;
+    },
+    /** 進化後のモンスターかどうか。 */
+    hasEvolution () {
+      return this.materialTargetMonsterData.evolution && this.materialTargetMonsterData.evolution.baseNo;
+    }
+  },
+  mounted: function () {
+    if (!this.hasEvolution) {
+      this.totalMaterialCounts[this.materialTargetMonsterData.no || this.no] = 1;
+      this.$emit('onTotalMaterialCounts', this.totalMaterialCounts);
+    }
+  },
+  methods: {
+    /** 必要素材数を受け取るメソッド。 */
+    onTotalMaterialCounts (obj) {
+      for (const key in obj) {
+        this.totalMaterialCounts[key] = (this.totalMaterialCounts[key] || 0) + obj[key];
+      }
+      this.returnedMeterialCountsCount++;
+      
+      let count = 1;
+      for (const material of this.materialTargetMonsterData.evolution.materials) {
+        if (material) { count++; }
+      }
+      if (this.returnedMeterialCountsCount === count) {
+        this.$emit('onTotalMaterialCounts', this.totalMaterialCounts);
+      }
     }
   }
 };
