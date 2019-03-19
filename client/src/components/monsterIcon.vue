@@ -22,14 +22,6 @@ export default {
       type: Number,
       default: null
     },
-    'monsterTable': {
-      type: Object,
-      default: undefined
-    },
-    'imageTable': {
-      type: Object,
-      required: true
-    },
     'width': {
       type: String,
       default: '96px'
@@ -45,6 +37,9 @@ export default {
     }
   },
   computed: {
+    monsterTable () { return this.$store.state.monsterTable; },
+    imageTable () { return this.$store.state.imageTable; },
+
     hasImage: function () { return !!this.imageTable[this.no]; },
     monsterData: function () { return (this.monsterTable[this.no] || {}); },
     monsterNoAndName: function () { return `No.${this.monsterData.no} ${this.monsterData.name}`; },
