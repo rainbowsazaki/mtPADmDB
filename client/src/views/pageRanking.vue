@@ -37,7 +37,7 @@
         <th class="text-right">{{ (page - 1) * inPageCount + n + 1 }}</th>
         <td>
           <router-link :to="{ name: 'monsterDetails', params: { no: data.data.no }}">
-            <monster-icon :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
+            <monster-icon no-link :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
             {{ data.data.name }}
           </router-link>
         </td>

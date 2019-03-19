@@ -136,10 +136,10 @@
         <template v-if="monsterData.evolutionType !== null">
           <tr><td colspan="2">
             <template v-if="monsterData.evolution.baseNo">
-              <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
+              <monster-icon no-link :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
               ←
               <router-link :to="{ name:'monsterDetails', params: { no: monsterData.evolution.baseNo }}">
-                <monster-icon :no="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
+                <monster-icon no-link :no="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
                 No. {{ monsterData.evolution.baseNo }} {{ monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name }}
               </router-link>
             </template>
@@ -170,10 +170,10 @@
       <table v-for="(evolution, n) in evolutionTable[monsterData.no]" class="table table-bordered table-sm" :key="`evolutionNo${n}`">
         <tr class="thead-light"><th colspan="2">{{ evolutionTypeTable[evolution.type] }}</th></tr>
         <tr><td colspan="2">
-          <monster-icon :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
+          <monster-icon no-link :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
           →
           <router-link v-if="evolution.no" :to="{ name:'monsterDetails', params: { no: evolution.no }}">
-            <monster-icon :no="evolution.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
+            <monster-icon no-link :no="evolution.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
             No. {{ evolution.no }} {{ monsterTable[evolution.no] && monsterTable[evolution.no].name }}
           </router-link>
         </td></tr>

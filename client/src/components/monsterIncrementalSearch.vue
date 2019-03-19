@@ -2,7 +2,7 @@
   <div class="form-row">
     <div class="col-md-4">
       <div class="input-group">
-        <monster-icon v-if="imageTable" :no="value" :monster-table="monsterTable" :image-table="imageTable" width="38px" height="38px" />
+        <monster-icon v-if="imageTable" no-link :no="value" :monster-table="monsterTable" :image-table="imageTable" width="38px" height="38px" />
         <div class="input-group-prepend">
           <span class="input-group-text">No.</span>
         </div>

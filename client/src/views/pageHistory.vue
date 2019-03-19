@@ -6,7 +6,7 @@
           <router-link :to="{ name:'monsterHistory', params: { id: history.id }}">{{ history.datetime }}</router-link>
         </td>
         <td><router-link :to="{ name: 'monsterDetails', params: { no: history.no }}">
-          <monster-icon :no="history.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
+          <monster-icon no-link :no="history.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
           No.{{ history.no }} {{ monsterName(history.no) }}
         </router-link></td>
         <td>
