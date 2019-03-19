@@ -19,9 +19,7 @@
       <h4 class="p-2 mt-3 bg-light">{{ targetName }}所持モンスター</h4>
       <ul v-if="existsMonsterUsingThisSkill" class="monsters list-inline">
         <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item" :key="`monster${monsterNo}`">
-          <router-link :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
-            <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-          </router-link>
+          <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
         </li>
       </ul>
       <div v-else>なし</div>

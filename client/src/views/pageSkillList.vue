@@ -29,9 +29,7 @@
             <div class="skillDescription">{{ skill.description }}</div>
             <ul class="list-inline monsterUsingSkillIcons">
               <li v-for="(monsterNo, m) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="`hasMonster${m}`">
-                <router-link v-if="m < monsterIconCountMax" :to="{ name: 'monsterDetails', params: { no: monsterNo }}">
-                  <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
-                </router-link>
+                <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
                 <span v-else-if="m == monsterIconCountMax">…</span>
               </li>
             </ul>
