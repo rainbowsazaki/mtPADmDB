@@ -1,13 +1,13 @@
 <template>
-  <div v-if="hasImage" style="display: inline-block; background-color: #ccc; vertical-align:bottom; border-radius: 6%;" :style="{ width: width, height: height }">
+  <div v-if="hasImage" class="monsterImage" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
-      <img :src="iconPath" style="border-radius: 6%;" :style="{width: width, height: height }" :alt="monsterNoAndName" :key="`icon${no}`">
+      <img :src="iconPath" style="width: 100%; height: 100%;" :alt="monsterNoAndName" :key="`icon${no}`">
     </span>
   </div>
-  <div v-else style="display: inline-block; background-color: #ccc; position:relative; vertical-align:bottom; border: 1px solid #bbb; border-bottom-width: 2px; border-radius: 6%;" :style="{ width: width, height: height }">
+  <div v-else class="monsterImage" style="position:relative; border: 1px solid #bbb; border-bottom-width: 2px;" :style="iconSizeStyleObject">
     <router-link :to="routerLinkObject">
-      <img v-if="hasAttr0" style="position:absolute; left:  2%; top:    2%; width: 23%; height: 23%;" :src="attrPath0">
-      <img v-if="hasAttr1" style="position:absolute; right: 2%; bottom: 2%; width: 23%; height: 23%;" :src="attrPath1">
+      <img v-if="hasAttr0" class="attr attr1" :src="attrPath0">
+      <img v-if="hasAttr1" class="attr attr2" :src="attrPath1">
       <div v-if="!isNaN(no)" :style="{ fontSize: fontSize, lineHeight: height }" style="text-align: center; overflow: hidden; color: #aaa;">{{ no }}</div>
     </router-link>
   </div>
@@ -61,11 +61,42 @@ export default {
     /** モンスター詳細ページへリンクするために router-link コンポーネントの to プロパティに指定するオブジェクト。 */
     routerLinkObject: function () {
       return (this.noLink) ? {} : { name: 'monsterDetails', params: { no: this.no }};
+    },
+    /** アイコンサイズの指定のために style 属性に指定するオブジェクト。 */
+    iconSizeStyleObject: function () {
+      return { width: this.width, height: this.height };
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+
+.monsterImage {
+  display: inline-block;
+  background-color: #ccc;
+  vertical-align: bottom;
+  border-radius: 6%;
+  overflow: hidden;
+
   a { text-decoration: none; }
+
+  img {
+    $attr_size: 23%;
+    $attr_margin: 2%;
+    &.attr {
+      position: absolute;
+      width: $attr_size;
+      height: $attr_size;
+    }
+    &.attr1 {
+      left: $attr_margin;
+      top: $attr_margin;
+    }
+    &.attr2 {
+      right: $attr_margin;
+      bottom: $attr_margin;
+    }
+  }
+}
 </style>
