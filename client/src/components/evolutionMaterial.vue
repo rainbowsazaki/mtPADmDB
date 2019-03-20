@@ -1,21 +1,33 @@
 <template>
-  <div>
-    <monster-icon :no="no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
+  <div v-if="hasEvolution">
+    <monster-icon :no="no" width="2.5em" height="2.5em" />
     <template v-if="stoneBaseMonsterData">
-      ← <monster-icon :no="stoneBaseMonsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
+      ← <monster-icon :no="stoneBaseMonsterData.no" width="2.5em" height="2.5em" />
     </template>
-    <table v-if="hasEvolution" class="table table-bordered">
+    {{ materialTargetMonsterData.name }}
+
+    <table class="table table-bordered table-sm">
+      <tr>
+        <th>進化元</th>
+        <th>素材</th>
+      </tr>
       <tr>
         <td>
-          <evolution-material :no="materialTargetMonsterData.evolution.baseNo" @onTotalMaterialCounts="onTotalMaterialCounts" />
+          <monster-icon :no="materialTargetMonsterData.evolution.baseNo" width="2.5em" height="2.5em" />
         </td>
-        <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
-          <td v-if="material" :key="`material_${i}`">
-            <evolution-material :no="material" @onTotalMaterialCounts="onTotalMaterialCounts" />
-          </td>
-        </template>
+        <td>
+          <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
+            <monster-icon v-if="material" :no="material" width="2.5em" height="2.5em" :key="`material_${i}`" />
+          </template>
+        </td>
       </tr>
     </table>
+    <div style="margin-left: 0.5rem">
+      <evolution-material :no="materialTargetMonsterData.evolution.baseNo" @onTotalMaterialCounts="onTotalMaterialCounts" />
+      <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
+        <evolution-material v-if="material" :no="material" @onTotalMaterialCounts="onTotalMaterialCounts" :key="`material_${i}`" />
+      </template>
+    </div>
   </div>
 </template>
 
