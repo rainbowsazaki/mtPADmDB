@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>{{ pageTitle }}</h2>
     <evolution-material :no="Number(no)" @onTotalMaterialCounts="onTotalMaterialCounts" />
     <h3>必要総数</h3>
     <ul class="list-group" style="max-width: 600px;">
@@ -18,6 +19,14 @@
 import evolutionMaterial from '../components/evolutionMaterial.vue';
 
 export default {
+  name: 'PageEvolutionMaterial',
+  pageTitle: function () { return this.pageTitle; },
+  middleOfBreadcrumbs: function () {
+    return {
+      text: `No.${this.no} ${this.monsterData.name}`,
+      link: { name: 'monsterDetails', params: { no: this.no }}
+    };
+  },
   components: {
     'evolutionMaterial': evolutionMaterial
   },
@@ -41,7 +50,13 @@ export default {
     /** モンスター情報のテーブル。 */
     monsterTable () { return this.$store.state.monsterTable; },
     /** モンスター画像情報のテーブル。 */
-    imageTable () { return this.$store.state.imageTable; }
+    imageTable () { return this.$store.state.imageTable; },
+    /** 対象のモンスターの情報。 */
+    monsterData () { return this.monsterTable[this.no] || {}; },
+    /** ページのタイトル。 */
+    pageTitle: function () {
+      return `No.${this.no || this.monsterData.no} ${this.monsterData.name} の作成に必要なモンスター`;
+    }
   },
   methods: {
     /** 必要素材数を受け取るメソッド。 */
