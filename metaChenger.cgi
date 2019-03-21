@@ -115,6 +115,9 @@ EOS
       $description = $row_ary[1];
       $description =~ s/\r?\n//g;
     };
+
+    my $image_type = ($is_leader_skill) ? 'leaderSkill' : 'skill';
+    $image_url = "${url_base}/skillImage.cgi/${image_type}/${no}";
   }
 
 # モンスターランキング
