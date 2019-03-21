@@ -38,7 +38,7 @@ if ($row_ary[0]) {
 # データを取得できなかった場合
 } else {
   # ファビコンと同じ画像を表示。
-  $file_name = 'client/dist/image/twitterCard.png';
+  $file_name = 'image/twitterCard.png';
   print "Content-type: image/png\n\n";
 }
 
