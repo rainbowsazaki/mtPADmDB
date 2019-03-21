@@ -15,6 +15,7 @@ sub create_monster_db_dbh {
 
 my $title;
 my $image_url;
+my $is_use_large_image = 0;
 my $description;
 my $url_base = 'https://padmdb.rainbowsite.net';
 
@@ -85,6 +86,7 @@ EOS
     my @row_ary = $dbh->selectrow_array($sql);
     if ($row_ary[0] > 0) {
       $image_url = "${url_base}/monsterImages/${no}.jpg";
+      $is_use_large_image = 1;
     }
   };
 
@@ -203,6 +205,8 @@ if ($title) {
 }
 if ($image_url) {
   $html =~ s|(<meta property="?og:image"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"${image_url}"$3|;
+}
+if ($is_use_large_image) {
   $html =~ s|(<meta name="?twitter:card"? content=)"?([^\s>]*?)"?(\s*/?>)|$1"summary_large_image"$3|;
 }
 if ($description) {
