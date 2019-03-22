@@ -17,14 +17,15 @@ my ($mode, $no) = $ENV{'PATH_INFO'} =~ m|^/([^/]+)/(\d+)|;
 
 my $dbh = create_monster_db_dbh();
 # 指定されたスキル/リーダースキルを持っていて、最もレアリティが高く、番号の小さいモンスターをそのスキルの代表モンスターとする。
+# 最初の覚醒が覚醒アシストの場合と最初のタイプが進化素材や強化素材の場合は優先度低くする。
 my $target_name = ($mode eq 'leaderSkill')? 'leaderSkill' : 'skill';
 my $sql = <<"EOS";
 SELECT mi.id, mi.no FROM monster_image AS mi
-	LEFT JOIN monster_data AS md ON mi.no = md.no
-	LEFT JOIN monster_base_data AS mbd ON md.monster_base_data = mbd.id
-	WHERE mi.state = 1 AND md.state = 1 AND mbd.${target_name} = ?
-	ORDER BY mbd.rare DESC, md.no
-	LIMIT 1
+  LEFT JOIN monster_data AS md ON mi.no = md.no
+  LEFT JOIN monster_base_data AS mbd ON md.monster_base_data = mbd.id
+  WHERE mi.state = 1 AND md.state = 1 AND mbd.${target_name} = ?
+  ORDER BY mbd.awakens_0 = 49, mbd.types_0 IN (9, 11), mbd.rare DESC, md.no
+  LIMIT 1
 EOS
 
 my @row_ary = $dbh->selectrow_array($sql, undef, $no);
