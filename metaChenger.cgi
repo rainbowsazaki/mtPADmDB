@@ -90,8 +90,8 @@ SELECT count(id) FROM monster_image
 EOS
       my @row_ary = $dbh->selectrow_array($sql);
       if ($row_ary[0] > 0) {
-        $image_url = "${url_base}/monsterImages/${no}.jpg";
-      $is_use_large_image = 1;
+        $image_url = "${url_base}/monsterImage4tc.cgi/${no}";
+        $is_use_large_image = 1;
       }
     }
   }
