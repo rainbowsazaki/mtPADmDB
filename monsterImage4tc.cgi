@@ -46,6 +46,11 @@ my $canvas = Image::Magick->new;
 $canvas->Set(size => $canvas_width . 'x' . $canvas_height);
 $canvas->ReadImage('xc:black');
 
+# モンスター画像より少し広い背景画像。
+my $back_image = Image::Magick->new;
+$back_image->Read('tcBack.jpeg');
+$canvas->Composite(image => $back_image, compose=>'over', gravity=>'Center');
+
 my $src_image = Image::Magick->new;
 $src_image->Read($file_name);
 my($src_width, $src_height) = $src_image->Get('width', 'height');
