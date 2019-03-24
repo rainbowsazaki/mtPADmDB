@@ -11,7 +11,9 @@
     <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
     <div class="row">
       <div class="col-md-6">
-        <img v-if="monsterData.no" :src="monsterImagePath" style="width: 100%; height: auto; max-width: 400px; display: block; margin: 0 auto;">
+        <div class="monsterImage">
+          <img v-if="monsterData.no" :src="monsterImagePath" style="width: 100%; height: auto; max-width: 400px; display: block; margin: 0 auto;">
+        </div>
         <table class="table table-bordered table-sm">
           <tr class="thead-light">
             <th colspan="2">タイプ</th><th>属性</th>
@@ -476,6 +478,13 @@ export default {
 
 h3 {
   margin-top: 1rem;
+}
+
+div.monsterImage {
+  background: black url('/image/monsterBack.jpeg');
+  background-size: auto 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .evaluationLink {
