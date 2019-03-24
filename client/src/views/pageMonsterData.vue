@@ -481,7 +481,7 @@ h3 {
 }
 
 div.monsterImage {
-  background: black url('/image/monsterBack.jpeg');
+  background: black url('../assets/image/monsterBack.jpeg');
   background-size: auto 100%;
   background-position: center;
   background-repeat: no-repeat;
