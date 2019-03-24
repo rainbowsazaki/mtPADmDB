@@ -386,8 +386,9 @@ export default {
     }
   },
   created: function () {
+    this.queryToFilter('name');
+    // 名前以外の指定がある場合は『その他絞り込み』を開いた状態で作成する。
     let isSetFilter = false;
-    isSetFilter |= this.queryToFilter('name');
     isSetFilter |= this.queryToFilter('attr');
     isSetFilter |= this.queryToFilter('subAttr');
     isSetFilter |= this.queryToFilter('type');
