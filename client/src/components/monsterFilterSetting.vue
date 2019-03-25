@@ -274,6 +274,8 @@ export default {
   },
   data: function () {
     return {
+      /** フィルタリング設定が変更されたときに表示ページ指定をリセットするかどうか。 */
+      pageResetFlag: false,
       /** フィルタリング設定領域を表示するかどうか。 */
       isVisibleFilter: false,
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
@@ -400,6 +402,8 @@ export default {
     if (isSetFilter) {
       this.isVisibleFilter = this.isOpenFilterTrigger = true;
     }
+    // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
+    setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
   methods: {
     /** input イベントを発火して現在の設定を送る。 */
@@ -424,6 +428,7 @@ export default {
     /** ルートのクエリーを更新する。 */
     updateRouteQuery: function (changeQuery) {
       const margedQuery = Object.assign({}, this.$route.query, changeQuery);
+      if (this.pageResetFlag) { margedQuery.page = undefined; }
       this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
     },
     /** 配列をカンマで結合した値を使用してルートのクエリーを変更する。 */
