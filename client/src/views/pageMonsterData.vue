@@ -231,7 +231,14 @@
       <h3 class="h4">編集コメント</h3>
       <div>{{ monsterData.comment }}</div>
     </div>
-
+    <div>
+      <h3 class="h4">JSON</h3>
+      <div class="row">
+        <div class="col-12">
+          <textarea readonly v-model="monsterDataJson" class="json" />
+        </div>
+      </div>
+    </div>
     <div style="margin-top: 1rem;">
       <h3 class="h4">編集履歴</h3>
       <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
@@ -299,6 +306,10 @@ export default {
     imageTable: function () { return this.$store.state.imageTable; },
     monsterData: function () {
       return this.isHistory ? this.$store.state.monsterData : this.monsterTable[this.no];
+    },
+    /** モンスター情報をJSONテキスト化したもの。 */
+    monsterDataJson: function () {
+      return JSON.stringify(this.monsterData, null, 4);
     },
 
     monsterImagePath: function () {
@@ -491,5 +502,10 @@ div.monsterImage {
   a { display: block; }
   li li { color: #060; font-size: 90%; }
   li { margin-bottom: 0.5em; }
+}
+
+textarea.json {
+  width: 100%;
+  height: 8em;
 }
 </style>
