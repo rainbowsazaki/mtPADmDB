@@ -309,7 +309,12 @@ export default {
     },
     /** モンスター情報をJSONテキスト化したもの。 */
     monsterDataJson: function () {
-      return JSON.stringify(this.monsterData, null, 4);
+      const keys = [
+        'no', 'name', 'attributes', 'cost', 'rare', 'types', 'awakens',
+        'maxExp', 'maxLevel', 'skill', 'leaderSkill', 'assist', 'overLImit',
+        'overLimitParam', 'superAwakens', 'evolutionType', 'evolution'
+      ];
+      return JSON.stringify(this.monsterData, keys, 4);
     },
 
     monsterImagePath: function () {
