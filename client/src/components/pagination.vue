@@ -39,7 +39,7 @@ export default {
       required: true
     },
     'itemCount': {
-      type: Number,
+      type: [Number, String],
       default: 99
     }
   },
