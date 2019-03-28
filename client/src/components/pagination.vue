@@ -40,15 +40,17 @@ export default {
     },
     'itemCount': {
       type: Number,
-      default: 7
+      default: 99
     }
   },
   data: function () {
     return {
+      /** 要素のサイズをもとに算出したページ切り替えの個数。 */
+      computedItemCount: 1
     };
   },
   computed: {
-    itemCountReal () { return Math.min(this.itemCount, this.pageCount); },
+    itemCountReal () { return Math.min(this.computedItemCount, this.pageCount); },
     itemCountHarf () { return (this.itemCountReal / 2) | 0; },
     paginationStart () {
       return (this.page > this.pageCount - this.itemCountHarf)
@@ -69,7 +71,24 @@ export default {
       return array;
     }
   },
+  mounted: function () {
+    this.updateCount();
+    window.addEventListener('resize', this.updateCount);
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.updateCount);
+  },
   methods: {
+    /** ページ切り替えの表示個数を更新する。 */
+    updateCount: function () {
+      let count = this.$el.parentNode.clientWidth / this.$el.children[0].children[1].clientWidth;
+      // 左右移動のやつを表示するのでその分をへらす。
+      count = (count | 0) - 2;
+      // ３以上 itemCount 以下にする。
+      if (count < 3) { count = 3; }
+      if (count > this.itemCount) { count = this.itemCount; }
+      if (this.computedItemCount !== count) { this.computedItemCount = count; }
+    },
     createToObj: function (pageNo) {
       const query = Object.assign({}, this.$route.query);
       query.page = pageNo;
