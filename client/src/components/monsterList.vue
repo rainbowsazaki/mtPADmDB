@@ -2,7 +2,7 @@
   <div>
     <monster-filter-setting v-model="filterSetting" />
 
-    <pagination :page="page" :page-count="pageCount" />
+    <pagination item-count="11" :page="page" :page-count="pageCount" />
 
     <div class="row">
       <div v-for="data in monsterTableInPage" class="col-md-6" style="padding-bottom: 2px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" :key="`monster${data.no}`">
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <pagination :page="page" :page-count="pageCount" />
+    <pagination item-count="11" :page="page" :page-count="pageCount" />
   </div>
 </template>
 

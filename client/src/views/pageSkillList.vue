@@ -16,7 +16,7 @@
       </div>
     </form>
     <div><tweet-button /></div>
-    <pagination :page="page" :page-count="pageCount" />
+    <pagination item-count="11" :page="page" :page-count="pageCount" />
     
     <div class="row skillList" style="margin-bottom: 1rem;">
       <template v-for="(skill, n) in skillArrayInPage">
@@ -38,7 +38,7 @@
       </template>
     </div>
 
-    <pagination :page="page" :page-count="pageCount" />
+    <pagination item-count="11" :page="page" :page-count="pageCount" />
   </div>
 </template>
 

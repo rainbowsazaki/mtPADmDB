@@ -24,7 +24,7 @@
 
     <monster-filter-setting v-model="filterSetting" />
 
-    <pagination :page="page" :page-count="pageCount" />
+    <pagination item-count="11" :page="page" :page-count="pageCount" />
 
     <div><tweet-button /></div>
     <table class="table table-bordered table-sm">
