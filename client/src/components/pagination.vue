@@ -81,9 +81,10 @@ export default {
   methods: {
     /** ページ切り替えの表示個数を更新する。 */
     updateCount: function () {
-      let count = this.$el.parentNode.clientWidth / this.$el.children[0].children[1].clientWidth;
-      // 左右移動のやつを表示するのでその分をへらす。
-      count = (count | 0) - 2;
+      const elUl = this.$el.children[0];
+      let count = ((this.$el.parentNode.clientWidth - elUl.children[0].clientWidth * 2) / elUl.children[1].clientWidth) | 0;
+      // 基本的に奇数個にする。
+      if (count & 1 === 0) { count -= 1; }
       // ３以上 itemCount 以下にする。
       if (count < 3) { count = 3; }
       if (count > this.itemCount) { count = this.itemCount; }
