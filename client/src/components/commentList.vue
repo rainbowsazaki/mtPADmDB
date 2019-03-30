@@ -15,14 +15,12 @@
     <div v-if="!readOnly" class="input">
       <form onsubmit="return false;" @submit="submit">
         <div class="form-row align-items-center">
-          <div class="col-3">
+          <div class="col-3 input-group-sm">
             <input v-model="name" class="form-control" placeholder="名前（省略可）">
           </div>
-          <div class="col-8">
-            <input v-model="message" class="form-control" placeholder="本文">
-          </div>
-          <div class="col-1">
-            <button type="submit" class="btn btn-primary btn-sm" :disabled="isSubmitted">{{ isSubmitted ? '送信中' :'送信する' }}</button>
+          <div class="col-9 input-group-sm">
+            <input v-model="message" class="form-control" style="width: calc(100% - 4.3em - 10px); float: left;" placeholder="本文">
+            <button type="submit" class="btn btn-primary btn-sm" style="width: 4.3em; float: right;" :disabled="isSubmitted">{{ isSubmitted ? '送信中' :'送信' }}</button>
           </div>
         </div>
       </form>
