@@ -1,10 +1,10 @@
 <template>
-  <div v-if="hasImage" class="monsterImage" :style="iconSizeStyleObject">
+  <div v-if="hasImage" class="monsterIcon" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img :src="iconPath" style="width: 100%; height: 100%;" :alt="monsterNoAndName" :key="`icon${no}`">
     </span>
   </div>
-  <div v-else class="monsterImage" style="position:relative; border: 1px solid #bbb; border-bottom-width: 2px;" :style="iconSizeStyleObject">
+  <div v-else class="monsterIcon" style="position:relative; border: 1px solid #bbb; border-bottom-width: 2px;" :style="iconSizeStyleObject">
     <router-link :to="routerLinkObject">
       <img v-if="hasAttr0" class="attr attr1" :src="attrPath0">
       <img v-if="hasAttr1" class="attr attr2" :src="attrPath1">
@@ -72,7 +72,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.monsterImage {
+.monsterIcon {
   display: inline-block;
   background-color: #ccc;
   vertical-align: bottom;
