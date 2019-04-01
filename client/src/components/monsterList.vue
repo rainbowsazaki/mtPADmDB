@@ -5,12 +5,12 @@
     <pagination item-count="11" :page="page" :page-count="pageCount" />
 
     <div class="row">
-      <div v-for="data in monsterTableInPage" class="col-md-6" style="padding-bottom: 2px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" :key="`monster${data.no}`">
+      <div v-for="data in monsterTableInPage" class="col-md-6 listItem" :key="`monster${data.no}`">
         <router-link :to="{ name: 'monsterDetails', params: { no: data.no }}">
           <monster-icon
             no-link :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em"
-          /><div style="display: inline-block; padding-left: 4px; vertical-align:bottom; height: 3em;">
-            <span style="font-size: 80%;">No.{{ data.no }}</span><br>
+          /><div class="monsterName">
+            <span class="monsterNo">No.{{ data.no }}</span><br>
             {{ data.name }}
           </div>
         </router-link>
@@ -75,3 +75,25 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.listItem {
+  padding-bottom: 2px;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .monsterName {
+    display: inline-block;
+    padding-left: 4px;
+    vertical-align:bottom;
+    height: 3em;
+
+    .monsterNo {
+      font-size: 80%;
+    }
+  }
+}
+
+</style>
