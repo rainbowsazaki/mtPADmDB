@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-6">
         <div class="monsterImage">
-          <img v-if="monsterData.no" :src="monsterImagePath">
+          <img v-if="monsterData.no" :src="monsterImagePath" :key="`monsterImage${monsterData.no}`">
         </div>
         <table class="table table-bordered table-sm">
           <tr class="thead-light">
