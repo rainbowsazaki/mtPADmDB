@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-6">
         <div class="monsterImage">
-          <img v-if="monsterData.no" :src="monsterImagePath" style="width: 100%; height: auto; max-width: 400px; display: block; margin: 0 auto;">
+          <img v-if="monsterData.no" :src="monsterImagePath">
         </div>
         <table class="table table-bordered table-sm">
           <tr class="thead-light">
@@ -501,6 +501,14 @@ div.monsterImage {
   background-size: auto 100%;
   background-position: center;
   background-repeat: no-repeat;
+
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 400px;
+    display: block;
+    margin: 0 auto;
+  }
 }
 
 .evaluationLink {
