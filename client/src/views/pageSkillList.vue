@@ -40,7 +40,8 @@
 </template>
 
 <script>
-import { escapeRegExp } from '../mtpadmdb.js';
+import { escapeRegExp, toAimaiSearch } from '../mtpadmdb.js';
+
 /**
  * スキル一覧のコンポーネント。
  */
@@ -150,8 +151,8 @@ export default {
           isSortRegExpSearch |= /(^|[^\\])\([^(\?\:)]/.test(useWord);
           return useWord;
         }
-        // それ以外はそのままの文字列として検索するため正規表現用にエスケープする。
-        return escapeRegExp(word);
+        // それ以外はそのままの文字列として検索するため、正規表現用にエスケープしてからあいまい検索させる正規表現に変更する。
+        return toAimaiSearch(escapeRegExp(word));
       };
       // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
       const regexp = new RegExp('^(?=.*' + searchWords.map(checkSearchWord).join(')(?=.*') + ').*$', 's');
