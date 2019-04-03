@@ -317,6 +317,81 @@ export let escapeRegExp;
   escapeRegExp = _escapeRegExp;
 })();
 
+/**
+ * 検索ワードのひらがなカタカナを、ひらがなとカタカナの両方にヒットする正規表現に変更する。
+ * 小文字大文字のある文字の場合はその両方を含める。
+ */
+function toHiraKanaSearchRegExp (str) {
+  return str.replace(/[\u3041-\u3096\u30a1-\u30f6]/g, function (match) {
+    let hiraCode = match.charCodeAt(0);
+    if (hiraCode >= 0x30a1) { hiraCode -= 0x60; }
+    const kataCode = hiraCode + 0x60;
+    const hira = String.fromCharCode(hiraCode);
+    const kata = String.fromCharCode(kataCode);
+    let resizeChars = '';
+    if (/[あいうえおつやゆよわ]/.test(hira)) {
+      resizeChars = String.fromCharCode(hiraCode - 1) + String.fromCharCode(kataCode - 1);
+    }
+    if (/[ぁぃぅぇぉっゃゅょゎ]/.test(hira)) {
+      resizeChars = String.fromCharCode(hiraCode + 1) + String.fromCharCode(kataCode + 1);
+    }
+    return `[${hira}${kata}${resizeChars}]`;
+  });
+}
+
+/**
+ * ば行 と ヴァ行 を相互に検索可能な正規表現に置き換える。
+ * ば行 の場合は /ゔ.{1,2}ぁ/ をヒットさせたくないので、文字間に関するあいまい検索置き換えのあとに行う。
+ * そのため置き換え元の文字にも .{0,2} が入った状態でチェックする。
+ */
+function toBaVaAimaiRegExp (str) {
+  const aimai = '.{0,2}';
+  return str.replace(/[ばびぶべぼバビブベボ]|[ゔヴ](?:\.\{0,2\}([ぁあぃいぇえぉおァアィイェエォオ]))?/g, function (match) {
+    switch (match[0]) {
+    case 'ば': case 'バ':
+      return '(?:ゔぁ|ば)';
+    case 'び': case 'ビ':
+      return '(?:ゔぃ|び)';
+    case 'ぶ': case 'ブ':
+      return '(?:ゔ|ぶ)';
+    case 'べ': case 'ベ':
+      return '(?:ゔぇ|べ)';
+    case 'ぼ': case 'ボ':
+      return '(?:ゔぉ|ぼ)';
+    case 'ゔ': case 'ヴ':
+      switch (RegExp.$1) {
+      case 'ぁ': case 'あ': case 'ァ': case 'ア':
+        return `(?:ゔ${aimai}ぁ|ば)`;
+      case 'ぃ': case 'い': case 'ィ': case 'イ':
+        return `(?:ゔ${aimai}ぃ|び)`;
+      case '':
+        return '(?:ゔ|ぶ)';
+      case 'ぇ': case 'え': case 'ェ': case 'エ':
+        return `(?:ゔ${aimai}ぇ|べ)`;
+      case 'ぉ': case 'お': case 'ォ': case 'オ':
+        return `(?:ゔ${aimai}ぉ|ぼ)`;
+      }
+    }
+  }).replace();
+}
+
+/** 指定された文字列を、検索ワードの文字と文字の間が2文字まで空いていてもヒットする検索形式の正規表現に変換する。 */
+function toAimaiSpaceSearch (str) {
+  // 文字と文字の間に .{0,2} を入れる。
+  // 正規表現の制御文字（カッコの終了除く）やエスケープ文字の直後と正規表現の制御文字（カッコの開始除く）の直前は除く。
+  return str.replace(/(?:[$^.*+?([{|]|\(?:|\(?=)*\\?.(?=[^\\^$.*+?)\]|])/g, '$&.{0,2}');
+}
+
+/**
+ * 検索ワードをあいまい検索を行うための正規表現に変換する。
+ * ２文字以上の間が空いていてもヒットする、『バ』と『ヴァ』の相互ヒット、ひらがか・カタカナの相互ヒットの３種類を適用する。
+ */
+export function toAimaiSearch (word) {
+  const temp1 = toAimaiSpaceSearch(word);
+  const temp2 = toBaVaAimaiRegExp(temp1);
+  return toHiraKanaSearchRegExp(temp2);
+}
+
 /** リーダースキルの説明文をゲーム内の表記と同様の表示になるよう装飾した HTML を作成する。 */
 export function leaderSkillDescriptionToDecoratedHtml (description) {
   const escapedDescription = escapeHtml(description);
