@@ -176,10 +176,8 @@ function toBaVaAimaiRegExp (str) {
   }).replace();
 }
 
-/** 検索ワードをあいまい検索のための正規表現に変更する。
- * （検索対象の文字列において、検索ワードの文字と文字の間が2文字まで空いていてもヒットする検索形式）
- */
-function toAimaiSearch (str) {
+/** 指定された文字列を、検索ワードの文字と文字の間が2文字まで空いていてもヒットする検索形式の正規表現に変換する。 */
+function toAimaiSpaceSearch (str) {
   // 文字と文字の間に .{0,2} を入れる。
   // 正規表現の制御文字（カッコの終了除く）やエスケープ文字の直後と正規表現の制御文字（カッコの開始除く）の直前は除く。
   return str.replace(/(?:[$^.*+?([{|]|\(?:|\(?=)*\\?.(?=[^\\^$.*+?)\]|])/g, '$&.{0,2}');
@@ -203,12 +201,22 @@ function replaceKanjiWordToRegExp (str) {
   return str;
 }
 
+/**
+ * 検索ワードをあいまい検索を行うための正規表現に変換する。
+ * ２文字以上の間が空いていてもヒットする、『バ』と『ヴァ』の相互ヒット、ひらがか・カタカナの相互ヒットの３種類を適用する。
+ */
+export function toAimaiSearch (word) {
+  const temp1 = toAimaiSpaceSearch(word);
+  const temp2 = toBaVaAimaiRegExp(temp1);
+  return toHiraKanaSearchRegExp(temp2);
+}
+
 /** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
 export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.name) {
     const searchWords = setting.name.split(/\s+/g);
-    const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch).map(toBaVaAimaiRegExp).map(toHiraKanaSearchRegExp);
+    const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
     const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
     functionArray.push(d => { return regexp.test(d.name); });
