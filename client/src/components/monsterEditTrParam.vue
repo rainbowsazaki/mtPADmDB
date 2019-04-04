@@ -1,9 +1,10 @@
 <template>
   <tr>
-    <th colspan="4">{{ info.name }}</th>
-    <td colspan="8">
+    <th colspan="3">{{ info.name }}</th>
+    <td colspan="6">
       <input type="number" class="form-control" v-model.number="nowValue" :min="info.min" :max="info.max">
     </td>
+    <td colspan="3" class="text-right">{{ (typeof(nowValue) === "number") ? nowValue + info.plusValue * 99 : '-' }}</td>
   </tr>
 </template>
 
@@ -35,19 +36,22 @@ export default {
         'hp': {
           name: 'HP',
           min: 1,
-          max: 99999
+          max: 99999,
+          plusValue: 10
         },
         'attack': {
           name: '攻撃',
           min: 1,
-          max: 99999
+          max: 99999,
+          plusValue: 5
         },
         'recovery': {
           name: '回復',
           min: -99999,
-          max: 99999
+          max: 99999,
+          plusValue: 3
         }
-      }[this.type] || { name: '', min: 0, max: 1 };
+      }[this.type] || { name: '', min: 0, max: 1, plusValue: 0 };
     }
   },
   watch: {
