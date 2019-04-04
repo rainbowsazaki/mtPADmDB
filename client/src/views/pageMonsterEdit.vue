@@ -91,24 +91,9 @@
         <tr class="thead-light">
           <th colspan="12">レベル最大時パラメータ</th>
         </tr>
-        <tr>
-          <th colspan="4">HP</th>
-          <td colspan="8">
-            <input type="number" class="form-control" id="inputMaxHp" v-model.number="monsterData.maxParam.hp" min="1" max="99999">
-          </td>
-        </tr>
-        <tr>
-          <th colspan="4">攻撃</th>
-          <td colspan="8">
-            <input type="number" class="form-control" id="inputMaxAttack" v-model.number="monsterData.maxParam.attack" min="1" max="99999">
-          </td>
-        </tr>
-        <tr>
-          <th colspan="4">回復</th>
-          <td colspan="8">
-            <input type="number" class="form-control" id="inputMaxRecovery" v-model.number="monsterData.maxParam.recovery" min="-9999" max="99999">
-          </td>
-        </tr>
+        <tr-param type="hp" v-model.number="monsterData.maxParam.hp" />
+        <tr-param type="attack" v-model.number="monsterData.maxParam.attack" />
+        <tr-param type="recovery" v-model.number="monsterData.maxParam.recovery" />
         <tr class="thead-light">
           <th colspan="12">スキル</th>
         </tr>
@@ -180,24 +165,9 @@
           <tr class="thead-light">
             <th colspan="12">限界突破時パラメータ</th>
           </tr>
-          <tr>
-            <th colspan="4">HP</th>
-            <td colspan="8">
-              <input type="number" class="form-control" id="inputOverLimitHp" v-model.number="monsterData.overLimitParam.hp" min="1" max="99999">
-            </td>
-          </tr>
-          <tr>
-            <th colspan="4">攻撃</th>
-            <td colspan="8">
-              <input type="number" class="form-control" id="inputOverLimitAttack" v-model.number="monsterData.overLimitParam.attack" min="1" max="99999">
-            </td>
-          </tr>
-          <tr>
-            <th colspan="4">回復</th>
-            <td colspan="8">
-              <input type="number" class="form-control" id="inputOverLimitRecovery" v-model.number="monsterData.overLimitParam.recovery" min="-9999" max="99999">
-            </td>
-          </tr>
+          <tr-param type="hp" v-model.number="monsterData.overLimitParam.hp" />
+          <tr-param type="attack" v-model.number="monsterData.overLimitParam.attack" />
+          <tr-param type="recovery" v-model.number="monsterData.overLimitParam.recovery" />
           <tr class="thead-light">
             <th colspan="12">超覚醒</th>
           </tr>
@@ -256,6 +226,8 @@
 <script>
 import $ from 'jquery';
 import { mtpadmdb, constData, gtagProductionOnly } from '../mtpadmdb.js';
+import TrParam from './../components/monsterEditTrParam.vue';
+
 /**
  * モンスター情報編集ページコンポーネント
  */
@@ -276,6 +248,9 @@ export default {
     } else {
       return undefined;
     }
+  },
+  components: {
+    TrParam
   },
   props: {
     no: {
