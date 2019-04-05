@@ -28,6 +28,9 @@
 
       <h4 class="p-2 mt-3 bg-light">コメント</h4>
       <comment-list />
+
+      <h4 class="p-2 mt-3 bg-light">JSON</h4>
+      <textarea readonly v-model="skillDataJson" class="json" />
     </template>
 
     <form v-else onsubmit="return false;" @submit="submit">
@@ -203,6 +206,13 @@ export default {
     },
     historyRouteName: function () {
       return (this.isLeaderSkill) ? 'leaderSkillDetailsHistory' : 'skillDetailsHistory';
+    },
+    /** スキル情報をJSONテキスト化したもの。 */
+    skillDataJson: function () {
+      const keys = [
+        'no', 'name', 'maxLevel', 'baseTurn', 'description'
+      ];
+      return JSON.stringify(this.skillDetails, keys, 4);
     }
   },
   watch: {
@@ -314,4 +324,9 @@ export default {
     padding: 0;
     padding: 2.4px;
   }
+
+textarea.json {
+  width: 100%;
+  height: 8em;
+}
 </style>
