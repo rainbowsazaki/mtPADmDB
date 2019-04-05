@@ -30,6 +30,7 @@
       "default": null
     },
     "param": {
+      "type": "object",
       "required": [
         "hp",
         "attack",
