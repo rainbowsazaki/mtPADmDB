@@ -13,6 +13,7 @@ const PageSkillDetails = () => import('./views/pageSkillDetails.vue');
 const PageSkillList = () => import('./views/pageSkillList.vue');
 const PageRaniking = () => import('./views/pageRanking.vue');
 const PageEvolutionMaterial = () => import('./views/pageEvolutionMaterial.vue');
+const PageKiseki = () => import('./views/pageKiseki.vue');
 
 /** router-view 要素のみのコンポーネント。 ネストされたルートの親要素で何も表示しない時用。 */
 const RouterViewComponent = {
@@ -199,6 +200,11 @@ export default new Router({
       name: 'ranking',
       component: PageRaniking,
       props: true
+    },
+    {
+      path: '/kiseki',
+      name: 'kisekiCheck',
+      component: PageKiseki
     },
     
     { path: '/:no', redirect: '/monster/:no' },
