@@ -311,8 +311,10 @@ export default {
     monsterDataJson: function () {
       const keys = [
         'no', 'name', 'attributes', 'cost', 'rare', 'types', 'awakens',
-        'maxExp', 'maxLevel', 'skill', 'leaderSkill', 'assist', 'overLImit',
-        'overLimitParam', 'superAwakens', 'evolutionType', 'evolution'
+        'maxExp', 'maxLevel', 'maxParam', 'skill', 'leaderSkill', 'assist', 'overLimit',
+        'overLimitParam', 'superAwakens', 'evolutionType', 'evolution',
+        'hp', 'attack', 'recovery',
+        'baseNo', 'materials'
       ];
       return JSON.stringify(this.monsterData, keys, 4);
     },
