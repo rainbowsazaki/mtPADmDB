@@ -86,8 +86,17 @@ Vue.mixin({
         if (typeof pageTitle === 'function') {
           pageTitle = pageTitle.call(this);
         }
+
+        let breadcrumbsTitle = this.$options.breadcrumbsTitle;
+        if (typeof breadcrumbsTitle === 'function') {
+          breadcrumbsTitle = breadcrumbsTitle.call(this);
+        }
+        if (!breadcrumbsTitle) { breadcrumbsTitle = pageTitle; }
+
         if (pageTitle) {
           document.title = `${pageTitle} - ${constData.title}`;
+        }
+        if (breadcrumbsTitle) {
           // パンくずリスト
           let breadcrumbs = [
             { text: 'ホーム', link: '/' }
@@ -99,7 +108,7 @@ Vue.mixin({
           if (middleOfBreadcrumbs) {
             breadcrumbs = breadcrumbs.concat(middleOfBreadcrumbs);
           }
-          breadcrumbs.push({ text: pageTitle });
+          breadcrumbs.push({ text: breadcrumbsTitle });
 
           this.$root.breadcrumbs = breadcrumbs;
         } else {
