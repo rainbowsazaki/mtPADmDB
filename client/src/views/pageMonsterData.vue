@@ -272,6 +272,12 @@ export default {
     if (this.isHistory) { str += ` (${this.monsterData.datetime})`; }
     return str;
   },
+  middleOfBreadcrumbs: function () {
+    return {
+      text: 'モンスター一覧',
+      link: { name: 'monsterList' }
+    };
+  },
   props: {
     no: {
       type: [String, Number],

@@ -23,10 +23,16 @@ export default {
   pageTitle: function () { return this.pageTitle; },
   breadcrumbsTitle: '作成に必要なモンスター',
   middleOfBreadcrumbs: function () {
-    return {
-      text: `No.${this.no} ${this.monsterData.name}`,
-      link: { name: 'monsterDetails', params: { no: this.no }}
-    };
+    return [
+      {
+        text: 'モンスター一覧',
+        link: { name: 'monsterList' }
+      },
+      {
+        text: `No.${this.no} ${this.monsterData.name}`,
+        link: { name: 'monsterDetails', params: { no: this.no }}
+      }
+    ];
   },
   components: {
     'evolutionMaterial': evolutionMaterial

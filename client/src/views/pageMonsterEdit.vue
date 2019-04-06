@@ -238,19 +238,26 @@ export default {
   pageTitle: function () { return this.pageTitle; },
   breadcrumbsTitle: function () { return this.breadCrumpsTitle; },
   middleOfBreadcrumbs: function () {
+    const breadCrumbs = [
+      {
+        text: 'モンスター一覧',
+        link: { name: 'monsterList' }
+      }
+    ];
     if (this.isHistory) {
-      return {
+      breadCrumbs.push({
         text: `No.${this.monsterData.no} ${this.monsterData.name} (${this.monsterData.datetime})`,
         link: `/history/${this.id}`
-      };
+      });
     } else if (this.no) {
-      return {
+      breadCrumbs.push({
         text: `No.${this.no} ${this.monsterData.name}`,
         link: `/${this.no}`
-      };
+      });
     } else {
       return undefined;
     }
+    return breadCrumbs;
   },
   components: {
     TrParam

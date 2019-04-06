@@ -59,7 +59,13 @@ export default {
   breadcrumbsTitle: '画像投稿',
   middleOfBreadcrumbs: function () {
     if (this.no) {
-      return { text: `No.${this.no} ${this.selectMonsterName}`, link: '/' + this.no };
+      return [
+        {
+          text: 'モンスター一覧',
+          link: { name: 'monsterList' }
+        },
+        { text: `No.${this.no} ${this.selectMonsterName}`, link: '/' + this.no }
+      ];
     } else {
       return undefined;
     }
