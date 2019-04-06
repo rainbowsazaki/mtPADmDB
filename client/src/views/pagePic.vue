@@ -56,6 +56,7 @@ import { mtpadmdb, gtagProductionOnly } from '../mtpadmdb.js';
 export default {
   name: 'PagePic',
   pageTitle: function () { return this.pageTitle; },
+  breadcrumbsTitle: '画像投稿',
   middleOfBreadcrumbs: function () {
     if (this.no) {
       return { text: `No.${this.no} ${this.selectMonsterName}`, link: '/' + this.no };

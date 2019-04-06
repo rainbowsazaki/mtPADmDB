@@ -21,6 +21,7 @@ import evolutionMaterial from '../components/evolutionMaterial.vue';
 export default {
   name: 'PageEvolutionMaterial',
   pageTitle: function () { return this.pageTitle; },
+  breadcrumbsTitle: '作成に必要なモンスター',
   middleOfBreadcrumbs: function () {
     return {
       text: `No.${this.no} ${this.monsterData.name}`,

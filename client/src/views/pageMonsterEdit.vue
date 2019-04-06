@@ -236,6 +236,7 @@ import TrParam from './../components/monsterEditTrParam.vue';
 export default {
   name: 'PageMonsterEdit',
   pageTitle: function () { return this.pageTitle; },
+  breadcrumbsTitle: function () { return this.breadCrumpsTitle; },
   middleOfBreadcrumbs: function () {
     if (this.isHistory) {
       return {
@@ -287,6 +288,14 @@ export default {
       if (this.isHistory) { return '履歴をもとに編集'; }
       if (this.no) {
         return `編集 No.${this.no} ${this.monsterData.name}`;
+      } else {
+        return 'モンスター情報新規登録';
+      }
+    },
+    breadCrumpsTitle: function () {
+      if (this.isHistory) { return '履歴をもとに編集'; }
+      if (this.no) {
+        return '編集';
       } else {
         return 'モンスター情報新規登録';
       }
