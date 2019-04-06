@@ -76,7 +76,7 @@ export default {
   display: inline-block;
   background-color: #ccc;
   vertical-align: bottom;
-  border-radius: 6%;
+  border-radius: 7.5%;
   overflow: hidden;
 
   a { text-decoration: none; }
