@@ -5,23 +5,12 @@
       ← <monster-icon :no="stoneBaseMonsterData.no" width="2.5em" height="2.5em" />
     </template>
     {{ materialTargetMonsterData.name }}
-
-    <table class="table table-bordered table-sm">
-      <tr>
-        <th>進化元</th>
-        <th>素材</th>
-      </tr>
-      <tr>
-        <td>
-          <monster-icon :no="materialTargetMonsterData.evolution.baseNo" width="2.5em" height="2.5em" />
-        </td>
-        <td>
-          <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
-            <monster-icon v-if="material" :no="material" width="2.5em" height="2.5em" :key="`material_${i}`" />
-          </template>
-        </td>
-      </tr>
-    </table>
+    <div class="baseAndMaterials">
+      <monster-icon :no="materialTargetMonsterData.evolution.baseNo" class="baseMonster" width="2.5em" height="2.5em" />
+      <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
+        <monster-icon class="materialMonster" v-if="material" :no="material" width="2.5em" height="2.5em" :key="`material_${i}`" />
+      </template>
+    </div>
     <div style="margin-left: 0.5rem">
       <evolution-material :no="materialTargetMonsterData.evolution.baseNo" @onTotalMaterialCounts="onTotalMaterialCounts" />
       <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
@@ -103,3 +92,16 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+div.baseAndMaterials {
+  margin: 0.25rem 0 1rem;
+
+  .baseMonster {
+    margin-right: 0.25rem;
+  }
+  .materialMonster {
+    margin-right: 1px;
+  }
+}
+</style>
