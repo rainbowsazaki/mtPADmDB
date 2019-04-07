@@ -247,12 +247,12 @@ export default {
     if (this.isHistory) {
       breadCrumbs.push({
         text: `No.${this.monsterData.no} ${this.monsterData.name} (${this.monsterData.datetime})`,
-        link: `/history/${this.id}`
+        link: { name: 'monsterHistory', params: { id: this.id }}
       });
     } else if (this.no) {
       breadCrumbs.push({
         text: `No.${this.no} ${this.monsterData.name}`,
-        link: `/${this.no}`
+        link: { name: 'monsterDetails', params: { no: this.no }}
       });
     } else {
       return undefined;

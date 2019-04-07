@@ -64,7 +64,10 @@ export default {
           text: 'モンスター一覧',
           link: { name: 'monsterList' }
         },
-        { text: `No.${this.no} ${this.selectMonsterName}`, link: '/' + this.no }
+        {
+          text: `No.${this.no} ${this.selectMonsterName}`,
+          link: { name: 'monsterDetails', params: { no: this.no }}
+        }
       ];
     } else {
       return undefined;
