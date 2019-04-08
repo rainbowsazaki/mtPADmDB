@@ -72,6 +72,13 @@ export default {
       for (const no in obj) {
         array.push({ no: no, count: obj[no] });
       }
+      // 指定された番号のモンスターが進化のための素材となるモンスターかどうかを取得する。
+      const isMaterial = (no) => {
+        const type = this.monsterTable[no].types[0];
+        // 進化系と強化系を素材系タイプとみなす。
+        return type === 9 || type === 11;
+      };
+      array.sort((a, b) => isMaterial(a.no) - isMaterial(b.no));
       this.sortedMaterialList = array;
     }
   }
