@@ -160,6 +160,11 @@
             <span v-else>不明</span>
           </td></tr>
           <tr><td colspan="2">
+            <router-link :to="{ name: 'evolutionMaterial', params: { no: monsterData.no } }">
+              作成に必要な全素材一覧へ
+            </router-link>
+          </td></tr>
+          <tr><td colspan="2">
             <router-link :to="{ name: 'compare', params: { nos: `${monsterData.evolution.baseNo},${monsterData.no}` } }">
               進化前と進化後のパラメータ比較へ
             </router-link>
@@ -190,6 +195,11 @@
             </template>
           </ul>
           <span v-else>不明</span>
+        </td></tr>
+        <tr><td colspan="2">
+          <router-link :to="{ name: 'evolutionMaterial', params: { no: evolution.no } }">
+            作成に必要な全素材一覧へ
+          </router-link>
         </td></tr>
         <tr><td colspan="2">
           <router-link :to="{ name: 'compare', params: { nos: `${monsterData.no},${evolution.no}` } }">
