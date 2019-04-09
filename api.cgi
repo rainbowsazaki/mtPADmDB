@@ -897,7 +897,9 @@ sub save_monster_list_json {
   # サイトマップ作成。
   my @sitemap_url_paths = ( '/', '/monster', '/about', '/compare', '/ranking' );
   push @sitemap_url_paths, map { "/ranking/$_" } qw/ hp attack recovery plus overlimitOffset wayAttack lJiAttack 7comboAttack 10comboAttack way7conboAttack lJi7comboAttack a3x3Attack a3x37comboAttack assistHp assistAttack assistRecovery assistPlus /;
-  push @sitemap_url_paths, map { '/monster/' . $_->{no} } sort { $a->{no} <=> $b->{no} } @$data_ref;
+  my @sorted_data = sort { $a->{no} <=> $b->{no} } @$data_ref;
+  push @sitemap_url_paths, map { '/monster/' . $_->{no} } @sorted_data;
+  push @sitemap_url_paths, map { "/monster/$_->{no}/material" } grep { defined($_->{evolutionType}) && $_->{evolutionType} != 0 } @sorted_data;
   save_sitemap('sitemap_monster', \@sitemap_url_paths);
 }
 
