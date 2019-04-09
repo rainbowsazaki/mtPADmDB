@@ -20,8 +20,9 @@ my $description;
 my $url_base = 'https://padmdb.rainbowsite.net';
 
 # モンスター情報の場合
-if ($ENV{'PATH_INFO'} =~ m|^/monster/?(\d+)?/?$|) {
+if ($ENV{'PATH_INFO'} =~ m|^/monster/?(\d+)?/?(material)?$|) {
   my $no = $1;
+  my $is_material_page = $2 eq 'material';
   # 番号なし＝一覧
   if (!$no) {
     $title = 'モンスター一覧';
@@ -43,44 +44,49 @@ EOS
       my @row_ary = $dbh->selectrow_array($sql);
       $title = "No.${no} ${row_ary[0]}";
 
-      sub number_array_to_names_string {
-        my ($name_table, @nos) = @_;
-        my @names = ();
-        for my $i (@nos) {
-          my $name = $name_table->[$i];
-          if (!defined $name) { last; }
-          push @names, $name;
+      if ($is_material_page) {
+        $title .= ' の作成に必要なモンスター一覧';
+        $description = "${row_ary[0]} の作成に必要となる全モンスターの一覧ページです。";
+      } else {
+        sub number_array_to_names_string {
+          my ($name_table, @nos) = @_;
+          my @names = ();
+          for my $i (@nos) {
+            my $name = $name_table->[$i];
+            if (!defined $name) { last; }
+            push @names, $name;
+          }
+          my $str = join '/', @names;
+          if ($str eq '') { $str = '不明'; }
+          return $str;
         }
-        my $str = join '/', @names;
-        if ($str eq '') { $str = '不明'; }
-        return $str;
-      }
 
-      my @attr_table = ( undef, '火', '水', '木', '光', '闇' );
-      my $attr_str = &number_array_to_names_string(\@attr_table, @row_ary[1..2]);
+        my @attr_table = ( undef, '火', '水', '木', '光', '闇' );
+        my $attr_str = &number_array_to_names_string(\@attr_table, @row_ary[1..2]);
 
-      my @type_table = (
-        undef, '神', 'ドラゴン', '悪魔', 'マシン', 'バランス', '攻撃', '体力', '回復',
-        '進化用','能力覚醒用', '強化合成用', '売却用'
-      );
-      my $type_str = &number_array_to_names_string(\@type_table, @row_ary[3..5]);
+        my @type_table = (
+          undef, '神', 'ドラゴン', '悪魔', 'マシン', 'バランス', '攻撃', '体力', '回復',
+          '進化用','能力覚醒用', '強化合成用', '売却用'
+        );
+        my $type_str = &number_array_to_names_string(\@type_table, @row_ary[3..5]);
 
-      sub array_to_param_string {
-        my @params = map { (defined $_ ) ? $_ : '不明' } @_;
-        return "HP:${params[0]} 攻撃:${params[1]} 回復:${params[2]}";
-      }
-      my $param_str = &array_to_param_string(@row_ary[6..8]);
-      $description = "タイプ:${type_str} 属性:${attr_str} ${param_str}";
-      
-      if ($row_ary[9]) {
-        my $quoted_over_limit = $dbh->quote($row_ary[10]);
-        my $sql2 = <<"EOS";
+        sub array_to_param_string {
+          my @params = map { (defined $_ ) ? $_ : '不明' } @_;
+          return "HP:${params[0]} 攻撃:${params[1]} 回復:${params[2]}";
+        }
+        my $param_str = &array_to_param_string(@row_ary[6..8]);
+        $description = "タイプ:${type_str} 属性:${attr_str} ${param_str}";
+        
+        if ($row_ary[9]) {
+          my $quoted_over_limit = $dbh->quote($row_ary[10]);
+          my $sql2 = <<"EOS";
 SELECT param_hp, param_attack, param_recovery FROM over_limit 
   WHERE id == ${quoted_over_limit};
 EOS
-        my @row_ary2 = $dbh->selectrow_array($sql2);
-        my $over_limit_param_string = &array_to_param_string(@row_ary2);
-        $description .= " (Lv110時 ${over_limit_param_string})";
+          my @row_ary2 = $dbh->selectrow_array($sql2);
+          my $over_limit_param_string = &array_to_param_string(@row_ary2);
+          $description .= " (Lv110時 ${over_limit_param_string})";
+        }
       }
     };
     eval {
