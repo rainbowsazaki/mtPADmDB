@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>{{ pageTitle }}</h2>
+    <tweet-button v-if="monsterData.no" />
     <div class="icons">
       <span v-for="materialCountInfo in sortedMaterialList" :key="`materialCount_${materialCountInfo.no}`">
         <span v-for="i in materialCountInfo.count" :key="`materialCount_${materialCountInfo.no}_${i}`">
