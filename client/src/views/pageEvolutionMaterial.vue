@@ -1,6 +1,14 @@
 <template>
   <div>
     <h2>{{ pageTitle }}</h2>
+    <div class="icons">
+      <span v-for="materialCountInfo in sortedMaterialList" :key="`materialCount_${materialCountInfo.no}`">
+        <span v-for="i in materialCountInfo.count" :key="`materialCount_${materialCountInfo.no}_${i}`">
+          <monster-icon :no="Number(materialCountInfo.no)" :monster-table="monsterTable" :image-table="imageTable" width="2rem" height="2rem" />
+        </span>
+      </span>
+    </div>
+    <h3>個々の進化素材</h3>
     <evolution-material :no="Number(no)" @onTotalMaterialCounts="onTotalMaterialCounts" />
     <h3>必要総数</h3>
     <ul class="list-group" style="max-width: 600px;">
@@ -84,3 +92,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+div.icons {
+  max-width: 20rem;
+  margin-bottom: 1rem;
+}
+</style>
