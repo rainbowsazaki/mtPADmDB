@@ -11,7 +11,7 @@
     </div>
     <h3>個々の進化素材</h3>
     <evolution-material :no="Number(no)" @onTotalMaterialCounts="onTotalMaterialCounts" />
-    <h3>必要素材一覧</h3>
+    <h3>必要モンスター一覧</h3>
     <ul class="list-group" style="max-width: 600px;">
       <li v-for="materialCountInfo in sortedMaterialList" class="list-group-item d-flex justify-content-between align-items-center" :key="`materialCount_${materialCountInfo.no}`">
         <span>
