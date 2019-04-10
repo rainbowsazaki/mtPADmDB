@@ -161,7 +161,7 @@
           </td></tr>
           <tr><td colspan="2">
             <router-link :to="{ name: 'evolutionMaterial', params: { no: monsterData.no } }">
-              作成に必要な全素材一覧へ
+              作成に必要な全モンスター一覧へ
             </router-link>
           </td></tr>
           <tr><td colspan="2">
@@ -198,7 +198,7 @@
         </td></tr>
         <tr><td colspan="2">
           <router-link :to="{ name: 'evolutionMaterial', params: { no: evolution.no } }">
-            作成に必要な全素材一覧へ
+            作成に必要な全モンスター一覧へ
           </router-link>
         </td></tr>
         <tr><td colspan="2">

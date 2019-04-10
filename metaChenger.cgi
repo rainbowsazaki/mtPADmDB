@@ -45,7 +45,7 @@ EOS
       $title = "No.${no} ${row_ary[0]}";
 
       if ($is_material_page) {
-        $title .= ' の作成に必要なモンスター一覧';
+        $title .= ' の作成に必要な全モンスター一覧';
         $description = "${row_ary[0]} の作成に必要となる全モンスターの一覧ページです。";
       } else {
         sub number_array_to_names_string {

@@ -30,7 +30,7 @@ import evolutionMaterial from '../components/evolutionMaterial.vue';
 export default {
   name: 'PageEvolutionMaterial',
   pageTitle: function () { return this.pageTitle; },
-  breadcrumbsTitle: '作成に必要なモンスター',
+  breadcrumbsTitle: '作成に必要な全モンスター一覧',
   middleOfBreadcrumbs: function () {
     return [
       {
@@ -71,7 +71,7 @@ export default {
     monsterData () { return this.monsterTable[this.no] || {}; },
     /** ページのタイトル。 */
     pageTitle: function () {
-      return `No.${this.no || this.monsterData.no} ${this.monsterData.name} の作成に必要なモンスター`;
+      return `No.${this.no || this.monsterData.no} ${this.monsterData.name} の作成に必要な全モンスター一覧`;
     }
   },
   methods: {
