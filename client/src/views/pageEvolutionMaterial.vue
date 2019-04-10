@@ -83,7 +83,9 @@ export default {
       }
       // 指定された番号のモンスターが進化のための素材となるモンスターかどうかを取得する。
       const isMaterial = (no) => {
-        const type = this.monsterTable[no].types[0];
+        const monsterData = this.monsterTable[no];
+        if (!monsterData) { return false; }
+        const type = monsterData.types[0];
         // 進化系と強化系を素材系タイプとみなす。
         return type === 9 || type === 11;
       };
