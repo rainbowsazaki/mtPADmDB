@@ -6,7 +6,7 @@
     <tr>
       <td colspan="3">
         <skill-incremental-input
-          id="inputSkillName" :placeholder="placeholderText"
+          :placeholder="placeholderText"
           @select-no="monsterData[noPropName] = $event;" v-model="skillName"
           :skill-table="skillTable" :required="skillDescription.length > 0"
         />
@@ -19,14 +19,14 @@
     </tr>
     <tr v-if="!leaderSkill">
       <td>
-        <input type="number" class="form-control" id="inputSkillBaseTurn" v-model.number="skillBaseTurn" min="1" max="199">
+        <input type="number" class="form-control" v-model.number="skillBaseTurn" min="1" max="199">
       </td>
       <td>
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text">SLv.</span>
           </div>
-          <input type="number" class="form-control" id="inputSkillMaxLevel" v-model.number="skillMaxLevel" min="1" max="99">
+          <input type="number" class="form-control" v-model.number="skillMaxLevel" min="1" max="99">
         </div>
       </td>
       <td>{{ (minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
@@ -36,7 +36,7 @@
     </tr>
     <tr>
       <td colspan="3">
-        <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="skillDescription" maxLength="200" />
+        <textarea class="form-control" rows="2" v-model="skillDescription" maxLength="200" />
       </td>
     </tr>
   </table>
