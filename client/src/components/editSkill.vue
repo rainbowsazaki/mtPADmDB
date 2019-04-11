@@ -5,15 +5,19 @@
     </tr>
     <tr>
       <td colspan="3">
-        <skill-incremental-input id="inputSkillName" placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillName" :skill-table="skillTable" :required="skillDescription.length > 0" />
+        <skill-incremental-input
+          id="inputSkillName" :placeholder="placeholderText"
+          @select-no="monsterData[noPropName] = $event;" v-model="skillName"
+          :skill-table="skillTable" :required="skillDescription.length > 0"
+        />
       </td>
     </tr>
-    <tr>
+    <tr v-if="!leaderSkill">
       <th style="width: calc(100% / 3);">SLv1時ターン</th>
       <th style="width: calc(100% / 3);">最大SLv</th>
       <th style="width: calc(100% / 3);">最短ターン</th>
     </tr>
-    <tr>
+    <tr v-if="!leaderSkill">
       <td>
         <input type="number" class="form-control" id="inputSkillBaseTurn" v-model.number="skillBaseTurn" min="1" max="199">
       </td>
@@ -46,15 +50,35 @@ export default {
     monsterData: {
       type: Object,
       required: true
+    },
+    /** リーダースキルを対象とするかどうか。 */
+    leaderSkill: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     /** 登録されているスキルが番号をキーとして入っているテーブル。 */
-    skillTable: function () { return this.$store.state.skillTable; },
+    skillTable: function () {
+      return (this.leaderSkill) ? this.$store.state.leaderSkillTable : this.$store.state.skillTable;
+    },
+
+    /** スキル名入力欄のプレースホルダーのテキスト。 */
+    placeholderText: function () {
+      return (this.leaderSkill) ? 'リーダースキル名' : 'スキル名';
+    },
+    /** スキル番号のプロパティ名。 */
+    noPropName: function () {
+      return (this.leaderSkill) ? 'leaderSkill' : 'skill';
+    },
+    /** 編集対象のスキルの詳細情報オブジェクトのプロパティ名。 */
+    detailsPropName: function () {
+      return this.noPropName + 'Details';
+    },
 
     /** 編集対象のスキルの詳細情報。 */
     targetSkillDetails: function () {
-      return this.monsterData.skillDetails;
+      return this.monsterData[this.detailsPropName];
     },
     /** 編集対象のスキルの名前。 */
     skillName: {
@@ -98,16 +122,24 @@ export default {
   },
   watch: {
     'monsterData.skill': function () {
-      if (this.monsterData.skill !== 0) {
-        this.monsterData.skillDetails = $.extend(true, { name: '', description: '' }, this.skillTable[this.monsterData.skill]);
-        delete this.monsterData.skillDetails.no;
-      }
+      this.setDetailsFromNo();
+    },
+    'monsterData.leaderSkill': function () {
+      this.setDetailsFromNo();
     }
   },
   methods: {
     /** スキル番号をクリアする。 */
     clearSkillNo: function () {
-      this.monsterData.skill = 0;
+      this.monsterData[this.noPropName] = 0;
+    },
+    /** スキル番号を元にスキル詳細情報を設定し直す。 */
+    setDetailsFromNo: function () {
+      const no = this.monsterData[this.noPropName];
+      if (no !== 0) {
+        this.monsterData[this.detailsPropName] = $.extend(true, { name: '', description: '' }, this.skillTable[no]);
+        delete this.targetSkillDetails.no;
+      }
     }
   }
 
