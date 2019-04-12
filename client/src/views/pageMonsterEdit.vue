@@ -99,57 +99,16 @@
           <th colspan="12">スキル</th>
         </tr>
         <tr>
-          <th colspan="12">名称</th>
-        </tr>
-        <tr>
-          <td colspan="12">
-            <skill-incremental-input id="inputSkillName" placeholder="スキル名" @select-no="monsterData.skill = $event;" v-model="skillName" :skill-table="skillTable" :required="skillDescription.length > 0" />
-          </td>
-        </tr>
-        <tr>
-          <th colspan="4">SLv1時ターン</th>
-          <th colspan="4">最大SLv</th>
-          <th colspan="4">最短ターン</th>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <input type="number" class="form-control" id="inputSkillBaseTurn" v-model.number="skillBaseTurn" min="1" max="199">
-          </td>
-          <td colspan="4">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text">SLv.</span>
-              </div>
-              <input type="number" class="form-control" id="inputSkillMaxLevel" v-model.number="skillMaxLevel" min="1" max="99">
-            </div>
-          </td>
-          <td colspan="4">{{ (minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
-        </tr>
-        <tr>
-          <th colspan="12">説明</th>
-        </tr>
-        <tr>
-          <td colspan="12">
-            <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="skillDescription" maxLength="200" />
+          <td colspan="12" style="padding: 0;">
+            <edit-skill :monster-data="monsterData" style="width: calc(100% + 2px); margin: -1px;" />
           </td>
         </tr>
         <tr class="thead-light">
           <th colspan="12">リーダースキル</th>
         </tr>
         <tr>
-          <th colspan="12">名称</th>
-        </tr>
-        <tr>
-          <td colspan="12">
-            <skill-incremental-input id="inputLeaderSkillname" placeholder="リーダースキル名" @select-no="monsterData.leaderSkill = $event;" v-model="leaderSkillName" :skill-table="leaderSkillTable" :required="leaderSkillDescription.length > 0" />
-          </td>
-        </tr>
-        <tr class="">
-          <th colspan="12">説明</th>
-        </tr>
-        <tr>
-          <td colspan="12">
-            <textarea class="form-control" id="textareaLeaderSkillDescription" rows="2" v-model="leaderSkillDescription" maxLength="200" />
+          <td colspan="12" style="padding: 0;">
+            <edit-skill leader-skill :monster-data="monsterData" style="width: calc(100% + 2px); margin: -1px;" />
           </td>
         </tr>
         <tr class="thead-light">
@@ -229,6 +188,7 @@
 import $ from 'jquery';
 import { mtpadmdb, constData, gtagProductionOnly } from '../mtpadmdb.js';
 import TrParam from './../components/monsterEditTrParam.vue';
+import EditSkill from './../components/editSkill.vue';
 
 /**
  * モンスター情報編集ページコンポーネント
@@ -260,7 +220,8 @@ export default {
     return breadCrumbs;
   },
   components: {
-    TrParam
+    TrParam,
+    EditSkill
   },
   props: {
     no: {
@@ -287,8 +248,6 @@ export default {
   },
   computed: {
     monsterTable: function () { return this.$store.state.monsterTable; },
-    skillTable: function () { return this.$store.state.skillTable; },
-    leaderSkillTable: function () { return this.$store.state.leaderSkillTable; },
     imageTable: function () { return this.$store.state.imageTable; },
     
     pageTitle: function () {
@@ -307,57 +266,6 @@ export default {
         return 'モンスター情報新規登録';
       }
     },
-    /** スキルレベル最大時の（最短の）スキルターン */
-    minimumSkillTurn: function () {
-      if (!this.monsterData.skillDetails.baseTurn || !this.monsterData.skillDetails.maxLevel) { return NaN; }
-      const turn = this.monsterData.skillDetails.baseTurn - this.monsterData.skillDetails.maxLevel + 1;
-      if (turn < 0) { return NaN; }
-      return turn;
-    },
-
-    skillName: {
-      get: function () { return this.monsterData.skillDetails.name; },
-      set: function (value) {
-        this.monsterData.skillDetails.name = value;
-        this.monsterData.skill = 0;
-      }
-    },
-    skillBaseTurn: {
-      get: function () { return this.monsterData.skillDetails.baseTurn; },
-      set: function (value) {
-        this.monsterData.skillDetails.baseTurn = value;
-        this.monsterData.skill = 0;
-      }
-    },
-    skillMaxLevel: {
-      get: function () { return this.monsterData.skillDetails.maxLevel; },
-      set: function (value) {
-        this.monsterData.skillDetails.maxLevel = value;
-        this.monsterData.skill = 0;
-      }
-    },
-    skillDescription: {
-      get: function () { return this.monsterData.skillDetails.description; },
-      set: function (value) {
-        this.monsterData.skillDetails.description = value;
-        this.monsterData.skill = 0;
-      }
-    },
-
-    leaderSkillName: {
-      get: function () { return this.monsterData.leaderSkillDetails.name; },
-      set: function (value) {
-        this.monsterData.leaderSkillDetails.name = value;
-        this.monsterData.leaderSkill = 0;
-      }
-    },
-    leaderSkillDescription: {
-      get: function () { return this.monsterData.leaderSkillDetails.description; },
-      set: function (value) {
-        this.monsterData.leaderSkillDetails.description = value;
-        this.monsterData.leaderSkill = 0;
-      }
-    },
 
     /** 編集履歴を元データとした編集かどうか。 */
     isHistory: function () {
@@ -372,18 +280,6 @@ export default {
   watch: {
     '$route.params.no': function () {
       this.fetchData();
-    },
-    'monsterData.skill': function () {
-      if (this.monsterData.skill !== 0) {
-        this.monsterData.skillDetails = $.extend(true, { name: '', description: '' }, this.skillTable[this.monsterData.skill]);
-        delete this.monsterData.skillDetails.no;
-      }
-    },
-    'monsterData.leaderSkill': function () {
-      if (this.monsterData.leaderSkill !== 0) {
-        this.monsterData.leaderSkillDetails = $.extend(true, { name: '', description: '' }, this.leaderSkillTable[this.monsterData.leaderSkill]);
-        delete this.monsterData.leaderSkillDetails.no;
-      }
     }
   },
   created: function () {
@@ -414,8 +310,6 @@ export default {
       if (commitParam) {
         commitParam.callback = () => {
           const m = $.extend(true, {}, this.$store.state.monsterData);
-          m.leaderSkillDetails = $.extend(true, m.leaderSkillDetails, this.leaderSkillTable[m.skill]);
-          m.skillDetails = $.extend(true, m.skillDetails, this.skillTable[m.leaderSkill]);
           m.comment = '';
 
           this.monsterData = m;
