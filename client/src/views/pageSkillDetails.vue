@@ -36,40 +36,8 @@
     <form v-else onsubmit="return false;" @submit="submit">
       <table class="table table-bordered table-sm">
         <tr>
-          <th colspan="12">名称</th>
-        </tr>
-        <tr>
-          <td colspan="12">
-            <input v-model="editData.name" class="form-control dropdown-toggle" required minLength="1" maxLength="50">
-          </td>
-        </tr>
-        <template v-if="!isLeaderSkill">
-          <tr>
-            <th colspan="4">SLv1時ターン</th>
-            <th colspan="4">最大SLv</th>
-            <th colspan="4">最短ターン</th>
-          </tr>
-          <tr>
-            <td colspan="4">
-              <input type="number" class="form-control" id="inputSkillBaseTurn" v-model.number="editData.baseTurn" min="1" max="199">
-            </td>
-            <td colspan="4">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">SLv.</span>
-                </div>
-                <input type="number" class="form-control" id="inputSkillMaxLevel" v-model.number="editData.maxLevel" min="1" max="99">
-              </div>
-            </td>
-            <td colspan="4">{{ (minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
-          </tr>
-        </template>
-        <tr>
-          <th colspan="12">説明</th>
-        </tr>
-        <tr>
-          <td colspan="12">
-            <textarea class="form-control" id="textareaSkillDescription" rows="2" v-model="editData.description" maxLength="200" />
+          <td colspan="12" style="padding: 0;">
+            <edit-skill style="width: 100%; margin: -1px;" :skill-details="editData" :leader-skill="isLeaderSkill" />
           </td>
         </tr>
         <tr class="thead-light">
@@ -110,6 +78,7 @@
 
 <script>
 import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml, gtagProductionOnly } from '../mtpadmdb.js';
+import EditSkill from './../components/editSkill.vue';
 /**
  * スキル詳細のコンポーネント。
  */
@@ -131,6 +100,9 @@ export default {
         link: { name: 'skillList' }
       };
     }
+  },
+  components: {
+    EditSkill
   },
   props: {
     no: {
