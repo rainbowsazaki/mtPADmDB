@@ -6,10 +6,11 @@
     <tr>
       <td colspan="3">
         <skill-incremental-input
-          :placeholder="placeholderText"
+          v-if="monsterData" :placeholder="placeholderText"
           @select-no="monsterData[noPropName] = $event;" v-model="skillName"
           :skill-table="skillTable" :required="skillDescription.length > 0"
         />
+        <input v-else v-model="skillName" class="form-control" required minLength="1" maxLength="50">
       </td>
     </tr>
     <tr v-if="!leaderSkill">
@@ -46,10 +47,15 @@
 
 export default {
   props: {
-    /** スキル編集対象のモンスターの情報。 */
+    /** スキル編集対象のモンスターの情報。 skillDetails とのいずれかを指定する。 */
     monsterData: {
       type: Object,
-      required: true
+      default: null
+    },
+    /** 編集対象のスキル情報。 monsterData とのいずれかを指定する。 */
+    skillDetails: {
+      type: Object,
+      default: () => {}
     },
     /** リーダースキルを対象とするかどうか。 */
     leaderSkill: {
@@ -78,7 +84,7 @@ export default {
 
     /** 編集対象のスキルの詳細情報。 */
     targetSkillDetails: function () {
-      return this.monsterData[this.detailsPropName];
+      return (this.monsterData) ? this.monsterData[this.detailsPropName] : this.skillDetails;
     },
     /** 編集対象のスキルの名前。 */
     skillName: {
@@ -131,10 +137,12 @@ export default {
   methods: {
     /** スキル番号をクリアする。 */
     clearSkillNo: function () {
+      if (!this.monsterData) { return; }
       this.monsterData[this.noPropName] = 0;
     },
     /** スキル番号を元にスキル詳細情報を設定し直す。 */
     setDetailsFromNo: function () {
+      if (!this.monsterData) { return; }
       const no = this.monsterData[this.noPropName];
       if (no !== 0) {
         this.monsterData[this.detailsPropName] = $.extend(true, { name: '', description: '' }, this.skillTable[no]);
