@@ -2,7 +2,7 @@
   <div class="dropdown show">
     <input :value="value" :id="id" @input="$emit('input', $event.target.value); showPopup($event.target);" @focus="showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" :required="required" minLength="1" maxLength="50">
     <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
-      <a v-for="skill in filteredSkillTable" class="dropdown-item" @click="$emit('select-no', skill.no)" href="javascript:void(0)" :key="`skill${skill.no}`">
+      <a v-for="skill in filteredSkillTable" class="dropdown-item" tabindex="-1" @click="$emit('select-no', skill.no)" href="javascript:void(0)" :key="`skill${skill.no}`">
         {{ skill.name }}<br>
         <span style="font-size: 80%;">{{ skill.description }}</span>
       </a>
