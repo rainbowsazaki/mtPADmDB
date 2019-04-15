@@ -405,3 +405,33 @@ export function getRouterBase () {
   return '/';
 }
 
+/** 再送を防ぐためために、送信状態をタイムアウト機能付きで記録するクラス。 */
+export class MultiSendBlocker {
+  /** タイムアウト処理のID。 */
+  timeoutId = 0;
+  /** タイムアウトを行うまでのミリ秒。 */
+  timeoutMs;
+  /** コンストラクタ。
+   * @param {number} timeoutMs - タイムアウトを行うまでのミリ秒。省略時は20000。（=20秒）
+   */
+  constructor (timeoutMs) {
+    this.timeoutMs = timeoutMs || 20 * 1000;
+  }
+  /** 現在送信中かどうか。 */
+  get isSending () { return !!this.timeoutId; }
+  /** 送信状態にする。 */
+  set (timeoutTime) {
+    this.reset();
+    // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように指定時間後に復帰させる。
+    this.timeoutId = setTimeout(() => {
+      this.timeoutId = 0;
+    }, this.timeoutMs);
+  }
+  /** 送信状態を解除する。 */
+  reset () {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = 0;
+    }
+  }
+};
