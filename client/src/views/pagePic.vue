@@ -40,7 +40,7 @@
         </div>
 
         <div style="margin-top: 1em;">
-          <button @click="submit" class="btn btn-primary" :disabled="isSubmitted">{{ isSubmitted ? '送信中' : 'この画像を送信する' }}</button>
+          <button @click="submit" class="btn btn-primary" :disabled="multiSendBlocker.isSending">{{ multiSendBlocker.isSending ? '送信中' : 'この画像を送信する' }}</button>
         </div>
       </div>
     </div>
@@ -49,7 +49,7 @@
 
 <script>
 import $ from 'jquery';
-import { mtpadmdb, gtagProductionOnly } from '../mtpadmdb.js';
+import { mtpadmdb, MultiSendBlocker, gtagProductionOnly } from '../mtpadmdb.js';
 /**
  * 画像投稿ページコンポーネント
  */
@@ -86,8 +86,8 @@ export default {
       uploadImgSrc: '',
       imageResultSrc: '',
       iconResultSrc: '',
-      /** 送信済みかどうか */
-      isSubmitted: false
+      /** 多重送信を防ぐオブジェクト。 */
+      multiSendBlocker: new MultiSendBlocker()
     };
   },
   computed: {
@@ -297,10 +297,8 @@ export default {
       if (this.monsterNo < 1 || this.monsterNo > 9999) { this.$store.commit('setErrors', ['モンスター番号の指定が不正です。']); return; }
       
       // 多重送信防止処理
-      if (this.isSubmitted) { return; }
-      this.isSubmitted = true;
-      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
-      const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
+      if (this.multiSendBlocker.isSending) { return; }
+      this.multiSendBlocker.set();
       
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', ['送信中...']);
@@ -324,7 +322,7 @@ export default {
         onUploadProgress: onUploadProgress
       }, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
-        clearTimeout(timeoutId);
+        this.multiSendBlocker.reset();
 
         // Google Analiticsにイベントを送信。
         let action = 'monsterImagePost';
@@ -346,13 +344,12 @@ export default {
           $('#monsterImageFile').next('.custom-file-label').text('モンスター情報画像選択');
           $('html,body').scrollTop(0);
           // 再度送信可能にする。
-          this.isSubmitted = false;
+          this.multiSendBlocker.reset();
         }
       }, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
-        clearTimeout(timeoutId);
         // 再度送信可能にする。
-        this.isSubmitted = false;
+        this.multiSendBlocker.reset();
       });
     }
   }

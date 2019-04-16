@@ -20,7 +20,7 @@
           </div>
           <div class="col-9 input-group-sm">
             <input v-model="message" class="form-control" style="width: calc(100% - 4.3em - 10px); float: left;" placeholder="本文">
-            <button type="submit" class="btn btn-primary btn-sm" style="width: 4.3em; float: right;" :disabled="isSubmitted">{{ isSubmitted ? '送信中' :'送信' }}</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="width: 4.3em; float: right;" :disabled="multiSendBlocker.isSending">{{ multiSendBlocker.isSending ? '送信中' :'送信' }}</button>
           </div>
         </div>
       </form>
@@ -31,6 +31,7 @@
 
 <script>
 import axios from 'axios';
+import { MultiSendBlocker } from '../mtpadmdb.js';
 
 /** コメントの投稿及び表示を行うコンポーネントです。 */
 export default {
@@ -50,8 +51,8 @@ export default {
     return {
       /** 取得した書き込み情報。 */
       entries: undefined,
-      /** 現在送信中かどうか。 */
-      isSubmitted: false,
+      /** 多重送信を防ぐオブジェクト。 */
+      multiSendBlocker: new MultiSendBlocker(),
       /** 入力中の名前。 */
       name: '',
       /** 入力中のコメント本文。 */
@@ -89,10 +90,8 @@ export default {
     /** 書き込んだ内容を送信する。 */
     submit: function () {
       // 多重送信防止処理
-      if (this.isSubmitted) { return; }
-      this.isSubmitted = true;
-      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
-      const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
+      if (this.multiSendBlocker.isSending) { return; }
+      this.multiSendBlocker.set();
 
       this.$store.commit('setMessages', ['送信中...']);
       const pageTitle = document.title;
@@ -112,15 +111,13 @@ export default {
             this.fetch();
           }
           // レスポンス来なかったときの復帰処理を止める。
-          clearTimeout(timeoutId);
           // 再度送信可能にする。
-          this.isSubmitted = false;
+          this.multiSendBlocker.reset();
         }).catch(response => {
           this.$store.commit('setErrors', ['失敗しました。']);
           // レスポンス来なかったときの復帰処理を止める。
-          clearTimeout(timeoutId);
           // 再度送信可能にする。
-          this.isSubmitted = false;
+          this.multiSendBlocker.reset();
         });
     }
   }

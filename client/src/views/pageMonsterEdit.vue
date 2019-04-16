@@ -179,14 +179,14 @@
           <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="`margin${n}`" />
         </tr>
       </table>
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{ isSubmitted ? '送信中' :'送信する' }}</button>
+      <button type="submit" class="btn btn-primary" :disabled="multiSendBlocker.isSending">{{ multiSendBlocker.isSending ? '送信中' :'送信する' }}</button>
     </form>
   </div>
 </template>
 
 <script>
 import $ from 'jquery';
-import { mtpadmdb, constData, gtagProductionOnly } from '../mtpadmdb.js';
+import { mtpadmdb, constData, gtagProductionOnly, MultiSendBlocker } from '../mtpadmdb.js';
 import TrParam from './../components/monsterEditTrParam.vue';
 import EditSkill from './../components/editSkill.vue';
 
@@ -242,8 +242,8 @@ export default {
       awakenTable: constData.awakenTable,
 
       monsterData: {},
-      /** 送信済みかどうか。 */
-      isSubmitted: false
+      /** 多重送信を防ぐオブジェクト。 */
+      multiSendBlocker: new MultiSendBlocker()
     };
   },
   computed: {
@@ -323,11 +323,9 @@ export default {
     },
     submit: function () {
       // 多重送信防止処理
-      if (this.isSubmitted) { return; }
-      this.isSubmitted = true;
-      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
-      const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
-
+      if (this.multiSendBlocker.isSending) { return; }
+      this.multiSendBlocker.set();
+      
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', ['送信中...']);
 
@@ -337,7 +335,7 @@ export default {
 
       mtpadmdb.api('updateMonster', this.monsterData, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
-        clearTimeout(timeoutId);
+        this.multiSendBlocker.reset();
 
         // Google Analiticsにイベントを送信。
         let action = 'monsterDataPost';
@@ -351,9 +349,8 @@ export default {
         this.$router.push({ path: `/${this.monsterData.no}` });
       }, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
-        clearTimeout(timeoutId);
         // 再度送信可能にする。
-        this.isSubmitted = false;
+        this.multiSendBlocker.reset();
       });
     }
   }

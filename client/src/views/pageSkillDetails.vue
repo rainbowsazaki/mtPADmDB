@@ -53,8 +53,8 @@
           <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="`margin${n}`" />
         </tr>
       </table>
-      <button type="button" class="btn btn-secondary" :disabled="isSubmitted" @click="endEdit">キャンセル</button>
-      <button type="submit" class="btn btn-primary" :disabled="isSubmitted">{{ isSubmitted ? '送信中' :'送信する' }}</button>
+      <button type="button" class="btn btn-secondary" :disabled="multiSendBlocker.isSending" @click="endEdit">キャンセル</button>
+      <button type="submit" class="btn btn-primary" :disabled="multiSendBlocker.isSending">{{ multiSendBlocker.isSending ? '送信中' :'送信する' }}</button>
     </form>
 
     <div style="margin-top: 1rem;">
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml, gtagProductionOnly } from '../mtpadmdb.js';
+import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml, MultiSendBlocker, gtagProductionOnly } from '../mtpadmdb.js';
 import EditSkill from './../components/editSkill.vue';
 /**
  * スキル詳細のコンポーネント。
@@ -120,8 +120,8 @@ export default {
       isEditing: false,
       /** 編集中データ。 */
       editData: {},
-      /** 送信中かどうか。 */
-      isSubmitted: false,
+      /** 多重送信を防ぐオブジェクト。 */
+      multiSendBlocker: new MultiSendBlocker(),
 
       /** 履歴情報の読み込み中かどうか。 */
       isLoadingHistory: false,
@@ -214,7 +214,7 @@ export default {
       this.isEditing = false;
       this.histories = null;
       this.isLoadingHistory = false;
-      this.isSubmitted = false;
+      this.multiSendBlocker.reset();
     },
 
     /** リーダースキル情報を元に、リーダースキルの説明文をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
@@ -229,15 +229,13 @@ export default {
     /** 編集モードを終了する。 */
     endEdit: function () {
       this.isEditing = false;
-      this.isSubmitted = false;
+      this.multiSendBlocker.reset();
     },
     /** 編集結果を送信する。 */
     submit: function () {
       // 多重送信防止処理
-      if (this.isSubmitted) { return; }
-      this.isSubmitted = true;
-      // 何かしらあってレスポンスが帰ってこなかった場合に再送信できるように２０秒後に復帰させる。
-      const timeoutId = setTimeout(() => { this.isSubmitted = false; }, 20 * 1000);
+      if (this.multiSendBlocker.isSending) { return; }
+      this.multiSendBlocker.set();
 
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', ['送信中...']);
@@ -247,7 +245,7 @@ export default {
         updateData: this.editData
       }, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
-        clearTimeout(timeoutId);
+        this.multiSendBlocker.reset();
 
         // Google Analiticsにイベントを送信。
         let action = 'skillDataPost';
@@ -259,9 +257,8 @@ export default {
         this.endEdit();
       }, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
-        clearTimeout(timeoutId);
         // 再度送信可能にする。
-        this.isSubmitted = false;
+        this.multiSendBlocker.reset();
       });
     },
     /** 履歴リストを取得する。 */
