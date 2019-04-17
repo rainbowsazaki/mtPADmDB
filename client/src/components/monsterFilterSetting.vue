@@ -137,6 +137,11 @@ function replaceKanjiWordToRegExp (str) {
   return str;
 }
 
+/** filter の初期値のオブジェクトを取得する。 */
+export function getFilterDefault () {
+  return Object.assign({}, filterDefault);
+}
+
 /** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
 export function getFilterFunction (setting) {
   const functionArray = [];
@@ -215,24 +220,7 @@ export default {
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
       isOpenFilterTrigger: false,
       /** 表示するモンスターに対するフィルタ。 */
-      filter: {
-        /** モンスター名。 */
-        name: undefined,
-        /** 主属性。 */
-        attr: [],
-        /** 複属性。 */
-        subAttr: [],
-        /** タイプ */
-        type: [],
-        /** 覚醒 */
-        awaken: [],
-        /** スキルターンの最小値。 */
-        skillTurnMin: 1,
-        /** スキルターンの最大値。 */
-        skillTurnMax: 99,
-        /** アシスト可不可 */
-        assist: undefined
-      }
+      filter: getFilterDefault()
     };
   },
   computed: {
