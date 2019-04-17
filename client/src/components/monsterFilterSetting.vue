@@ -204,6 +204,7 @@ export function getFilterFunction (setting) {
 /** フィルタリング設定を使用してモンスター情報の配列から、フィルタリング情報の条件を満たすもののみ取り出した配列を作成する。 */
 export function filterMonsterDataArray (setting, target) {
   const func = getFilterFunction(setting);
+  if (func.isAll) { return target; }
   return target.filter(d => func(d.data || d));
 }
 
