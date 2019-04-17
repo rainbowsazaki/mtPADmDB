@@ -142,7 +142,10 @@ export function getFilterDefault () {
   return Object.assign({}, filterDefault);
 }
 
-/** 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。 */
+/**
+ * 指定されたフィルタリング設定に基づき、モンスター情報を判定する関数を作成する。
+ * フィルタリング指定のない設定の場合は、isAll プロパティに true が入った関数を返す。
+ */
 export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.name) {
@@ -191,7 +194,9 @@ export function getFilterFunction (setting) {
   }
   // フィルタリングがない場合は常に true を返す関数を返す。
   if (functionArray.length === 0) {
-    return d => true;
+    const retFunc = d => true;
+    retFunc.isAll = true;
+    return retFunc;
   }
   return d => functionArray.every(f => f(d));
 }
