@@ -12,6 +12,9 @@
         </router-link>
       </div>
     </form>
+
+    <monster-filter-setting v-model="monsterFilterSetting" />
+
     <div><tweet-button /></div>
     <pagination item-count="11" :page="page" :page-count="pageCount" />
     
@@ -41,6 +44,7 @@
 
 <script>
 import { escapeRegExp, toAimaiSearch } from '../mtpadmdb.js';
+import { getFilterDefault, getFilterFunction } from '../components/monsterFilterSetting.vue';
 
 /**
  * スキル一覧のコンポーネント。
@@ -111,7 +115,10 @@ export default {
       /** １ページに表示するデータの個数。 */
       inPageCount: 50,
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
-      monsterIconCountMax: 10
+      monsterIconCountMax: 10,
+
+      /** 特定条件を満たすモンスターが持つスキルのみを表示するためのモンスター条件のフィルタ。 */
+      monsterFilterSetting: getFilterDefault()
     };
   },
   computed: {
@@ -127,9 +134,20 @@ export default {
     imageTable () { return this.$store.state.imageTable; },
     /** スキルテーブル。 */
     skillTable () { return (this.isLeaderSkill) ? this.$store.state.leaderSkillTable : this.$store.state.skillTable; },
-    /** スキル番号をキーとして、スキルを持っているモンスター番号の配列を格納したオブジェクト。 */
+    /**
+     * スキル番号をキーとして、スキルを持っているモンスター番号の配列を格納したオブジェクト。
+     * モンスターに対する絞り込し指定がある場合は、その条件を満たすものだけを対象とする。
+     */
     skillToMonsterNosTable: function () {
-      return (this.isLeaderSkill) ? this.$store.getters.leaderSkillToMonsterNosTable : this.$store.getters.skillToMonsterNosTable;
+      const nosTable = (this.isLeaderSkill) ? this.$store.getters.leaderSkillToMonsterNosTable : this.$store.getters.skillToMonsterNosTable;
+      const filterFunc = getFilterFunction(this.monsterFilterSetting);
+      if (filterFunc.isAll) { return nosTable; }
+      const filteredNosTable = {};
+      for (const skillNo in nosTable) {
+        const filteredNos = nosTable[skillNo].filter(monsterNo => filterFunc(this.monsterTable[monsterNo]));
+        if (filteredNos.length) { filteredNosTable[skillNo] = filteredNos; }
+      }
+      return filteredNosTable;
     },
     /** 所持しているモンスターが存在するスキルテーブルの値を配列にしたもの。 */
     skillArray () {
