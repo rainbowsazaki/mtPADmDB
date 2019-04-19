@@ -1,7 +1,7 @@
 <template>
 
   <div id="filter" style="margin-bottom: 4px;">
-    <div class="row">
+    <div v-if="!hideName" class="row">
       <div class="col-sm-12 mb-2">
         <input type="text" class="form-control" placeholder="モンスター名検索" v-model="filter.name">
       </div>
@@ -215,6 +215,11 @@ export default {
     'value': {
       type: Object,
       default: () => {}
+    },
+    /** 名前の入力欄を非表示にするかどうか。 */
+    'hideName': {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {

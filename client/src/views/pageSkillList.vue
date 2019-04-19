@@ -13,7 +13,7 @@
       </div>
     </form>
 
-    <monster-filter-setting v-model="monsterFilterSetting" />
+    <monster-filter-setting hide-name v-model="monsterFilterSetting" />
 
     <div><tweet-button /></div>
     <pagination item-count="11" :page="page" :page-count="pageCount" />
