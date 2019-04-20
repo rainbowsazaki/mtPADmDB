@@ -41,14 +41,10 @@ export default {
     filteredSkillTable: function () {
       // 文字が入力されていない場合は表示しない。
       if (this.value.length < 1) { return {}; }
-      const obj = {};
-      for (const key in this.skillTable) {
-        const value = this.skillTable[key];
-        if (value.name.indexOf(this.value) !== -1) {
-          obj[key] = value;
-        }
-      }
-      return obj;
+      const array = Object.values(this.skillTable).filter(
+        value => value.name.indexOf(this.value) !== -1
+      );
+      return array;
     }
   },
   methods: {
