@@ -45,9 +45,19 @@ export default {
       const searchWords = this.value.split(/\s+/g).map(word => toAimaiSearch(escapeRegExp(word)));
       // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
       const regexp = new RegExp('^(?=.*' + searchWords.join(')(?=.*') + ').*$', 's');
+      let nameEqualData = null;
       const array = Object.values(this.skillTable).filter(
-        value => value.name.match(regexp)
+        value => {
+          // 名前が入力値と完全一致するものは先頭にするため別途取得しておく。
+          if (value.name === this.value) {
+            nameEqualData = value;
+            return false;
+          }
+          return value.name.match(regexp);
+        }
       );
+      // 名前が入力値と一致したものはリストの先頭に来るようにする。
+      if (nameEqualData) { array.unshift(nameEqualData); }
       return array;
     }
   },
