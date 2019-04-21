@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { escapeRegExp, toAimaiSearch } from '../mtpadmdb.js';
 import $ from 'jquery';
 export default {
   name: 'SkillIncrementalInput',
@@ -41,8 +42,11 @@ export default {
     filteredSkillTable: function () {
       // 文字が入力されていない場合は表示しない。
       if (this.value.length < 1) { return {}; }
+      const searchWords = this.value.split(/\s+/g).map(word => toAimaiSearch(escapeRegExp(word)));
+      // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
+      const regexp = new RegExp('^(?=.*' + searchWords.join(')(?=.*') + ').*$', 's');
       const array = Object.values(this.skillTable).filter(
-        value => value.name.indexOf(this.value) !== -1
+        value => value.name.match(regexp)
       );
       return array;
     }
