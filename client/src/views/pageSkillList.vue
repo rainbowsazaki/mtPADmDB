@@ -25,7 +25,10 @@
         </div>
         <div class="col-md-6" :key="`skillList${n}`">
           <div class="box">
-            <div><router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{ skill.name }}</router-link></div>
+            <div class="skillName">
+              <router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{ skill.name }}</router-link>
+              <span v-if="skill.baseTurn && skill.maxLevel" class="skillTurn">{{ (skill.baseTurn - skill.maxLevel + 1) }}ターン</span>
+            </div>
             <div class="skillDescription">{{ skill.description }}</div>
             <ul class="list-inline monsterUsingSkillIcons">
               <li v-for="(monsterNo, m) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="`hasMonster${m}`">
@@ -264,6 +267,17 @@ export default {
   h3 {
     font-size: 1.25rem;
     margin-top: 1rem;
+  }
+
+  .skillName {
+    position: relative;
+
+    .skillTurn {
+      position: absolute;
+      font-size: 80%;
+      right: 0;
+      bottom: 0;
+    }
   }
 }
 </style>
