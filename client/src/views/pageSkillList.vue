@@ -252,6 +252,8 @@ export default {
     /** URLで指定された検索ワードで searchWord を更新する。 */
     updateSearchWordFromUrl: function () {
       this.searchWord = this.$route.query.searchWord;
+      this.searchTemplateIndex = this.$route.query.type;
+      if (this.searchTemplateIndex === undefined) { this.searchTemplateIndex = -1; }
     },
     /** searchWord の文字列を使用して検索を行う。 */
     search: function () {
