@@ -6,10 +6,20 @@
       <div class="input-group mb-3">
         <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="searchWord">
       </div>
-      <div>
-        <router-link v-for="searchWordPair in searchTemplateArray" class="ml-2" :to="{ query: { title: searchWordPair[0], searchWord: searchWordPair[1] }}" :key="searchWordPair[1]">
-          {{ searchWordPair[0] }}
-        </router-link>
+      <div class="form-group row">
+        <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
+        <div class="col-sm-10">
+          <select class="form-control" v-model="searchTemplateIndex">
+            <option value="-1">（なし）</option>
+            <option
+              v-for="(searchWordPair, index) in searchTemplateArray"
+              :value="index"
+              :key="`type_${index}`"
+            >
+              {{ searchWordPair[0] }}
+            </option>
+          </select>
+        </div>
       </div>
     </form>
 
@@ -56,7 +66,7 @@ export default {
   name: 'PageSkillList',
   pageTitle: function () {
     if (!this.$route.query.searchWord) { return this.targetName + '一覧'; }
-    return this.targetName + '検索 ' + (this.$route.query.title || this.$route.query.searchWord);
+    return this.targetName + '検索 ' + this.$route.query.searchWord;
   },
   middleOfBreadcrumbs: function () {
     if (!this.$route.query.searchWord) { return undefined; }
@@ -125,6 +135,8 @@ export default {
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
       monsterIconCountMax: 10,
 
+      /** 使用する検索テンプレートのインデックス。 */
+      searchTemplateIndex: -1,
       /** 特定条件を満たすモンスターが持つスキルのみを表示するためのモンスター条件のフィルタ。 */
       monsterFilterSetting: getFilterDefault()
     };
@@ -163,7 +175,12 @@ export default {
     },
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
-      const searchWord = this.$route.query.searchWord;
+      let searchWord = this.$route.query.searchWord || '';
+      const searchTemplate = this.searchTemplateArray[this.searchTemplateIndex];
+      if (searchTemplate) {
+        searchWord = searchTemplate[1] + ' ' + searchWord;
+      }
+
       if (!searchWord) { return this.skillArray; }
       const searchWords = searchWord.split(/\s+/g);
       /* 検索ワードに後方参照指定のある正規表現として扱うものが含まれているかどうか。 */
