@@ -65,8 +65,12 @@ import { getFilterDefault, getFilterFunction } from '../components/monsterFilter
 export default {
   name: 'PageSkillList',
   pageTitle: function () {
-    if (!this.$route.query.searchWord) { return this.targetName + '一覧'; }
-    return this.targetName + '検索 ' + this.$route.query.searchWord;
+    const searchTemplate = this.searchTemplateArray[this.searchTemplateIndex];
+    let typeName = '';
+    if (searchTemplate) { typeName = ' ' + searchTemplate[0]; }
+
+    if (!this.$route.query.searchWord) { return this.targetName + '一覧' + typeName; }
+    return this.targetName + '検索' + typeName + ' ' + this.$route.query.searchWord;
   },
   middleOfBreadcrumbs: function () {
     if (!this.$route.query.searchWord) { return undefined; }
