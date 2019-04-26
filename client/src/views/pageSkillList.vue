@@ -10,7 +10,7 @@
         <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
         <div class="col-sm-10">
           <select class="form-control" v-model="searchTemplateIndex">
-            <option value="-1">（なし）</option>
+            <option :value="-1">（なし）</option>
             <option
               v-for="(searchWordPair, index) in searchTemplateArray"
               :value="index"
@@ -247,7 +247,8 @@ export default {
       'updateSearchWordFromUrl',
       '$_mixinForPage_updateTitle'
     ],
-    searchWord: 'search'
+    searchWord: 'search',
+    searchTemplateIndex: 'changeSkillType'
   },
   created: function () {
     this.updateSearchWordFromUrl();
@@ -256,12 +257,21 @@ export default {
     /** URLで指定された検索ワードで searchWord を更新する。 */
     updateSearchWordFromUrl: function () {
       this.searchWord = this.$route.query.searchWord;
-      this.searchTemplateIndex = this.$route.query.type;
+      this.searchTemplateIndex = this.$route.query.skillType;
       if (this.searchTemplateIndex === undefined) { this.searchTemplateIndex = -1; }
     },
     /** searchWord の文字列を使用して検索を行う。 */
     search: function () {
-      this.$router.push({ path: this.$router.path, query: { searchWord: this.searchWord }});
+      const query = Object.assign({}, this.$route.query, { searchWord: this.searchWord });
+      this.$router.push({ path: this.$router.path, query: query });
+    },
+    /** searchTemplateIndex の値を元に表示するスキルタイプの種類を変更する。 */
+    changeSkillType: function () {
+      let skillType = this.searchTemplateIndex;
+      // -1 の場合は 無し なので、非表示にするために undefined にする。
+      if (skillType === -1) { skillType = undefined; }
+      const query = Object.assign({}, this.$route.query, { skillType: skillType });
+      this.$router.push({ path: this.$router.path, query: query });
     },
     /** このスキルを持つモンスターの番号の配列を取得する。 */
     monsterNosUsingThisSkill: function (no) {
