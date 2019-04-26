@@ -262,7 +262,7 @@ export default {
     },
     /** searchWord の文字列を使用して検索を行う。 */
     search: function () {
-      const query = Object.assign({}, this.$route.query, { searchWord: this.searchWord });
+      const query = Object.assign({}, this.$route.query, { searchWord: this.searchWord || undefined });
       this.$router.push({ path: this.$router.path, query: query });
     },
     /** searchTemplateIndex の値を元に表示するスキルタイプの種類を変更する。 */
