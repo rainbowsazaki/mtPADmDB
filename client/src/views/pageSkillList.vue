@@ -9,10 +9,10 @@
       <div class="form-group row">
         <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
         <div class="col-sm-10">
-          <select class="form-control" v-model="searchTemplateIndex">
+          <select class="form-control" v-model="skillTypeSearchIndex">
             <option :value="-1">（なし）</option>
             <option
-              v-for="(searchWordPair, index) in searchTemplateArray"
+              v-for="(searchWordPair, index) in skillTypeSearchArray"
               :value="index"
               :key="`type_${index}`"
             >
@@ -65,9 +65,9 @@ import { getFilterDefault, getFilterFunction } from '../components/monsterFilter
 export default {
   name: 'PageSkillList',
   pageTitle: function () {
-    const searchTemplate = this.searchTemplateArray[this.searchTemplateIndex];
+    const skillTypeSearch = this.skillTypeSearchArray[this.skillTypeSearchIndex];
     let typeName = '';
-    if (searchTemplate) { typeName = ' ' + searchTemplate[0]; }
+    if (skillTypeSearch) { typeName = ' ' + skillTypeSearch[0]; }
 
     if (!this.$route.query.searchWord) { return this.targetName + '一覧' + typeName; }
     return this.targetName + '検索' + typeName + ' ' + this.$route.query.searchWord;
@@ -86,8 +86,8 @@ export default {
       };
     }
   },
-  /** 検索テンプレート情報。1つ目はスキル、2つ名はリーダースキル用。 */
-  searchTemplateArrays: [
+  /** スキルタイプ検索情報。1つ目はスキル、2つ名はリーダースキル用。 */
+  skillTypeSearchArrays: [
     [
       ['威嚇系', '/(\\d+ターン)遅/'],
       ['１体ブレス', '/敵1体に(.*倍)の.*攻撃。/'],
@@ -139,8 +139,8 @@ export default {
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
       monsterIconCountMax: 10,
 
-      /** 使用する検索テンプレートのインデックス。 */
-      searchTemplateIndex: -1,
+      /** 使用するスキルタイプ検索情報のインデックス。 */
+      skillTypeSearchIndex: -1,
       /** 特定条件を満たすモンスターが持つスキルのみを表示するためのモンスター条件のフィルタ。 */
       monsterFilterSetting: getFilterDefault()
     };
@@ -180,9 +180,9 @@ export default {
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
       let searchWord = this.$route.query.searchWord || '';
-      const searchTemplate = this.searchTemplateArray[this.searchTemplateIndex];
-      if (searchTemplate) {
-        searchWord = searchTemplate[1] + ' ' + searchWord;
+      const skillTypeSearch = this.skillTypeSearchArray[this.skillTypeSearchIndex];
+      if (skillTypeSearch) {
+        searchWord = skillTypeSearch[1] + ' ' + searchWord;
       }
 
       if (!searchWord) { return this.skillArray; }
@@ -229,9 +229,9 @@ export default {
         return regexp.test(skill.name + '\n' + skill.description);
       });
     },
-    /** 検索のテンプレート情報の配列。 */
-    searchTemplateArray: function () {
-      return this.$options.searchTemplateArrays[this.isLeaderSkill ? 1 : 0];
+    /** スキルタイプ検索情報の配列。 */
+    skillTypeSearchArray: function () {
+      return this.$options.skillTypeSearchArrays[this.isLeaderSkill ? 1 : 0];
     },
     /** 現在の条件を満たすデータを最後を表示するのに必要なページ数。 */
     pageCount () { return ((this.searchedSkillArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
@@ -248,7 +248,7 @@ export default {
       '$_mixinForPage_updateTitle'
     ],
     searchWord: 'search',
-    searchTemplateIndex: 'changeSkillType'
+    skillTypeSearchIndex: 'changeSkillType'
   },
   created: function () {
     this.updateSearchWordFromUrl();
@@ -257,17 +257,17 @@ export default {
     /** URLで指定された検索ワードで searchWord を更新する。 */
     updateSearchWordFromUrl: function () {
       this.searchWord = this.$route.query.searchWord;
-      this.searchTemplateIndex = this.$route.query.skillType;
-      if (this.searchTemplateIndex === undefined) { this.searchTemplateIndex = -1; }
+      this.skillTypeSearchIndex = this.$route.query.skillType;
+      if (this.skillTypeSearchIndex === undefined) { this.skillTypeSearchIndex = -1; }
     },
     /** searchWord の文字列を使用して検索を行う。 */
     search: function () {
       const query = Object.assign({}, this.$route.query, { searchWord: this.searchWord || undefined });
       this.$router.push({ path: this.$router.path, query: query });
     },
-    /** searchTemplateIndex の値を元に表示するスキルタイプの種類を変更する。 */
+    /** skillTypeSearchIndex の値を元に表示するスキルタイプの種類を変更する。 */
     changeSkillType: function () {
-      let skillType = this.searchTemplateIndex;
+      let skillType = this.skillTypeSearchIndex;
       // -1 の場合は 無し なので、非表示にするために undefined にする。
       if (skillType === -1) { skillType = undefined; }
       const query = Object.assign({}, this.$route.query, { skillType: skillType });
