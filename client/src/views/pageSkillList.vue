@@ -42,8 +42,8 @@
             <div class="skillDescription">{{ skill.description }}</div>
             <ul class="list-inline monsterUsingSkillIcons">
               <li v-for="(monsterNo, m) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="`hasMonster${m}`">
-                <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
-                <span v-else-if="m == monsterIconCountMax">…</span>
+                <monster-icon v-if="m < monsterIconCountMax" :no="monsterNo" width="2em" height="2em" />
+                <span v-else>…</span>
               </li>
             </ul>
           </div>
@@ -275,7 +275,9 @@ export default {
     },
     /** このスキルを持つモンスターの番号の配列を取得する。 */
     monsterNosUsingThisSkill: function (no) {
-      return (this.skillToMonsterNosTable[no] || []).slice().reverse();
+      const ary = (this.skillToMonsterNosTable[no] || []).slice().reverse();
+      if (ary.length > this.monsterIconCountMax) { ary.length = this.monsterIconCountMax + 1; }
+      return ary;
     }
   }
 };
