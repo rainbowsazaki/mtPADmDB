@@ -101,8 +101,8 @@
             </tr>
             <tr>
               <th>回復</th>
-              <td class="text-right" :style="{ color: monsterData.maxParam.recovery < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.maxParam.recovery }}</td>
-              <td v-if="canAddPlus" class="text-right" :style="{ color: monsterData.maxParam.recovery + 3 * 99 < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.maxParam.recovery + 3 * 99 }}</td>
+              <td class="text-right" :class="{ paramAlert: monsterData.maxParam.recovery < 0 }">{{ monsterData.maxParam.recovery }}</td>
+              <td v-if="canAddPlus" class="text-right" :class="{ paramAlert: monsterData.maxParam.recovery + 3 * 99 < 0 }">{{ monsterData.maxParam.recovery + 3 * 99 }}</td>
               <td class="text-right">{{ plusCountParam.recovery.toFixed(1) }}</td>
             </tr>
             <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) }}</td></tr>
@@ -123,8 +123,8 @@
                 <td class="text-right">{{ plusCountOverlimitParam.attack.toFixed(1) }}</td></tr>
               <tr>
                 <th>回復</th>
-                <td class="text-right" :style="{ color: monsterData.overLimitParam.recovery < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.overLimitParam.recovery }}</td>
-                <td v-if="canAddPlus" class="text-right" :style="{ color: monsterData.overLimitParam.recovery + 3 * 99 < 0 ? 'rgba(224, 0, 0, 0.8)' : undefined }">{{ monsterData.overLimitParam.recovery + 3 * 99 }}</td>
+                <td class="text-right" :class="{ paramAlert: monsterData.overLimitParam.recovery < 0 }">{{ monsterData.overLimitParam.recovery }}</td>
+                <td v-if="canAddPlus" class="text-right" :class="{ paramAlert: monsterData.overLimitParam.recovery + 3 * 99 < 0 }">{{ monsterData.overLimitParam.recovery + 3 * 99 }}</td>
                 <td class="text-right">{{ plusCountOverlimitParam.recovery.toFixed(1) }}</td></tr>
               <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) }}</td></tr>
             </template>
@@ -521,6 +521,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.paramAlert {
+  color: rgba(224, 0, 0, 0.8);
+}
 
 .editButtons {
   margin-top: 1rem;
