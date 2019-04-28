@@ -87,45 +87,14 @@
         <table class="table table-bordered table-sm">
           <template v-if="hasMaxParam">
             <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
-            <tr>
-              <th style="width:auto;">HP</th>
-              <td style="width: 25%;" class="text-right">{{ monsterData.maxParam.hp }}</td>
-              <td v-if="canAddPlus" style="width:25%;" class="text-right">{{ monsterData.maxParam.hp + 10 * 99 }}</td>
-              <td style="width: 25%;" class="text-right">{{ plusCountParam.hp.toFixed(1) }}</td>
-            </tr>
-            <tr>
-              <th>攻撃</th>
-              <td class="text-right">{{ monsterData.maxParam.attack }}</td>
-              <td v-if="canAddPlus" class="text-right">{{ monsterData.maxParam.attack + 5 * 99 }}</td>
-              <td class="text-right">{{ plusCountParam.attack.toFixed(1) }}</td>
-            </tr>
-            <tr>
-              <th>回復</th>
-              <td class="text-right" :class="{ paramAlert: monsterData.maxParam.recovery < 0 }">{{ monsterData.maxParam.recovery }}</td>
-              <td v-if="canAddPlus" class="text-right" :class="{ paramAlert: monsterData.maxParam.recovery + 3 * 99 < 0 }">{{ monsterData.maxParam.recovery + 3 * 99 }}</td>
-              <td class="text-right">{{ plusCountParam.recovery.toFixed(1) }}</td>
-            </tr>
+            <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.maxParam[paramType]" :key="paramType" />
             <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) }}</td></tr>
           </template>
           <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>
           <template v-if="monsterData.overLimit === 1">
             <template v-if="hasOverLimitParam">
               <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
-              <tr>
-                <th>HP</th>
-                <td class="text-right">{{ monsterData.overLimitParam.hp }}</td>
-                <td v-if="canAddPlus" class="text-right">{{ monsterData.overLimitParam.hp + 10 * 99 }}</td>
-                <td class="text-right">{{ plusCountOverlimitParam.hp.toFixed(1) }}</td></tr>
-              <tr>
-                <th>攻撃</th>
-                <td class="text-right">{{ monsterData.overLimitParam.attack }}</td>
-                <td v-if="canAddPlus" class="text-right">{{ monsterData.overLimitParam.attack + 5 * 99 }}</td>
-                <td class="text-right">{{ plusCountOverlimitParam.attack.toFixed(1) }}</td></tr>
-              <tr>
-                <th>回復</th>
-                <td class="text-right" :class="{ paramAlert: monsterData.overLimitParam.recovery < 0 }">{{ monsterData.overLimitParam.recovery }}</td>
-                <td v-if="canAddPlus" class="text-right" :class="{ paramAlert: monsterData.overLimitParam.recovery + 3 * 99 < 0 }">{{ monsterData.overLimitParam.recovery + 3 * 99 }}</td>
-                <td class="text-right">{{ plusCountOverlimitParam.recovery.toFixed(1) }}</td></tr>
+              <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.overLimitParam[paramType]" :key="paramType" />
               <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) }}</td></tr>
             </template>
             <tr v-else class="thead-light"><th colspan="4">限界突破時パラメータ不明</th></tr>
@@ -291,6 +260,7 @@
 <script>
 import axios from 'axios';
 import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
+import TrParam from './../components/monsterDataTrParam.vue';
 
 /**
  * モンスター情報ページコンポーネント
@@ -307,6 +277,9 @@ export default {
       text: 'モンスター一覧',
       link: { name: 'monsterList' }
     };
+  },
+  components: {
+    TrParam
   },
   props: {
     no: {
