@@ -1,9 +1,15 @@
 <template>
-  <tr>
+  <tr v-if="value !== null">
     <th style="width: auto;">{{ info.name }}</th>
     <td style="width: 25%;" class="text-right">{{ value }}</td>
     <td v-if="isVisible297" style="width:25%;" class="text-right">{{ value + info.plusValue * 99 }}</td>
     <td style="width: 25%;" class="text-right">{{ (value / info.plusValue).toFixed(1) }}</td>
+  </tr>
+  <tr v-else>
+    <th style="width: auto;">{{ info.name }}</th>
+    <td style="width: 25%;" class="text-right unknownParam">不明</td>
+    <td v-if="isVisible297" style="width:25%;" class="text-right unknownParam">不明</td>
+    <td style="width: 25%;" class="text-right unknownParam">不明</td>
   </tr>
 </template>
 
@@ -50,4 +56,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  .unknownParam {
+    color: rgba(0, 0, 0, 0.6);
+  }
+</style>
 
