@@ -1,9 +1,9 @@
 <template>
   <tr v-if="value !== null">
     <th style="width: auto;">{{ info.name }}</th>
-    <td style="width: 25%;" class="text-right">{{ value }}</td>
-    <td v-if="isVisible297" style="width:25%;" class="text-right">{{ value + info.plusValue * 99 }}</td>
-    <td style="width: 25%;" class="text-right">{{ (value / info.plusValue).toFixed(1) }}</td>
+    <td style="width: 25%;" class="text-right">{{ value | addComma }}</td>
+    <td v-if="isVisible297" style="width:25%;" class="text-right">{{ value + info.plusValue * 99 | addComma }}</td>
+    <td style="width: 25%;" class="text-right">{{ (value / info.plusValue).toFixed(1) | addComma }}</td>
   </tr>
   <tr v-else>
     <th style="width: auto;">{{ info.name }}</th>
