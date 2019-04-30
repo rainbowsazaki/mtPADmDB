@@ -140,6 +140,8 @@ export default {
   ],
   data: function () {
     return {
+      /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
+      pageResetFlag: false,
       /** 検索ワード。 */
       searchWord: '',
       /** １ページに表示するデータの個数。 */
@@ -260,6 +262,8 @@ export default {
   },
   created: function () {
     this.updateSearchWordFromUrl();
+    // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
+    setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
   methods: {
     /** URLで指定された検索ワードで searchWord を更新する。 */
@@ -270,16 +274,20 @@ export default {
     },
     /** searchWord の文字列を使用して検索を行う。 */
     search: function () {
-      const query = Object.assign({}, this.$route.query, { searchWord: this.searchWord || undefined });
-      this.$router.push({ path: this.$router.path, query: query });
+      this.updateRouteQuery({ searchWord: this.searchWord || undefined });
     },
     /** skillTypeSearchIndex の値を元に表示するスキルタイプの種類を変更する。 */
     changeSkillType: function () {
       let skillType = this.skillTypeSearchIndex;
       // -1 の場合は 無し なので、非表示にするために undefined にする。
       if (skillType === -1) { skillType = undefined; }
-      const query = Object.assign({}, this.$route.query, { skillType: skillType });
-      this.$router.push({ path: this.$router.path, query: query });
+      this.updateRouteQuery({ skillType: skillType });
+    },
+    /** ルートのクエリーを更新する。 */
+    updateRouteQuery: function (changeQuery) {
+      const margedQuery = Object.assign({}, this.$route.query, changeQuery);
+      if (this.pageResetFlag) { margedQuery.page = undefined; }
+      this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
     },
     /** このスキルを持つモンスターの番号の配列を取得する。 */
     monsterNosUsingThisSkill: function (no) {
