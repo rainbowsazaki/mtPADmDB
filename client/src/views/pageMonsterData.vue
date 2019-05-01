@@ -259,7 +259,7 @@
 
 <script>
 import axios from 'axios';
-import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
+import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml, checkCanMixMonster } from '../mtpadmdb.js';
 import TrParam from './../components/monsterDataTrParam.vue';
 
 /**
@@ -375,10 +375,7 @@ export default {
 
     /** プラスが振れるキャラクターかどうかを返す。 */
     canAddPlus: function () {
-      // 素材系のタイプの場合はプラス合成不可と判断する。
-      // レベルアップの可能なキャラの場合はプラスを降ることも可能だが需要もないだろうから無視。
-      const type = this.monsterData.types[0];
-      return !((type >= 9 && type <= 12) || type === 99);
+      return checkCanMixMonster(this.monsterData);
     },
     /** 現在表示しているのがモンスター評価ページのリストを表示する情報かどうかを返す。 */
     isShowEvaluationLinks: function () {

@@ -405,6 +405,14 @@ export function getRouterBase () {
   return '/';
 }
 
+/** 強化合成が可能なモンスターかどうかを判定する。 */
+export function checkCanMixMonster (monsterData) {
+  // 最大レベルが1で素材系のタイプの場合は合成不可と判断する。
+  if (monsterData.maxLevel > 1) { return true; }
+  const type = monsterData.types[0];
+  return !((type >= 9 && type <= 12) || type === 99);
+}
+
 /** 再送を防ぐためために、送信状態をタイムアウト機能付きで記録するクラス。 */
 export class MultiSendBlocker {
   /** タイムアウト処理のID。 */
