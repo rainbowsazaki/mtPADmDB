@@ -44,6 +44,7 @@ jQuery.fn.scrollParentShowThis = function () {
 
 // 数字をカンマ区切りにする。
 Vue.filter('addComma', function (val) {
+  if (!val) { return val; }
   const arr = String(val).split('.');
   arr[0] = arr[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
   return arr.join('.');
