@@ -263,6 +263,8 @@ export default {
   ],
   data: function () {
     return {
+      /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
+      pageResetFlag: false,
       /** 限界突破時のパラメータを使用するかどうか。 */
       useOverLimit: false,
       /** マルチブースト適用時のパラメータを使用するかどうか。 */
@@ -552,11 +554,14 @@ export default {
   created: function () {
     this.queryToData('useOverLimit');
     this.queryToData('useMultiBoost');
+    // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
+    setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
   methods: {
     /** ルートのクエリーを更新する。 */
     updateRouteQuery: function (changeQuery) {
       const margedQuery = Object.assign({}, this.$route.query, changeQuery);
+      if (this.pageResetFlag) { margedQuery.page = undefined; }
       this.$router.push({ name: this.$route.name, params: this.$route.params, query: margedQuery });
     },
     /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
@@ -566,7 +571,9 @@ export default {
     },
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
-      this.$router.push({ name: this.$route.name, params: { id: newId }, query: this.$route.query });
+      let query = this.$route.query;
+      if (this.pageResetFlag) { query = Object.assign({}, query, { page: undefined });
+      this.$router.push({ name: this.$route.name, params: { id: newId }, query: query });
     }
   }
 };
