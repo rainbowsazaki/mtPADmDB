@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { constData } from '../mtpadmdb.js';
+import { constData, checkCanMixMonster } from '../mtpadmdb.js';
 import { filterMonsterDataArray } from '../components/monsterFilterSetting.vue';
 
 /**
@@ -419,9 +419,11 @@ export default {
           const cache = this.cache;
           if (!cache[propName]) {
             const param = this.culcFullAwakenParam(this._targetParam);
-            param.hp += 10 * 99;
-            param.attack += 5 * 99;
-            param.recovery += 3 * 99;
+            if (checkCanMixMonster(this.baseData)) {
+              param.hp += 10 * 99;
+              param.attack += 5 * 99;
+              param.recovery += 3 * 99;
+            }
             if (manageObj.useMultiBoost && this.awakenCount[30]) {
               const rate = awakenTable[30].rate ** this.awakenCount[30];
               param.hp = param.hp * rate | 0;
