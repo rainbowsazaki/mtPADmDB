@@ -572,7 +572,7 @@ export default {
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
       let query = this.$route.query;
-      if (this.pageResetFlag) { query = Object.assign({}, query, { page: undefined });
+      if (this.pageResetFlag) { query = Object.assign({}, query, { page: undefined }); }
       this.$router.push({ name: this.$route.name, params: { id: newId }, query: query });
     }
   }
