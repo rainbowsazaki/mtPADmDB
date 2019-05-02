@@ -333,7 +333,20 @@ export default {
         if (columns[sortColumn] === null) { continue; }
         rankInfos.push({ columns: columns, data: data });
       }
-      rankInfos.sort((a, b) => b.columns[sortColumn] - a.columns[sortColumn]);
+      rankInfos.sort((a, b) => {
+        // NaNが含まれている場合、減算結果をそのままだ使うとNaNの値がソートされないので、事前に判定する。
+        // （パラメータ不明のものの+297やプラス換算、アシスト時加算値の計算結果が NaN になっている）
+        const aValue = a.columns[sortColumn];
+        const bValue = b.columns[sortColumn];
+        const aIsNotNumeric = aValue === null || isNaN(aValue);
+        const bIsNotNumeric = bValue === null || isNaN(bValue);
+        if (aIsNotNumeric) {
+          if (bIsNotNumeric) { return 0; }
+          return 1;
+        }
+        if (bIsNotNumeric) { return -1; }
+        return bValue - aValue;
+      });
       return rankInfos;
     },
     /** 現在のフィルタリング設定でフィルタリングされた、ランキング結果の配列。 */
