@@ -185,6 +185,8 @@ export function getFilterFunction (setting) {
     functionArray.push(d => {
       const skill = commonData.skillTable[d.skill];
       if (!skill) { return false; }
+      // スキルベースターン情報がない場合は弾く。
+      if (skill.baseTurn === null) { return false; }
       const minTurn = skill.baseTurn - skill.maxLevel + 1;
       return minTurn >= skillTurnMin && minTurn <= skillTurnMax;
     });
