@@ -218,7 +218,7 @@ export default {
           for (let i = 0; i < 10; i++) {
             const n = 4 * (checkHeight - 1 - i) * checkWidth;
             if ((data.data[n] < 40 && data.data[n + 1] < 40 && data.data[n + 2] < 40) ||
-                (data.data[n] < 60 && data.data[n + 1] < 20 && data.data[n + 2] < 10)) { // iPhone6〜8のサイズでたまに赤みがかっている。
+                (data.data[n] < 60 && data.data[n + 1] < 20 && data.data[n + 2] < 20)) { // iPhone6〜8のサイズでたまに赤みがかっている。
               srcY -= i;
               isHitBlackLine = true;
               break;
