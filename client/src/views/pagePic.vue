@@ -211,7 +211,7 @@ export default {
           // アイコン上端の黒い線の位置を探す。
           srcY += 1; // 上にずらして確認していくので、最初は5sサイズの上端ラインの１段下から始める。
           // アイコン左上の主属性の上辺りを確認する。
-          const checkWidth = 8;
+          const checkWidth = (srcWidth / 12) | 0;
           const checkHeight = 16;
           let isHitBlackLine = false;
           data = ctx.getImageData(srcX + srcWidth * 0.2, srcY - (checkHeight - 1), checkWidth, checkHeight);
