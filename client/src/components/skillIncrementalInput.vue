@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown show">
-    <input :value="value" :id="id" @input="$emit('input', $event.target.value); showPopup($event.target);" @focus="showPopup($event.target);" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" :required="required" minLength="1" maxLength="50">
+    <input :value="value" :id="id" @input="$emit('input', $event.target.value); showPopup($event.target);" @focus="showPopup($event.target);" @mousedown="onMousedown" class="form-control dropdown-toggle" :placeholder="placeholder" data-toggle="dropdown" :required="required" minLength="1" maxLength="50">
     <div class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
       <a v-for="skill in filteredSkillTable" class="dropdown-item" tabindex="-1" @click="$emit('select-no', skill.no)" href="javascript:void(0)" :key="`skill${skill.no}`">
         {{ skill.name }}<br>
@@ -37,7 +37,12 @@ export default {
       default: true
     }
   },
-
+  data: function () {
+    return {
+      /** mousedown イベント直後 かどうか。 */
+      mousedownFlag: false
+    };
+  },
   computed: {
     filteredSkillTable: function () {
       // 文字が入力されていない場合は表示しない。
@@ -63,10 +68,19 @@ export default {
   },
   methods: {
     showPopup: function (target) {
+      // mousedown 直後に表示指定された（＝focusがあった）場合は、その後に起こる mouseup 時に発生する
+      // 標準のポップアップ切り替え処理により非表示にされてしまうので、ここでのポップアップ表示は行わない。
+      if (this.mousedownFlag) { return; }
       if (!$(target).siblings('.dropdown-menu').hasClass('show')) {
         $(target).dropdown('toggle');
       }
       $(target).dropdown('update');
+    },
+    /** テキストボックスに対して mousedown イベントが起きたときに呼ばれるイベントハンドラ。 */
+    onMousedown: function () {
+      // mousedown 発生直後であることをしめすフラグを立て。すぐに消すための処理を仕込む。
+      this.mousedownFlag = true;
+      setTimeout(() => { this.mousedownFlag = false; }, 0);
     }
   }
 };
