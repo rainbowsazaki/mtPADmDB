@@ -355,7 +355,7 @@ export default {
       return leaderSkillDetails;
     },
 
-    /** リーダースキル説明文を装飾したHTMLを取得する。 */
+    /** リーダースキルの効果を装飾したHTMLを取得する。 */
     leaderSkillDescriptionHtml: function () {
       return leaderSkillDescriptionToDecoratedHtml(this.leaderSkillDetails.description);
     },

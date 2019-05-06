@@ -33,7 +33,7 @@
       <td>{{ (minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
     </tr>
     <tr>
-      <th colspan="3">説明</th>
+      <th colspan="3">効果</th>
     </tr>
     <tr>
       <td colspan="3">
@@ -94,7 +94,7 @@ export default {
         this.clearSkillNo();
       }
     },
-    /** 編集対象のスキルの説明文。 */
+    /** 編集対象のスキルの効果。 */
     skillDescription: {
       get: function () { return this.targetSkillDetails.description; },
       set: function (value) {

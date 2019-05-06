@@ -337,7 +337,7 @@ export default {
       return Array.from(killerNoSet).filter(a => a < 9).sort((a, b) => a - b);
     },
     
-    /** リーダースキル情報を元に、リーダースキルの説明文をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
+    /** リーダースキル情報を元に、リーダースキルの効果をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
     getLeaderSkillDescriptionHtml: function (leaderSkillData) {
       return leaderSkillDescriptionToDecoratedHtml(leaderSkillData.description);
     },

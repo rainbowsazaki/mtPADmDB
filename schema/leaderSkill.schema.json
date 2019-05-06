@@ -31,7 +31,7 @@
         },
         "description": {
           "type": "string",
-          "title": "内容説明",
+          "title": "リーダースキル効果",
           "default": "",
           "minLength": 0,
           "maxLength": 200

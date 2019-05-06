@@ -13,7 +13,7 @@
         <div v-if="skillDetails.maxLevel">最大Lv.{{ skillDetails.maxLevel }} ターン:<span v-if="skillDetails.baseTurn">{{ minTurn }}</span><span v-else>不明</span></div>
         <div v-else>最大lv.不明</div>
       </template>
-      <h4 class="p-2 mt-3 bg-light">説明</h4>
+      <h4 class="p-2 mt-3 bg-light">効果</h4>
       <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{ skillDetails.description }}</div>
       <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
       <h4 class="p-2 mt-3 bg-light">{{ targetName }}所持モンスター</h4>
@@ -45,7 +45,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            編集理由などを書いてください。（例：説明を更新）
+            編集理由などを書いてください。（例：効果を更新）
             <textarea class="form-control" id="textareaComment" rows="3" v-model="editData.comment" minLength="0" maxLength="1000" />
           </td>
         </tr>
@@ -217,7 +217,7 @@ export default {
       this.multiSendBlocker.reset();
     },
 
-    /** リーダースキル情報を元に、リーダースキルの説明文をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
+    /** リーダースキル情報を元に、リーダースキルの効果をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
     getLeaderSkillDescriptionHtml: function (leaderSkillData) {
       return leaderSkillDescriptionToDecoratedHtml(leaderSkillData.description);
     },
