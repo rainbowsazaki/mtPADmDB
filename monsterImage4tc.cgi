@@ -84,14 +84,20 @@ SELECT ${columns_str} FROM monster_base_data
 	WHERE id = ?
 EOS
 
-@row_ary = $dbh->selectrow_array($sql, undef, $monster_base_data_id);
-for (my $i; $i < 9; $i++) {
-  my $awaken = $row_ary[$i];
-  if ($awaken == 0 || $awaken == 99) { next; }
+# 指定した覚醒の画像をモンスター画像の指定した座標に重ねる。
+sub composite_awaken_image {
+  my ($awaken, $x, $y) = @_;
+  if ($awaken == 0 || $awaken == 99) { return; }
   my $src_image = Image::Magick->new;
   $src_image->Read("./image/awaken/${awaken}.${opt_image_ext}");
   $src_image->Resize(width => 47, height => 48);
-  $canvas->Composite(image => $src_image, compose => 'over', gravity => 'northwest', x => $canvas_width - 96, y => 32 + 64 * $i);
+  $canvas->Composite(image => $src_image, compose => 'over', gravity => 'northwest', x => $x, y => $y);
+}
+
+@row_ary = $dbh->selectrow_array($sql, undef, $monster_base_data_id);
+for (my $i; $i < 9; $i++) {
+  my $awaken = $row_ary[$i];
+  &composite_awaken_image($awaken, $canvas_width - 96, 32 + 64 * $i);
 }
 
 #潜在覚醒
@@ -106,11 +112,7 @@ EOS
   my $super_awakens_count = @$super_awakens;
   for (my $i; $i < $super_awakens_count; $i++) {
     my $awaken = $super_awakens->[$i];
-    if ($awaken == 0 || $awaken == 99) { next; }
-    my $src_image = Image::Magick->new;
-    $src_image->Read("./image/awaken/${awaken}.${opt_image_ext}");
-    $src_image->Resize(width => 47, height => 48);
-    $canvas->Composite(image => $src_image, compose => 'over', gravity => 'northwest', x => $canvas_width - 160, y => 32 + 64 * $i);
+    &composite_awaken_image($awaken, $canvas_width - 160, 32 + 64 * $i);
   }
 }
 
