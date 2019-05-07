@@ -97,7 +97,7 @@ sub composite_awaken_image {
 @row_ary = $dbh->selectrow_array($sql, undef, $monster_base_data_id);
 for (my $i; $i < 9; $i++) {
   my $awaken = $row_ary[$i];
-  &composite_awaken_image($awaken, $canvas_width - 96, 32 + 64 * $i);
+  &composite_awaken_image($awaken, $canvas_width - 80, 32 + 64 * $i);
 }
 
 #潜在覚醒
