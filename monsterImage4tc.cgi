@@ -4,6 +4,7 @@ use utf8;
 
 use Image::Magick;
 use CGI::Carp qw(fatalsToBrowser);
+use JSON::PP ();
 use DBI;
 
 # モンスター情報のデータベースに接続する dbh を作成する。
@@ -63,6 +64,14 @@ $src_image->Resize(
 # 画像を重ねる
 $canvas->Composite(image=>$src_image, compose=>'over', gravity=>'Center');
 
+my $opt_image_ext = 'png';
+
+$sql = <<"EOS";
+SELECT monster_base_data, over_limit FROM monster_data
+	WHERE state = 1 AND no = ?
+EOS
+my ($monster_base_data_id, $over_limit_id) = $dbh->selectrow_array($sql, undef, $no);
+
 # 覚醒を表示する
 my @columns;
 for my $i (0 .. 8) {
@@ -71,19 +80,38 @@ for my $i (0 .. 8) {
 my $columns_str = join ', ', @columns;
 
 $sql = <<"EOS";
-SELECT ${columns_str} FROM monster_data as md 
-	LEFT JOIN monster_base_data as mbd ON md.monster_base_data = mbd.id
-	WHERE md.state = 1 AND md.no = ?
+SELECT ${columns_str} FROM monster_base_data
+	WHERE id = ?
 EOS
 
-@row_ary = $dbh->selectrow_array($sql, undef, $no);
+@row_ary = $dbh->selectrow_array($sql, undef, $monster_base_data_id);
 for (my $i; $i < 9; $i++) {
   my $awaken = $row_ary[$i];
   if ($awaken == 0 || $awaken == 99) { next; }
   my $src_image = Image::Magick->new;
-  $src_image->Read("./image/awaken/${awaken}.png");
+  $src_image->Read("./image/awaken/${awaken}.${opt_image_ext}");
   $src_image->Resize(width => 47, height => 48);
   $canvas->Composite(image => $src_image, compose => 'over', gravity => 'northwest', x => $canvas_width - 96, y => 32 + 64 * $i);
+}
+
+#潜在覚醒
+if ($over_limit_id != 0) {
+  $sql = <<"EOS";
+SELECT superAwakens FROM over_limit
+  WHERE id = ?
+EOS
+
+  @row_ary = $dbh->selectrow_array($sql, undef, $over_limit_id);
+  my $super_awakens = JSON::PP::decode_json($row_ary[0]);
+  my $super_awakens_count = @$super_awakens;
+  for (my $i; $i < $super_awakens_count; $i++) {
+    my $awaken = $super_awakens->[$i];
+    if ($awaken == 0 || $awaken == 99) { next; }
+    my $src_image = Image::Magick->new;
+    $src_image->Read("./image/awaken/${awaken}.${opt_image_ext}");
+    $src_image->Resize(width => 47, height => 48);
+    $canvas->Composite(image => $src_image, compose => 'over', gravity => 'northwest', x => $canvas_width - 160, y => 32 + 64 * $i);
+  }
 }
 
 print "Content-type: image/jpeg\n\n";
