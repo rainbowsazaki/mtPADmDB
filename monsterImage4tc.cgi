@@ -115,7 +115,7 @@ sub composite_awaken_image {
 @row_ary = $dbh->selectrow_array($sql, undef, $monster_base_data_id);
 for (my $i; $i < 9; $i++) {
   my $awaken = $row_ary[$i];
-  &composite_awaken_image($awaken, $canvas_width - 80, 32 + 64 * $i);
+  &composite_awaken_image($awaken, $canvas_width - 72, 32 + 64 * $i);
 }
 # タイプ
 for (my $i = 0; $i < 3; $i++) {
@@ -135,7 +135,7 @@ EOS
   my $super_awakens_count = @$super_awakens;
   for (my $i; $i < $super_awakens_count; $i++) {
     my $awaken = $super_awakens->[$i];
-    &composite_awaken_image($awaken, $canvas_width - 160, 32 + 64 * $i);
+    &composite_awaken_image($awaken, $canvas_width - 152, 32 + 64 * $i);
   }
 }
 
