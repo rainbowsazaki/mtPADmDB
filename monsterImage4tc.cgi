@@ -65,6 +65,17 @@ $src_image->Resize(
 $canvas->Composite(image=>$src_image, compose=>'over', gravity=>'Center');
 
 my $opt_image_ext = 'png';
+# アイコン画像を重ねる
+{
+  my $src_image = Image::Magick->new;
+  $src_image->Read("monsterIconsLog/icon_${no}_$row_ary[0].jpg");
+  my $icon_size = 160;
+  $src_image->Resize(width => $icon_size, height => $icon_size);
+  $canvas->Composite(
+    image => $src_image, compose => 'over', gravity => 'northwest',
+    x => 4, y => $canvas_height - $icon_size - 20
+  );
+}
 
 $sql = <<"EOS";
 SELECT monster_base_data, over_limit FROM monster_data
