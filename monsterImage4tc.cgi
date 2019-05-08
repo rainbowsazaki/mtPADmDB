@@ -72,10 +72,13 @@ SELECT monster_base_data, over_limit FROM monster_data
 EOS
 my ($monster_base_data_id, $over_limit_id) = $dbh->selectrow_array($sql, undef, $no);
 
-# 覚醒を表示する
+# 覚醒・タイプを表示する
 my @columns;
 for my $i (0 .. 8) {
   push @columns, "awakens_${i}";
+}
+for my $i (0 .. 2) {
+  push @columns, "types_${i}";
 }
 my $columns_str = join ', ', @columns;
 
@@ -84,20 +87,29 @@ SELECT ${columns_str} FROM monster_base_data
 	WHERE id = ?
 EOS
 
-# 指定した覚醒の画像をモンスター画像の指定した座標に重ねる。
-sub composite_awaken_image {
-  my ($awaken, $x, $y) = @_;
-  if ($awaken == 0 || $awaken == 99) { return; }
+# 任意のアイコンの画像をモンスター画像の指定した座標に重ねる。
+sub composite_any_image {
+  my ($type, $no, $x, $y) = @_;
+  if ($no == 0 || $no == 99) { return; }
   my $src_image = Image::Magick->new;
-  $src_image->Read("./image/awaken/${awaken}.${opt_image_ext}");
+  $src_image->Read("./image/${type}/${no}.${opt_image_ext}");
   $src_image->Resize(width => 47, height => 48);
   $canvas->Composite(image => $src_image, compose => 'over', gravity => 'northwest', x => $x, y => $y);
+}
+# 指定した覚醒の画像をモンスター画像の指定した座標に重ねる。
+sub composite_awaken_image {
+  &composite_any_image('awaken', @_);
 }
 
 @row_ary = $dbh->selectrow_array($sql, undef, $monster_base_data_id);
 for (my $i; $i < 9; $i++) {
   my $awaken = $row_ary[$i];
   &composite_awaken_image($awaken, $canvas_width - 80, 32 + 64 * $i);
+}
+# タイプ
+for (my $i = 0; $i < 3; $i++) {
+  my $type = $row_ary[$i + 9];
+  &composite_any_image('type', $type, 24 + (48 + 4) * $i, 32);
 }
 
 #潜在覚醒
