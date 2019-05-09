@@ -305,7 +305,7 @@ export default {
       awakenTable: constData.awakenTable,
 
       /** モンスター情報表示部分のフォントサイズ。 */
-      infoFontSize: 16,
+      infoFontSize: 8,
       /** モンスター評価ページへのリンク情報の配列 */
       evaluationOfMonsterLinks: null,
       /** 履歴情報の読み込み中かどうか。 */
@@ -431,9 +431,9 @@ export default {
     window.removeEventListener('resize', this.updateInfoFontSize);
   },
   methods: {
-    /** モンスター情報表示領域のフォントサイズを、領域よ横幅をもとに更新する。 */
+    /** モンスター情報表示領域のフォントサイズを、領域の横幅をもとに更新する。 */
     updateInfoFontSize: function () {
-      this.infoFontSize = $('#monsterInfo').width() * 0.037;
+      this.infoFontSize = document.getElementById('monsterInfo').clientWidth * 0.037;
     },
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
