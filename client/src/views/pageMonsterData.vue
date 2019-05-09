@@ -9,7 +9,7 @@
       <div class="col-md-6">
         <div id="monsterInfo" style="color: #FFF; line-height: 1.3em; font-family: 'M PLUS 1p', sans-serif; text-shadow: 0.1em 0.1em 0 rgba(0,0,0, 0.5); background: #000; border: 1px solid black; margin-bottom: 1rem;" :style="{ 'font-size': `${infoFontSize}px` }">
           <div style="background: linear-gradient(#798320, #394a14); border: 0.1em #b1ba39 solid; border-left: none; margin-top: 1em; margin-right: 5em; padding: 0.1em 0em 0.2em 4.4em; line-height: 1.1em; border-radius: 0 0.5em 0.5em 0;">
-            <span style="display: inline-block; width: 6.5em;">No.{{ monsterData.no }}</span><span style="color: #EE0"><template v-for="n in monsterData.rare">★</template></span><br>
+            <span style="display: inline-block; width: 6.5em;">No.{{ monsterData.no }}</span><span style="color: #EE0; -webkit-text-stroke: 0.05em #660;"><template v-for="n in monsterData.rare">★</template></span><br>
             {{ monsterData.name }}
           </div>
           <div style="position: relative; height: 17em;">
@@ -589,6 +589,8 @@ div.skill {
       float: left;
       text-shadow: none;
       border-radius: 0.4em 0.4em;
+      -webkit-text-stroke: 0.08em #000;
+      font-weight: 900;
     }
   }
 
