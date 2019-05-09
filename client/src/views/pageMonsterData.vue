@@ -3,88 +3,110 @@
     <div v-if="isHistory" class="alert alert-primary" role="alert">
       {{ monsterData.datetime }} 時点のデータです
     </div>
-    <div class="row">
-      <div class="col-12">
-        <h2>No. {{ monsterData.no }} {{ monsterData.name }}</h2>
-      </div>
-    </div>
+
     <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
     <div class="row">
       <div class="col-md-6">
-        <div class="monsterImage">
-          <img v-if="monsterData.no" :src="monsterImagePath" :key="`monsterImage${monsterData.no}`">
-        </div>
-        <table class="table table-bordered table-sm">
-          <tr class="thead-light">
-            <th colspan="2">タイプ</th><th>属性</th>
-          </tr>
-          <tr>
-            <td colspan="2"><template v-for="(type, n) in monsterData.types"><span v-if="type !== 0" class="slash-join" :key="`typeNo${n}`"><img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:24px; height: 24px;">{{ typeTable[type].name }}</span></template></td>
-            <td>
-              <span v-if="monsterData.attributes[0] === null">不明</span>
-              <template v-for="(attr, n) in monsterData.attributes"><img v-if="attr !== 0 && attr !== null" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`" :key="`attrNo${n}`"></template>
-            </td>
-          </tr>
-          <tr class="thead-light">
-            <th>コスト</th><th>レア</th><th>アシスト</th>
-          </tr>
-          <tr>
-            <td v-if="monsterData.cost" class="text-right">{{ monsterData.cost }}</td>
-            <td v-else>不明</td>
-            <td v-if="monsterData.rare" class="text-right">{{ monsterData.rare }}</td>
-            <td v-else>不明</td>
-            <td>{{ booleanTable[monsterData.assist] }}</td>
-          </tr>
-          
-          <tr class="thead-light">
-            <th>最大レベル</th><th>必要経験値</th><th>限界突破</th>
-          </tr>
-          <tr>
-            <td v-if="monsterData.maxLevel" class="text-right">{{ monsterData.maxLevel }}</td>
-            <td v-else>不明</td>
-            <td v-if="monsterData.maxExp !== null" class="text-right">{{ monsterData.maxExp | addComma }}</td>
-            <td v-else>不明</td>
-            <td>{{ booleanTable[monsterData.overLimit] }}</td>
-          </tr>
-          <tr class="thead-light"><th colspan="3">覚醒</th></tr>
-          <tr><td colspan="3">
-            <span v-if="monsterData.awakens[0] === 0">なし</span>
-            <span v-else-if="monsterData.awakens[0] === null">不明</span>
-            <ul v-else style="list-style: none; margin: 0px; padding: 0px; display: flex; justify-content: space-between;">
-              <li v-for="(awaken, n) in monsterData.awakens" style="flex-grow: 1; width: 24px;" :key="`awakenNo${n}`">
-                <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 24px; height: 24px;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
-              </li>
-            </ul>
-          </td></tr>
-          <template class="row" v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length">
-            <tr class="thead-light"><th colspan="3">超覚醒</th></tr>
-            <tr><td colspan="3">
-              <ul style="list-style: none; margin: 0px; padding: 0px; display: flex;">
-                <li v-for="superAwaken in monsterData.superAwakens" style="margin-right: 2px;" :key="`superAwaken${superAwaken}`">
-                  <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" width="24" height="24" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
+        <div id="monsterInfo" style="color: #FFF; text-shadow: 0.07em 0.05em 0 rgba(0,0,0, 0.5); background: #000; border: 1px solid black; margin-bottom: 1rem;" :style="{ 'font-size': `${infoFontSize}px` }">
+          <div style="background: #692; padding: 0.2em;">
+            No.{{ monsterData.no }} <span style="color: #EE0"><template v-for="n in monsterData.rare">★</template></span><br>
+            {{ monsterData.name }}
+          </div>
+          <div style="position: relative; height: 17em;">
+            <div class="monsterImage" style="height: 100%;">
+              <img v-if="monsterData.no" :src="monsterImagePath" :key="`monsterImage${monsterData.no}`">
+            </div>
+
+            <div style="position: absolute; left: 0.2em; top: 0.2em; color: white;">
+              <template v-for="(type, n) in monsterData.types">
+                <span v-if="type !== 0" :key="`typeNo${n}`" style="margin-right: 0.2em;">
+                  <img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:1.2em; height: 1.2em;">{{ typeTable[type].name }}
+                </span>
+              </template>
+            </div>
+            <div style="position: absolute; right: 0.2em; top: 0.2em;">
+              <span v-if="monsterData.awakens[0] === 0" />
+              <span v-else-if="monsterData.awakens[0] === null">？</span>
+              <ul v-else style="list-style: none; margin: 0; padding: 0;">
+                <li v-for="(awaken, n) in monsterData.awakens" style="line-height: 1.8em;" :key="`awakenNo${n}`">
+                  <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.2em; height: 1.2em;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
+                </li>
+              </ul>
+            </div>
+            <div v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length" style="position: absolute; right: 2.0em; top: 0.2em;">
+              <ul style="list-style: none; margin: 0; padding: 0;">
+                <li v-for="superAwaken in monsterData.superAwakens" style="line-height:1.8em;" :key="`superAwaken${superAwaken}`">
+                  <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" style="width: 1.2em; height: 1.2em;" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
                   <span v-else>不明</span>
                 </li>
               </ul>
-            </td></tr>
-          </template>
-          <template>
-            <tr class="thead-light"><th colspan="3">振れる潜在キラー</th></tr>
-            <tr>
-              <td colspan="3">
-                <span v-if="monsterData.types[0] === null">不明</span>
-                <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
-                  <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" :key="`killer${senzaiKillerType}`">
-                    <img :src="`./image/senzaiKiller/${senzaiKillerType}.png`" :alt="`${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 24px;">
-                  </li>
-                </ul>
-                <span v-else>振れる潜在キラーはありません。</span>
-              </td>
-            </tr>
-          </template>
-        </table>
+            </div>
+          </div>
+
+          <div style="border: #CC0 solid 0.1em; background: #961; padding: 0.3em; border-radius: 0.4em 0.4em;">
+            <monster-icon no-link style="float: left;" :no="monsterData.no" width="4em" height="4em" />
+            <dl class="paramater" style="margin-left: 0.2em; width: calc(45% - 4.5em - 0.2em); float: left;">
+              <dt>HP:</dt><dd>{{ monsterData.maxParam.hp | addComma }}</dd>
+              <dt>攻撃:</dt><dd>{{ monsterData.maxParam.attack | addComma }}</dd>
+              <dt>回復:</dt><dd>{{ monsterData.maxParam.recovery | addComma }}</dd>
+            </dl>
+            <div style="margin-left: 45%;">
+              <div style="float: right; border: 0.1em solid #321; background: #333; padding: 0 0.1em; border-radius: 0.3em 0.3em;">
+                コスト:<span style="display: inline-block; width: 3em; text-align: right;">{{ monsterData.cost || '不明' }}</span>
+              </div>
+              <div style="white-space: pre; padding-top: 1.45em;">
+                <div :style="{ color: (monsterData.overLimit === 1) ? '#09F' : ''}">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
+                <div>経験値:{{ monsterData.maxExp || '不明' | addComma }}</div>
+              </div>
+            </div>
+
+            <div class="skill" style="clear: both;">
+              <div class="skillHeader">
+                <div class="skillLogo" style="color: #6CF;">スキル</div>
+                <div style="float: left;">
+                  <span v-if="!skillDetails.name">不明</span>
+                  <router-link v-else :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{ skillDetails.name }}</router-link>
+                </div>
+                <div v-if="skillDetails.baseTurn >= 1" style="text-align: right;">
+                  Lv.1 ターン:{{ skillDetails.baseTurn }}
+                  最大Lv.<span v-if="skillDetails.maxLevel">{{ skillDetails.maxLevel }} ターン:{{ skillDetails.baseTurn - skillDetails.maxLevel + 1 }}</span><span v-else>不明</span>
+                </div>
+              </div>
+              <div class="skillDescription" style="clear: both;">{{ skillDetails.description }}</div>
+            </div>
+
+            <div class="skill">
+              <div class="skillHeader">
+                <div class="skillLogo" style="color: #6F6;">リーダースキル</div>
+                <div>
+                  <span v-if="!leaderSkillDetails.name">不明</span>
+                  <router-link v-else :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
+                </div>
+              </div>
+              <div class="skillDescription" style="background: #FF9;" v-html="leaderSkillDescriptionHtml" />
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-md-6">
         <table class="table table-bordered table-sm">
+          <tr class="thead-light">
+            <th colspan="2">アシスト</th>
+            <td colspan="2">{{ booleanTable[monsterData.assist] }}</td>
+          </tr>
+          
+          <tr class="thead-light"><th colspan="4">振れる潜在キラー</th></tr>
+          <tr>
+            <td colspan="4">
+              <span v-if="monsterData.types[0] === null">不明</span>
+              <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
+                <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" :key="`killer${senzaiKillerType}`">
+                  <img :src="`./image/senzaiKiller/${senzaiKillerType}.png`" :alt="`${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 24px;">
+                </li>
+              </ul>
+              <span v-else>振れる潜在キラーはありません。</span>
+            </td>
+          </tr>
           <template v-if="hasMaxParam">
             <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
             <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.maxParam[paramType]" :key="paramType" />
@@ -99,23 +121,6 @@
             </template>
             <tr v-else class="thead-light"><th colspan="4">限界突破時パラメータ不明</th></tr>
           </template>
-        </table>
-
-        <table class="table table-bordered table-sm">
-          <tr class="thead-light"><th>スキル</th></tr>
-          <tr v-if="!skillDetails.name"><td>不明</td></tr>
-          <tr v-if="skillDetails.name"><td>
-            <router-link :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{ skillDetails.name }}</router-link>
-            <span v-if="skillDetails.baseTurn >= 1" style="font-size: 80%; float:right;">(Lv.1 ターン:{{ skillDetails.baseTurn }} 最大Lv.<span v-if="skillDetails.maxLevel">{{ skillDetails.maxLevel }} ターン:{{ skillDetails.baseTurn - skillDetails.maxLevel + 1 }}</span><span v-else>不明</span>)</span>
-          </td></tr>
-          <tr v-if="skillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;">{{ skillDetails.description }}</td></tr>
-
-          <tr class="thead-light"><th>リーダースキル</th></tr>
-          <tr v-if="!leaderSkillDetails.name"><td>不明</td></tr>
-          <tr v-if="leaderSkillDetails.name"><td>
-            <router-link :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
-          </td></tr>
-          <tr v-if="leaderSkillDetails.name"><td style="font-size: 90%; padding-left: 1em; white-space: pre;" v-html="leaderSkillDescriptionHtml" /></tr>
         </table>
       </div>
     </div>
@@ -299,6 +304,8 @@ export default {
       evolutionTypeTable: constData.evolutionTypeTable,
       awakenTable: constData.awakenTable,
 
+      /** モンスター情報表示部分のフォントサイズ。 */
+      infoFontSize: 16,
       /** モンスター評価ページへのリンク情報の配列 */
       evaluationOfMonsterLinks: null,
       /** 履歴情報の読み込み中かどうか。 */
@@ -416,7 +423,18 @@ export default {
     this.fetchData();
     this.updateEvaluationOfMonsterLinks();
   },
+  mounted: function () {
+    this.updateInfoFontSize();
+    window.addEventListener('resize', this.updateInfoFontSize);
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.updateInfoFontSize);
+  },
   methods: {
+    /** モンスター情報表示領域のフォントサイズを、領域よ横幅をもとに更新する。 */
+    updateInfoFontSize: function () {
+      this.infoFontSize = $('#monsterInfo').width() * 0.037;
+    },
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
       this.histories = null;
@@ -515,11 +533,55 @@ div.monsterImage {
   background-repeat: no-repeat;
 
   img {
-    width: 100%;
-    height: auto;
-    max-width: 400px;
+    width: auto;
+    height: 100%;
     display: block;
     margin: 0 auto;
+  }
+}
+
+dl.paramater {
+  margin: 0;
+  dt {
+    float: left;
+    width: 3em;
+  }
+  dd {
+    margin: 0;
+    text-align: right;
+  }
+}
+
+div.skill {
+  width: 100%;
+  overflow: hidden;
+  border: #aa0 0.1em solid;
+  background: #600;
+  border-radius: 0.3em 0.3em;
+
+  div.skillHeader {
+    height: 1.7em;
+    padding: 0.1em;
+
+    div.skillLogo {
+      margin-right: 0.2em;
+      line-height: 1.3em;
+      border: #aa0 0.1em solid;
+      background: #960;
+      overflow: hidden;
+      float: left;
+      text-shadow: none;
+      border-radius: 0.4em 0.4em;
+    }
+  }
+
+  div.skillDescription {
+    height: 3em;
+    padding: 0.1em;
+    color: #000;
+    background: #FFE;
+    white-space: pre;
+    text-shadow: none;
   }
 }
 
