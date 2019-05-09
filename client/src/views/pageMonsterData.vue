@@ -8,7 +8,7 @@
     <div class="row">
       <div class="col-md-12">
         <div id="monsterInfo" style="color: #FFF; line-height: 1.3em; text-shadow: 0.1em 0.1em 0 rgba(0,0,0, 0.5); background: #000; border: 1px solid black; margin-bottom: 1rem;" :style="{ 'font-size': `${infoFontSize}px` }">
-          <div style="background: #692; margin-top: 1em; margin-right: 5em; padding: 0.2em 0em 0.3em 4.3em; line-height: 1.1em; border-radius: 0 0.5em 0.5em 0;">
+          <div style="background: linear-gradient(#798320, #394a14); border: 0.1em #b1ba39 solid; border-left: none; margin-top: 1em; margin-right: 5em; padding: 0.1em 0em 0.2em 4.4em; line-height: 1.1em; border-radius: 0 0.5em 0.5em 0;">
             <span style="display: inline-block; width: 6.5em;">No.{{ monsterData.no }}</span><span style="color: #EE0"><template v-for="n in monsterData.rare">★</template></span><br>
             {{ monsterData.name }}
           </div>
@@ -43,7 +43,7 @@
             </div>
           </div>
 
-          <div style="border: #CC0 solid 0.1em; background: #961; padding: 0.3em; padding-bottom: 0.55em; border-radius: 0.5em 0.5em;">
+          <div style="border: #fddb70 solid 0.1em; background: linear-gradient(#a07b44, #382717); padding: 0.3em; padding-bottom: 0.55em; border-radius: 0.5em 0.5em;">
             <monster-icon no-link style="float: left; margin: 0.1em;" :no="monsterData.no" width="4.15em" height="4.15em" />
             <dl class="paramater" style="margin-left: 0.2em; margin-bottom: 0.4em; width: calc(45% - 4.2em - 0.2em); float: left;">
               <dt>HP:</dt><dd>{{ monsterData.maxParam.hp | addComma }}</dd>
@@ -51,39 +51,47 @@
               <dt>回復:</dt><dd>{{ monsterData.maxParam.recovery | addComma }}</dd>
             </dl>
             <div style="margin-left: 47%;">
-              <div style="float: right; border: 0.2em solid #321; background: #333; margin: 0.2em 0.1em; ; padding: 0 0.1em; border-radius: 0.4em 0.4em;">
+              <div style="float: right; border: 0.2em solid #563e22; background: #2f2b28; box-shadow: 0 0.2em 0.1em 0.03em rgba(0,0,0,0.4) inset; margin: 0.2em 0.1em; padding: 0 0.1em; border-radius: 0.4em 0.4em;">
                 コスト:<span style="display: inline-block; width: 2.5em; text-align: right;">{{ monsterData.cost || '不明' }}</span>
               </div>
               <div style="white-space: pre; padding-top: 1.45em;">
-                <div :style="{ color: (monsterData.overLimit === 1) ? '#09F' : ''}">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
+                <div :style="{ color: (monsterData.overLimit === 1) ? '#0FF' : ''}">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
                 <div>経験値:{{ monsterData.maxExp || '不明' | addComma }}</div>
               </div>
             </div>
 
             <div class="skill" style="clear: both;">
               <div class="skillHeader">
-                <div class="skillLogo" style="color: #6CF;">スキル</div>
+                <div class="skillLogo">
+                  <div style="color: #acbcdd; background: linear-gradient(#ffffff, #3270a3); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    スキル
+                  </div>
+                </div>
                 <div style="float: left;">
-                  <span v-if="!skillDetails.name">不明</span>
-                  <router-link v-else :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{ skillDetails.name }}</router-link>
+                  <span v-if="!skillDetails.name" style="color: #85bcfd;">不明</span>
+                  <router-link v-else style="color: #85bcfd;" :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{ skillDetails.name }}</router-link>
                 </div>
                 <div v-if="skillDetails.baseTurn >= 1" style="text-align: right;">
                   Lv.1 ターン:{{ skillDetails.baseTurn }}
                   最大Lv.<span v-if="skillDetails.maxLevel">{{ skillDetails.maxLevel }} ターン:{{ skillDetails.baseTurn - skillDetails.maxLevel + 1 }}</span><span v-else>不明</span>
                 </div>
               </div>
-              <div class="skillDescription" style="clear: both;">{{ skillDetails.description }}</div>
+              <div class="skillDescription" style="background: #b1aaa0; clear: both;">{{ skillDetails.description }}</div>
             </div>
 
             <div class="skill">
               <div class="skillHeader">
-                <div class="skillLogo" style="color: #6F6;">リーダースキル</div>
+                <div class="skillLogo">
+                  <div style="color: #fdaa66; background: linear-gradient(#feffa2, #d75b39); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    リーダースキル
+                  </div>
+                </div>
                 <div>
-                  <span v-if="!leaderSkillDetails.name">不明</span>
-                  <router-link v-else :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
+                  <span v-if="!leaderSkillDetails.name" style="color: #82ff81;">不明</span>
+                  <router-link v-else style="color: #82ff81;" :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
                 </div>
               </div>
-              <div class="skillDescription" style="background: #FF9;" v-html="leaderSkillDescriptionHtml" />
+              <div class="skillDescription" style="background: #d0cc82;" v-html="leaderSkillDescriptionHtml" />
             </div>
           </div>
         </div>
@@ -559,21 +567,22 @@ dl.paramater {
 div.skill {
   width: 100%;
   overflow: hidden;
-  border: #aa0 0.1em solid;
-  background: #600;
+  border: #9b733f 0.1em solid;
+  background: #39180f;
   border-radius: 0.4em 0.4em;
   margin-top: 0.4em;
 
   div.skillHeader {
     height: 1.6em;
     padding: 0.15em;
+    box-shadow: 0 0.2em 0.1em 0.03em rgba(0,0,0,0.6) inset;
 
     div.skillLogo {
       margin: 0em 0.28em 0em 0em;
       padding: 0em 0.12em;
       line-height: 1.1em;
-      border: #aa0 0.1em solid;
-      background: #960;
+      border: #9b733f 0.1em solid;
+      background: #774433;
       overflow: hidden;
       float: left;
       text-shadow: none;
