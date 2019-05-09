@@ -6,10 +6,10 @@
 
     <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
     <div class="row">
-      <div class="col-md-6">
-        <div id="monsterInfo" style="color: #FFF; text-shadow: 0.07em 0.05em 0 rgba(0,0,0, 0.5); background: #000; border: 1px solid black; margin-bottom: 1rem;" :style="{ 'font-size': `${infoFontSize}px` }">
-          <div style="background: #692; padding: 0.2em;">
-            No.{{ monsterData.no }} <span style="color: #EE0"><template v-for="n in monsterData.rare">★</template></span><br>
+      <div class="col-md-12">
+        <div id="monsterInfo" style="color: #FFF; line-height: 1.3em; text-shadow: 0.1em 0.1em 0 rgba(0,0,0, 0.5); background: #000; border: 1px solid black; margin-bottom: 1rem;" :style="{ 'font-size': `${infoFontSize}px` }">
+          <div style="background: #692; margin-top: 1em; margin-right: 5em; padding: 0.2em 0em 0.3em 4.3em; line-height: 1.1em; border-radius: 0 0.5em 0.5em 0;">
+            <span style="display: inline-block; width: 6.5em;">No.{{ monsterData.no }}</span><span style="color: #EE0"><template v-for="n in monsterData.rare">★</template></span><br>
             {{ monsterData.name }}
           </div>
           <div style="position: relative; height: 17em;">
@@ -17,42 +17,42 @@
               <img v-if="monsterData.no" :src="monsterImagePath" :key="`monsterImage${monsterData.no}`">
             </div>
 
-            <div style="position: absolute; left: 0.2em; top: 0.2em; color: white;">
+            <div style="position: absolute; left: 0.4em; top: 0.4em; color: white;">
               <template v-for="(type, n) in monsterData.types">
                 <span v-if="type !== 0" :key="`typeNo${n}`" style="margin-right: 0.2em;">
-                  <img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:1.2em; height: 1.2em;">{{ typeTable[type].name }}
+                  <img v-if="type !== null" :src="`./image/type/${type}.png`" alt="" style="width:1.3em; height: 1.35em; margin-right: 0.1em;">{{ typeTable[type].name }}
                 </span>
               </template>
             </div>
-            <div style="position: absolute; right: 0.2em; top: 0.2em;">
+            <div style="position: absolute; right: 0.7em; top: 0.2em;">
               <span v-if="monsterData.awakens[0] === 0" />
               <span v-else-if="monsterData.awakens[0] === null">？</span>
               <ul v-else style="list-style: none; margin: 0; padding: 0;">
                 <li v-for="(awaken, n) in monsterData.awakens" style="line-height: 1.8em;" :key="`awakenNo${n}`">
-                  <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.2em; height: 1.2em;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
+                  <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.25em; height: 1.25em;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
                 </li>
               </ul>
             </div>
-            <div v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length" style="position: absolute; right: 2.0em; top: 0.2em;">
+            <div v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length" style="position: absolute; right: 2.5em; top: 0.2em;">
               <ul style="list-style: none; margin: 0; padding: 0;">
                 <li v-for="superAwaken in monsterData.superAwakens" style="line-height:1.8em;" :key="`superAwaken${superAwaken}`">
-                  <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" style="width: 1.2em; height: 1.2em;" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
+                  <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" style="width: 1.25em; height: 1.25em;" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
                   <span v-else>不明</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div style="border: #CC0 solid 0.1em; background: #961; padding: 0.3em; border-radius: 0.4em 0.4em;">
-            <monster-icon no-link style="float: left;" :no="monsterData.no" width="4em" height="4em" />
-            <dl class="paramater" style="margin-left: 0.2em; width: calc(45% - 4.5em - 0.2em); float: left;">
+          <div style="border: #CC0 solid 0.1em; background: #961; padding: 0.3em; padding-bottom: 0.55em; border-radius: 0.5em 0.5em;">
+            <monster-icon no-link style="float: left; margin: 0.1em;" :no="monsterData.no" width="4.15em" height="4.15em" />
+            <dl class="paramater" style="margin-left: 0.2em; margin-bottom: 0.4em; width: calc(45% - 4.2em - 0.2em); float: left;">
               <dt>HP:</dt><dd>{{ monsterData.maxParam.hp | addComma }}</dd>
               <dt>攻撃:</dt><dd>{{ monsterData.maxParam.attack | addComma }}</dd>
               <dt>回復:</dt><dd>{{ monsterData.maxParam.recovery | addComma }}</dd>
             </dl>
-            <div style="margin-left: 45%;">
-              <div style="float: right; border: 0.1em solid #321; background: #333; padding: 0 0.1em; border-radius: 0.3em 0.3em;">
-                コスト:<span style="display: inline-block; width: 3em; text-align: right;">{{ monsterData.cost || '不明' }}</span>
+            <div style="margin-left: 47%;">
+              <div style="float: right; border: 0.2em solid #321; background: #333; margin: 0.2em 0.1em; ; padding: 0 0.1em; border-radius: 0.4em 0.4em;">
+                コスト:<span style="display: inline-block; width: 2.5em; text-align: right;">{{ monsterData.cost || '不明' }}</span>
               </div>
               <div style="white-space: pre; padding-top: 1.45em;">
                 <div :style="{ color: (monsterData.overLimit === 1) ? '#09F' : ''}">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
@@ -433,7 +433,7 @@ export default {
   methods: {
     /** モンスター情報表示領域のフォントサイズを、領域の横幅をもとに更新する。 */
     updateInfoFontSize: function () {
-      this.infoFontSize = document.getElementById('monsterInfo').clientWidth * 0.037;
+      this.infoFontSize = document.getElementById('monsterInfo').clientWidth * 0.0375;
     },
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
@@ -542,9 +542,13 @@ div.monsterImage {
 
 dl.paramater {
   margin: 0;
+  line-height: 1.4em;
+  * {
+    font-size: 1.3em;
+  }
+
   dt {
     float: left;
-    width: 3em;
   }
   dd {
     margin: 0;
@@ -557,15 +561,17 @@ div.skill {
   overflow: hidden;
   border: #aa0 0.1em solid;
   background: #600;
-  border-radius: 0.3em 0.3em;
+  border-radius: 0.4em 0.4em;
+  margin-top: 0.4em;
 
   div.skillHeader {
-    height: 1.7em;
-    padding: 0.1em;
+    height: 1.6em;
+    padding: 0.15em;
 
     div.skillLogo {
-      margin-right: 0.2em;
-      line-height: 1.3em;
+      margin: 0em 0.28em 0em 0em;
+      padding: 0em 0.12em;
+      line-height: 1.1em;
       border: #aa0 0.1em solid;
       background: #960;
       overflow: hidden;
@@ -576,8 +582,9 @@ div.skill {
   }
 
   div.skillDescription {
-    height: 3em;
-    padding: 0.1em;
+    height: 2.55em;
+    padding: 0.25em 0.15em;
+    line-height: 1.1em;
     color: #000;
     background: #FFE;
     white-space: pre;
