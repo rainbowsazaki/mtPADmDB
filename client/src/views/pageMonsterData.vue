@@ -607,7 +607,7 @@ div.skill {
 
   div.skillDescription {
     height: 2.55em;
-    padding: 0.25em 0.15em;
+    padding: 0.2em 0.15em;
     line-height: 1.1em;
     color: #000;
     background: #FFE;
