@@ -46,9 +46,9 @@
           <div style="border: #fddb70 solid 0.1em; background: linear-gradient(#a07b44, #382717); padding: 0.3em; padding-bottom: 0.55em; border-radius: 0.5em 0.5em;">
             <monster-icon no-link style="float: left; margin: 0.1em;" :no="monsterData.no" width="4.15em" height="4.15em" />
             <dl class="paramater" style="margin-left: 0.2em; margin-bottom: 0.4em; width: calc(45% - 4.2em - 0.2em); float: left;">
-              <dt>HP:</dt><dd>{{ monsterData.maxParam.hp | addComma }}</dd>
-              <dt>攻撃:</dt><dd>{{ monsterData.maxParam.attack | addComma }}</dd>
-              <dt>回復:</dt><dd>{{ monsterData.maxParam.recovery | addComma }}</dd>
+              <dt>HP:</dt><dd>{{ monsterData.maxParam.hp === null ? '不明' : monsterData.maxParam.hp | addComma }}</dd>
+              <dt>攻撃:</dt><dd>{{ monsterData.maxParam.attack === null ? '不明' : monsterData.maxParam.attack | addComma }}</dd>
+              <dt>回復:</dt><dd>{{ monsterData.maxParam.recovery === null ? '不明' : monsterData.maxParam.recovery | addComma }}</dd>
             </dl>
             <div style="margin-left: 47%;">
               <div style="float: right; border: 0.2em solid #563e22; background: #2f2b28; box-shadow: 0 0.2em 0.1em 0.03em rgba(0,0,0,0.4) inset; margin: 0.2em 0.1em; padding: 0 0.1em; border-radius: 0.4em 0.4em;">
