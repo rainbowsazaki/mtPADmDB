@@ -60,7 +60,7 @@
                 コスト:<span style="display: inline-block; width: 2.5em; text-align: right;">{{ monsterData.cost || '不明' }}</span>
               </div>
               <div style="white-space: pre; padding-top: 1.45em;">
-                <div :style="{ color: (monsterData.overLimit === 1) ? '#0FF' : ''}">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
+                <div :style="{ color: (monsterData.overLimit === 1) ? '#85bcfd' : ''}">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
                 <div>経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp | addComma }}</div>
               </div>
             </div>
