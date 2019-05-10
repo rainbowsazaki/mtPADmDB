@@ -56,7 +56,7 @@
               </div>
               <div style="white-space: pre; padding-top: 1.45em;">
                 <div :style="{ color: (monsterData.overLimit === 1) ? '#0FF' : ''}">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
-                <div>経験値:{{ monsterData.maxExp || '不明' | addComma }}</div>
+                <div>経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp | addComma }}</div>
               </div>
             </div>
 
