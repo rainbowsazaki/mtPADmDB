@@ -26,7 +26,7 @@
             </div>
             <div style="position: absolute; right: 0.7em; top: 0.2em;">
               <span v-if="monsterData.awakens[0] === 0" />
-              <span v-else-if="monsterData.awakens[0] === null">？</span>
+              <div v-else-if="monsterData.awakens[0] === null" class="awakenDummy">？</div>
               <ul v-else style="list-style: none; margin: 0; padding: 0;">
                 <li v-for="(awaken, n) in monsterData.awakens" style="line-height: 1.8em;" :key="`awakenNo${n}`">
                   <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.25em; height: 1.25em;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
@@ -34,10 +34,10 @@
               </ul>
             </div>
             <div v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length" style="position: absolute; right: 2.5em; top: 0.2em;">
-              <ul style="list-style: none; margin: 0; padding: 0;">
+              <div v-if="monsterData.superAwakens[0] === null" class="awakenDummy">？</div>
+              <ul v-else style="list-style: none; margin: 0; padding: 0;">
                 <li v-for="superAwaken in monsterData.superAwakens" style="line-height:1.8em;" :key="`superAwaken${superAwaken}`">
                   <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" style="width: 1.25em; height: 1.25em;" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
-                  <span v-else>不明</span>
                 </li>
               </ul>
             </div>
@@ -548,6 +548,17 @@ div.monsterImage {
     display: block;
     margin: 0 auto;
   }
+}
+
+.awakenDummy {
+  border: 0.05em solid #99ff32;
+  background: linear-gradient(#559920, #3d4c11);
+  width: 1.25em;
+  height: 1.25em;
+  line-height: 1.125em;
+  text-align: center;
+  box-shadow: 0 0.1em 0.1em 0.03em rgba(0,0,0,0.4) inset;
+  border-radius: 0.2em;
 }
 
 dl.paramater {
