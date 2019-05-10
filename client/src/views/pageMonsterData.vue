@@ -76,7 +76,9 @@
                   最大Lv.<span v-if="skillDetails.maxLevel">{{ skillDetails.maxLevel }} ターン:{{ skillDetails.baseTurn - skillDetails.maxLevel + 1 }}</span><span v-else>不明</span>
                 </div>
               </div>
-              <div class="skillDescription" style="background: #b1aaa0; clear: both;">{{ skillDetails.description }}</div>
+              <div class="skillDescription" style="background: #b1aaa0; clear: both;">
+                <div class="stretch">{{ skillDetails.description }}</div>
+              </div>
             </div>
 
             <div class="skill">
@@ -91,7 +93,9 @@
                   <router-link v-else style="color: #82ff81;" :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
                 </div>
               </div>
-              <div class="skillDescription" style="background: #d0cc82;" v-html="leaderSkillDescriptionHtml" />
+              <div class="skillDescription" style="background: #d0cc82;">
+                <div class="stretch" v-html="leaderSkillDescriptionHtml" />
+              </div>
             </div>
           </div>
         </div>
@@ -438,10 +442,30 @@ export default {
   beforeDestroy: function () {
     window.removeEventListener('resize', this.updateInfoFontSize);
   },
+  updated: function () {
+    const elms = document.getElementsByClassName('stretch');
+    for (const elm of elms) {
+      this.stretchElement(elm);
+    }
+  },
   methods: {
     /** モンスター情報表示領域のフォントサイズを、領域の横幅をもとに更新する。 */
     updateInfoFontSize: function () {
       this.infoFontSize = document.getElementById('monsterInfo').clientWidth * 0.0375;
+    },
+    /** 指定された要素の横幅が親要素より大きい場合に、親要素の横幅に収まるように縮小させる。 */
+    stretchElement: function (elm) {
+      const parentWidth = parseInt(getComputedStyle(elm.parentNode).width);
+      // そのままだと親要素以上のサイズにはならないので、 position を absolute にした状態で計測する。
+      elm.style.transform = '';
+      const beforePosition = elm.style.position;
+      elm.style.position = 'absolute';
+      const width = elm.offsetWidth;
+      if (parentWidth < width) {
+        elm.style.transform = 'scaleX(' + (parentWidth / width) + ')';
+        elm.style.transformOrigin = 'left';
+      }
+      elm.style.position = beforePosition;
     },
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
