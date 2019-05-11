@@ -72,13 +72,16 @@
                     スキル
                   </div>
                 </div>
-                <div style="float: left;">
-                  <span v-if="!skillDetails.name" style="color: #85bcfd;">不明</span>
-                  <router-link v-else style="color: #85bcfd;" :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{ skillDetails.name }}</router-link>
-                </div>
-                <div v-if="skillDetails.baseTurn >= 1" style="text-align: right;">
-                  Lv.1 ターン:{{ skillDetails.baseTurn }}
-                  最大Lv.<span v-if="skillDetails.maxLevel">{{ skillDetails.maxLevel }} ターン:{{ skillDetails.baseTurn - skillDetails.maxLevel + 1 }}</span><span v-else>不明</span>
+                <div class="skillName">
+                  <div class="stretch" style="text-align: right;">
+                    <div style="float:left; margin-right: 0.2em;">
+                      <span v-if="!skillDetails.name" style="color: #85bcfd;">不明</span>
+                      <router-link v-else style="color: #85bcfd;" :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{ skillDetails.name }}</router-link>
+                    </div>
+                    <span v-if="skillDetails.baseTurn >= 1">
+                      <span style="color: #0FF;">最大</span>Lv.<span v-if="skillDetails.maxLevel">{{ skillDetails.maxLevel }} ターン:{{ skillDetails.baseTurn - skillDetails.maxLevel + 1 }}</span><span v-else>不明</span>
+                    </span>
+                  </div>
                 </div>
               </div>
               <div class="skillDescription" style="background: #b1aaa0; clear: both;">
@@ -93,9 +96,11 @@
                     リーダースキル
                   </div>
                 </div>
-                <div>
-                  <span v-if="!leaderSkillDetails.name" style="color: #82ff81;">不明</span>
-                  <router-link v-else style="color: #82ff81;" :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
+                <div class="skillName">
+                  <div class="stretch">
+                    <span v-if="!leaderSkillDetails.name" style="color: #82ff81;">不明</span>
+                    <router-link v-else style="color: #82ff81;" :to="{ name: 'leaderSkillDetails', params: { no: leaderSkillDetails.no }}">{{ leaderSkillDetails.name }}</router-link>
+                  </div>
                 </div>
               </div>
               <div class="skillDescription" style="background: #d0cc82;">
@@ -460,6 +465,7 @@ export default {
     },
     /** 指定された要素の横幅が親要素より大きい場合に、親要素の横幅に収まるように縮小させる。 */
     stretchElement: function (elm) {
+      // 子要素を表示していることによって親要素のサイズか変わる可能性があるので、非表示に下状態で親要素のサイズを取得する。
       const tempDisplay = elm.style.display;
       elm.style.display = 'none';
       const parentWidth = parseInt(getComputedStyle(elm.parentNode).width) - 0.2 * this.infoFontSize;
@@ -615,22 +621,31 @@ div.skill {
   margin-top: 0.4em;
 
   div.skillHeader {
+    display: table;
+    width: 100%;
     height: 1.6em;
     padding: 0.15em;
+    white-space: nowrap;
     box-shadow: 0 0.2em 0.1em 0.03em rgba(0,0,0,0.6) inset;
 
     div.skillLogo {
-      margin: 0em 0.28em 0em 0em;
+      display: table-cell;
+      width: 1px;
       padding: 0em 0.12em;
       line-height: 1.1em;
       border: #9b733f 0.1em solid;
       background: #774433;
       overflow: hidden;
-      float: left;
       text-shadow: none;
       border-radius: 0.4em 0.4em;
       -webkit-text-stroke: 0.08em #000;
       font-weight: 900;
+    }
+
+    div.skillName {
+      display: table-cell;
+      padding-left: 0.28em;
+      line-height: 1em;
     }
   }
 
