@@ -460,17 +460,17 @@ export default {
     },
     /** 指定された要素の横幅が親要素より大きい場合に、親要素の横幅に収まるように縮小させる。 */
     stretchElement: function (elm) {
-      const parentWidth = parseInt(getComputedStyle(elm.parentNode).width);
-      // そのままだと親要素以上のサイズにはならないので、 position を absolute にした状態で計測する。
+      const tempDisplay = elm.style.display;
+      elm.style.display = 'none';
+      const parentWidth = parseInt(getComputedStyle(elm.parentNode).width) - 0.2 * this.infoFontSize;
+      elm.style.display = tempDisplay;
+
       elm.style.transform = '';
-      const beforePosition = elm.style.position;
-      elm.style.position = 'absolute';
-      const width = elm.offsetWidth;
+      const width = elm.scrollWidth;
       if (parentWidth < width) {
         elm.style.transform = 'scaleX(' + (parentWidth / width) + ')';
         elm.style.transformOrigin = 'left';
       }
-      elm.style.position = beforePosition;
     },
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
