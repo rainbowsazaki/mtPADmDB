@@ -394,6 +394,7 @@ export function toAimaiSearch (word) {
 
 /** リーダースキルの効果をゲーム内の表記と同様の表示になるよう装飾した HTML を作成する。 */
 export function leaderSkillDescriptionToDecoratedHtml (description) {
+  if (typeof description !== 'string') { return description; }
   const escapedDescription = escapeHtml(description);
   return escapedDescription.replace(/^(【.*】|ドロップを\d+個以下で消せない)+/, '<span style="color:rgba(224, 0, 0, 0.8);">$&</span>');
 }
