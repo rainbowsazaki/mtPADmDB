@@ -1,7 +1,7 @@
 <template>
   <div :class="`type${type}`" style="border: 1px solid black; background: #960;">
     <div style="display: inline-block; background:#F90; padding: 0.1em;">
-      <div class="typeName">{{ evolutionTypeTable[type] }}</div>
+      <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
       <div>
         <monster-icon :no="targetNo" width="3.6em" height="3.6em" />
       </div>
@@ -56,7 +56,20 @@ export default {
 <style lang="scss" scoped>
 .typeName {
   font-size: 0.9em;
+  line-height: 1em;
+  margin: 0.25em 0;
+  color: #FFF;
+  background: #FFF;
+  -webkit-text-fill-color: transparent;
   font-weight: bold;
+
+  $shadowBlur: 0.4px;
+  $shadowColor: rgba(0,0,0,1);
+  filter:
+    drop-shadow(0px 0px $shadowBlur $shadowColor)
+    drop-shadow(0px 0px $shadowBlur $shadowColor)
+    drop-shadow(0px 0px $shadowBlur $shadowColor)
+    drop-shadow(0px 0px $shadowBlur $shadowColor);
 }
 
 </style>
