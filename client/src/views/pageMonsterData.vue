@@ -149,80 +149,16 @@
 
     <div v-if="monsterData.evolutionType !== 0">
       <h3 class="h4">このモンスターへの進化</h3>
-      <table class="table table-bordered table-sm">
-        <tr class="thead-light"><th colspan="2">{{ evolutionTypeTable[monsterData.evolutionType] }}</th></tr>
-        <template v-if="monsterData.evolutionType !== null">
-          <tr><td colspan="2">
-            <template v-if="monsterData.evolution.baseNo">
-              <monster-icon no-link :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
-              ←
-              <router-link :to="{ name:'monsterDetails', params: { no: monsterData.evolution.baseNo }}">
-                <monster-icon no-link :no="monsterData.evolution.baseNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-                No. {{ monsterData.evolution.baseNo }} {{ monsterTable[monsterData.evolution.baseNo] && monsterTable[monsterData.evolution.baseNo].name }}
-              </router-link>
-            </template>
-            <span v-else>進化元不明</span>
-          </td></tr>
-          <tr class="thead-light"><th style="width: 3em;">素材</th><td>
-            <ul v-if="monsterData.evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
-              <template v-for="(material, n) in monsterData.evolution.materials">
-                <li v-if="material" style="margin-right: 2px;" :key="`materialNo${n}`">
-                  <router-link :to="{ name:'monsterDetails', params: { no: material }}">
-                    <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-                  </router-link>
-                </li>
-              </template>
-            </ul>
-            <span v-else>不明</span>
-          </td></tr>
-          <tr><td colspan="2">
-            <router-link :to="{ name: 'evolutionMaterial', params: { no: monsterData.no } }">
-              作成に必要な全モンスター一覧へ
-            </router-link>
-          </td></tr>
-          <tr><td colspan="2">
-            <router-link :to="{ name: 'compare', params: { nos: `${monsterData.evolution.baseNo},${monsterData.no}` } }">
-              進化前と進化後のパラメータ比較へ
-            </router-link>
-          </td></tr>
-        </template>
-      </table>
+      <evolution-materials :type="monsterData.evolutionType" :before-no="monsterData.no" :target-no="monsterData.evolution.baseNo" :materials="monsterData.evolution.materials" />
     </div>
     <div v-if="evolutionTable[monsterData.no]">
       <h3 class="h4">このモンスターからの進化</h3>
-      <table v-for="(evolution, n) in evolutionTable[monsterData.no]" class="table table-bordered table-sm" :key="`evolutionNo${n}`">
-        <tr class="thead-light"><th colspan="2">{{ evolutionTypeTable[evolution.type] }}</th></tr>
-        <tr><td colspan="2">
-          <monster-icon no-link :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
-          →
-          <router-link v-if="evolution.no" :to="{ name:'monsterDetails', params: { no: evolution.no }}">
-            <monster-icon no-link :no="evolution.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-            No. {{ evolution.no }} {{ monsterTable[evolution.no] && monsterTable[evolution.no].name }}
-          </router-link>
-        </td></tr>
-        <tr class="thead-light"><th style="width: 3em;">素材</th><td>
-          <ul v-if="evolution.materials[0]" style="width: 100%; list-style: none; margin: 0px; padding: 0px; display:flex;">
-            <template v-for="(material, m) in evolution.materials">
-              <li v-if="material" style="margin-right: 2px;" :key="`materialNo${m}`">
-                <router-link :to="{ name:'monsterDetails', params: { no: material }}">
-                  <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
-                </router-link>
-              </li>
-            </template>
-          </ul>
-          <span v-else>不明</span>
-        </td></tr>
-        <tr><td colspan="2">
-          <router-link :to="{ name: 'evolutionMaterial', params: { no: evolution.no } }">
-            作成に必要な全モンスター一覧へ
-          </router-link>
-        </td></tr>
-        <tr><td colspan="2">
-          <router-link :to="{ name: 'compare', params: { nos: `${monsterData.no},${evolution.no}` } }">
-            進化前と進化後のパラメータ比較へ
-          </router-link>
-        </td></tr>
-      </table>
+      <evolution-materials
+        v-for="(evolution, n) in evolutionTable[monsterData.no]" :key="`evolutionNo${n}`"
+        style="margin-bottom: 0.5em;"
+        :type="evolution.type" :before-no="monsterData.no" :target-no="evolution.no" :materials="evolution.materials"
+      />
+
       <router-link
         v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
         :to="{ name: 'compare', params: { nos: evolutionTable[monsterData.no].map(e => e.no).join(',') } }"
@@ -288,6 +224,7 @@
 import axios from 'axios';
 import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml, checkCanMixMonster } from '../mtpadmdb.js';
 import TrParam from './../components/monsterDataTrParam.vue';
+import EvolutionMaterials from './../components/monsterDataEvolutionMaterials.vue';
 
 /**
  * モンスター情報ページコンポーネント
@@ -306,7 +243,8 @@ export default {
     };
   },
   components: {
-    TrParam
+    TrParam,
+    EvolutionMaterials
   },
   props: {
     no: {
