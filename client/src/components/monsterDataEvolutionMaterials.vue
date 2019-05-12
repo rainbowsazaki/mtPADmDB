@@ -19,6 +19,20 @@
       </ul>
       <span v-else>不明</span>
     </div>
+    <div style="border-top: 1px solid #000; background: #EDA;">
+      <ul style="list-style: none; margin: 0px; padding: 0.2em;">
+        <li>
+          <router-link :to="{ name: 'evolutionMaterial', params: { no: targetNo } }">
+            作成に必要な全モンスター一覧へ
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{ name: 'compare', params: { nos: `${targetNo},${beforeNo}` } }">
+            進化前と進化後のパラメータ比較へ
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
