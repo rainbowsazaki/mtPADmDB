@@ -19,7 +19,7 @@
       </ul>
       <span v-else>不明</span>
     </div>
-    <div style="border-top: 1px solid #000; background: #EDA;">
+    <div style="border-top: 1px solid #000; background: rgba(255,255,255,0.5);">
       <ul style="list-style: none; margin: 0px; padding: 0.2em;">
         <li>
           <router-link :to="{ name: 'evolutionMaterial', params: { no: targetNo } }">
