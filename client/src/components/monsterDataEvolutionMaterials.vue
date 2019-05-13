@@ -136,6 +136,7 @@ export default {
       width: 14em;
       background: #3f3421;
       color: #FFF;
+      text-shadow: 1px 1px rgba(0,0,0,0.5);
       padding-left: 2px;
       margin-bottom: 0.1em;
       box-shadow: 0 2px 1px 0px rgba(0,0,0,0.6) inset;
