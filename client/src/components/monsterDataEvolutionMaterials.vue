@@ -48,6 +48,11 @@ export default {
       type: Number,
       default: 99
     },
+    /** 表示する内容において基準となるモンスターの番号。 */
+    beforeNo: {
+      type: Number,
+      default: null
+    },
     /** 進化後（or 進化前）のモンスターの番号。 */
     targetNo: {
       type: Number,
