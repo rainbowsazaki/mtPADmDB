@@ -1,13 +1,13 @@
 <template>
   <div :class="`type${type}`" style="border: 1px solid black;">
-    <div style="display: inline-block; background:#F90; padding: 0.1em;">
+    <div style="display: inline-block; background: linear-gradient(#9a6d36, #5b3f1e); padding: 0.1em;">
       <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
       <div>
         <monster-icon :no="targetNo" width="3.6em" height="3.6em" />
       </div>
     </div>
     <div style="display: inline-block; vertical-align:top; padding-top: 0.5em; padding-left: 0.3em;">
-      <div style="border: 0.1em solid #900; background: #C60; margin-bottom: 0.1em;">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
+      <div style="border: 0.1em solid #5b401e; background: #3f3421; color: #FFF; margin-bottom: 0.1em;">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
       <ul v-if="materials[0]" style="width: 14em; list-style: none; margin: 0px; padding: 0px; display:flex; justify-content: space-between;">
         <template v-for="(material, n) in materials">
           <li v-if="material" style="" :key="`materialNo${n}`">
