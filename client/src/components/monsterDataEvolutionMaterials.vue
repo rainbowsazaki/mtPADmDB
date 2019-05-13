@@ -13,7 +13,7 @@
           <template v-for="(material, n) in materials">
             <li v-if="material" style="" :key="`materialNo${n}`">
               <router-link :to="{ name:'monsterDetails', params: { no: material }}">
-                <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="2.7em" height="2.7em" />
+                <monster-icon :no="material" width="2.7em" height="2.7em" />
               </router-link>
             </li>
           </template>
