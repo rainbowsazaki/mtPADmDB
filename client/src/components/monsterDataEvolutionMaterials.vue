@@ -77,6 +77,8 @@ export default {
 <style lang="scss" scoped>
 
 .evolutionInfo {
+  z-index: 2;
+  position: relative;
   display: table;
   width: 100%;
 
@@ -141,9 +143,15 @@ export default {
 }
 
 .relatedLinks {
+  z-index: 1;
+  position: relative;
+  margin-top: -6px;
+  padding-top: 6px;
   border: 1px solid #000;
   border-top: none;
   background: rgba(255,255,255,0.5);
+  box-shadow: 0 10px 4px -4px rgba(0,0,0,0.5) inset;
+  border-radius: 0 0 6px 6px;
 
   ul {
     list-style: none;
@@ -152,11 +160,21 @@ export default {
   }
 }
 
+$bgColorLigntnPercent: 30%;
+
 // 通常進化
 .type1 {
+  $bgColor: #d6b67e;
+
   .materials {
-    background: #d6b67e;
+    background: $bgColor;
   }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
   .typeName {
     background: linear-gradient(#d1fc5c, #97e14b)
   }
@@ -164,9 +182,17 @@ export default {
 
 // 究極進化
 .type2 {
+  $bgColor: #d6b67e;
+  
   .materials {
-    background: #d6b67e;
+    background: $bgColor;
   }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
   .typeName {
     background: linear-gradient(#fefcae 20%, #a58a2c 50%, #fefcae 80%);
   }
@@ -174,9 +200,17 @@ export default {
 
 // 転生進化
 .type3 {
+  $bgColor: #d6b67e;
+  
   .materials {
-    background: #d6b67e;
+    background: $bgColor;
   }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
   .typeName {
     background: linear-gradient(#58c2cb 10%, #ffffff 50%, #aa8f2e 50%, #fefcb0 90%);
   }
@@ -184,9 +218,17 @@ export default {
 
 // ドット進化
 .type4 {
+  $bgColor: #bba658;
+  
   .materials {
-    background: #bba658;
+    background: $bgColor;
   }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
   .typeName {
     background: linear-gradient(#edce7c 33.3%, #e6b955 33.3% 66.6%, #b6812e 66.6%);
   }
@@ -194,9 +236,17 @@ export default {
 
 // アシスト進化
 .type5 {
+  $bgColor: #677f42;
+  
   .materials {
-    background: #677f42;
+    background: $bgColor;
   }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
   .typeName {
     background: linear-gradient(#b6ef7d 10%, #5f7926 90%);
   }
@@ -204,9 +254,17 @@ export default {
 
 // 超転生進化
 .type6 {
+  $bgColor: #d6b67e;
+
   .materials {
-    background: #d6b67e;
+    background: $bgColor;
   }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
   .typeName {
     background: linear-gradient(#ec8a33 10%, #faf462 30%, #faf462 40%, #2b4fa3 90%);
   }
