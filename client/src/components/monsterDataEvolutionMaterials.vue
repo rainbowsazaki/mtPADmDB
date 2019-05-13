@@ -1,25 +1,27 @@
 <template>
-  <div :class="`type${type}`" style="border: 1px solid black;">
-    <div style="display: inline-block; background: linear-gradient(#9a6d36, #5b3f1e); padding: 0.1em;">
-      <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
-      <div>
-        <monster-icon :no="targetNo" width="3.6em" height="3.6em" />
+  <div :class="`type${type}`">
+    <div style="display: table; width: 100%;">
+      <div style="display: table-cell; width: 4em;background: linear-gradient(#9a6d36, #5b3f1e); border: 2px solid #303030; border-right: none; padding: 0.1em; border-radius: 6px 0 0 6px;">
+        <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
+        <div>
+          <monster-icon :no="targetNo" width="3.6em" height="3.6em" />
+        </div>
+      </div>
+      <div class="materials" style="display: table-cell; vertical-align:top; border: 2px solid #2d261b; border-left: none; padding-top: 0.5em; padding-left: 0.3em; border-radius: 0 6px 6px 0;">
+        <div style="border: 0.1em solid #5b401e; width: 14em; background: #3f3421; color: #FFF; padding-left: 2px; margin-bottom: 0.1em; box-shadow: 0 2px 1px 0px rgba(0,0,0,0.6) inset; border-radius: 6px;">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
+        <ul v-if="materials[0]" style="width: 14em; list-style: none; margin: 0px; padding: 0px; display:flex; justify-content: space-between;">
+          <template v-for="(material, n) in materials">
+            <li v-if="material" style="" :key="`materialNo${n}`">
+              <router-link :to="{ name:'monsterDetails', params: { no: material }}">
+                <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="2.7em" height="2.7em" />
+              </router-link>
+            </li>
+          </template>
+        </ul>
+        <span v-else>不明</span>
       </div>
     </div>
-    <div style="display: inline-block; vertical-align:top; padding-top: 0.5em; padding-left: 0.3em;">
-      <div style="border: 0.1em solid #5b401e; background: #3f3421; color: #FFF; margin-bottom: 0.1em;">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
-      <ul v-if="materials[0]" style="width: 14em; list-style: none; margin: 0px; padding: 0px; display:flex; justify-content: space-between;">
-        <template v-for="(material, n) in materials">
-          <li v-if="material" style="" :key="`materialNo${n}`">
-            <router-link :to="{ name:'monsterDetails', params: { no: material }}">
-              <monster-icon :no="material" :monster-table="monsterTable" :image-table="imageTable" width="2.7em" height="2.7em" />
-            </router-link>
-          </li>
-        </template>
-      </ul>
-      <span v-else>不明</span>
-    </div>
-    <div style="border-top: 1px solid #000; background: rgba(255,255,255,0.5);">
+    <div style="border: 1px solid #000; border-top: none; abackground: rgba(255,255,255,0.5);">
       <ul style="list-style: none; margin: 0px; padding: 0.2em;">
         <li>
           <router-link :to="{ name: 'evolutionMaterial', params: { no: targetNo } }">
@@ -93,7 +95,9 @@ export default {
 
 // 通常進化
 .type1 {
-  background: #d6b67e;
+  .materials {
+    background: #d6b67e;
+  }
   .typeName {
     background: linear-gradient(#d1fc5c, #97e14b)
   }
@@ -101,7 +105,9 @@ export default {
 
 // 究極進化
 .type2 {
-  background: #d6b67e;
+  .materials {
+    background: #d6b67e;
+  }
   .typeName {
     background: linear-gradient(#fefcae 20%, #a58a2c 50%, #fefcae 80%);
   }
@@ -109,7 +115,9 @@ export default {
 
 // 転生進化
 .type3 {
-  background: #d6b67e;
+  .materials {
+    background: #d6b67e;
+  }
   .typeName {
     background: linear-gradient(#58c2cb 10%, #ffffff 50%, #aa8f2e 50%, #fefcb0 90%);
   }
@@ -117,7 +125,9 @@ export default {
 
 // ドット進化
 .type4 {
-  background: #bba658;
+  .materials {
+    background: #bba658;
+  }
   .typeName {
     background: linear-gradient(#edce7c 33.3%, #e6b955 33.3% 66.6%, #b6812e 66.6%);
   }
@@ -125,7 +135,9 @@ export default {
 
 // アシスト進化
 .type5 {
-  background: #677f42;
+  .materials {
+    background: #677f42;
+  }
   .typeName {
     background: linear-gradient(#b6ef7d 10%, #5f7926 90%);
   }
@@ -133,7 +145,9 @@ export default {
 
 // 超転生進化
 .type6 {
-  background: #d6b67e;
+  .materials {
+    background: #d6b67e;
+  }
   .typeName {
     background: linear-gradient(#ec8a33 10%, #faf462 30%, #faf462 40%, #2b4fa3 90%);
   }
