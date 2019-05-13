@@ -1,5 +1,5 @@
 <template>
-  <div :class="`type${type}`" style="border: 1px solid black; background: #960;">
+  <div :class="`type${type}`" style="border: 1px solid black;">
     <div style="display: inline-block; background:#F90; padding: 0.1em;">
       <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
       <div>
@@ -89,6 +89,54 @@ export default {
     drop-shadow(0px 0px $shadowBlur $shadowColor)
     drop-shadow(0px 0px $shadowBlur $shadowColor)
     drop-shadow(0px 0px $shadowBlur $shadowColor);
+}
+
+// 通常進化
+.type1 {
+  background: #d6b67e;
+  .typeName {
+    background: linear-gradient(#d1fc5c, #97e14b)
+  }
+}
+
+// 究極進化
+.type2 {
+  background: #d6b67e;
+  .typeName {
+    background: linear-gradient(#fefcae 20%, #a58a2c 50%, #fefcae 80%);
+  }
+}
+
+// 転生進化
+.type3 {
+  background: #d6b67e;
+  .typeName {
+    background: linear-gradient(#58c2cb 10%, #ffffff 50%, #aa8f2e 50%, #fefcb0 90%);
+  }
+}
+
+// ドット進化
+.type4 {
+  background: #bba658;
+  .typeName {
+    background: linear-gradient(#edce7c 33.3%, #e6b955 33.3% 66.6%, #b6812e 66.6%);
+  }
+}
+
+// アシスト進化
+.type5 {
+  background: #677f42;
+  .typeName {
+    background: linear-gradient(#b6ef7d 10%, #5f7926 90%);
+  }
+}
+
+// 超転生進化
+.type6 {
+  background: #d6b67e;
+  .typeName {
+    background: linear-gradient(#ec8a33 10%, #faf462 30%, #faf462 40%, #2b4fa3 90%);
+  }
 }
 
 </style>
