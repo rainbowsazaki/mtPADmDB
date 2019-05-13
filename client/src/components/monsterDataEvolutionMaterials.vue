@@ -90,6 +90,12 @@ export default {
     border-right: none;
     padding: 0.1em;
     border-radius: 6px 0 0 6px;
+    
+    box-shadow:
+      0 4px 2px -2px rgba(255,255,0,0.5) inset,
+      3px 0 2px -2px rgba(255,255,0,0.5) inset,
+      0 -2px 2px -2px rgba(255,255,0,0.5) inset
+    ;
   }
 
   /* これを .baseIcon の中に入れると下の .type? .typeName より優先度が高くなり下でのクラデーション背景指定が効かなくなるの外に出しておく。 */
@@ -119,6 +125,11 @@ export default {
     padding-top: 0.5em;
     padding-left: 0.3em;
     border-radius: 0 6px 6px 0;
+    
+    box-shadow:
+      0 4px 2px -2px rgba(255,255,0,0.5) inset,
+      -3px 0 2px -2px rgba(255,255,0,0.5) inset,
+      0 -2px 2px -2px rgba(255,255,0,0.5) inset;
 
     .monsterName {
       border: 0.1em solid #5b401e;
