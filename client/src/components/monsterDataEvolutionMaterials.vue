@@ -1,17 +1,17 @@
 <template>
   <div :class="`type${type}`">
-    <div style="display: table; width: 100%;">
-      <div style="display: table-cell; width: 4em;background: linear-gradient(#9a6d36, #5b3f1e); border: 2px solid #303030; border-right: none; padding: 0.1em; border-radius: 6px 0 0 6px;">
+    <div class="evolutionInfo">
+      <div class="baseIcon">
         <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
         <div>
           <monster-icon :no="targetNo" width="3.6em" height="3.6em" />
         </div>
       </div>
-      <div class="materials" style="display: table-cell; vertical-align:top; border: 2px solid #2d261b; border-left: none; padding-top: 0.5em; padding-left: 0.3em; border-radius: 0 6px 6px 0;">
-        <div style="border: 0.1em solid #5b401e; width: 14em; background: #3f3421; color: #FFF; padding-left: 2px; margin-bottom: 0.1em; box-shadow: 0 2px 1px 0px rgba(0,0,0,0.6) inset; border-radius: 6px;">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
-        <ul v-if="materials[0]" style="width: 14em; list-style: none; margin: 0px; padding: 0px; display:flex; justify-content: space-between;">
+      <div class="materials">
+        <div class="monsterName">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
+        <ul v-if="materials[0]">
           <template v-for="(material, n) in materials">
-            <li v-if="material" style="" :key="`materialNo${n}`">
+            <li v-if="material" :key="`materialNo${n}`">
               <router-link :to="{ name:'monsterDetails', params: { no: material }}">
                 <monster-icon :no="material" width="2.7em" height="2.7em" />
               </router-link>
@@ -21,8 +21,8 @@
         <span v-else>不明</span>
       </div>
     </div>
-    <div style="border: 1px solid #000; border-top: none; abackground: rgba(255,255,255,0.5);">
-      <ul style="list-style: none; margin: 0px; padding: 0.2em;">
+    <div class="relatedLinks">
+      <ul>
         <li>
           <router-link :to="{ name: 'evolutionMaterial', params: { no: targetNo } }">
             作成に必要な全モンスター一覧へ
@@ -75,22 +75,81 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.typeName {
-  font-size: 0.9em;
-  line-height: 1em;
-  margin: 0.25em 0;
-  color: #FFF;
-  background: #FFF;
-  -webkit-text-fill-color: transparent;
-  font-weight: bold;
 
-  $shadowBlur: 0.4px;
-  $shadowColor: rgba(0,0,0,1);
-  filter:
-    drop-shadow(0px 0px $shadowBlur $shadowColor)
-    drop-shadow(0px 0px $shadowBlur $shadowColor)
-    drop-shadow(0px 0px $shadowBlur $shadowColor)
-    drop-shadow(0px 0px $shadowBlur $shadowColor);
+.evolutionInfo {
+  display: table;
+  width: 100%;
+
+  .baseIcon {
+    display: table-cell;
+    width: 4em;
+    background: linear-gradient(#9a6d36, #5b3f1e);
+    border: 2px solid #303030;
+    border-right: none;
+    padding: 0.1em;
+    border-radius: 6px 0 0 6px;
+  }
+
+  /* これを .baseIcon の中に入れると下の .type? .typeName より優先度が高くなり下でのクラデーション背景指定が効かなくなるの外に出しておく。 */
+  .typeName {
+    font-size: 0.9em;
+    line-height: 1em;
+    margin: 0.25em 0;
+    color: #FFF;
+    background: #FFF;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+
+    $shadowBlur: 0.4px;
+    $shadowColor: rgba(0,0,0,1);
+    filter:
+      drop-shadow(0px 0px $shadowBlur $shadowColor)
+      drop-shadow(0px 0px $shadowBlur $shadowColor)
+      drop-shadow(0px 0px $shadowBlur $shadowColor)
+      drop-shadow(0px 0px $shadowBlur $shadowColor);
+  }
+  
+  .materials {
+    display: table-cell;
+    vertical-align:top;
+    border: 2px solid #2d261b;
+    border-left: none;
+    padding-top: 0.5em;
+    padding-left: 0.3em;
+    border-radius: 0 6px 6px 0;
+
+    .monsterName {
+      border: 0.1em solid #5b401e;
+      width: 14em;
+      background: #3f3421;
+      color: #FFF;
+      padding-left: 2px;
+      margin-bottom: 0.1em;
+      box-shadow: 0 2px 1px 0px rgba(0,0,0,0.6) inset;
+      border-radius: 6px;
+    }
+
+    ul {
+      width: 14em;
+      list-style: none;
+      margin: 0px;
+      padding: 0px;
+      display:flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+.relatedLinks {
+  border: 1px solid #000;
+  border-top: none;
+  background: rgba(255,255,255,0.5);
+
+  ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0.2em;
+  }
 }
 
 // 通常進化
