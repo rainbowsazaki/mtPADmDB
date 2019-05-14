@@ -102,10 +102,12 @@ export default {
   .typeName {
     font-size: 0.9em;
     line-height: 1em;
+    text-align: center;
     margin: 0.25em 0;
     color: #FFF;
     background: #FFF;
     -webkit-text-fill-color: transparent;
+    white-space: nowrap;
     font-weight: bold;
 
     $shadowBlur: 0.4px;
@@ -243,6 +245,9 @@ $bgColorLigntnPercent: 30%;
 
   .typeName {
     background: linear-gradient(#edce7c 33.3%, #e6b955 33.3% 66.6%, #b6812e 66.6%);
+    margin-right: -1em;
+    transform: scaleX(1 / 5 * 4);
+    transform-origin: left top;
   }
 }
 
@@ -261,6 +266,9 @@ $bgColorLigntnPercent: 30%;
 
   .typeName {
     background: linear-gradient(#b6ef7d 10%, #5f7926 90%);
+    margin-right: -2em;
+    transform: scaleX(1 / 6 * 4);
+    transform-origin: left top;
   }
 }
 
@@ -279,6 +287,9 @@ $bgColorLigntnPercent: 30%;
 
   .typeName {
     background: linear-gradient(#ec8a33 10%, #faf462 30%, #faf462 40%, #2b4fa3 90%);
+    margin-right: -1em;
+    transform: scaleX(1 / 5 * 4);
+    transform-origin: left top;
   }
 }
 
