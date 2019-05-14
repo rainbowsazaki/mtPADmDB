@@ -1,14 +1,14 @@
 <template>
   <div v-if="hasImage" class="monsterIcon" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
-      <img :src="iconPath" style="width: 100%; height: 100%;" :alt="monsterNoAndName" :key="`icon${no}`">
+      <img :src="iconPath" :alt="monsterNoAndName" :key="`icon${no}`">
     </span>
   </div>
-  <div v-else class="monsterIcon" style="position:relative; border: 1px solid #bbb; border-bottom-width: 2px;" :style="iconSizeStyleObject">
+  <div v-else class="monsterIcon monsterIconDummy" :style="iconSizeStyleObject">
     <router-link :to="routerLinkObject">
       <img v-if="hasAttr0" class="attr attr1" :src="attrPath0">
       <img v-if="hasAttr1" class="attr attr2" :src="attrPath1">
-      <div v-if="!isNaN(no)" :style="{ fontSize: fontSize, lineHeight: height }" style="text-align: center; overflow: hidden; color: #aaa;">{{ no }}</div>
+      <div v-if="!isNaN(no)" class="iconDummy" :style="{ fontSize: fontSize, lineHeight: '3em' }">{{ no }}</div>
     </router-link>
   </div>
 </template>
@@ -82,21 +82,37 @@ export default {
   a { text-decoration: none; }
 
   img {
-    $attr_size: 23%;
-    $attr_margin: 2%;
-    &.attr {
-      position: absolute;
-      width: $attr_size;
-      height: $attr_size;
-    }
-    &.attr1 {
-      left: $attr_margin;
-      top: $attr_margin;
-    }
-    &.attr2 {
-      right: $attr_margin;
-      bottom: $attr_margin;
-    }
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.monsterIconDummy {
+  position: relative;
+  border: 1px solid #bbb;
+  border-bottom-width: 2px;
+
+  $attr_size: 23%;
+  $attr_margin: 2%;
+  
+  img.attr {
+    position: absolute;
+    width: $attr_size;
+    height: $attr_size;
+  }
+  img.attr1 {
+    left: $attr_margin;
+    top: $attr_margin;
+  }
+  img.attr2 {
+    right: $attr_margin;
+    bottom: $attr_margin;
+  }
+
+  .iconDummy {
+    text-align: center;
+    overflow: hidden;
+    color: #aaa;
   }
 }
 </style>
