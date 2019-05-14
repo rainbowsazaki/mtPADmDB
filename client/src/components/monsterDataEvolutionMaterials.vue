@@ -1,5 +1,5 @@
 <template>
-  <div :class="`type${type}`">
+  <div :class="`type${type} ` + (originOfEvolution ? 'type_originOfEvolution' : '' )">
     <router-link class="evolutionInfoLink" :to="{ name: 'monsterDetails', params: { no: targetNo }}">
       <div class="evolutionInfo">
         <div class="baseIcon">
@@ -68,6 +68,11 @@ export default {
     materials: {
       type: Array,
       required: true
+    },
+    /** 進化元のモンスターの表示かどうか。 */
+    originOfEvolution: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -308,6 +313,20 @@ $bgColorLigntnPercent: 30%;
     margin-right: -1em;
     transform: scaleX(1 / 5 * 4);
     transform-origin: left top;
+  }
+}
+
+// 進化元
+.type_originOfEvolution {
+  $bgColor: #65779b;
+  
+  .materials {
+    background: $bgColor;
+  }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
   }
 }
 

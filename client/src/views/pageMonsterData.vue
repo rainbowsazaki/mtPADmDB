@@ -149,7 +149,7 @@
 
     <div v-if="monsterData.evolutionType !== 0">
       <h3 class="h4">このモンスターへの進化</h3>
-      <evolution-materials :type="monsterData.evolutionType" :before-no="monsterData.no" :target-no="monsterData.evolution.baseNo" :materials="monsterData.evolution.materials" />
+      <evolution-materials origin-of-evolution :type="monsterData.evolutionType" :before-no="monsterData.no" :target-no="monsterData.evolution.baseNo" :materials="monsterData.evolution.materials" />
     </div>
     <div v-if="evolutionTable[monsterData.no]">
       <h3 class="h4">このモンスターからの進化</h3>
