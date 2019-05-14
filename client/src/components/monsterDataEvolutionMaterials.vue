@@ -8,7 +8,9 @@
         </div>
       </div>
       <div class="materials">
-        <div class="monsterName">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
+        <div class="monsterName">
+          <div class="monsterNameText">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
+        </div>
         <ul v-if="materials[0]">
           <template v-for="(material, n) in materials">
             <li v-if="material" :key="`materialNo${n}`">
@@ -39,7 +41,7 @@
 </template>
 
 <script>
-import { constData } from '../mtpadmdb.js';
+import { constData, stretchElement } from '../mtpadmdb.js';
 
 /** モンスター情報ページの進化素材情報を表示するコンポーネント。 */
 export default {
@@ -70,6 +72,15 @@ export default {
     evolutionTypeTable: function () { return constData.evolutionTypeTable; },
     monsterTable: function () { return this.$store.state.monsterTable; },
     evolutionTable: function () { return this.$store.state.evolutionTable; }
+  },
+  mounted: function () { this.stretchMonsterName(); },
+  updated: function () { this.stretchMonsterName(); },
+  methods: {
+    /** モンスター名が長い場合に、枠のサイズに収まるように縮小する。 */
+    stretchMonsterName: function () {
+      const elm = this.$el.getElementsByClassName('monsterNameText')[0];
+      stretchElement(elm);
+    }
   }
 };
 </script>
@@ -136,6 +147,7 @@ export default {
     .monsterName {
       border: 0.1em solid #5b401e;
       width: 14em;
+      white-space: nowrap;
       background: #3f3421;
       color: #FFF;
       text-shadow: 1px 1px rgba(0,0,0,0.5);
