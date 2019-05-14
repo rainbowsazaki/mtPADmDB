@@ -222,7 +222,7 @@
 
 <script>
 import axios from 'axios';
-import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml, checkCanMixMonster } from '../mtpadmdb.js';
+import { mtpadmdb, constData, leaderSkillDescriptionToDecoratedHtml, stretchElement, checkCanMixMonster } from '../mtpadmdb.js';
 import TrParam from './../components/monsterDataTrParam.vue';
 import EvolutionMaterials from './../components/monsterDataEvolutionMaterials.vue';
 
@@ -403,18 +403,7 @@ export default {
     },
     /** 指定された要素の横幅が親要素より大きい場合に、親要素の横幅に収まるように縮小させる。 */
     stretchElement: function (elm) {
-      // 子要素を表示していることによって親要素のサイズか変わる可能性があるので、非表示に下状態で親要素のサイズを取得する。
-      const tempDisplay = elm.style.display;
-      elm.style.display = 'none';
-      const parentWidth = parseInt(getComputedStyle(elm.parentNode).width) - 0.2 * this.infoFontSize;
-      elm.style.display = tempDisplay;
-
-      elm.style.transform = '';
-      const width = elm.scrollWidth;
-      if (parentWidth < width) {
-        elm.style.transform = 'scaleX(' + (parentWidth / width) + ')';
-        elm.style.transformOrigin = 'left';
-      }
+      stretchElement(elm);
     },
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;

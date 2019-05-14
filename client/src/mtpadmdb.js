@@ -444,3 +444,21 @@ export class MultiSendBlocker {
     }
   }
 };
+
+/** 指定された要素の横幅が親要素より大きい場合に、親要素の横幅に収まるように縮小させる。 */
+export function stretchElement (elm, parentOffset) {
+  // 子要素を表示していることによって親要素のサイズか変わる可能性があるので、非表示に下状態で親要素のサイズを取得する。
+  const tempDisplay = elm.style.display;
+  elm.style.display = 'none';
+  const parentStyle = getComputedStyle(elm.parentNode);
+  const parentWidth = parseFloat(parentStyle.width) - parseFloat(parentStyle.paddingLeft) - parseFloat(parentStyle.paddingRight) -
+    parseFloat(parentStyle.borderLeftWidth) - parseFloat(parentStyle.borderRightWidth);
+  elm.style.display = tempDisplay;
+
+  elm.style.transform = '';
+  const width = elm.scrollWidth;
+  if (parentWidth < width) {
+    elm.style.transform = 'scaleX(' + (parentWidth / width) + ')';
+    elm.style.transformOrigin = 'left';
+  }
+}
