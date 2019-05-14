@@ -27,7 +27,7 @@
     </router-link>
     <div class="relatedLinks">
       <ul>
-        <li>
+        <li v-if="!originOfEvolution">
           <router-link :to="{ name: 'evolutionMaterial', params: { no: targetNo } }">
             作成に必要な全モンスター一覧へ
           </router-link>
