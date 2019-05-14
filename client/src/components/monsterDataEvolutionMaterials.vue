@@ -121,8 +121,8 @@ export default {
     white-space: nowrap;
     font-weight: bold;
 
-    $shadowBlur: 0.4px;
-    $shadowColor: rgba(0,0,0,1);
+    $shadowBlur: 1px;
+    $shadowColor: rgba(0,0,0,0.6);
     filter:
       drop-shadow(0px 0px $shadowBlur $shadowColor)
       drop-shadow(0px 0px $shadowBlur $shadowColor)
@@ -176,7 +176,7 @@ export default {
   border: 1px solid #000;
   border-top: none;
   background: rgba(255,255,255,0.5);
-  box-shadow: 0 10px 4px -4px rgba(0,0,0,0.5) inset;
+  box-shadow: 0 11px 4px -4px rgba(0,0,0,0.3) inset;
   border-radius: 0 0 6px 6px;
 
   ul {
