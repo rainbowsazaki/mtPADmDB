@@ -1,28 +1,30 @@
 <template>
   <div :class="`type${type}`">
-    <div class="evolutionInfo">
-      <div class="baseIcon">
-        <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
-        <div>
-          <monster-icon :no="targetNo" width="3.6em" height="3.6em" />
+    <router-link class="evolutionInfoLink" :to="{ name: 'monsterDetails', params: { no: targetNo }}">
+      <div class="evolutionInfo">
+        <div class="baseIcon">
+          <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
+          <div>
+            <monster-icon :no="targetNo" width="3.6em" height="3.6em" />
+          </div>
+        </div>
+        <div class="materials">
+          <div class="monsterName">
+            <div class="monsterNameText">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
+          </div>
+          <ul v-if="materials[0]">
+            <template v-for="(material, n) in materials">
+              <li v-if="material" :key="`materialNo${n}`">
+                <router-link :to="{ name:'monsterDetails', params: { no: material }}">
+                  <monster-icon :no="material" width="2.7em" height="2.7em" />
+                </router-link>
+              </li>
+            </template>
+          </ul>
+          <span v-else>不明</span>
         </div>
       </div>
-      <div class="materials">
-        <div class="monsterName">
-          <div class="monsterNameText">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
-        </div>
-        <ul v-if="materials[0]">
-          <template v-for="(material, n) in materials">
-            <li v-if="material" :key="`materialNo${n}`">
-              <router-link :to="{ name:'monsterDetails', params: { no: material }}">
-                <monster-icon :no="material" width="2.7em" height="2.7em" />
-              </router-link>
-            </li>
-          </template>
-        </ul>
-        <span v-else>不明</span>
-      </div>
-    </div>
+    </router-link>
     <div class="relatedLinks">
       <ul>
         <li>
@@ -86,6 +88,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+a.evolutionInfoLink:hover {
+  text-decoration:none;
+}
 
 .evolutionInfo {
   z-index: 2;
