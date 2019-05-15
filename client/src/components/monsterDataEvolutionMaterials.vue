@@ -110,7 +110,7 @@ a.evolutionInfoLink:hover {
     background: linear-gradient(#9a6d36, #5b3f1e);
     border: 2px solid #303030;
     border-right: none;
-    padding: 0.1em;
+    padding: 0.2em;
     border-radius: 6px 0 0 6px;
     
     box-shadow:
