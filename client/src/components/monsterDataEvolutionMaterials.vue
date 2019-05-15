@@ -338,7 +338,7 @@ $bgColorLigntnPercent: 30%;
 }
 
 // 進化元
-.type_originOfEvolutionn {
+.type_originOfEvolution {
   $bgColor: #65779b;
   
   .materials {
