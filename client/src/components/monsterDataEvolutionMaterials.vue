@@ -32,7 +32,7 @@
             作成に必要な全モンスター一覧へ
           </router-link>
         </li>
-        <li>
+        <li v-if="targetNo">
           <router-link :to="{ name: 'compare', params: { nos: originOfEvolution ? `${targetNo},${beforeNo}` : `${beforeNo},${targetNo}` } }">
             進化前と進化後のパラメータ比較へ
           </router-link>
