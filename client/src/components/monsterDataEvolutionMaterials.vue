@@ -173,8 +173,13 @@ a.evolutionInfoLink:hover {
       list-style: none;
       margin: 0px;
       padding: 0px;
-      display:flex;
-      justify-content: space-between;
+
+      li {
+        display: inline-block;
+      }
+      li + li {
+        margin-left: (14em - 2.7em * 5) / 4;
+      }
     }
   }
 }
