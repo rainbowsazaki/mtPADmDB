@@ -21,7 +21,7 @@
               </li>
             </template>
           </ul>
-          <span v-else>不明</span>
+          <span v-else>進化素材不明</span>
         </div>
       </div>
     </router-link>
