@@ -316,8 +316,29 @@ $bgColorLigntnPercent: 30%;
   }
 }
 
+// 進化形式不明
+.typenull {
+  $bgColor: #ccccdd;
+
+  .materials {
+    background: $bgColor;
+  }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+  
+  .typeName {
+    background: linear-gradient(#dddde0 10%, #bbbbc1 90%);
+    margin-right: -2em;
+    transform: scaleX(1 / 6 * 4);
+    transform-origin: left top;
+  }
+}
+
 // 進化元
-.type_originOfEvolution {
+.type_originOfEvolutionn {
   $bgColor: #65779b;
   
   .materials {
