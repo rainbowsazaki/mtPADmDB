@@ -10,7 +10,7 @@
         </div>
         <div class="materials">
           <div class="monsterName">
-            <div class="monsterNameText">{{ monsterTable[targetNo] && monsterTable[targetNo].name }}</div>
+            <div class="monsterNameText">{{ monsterTable[targetNo] ? monsterTable[targetNo].name : '？？？？' }}</div>
           </div>
           <ul v-if="materials[0]">
             <template v-for="(material, n) in materials">
