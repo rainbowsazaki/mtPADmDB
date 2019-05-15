@@ -482,6 +482,14 @@ export default {
 
 @import url('https://fonts.googleapis.com/css?family=M+PLUS+1p:700,900');
 
+h3 {
+  color: #ffffff;
+  background: linear-gradient(#798320, #394a14);
+  border: 0.1em #b1ba39 solid;
+  border-left-width: 0.05em;
+  padding: 0.2em 0.2em;
+  border-radius: 0 0.5em 0.5em 0;
+}
 .paramAlert {
   color: rgba(224, 0, 0, 0.8);
 }
