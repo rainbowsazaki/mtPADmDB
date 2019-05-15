@@ -33,7 +33,7 @@
           </router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'compare', params: { nos: `${targetNo},${beforeNo}` } }">
+          <router-link :to="{ name: 'compare', params: { nos: originOfEvolution ? `${targetNo},${beforeNo}` : `${beforeNo},${targetNo}` } }">
             進化前と進化後のパラメータ比較へ
           </router-link>
         </li>
