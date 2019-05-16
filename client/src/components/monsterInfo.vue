@@ -1,5 +1,5 @@
 <template>
-  <div clss="monsterInfo" style="color: #FFF; line-height: 1.3em; font-family: 'M PLUS 1p', sans-serif; text-shadow: 0.1em 0.1em 0 rgba(0,0,0, 0.5); background: #000; border: 1px solid black; margin-bottom: 1rem;" :style="{ 'font-size': `${infoFontSize}px` }">
+  <div class="monsterInfo" style="color: #FFF; line-height: 1.3em; font-family: 'M PLUS 1p', sans-serif; text-shadow: 0.1em 0.1em 0 rgba(0,0,0, 0.5); background: #000; border: 1px solid black; margin-bottom: 1rem;" :style="{ 'font-size': `${infoFontSize}px` }">
     <div style="background: linear-gradient(#798320, #394a14); border: 0.1em #b1ba39 solid; border-left: none; margin-top: 1em; margin-right: 5em; padding: 0.1em 0em 0.2em 4.4em; line-height: 1.1em; border-radius: 0 0.5em 0.5em 0;">
       <div>
         <span style="display: inline-block; width: 6.5em;">No.{{ monsterData.no }}</span>
