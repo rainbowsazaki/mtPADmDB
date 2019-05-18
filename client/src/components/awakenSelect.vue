@@ -54,9 +54,9 @@ export default {
     /** ゲーム内の覚醒フィルタでの覚醒の並び順を示すテーブル。 0 は改行。 */
     awakenSortList () {
       return [
-        [4, 5, 6, 7, 8, 1, 49, 57],
-        [14, 15, 16, 17, 18, 2, 50, 58],
-        [22, 23, 24, 25, 26, 3, 51, 59],
+        [4, 5, 6, 7, 8, 1, 49, 57, 65],
+        [14, 15, 16, 17, 18, 2, 50, 58, 66],
+        [22, 23, 24, 25, 26, 3, 51, 59, 67],
         [9, 10, 20, 11, 12, 13, 52, 60],
         [19, 21, 27, 28, 29, 30, 53, 61],
         [32, 31, 33, 34, 35, 36, 54, 62],
@@ -134,7 +134,7 @@ export default {
     height: 24px;
     background: #CCC;
     border-radius: 4px;
-    margin: 3px;
+    margin: 3px 5px;
   }
   img.hasItem {
     cursor: pointer;
@@ -193,11 +193,11 @@ export default {
 .selectArea {
 
   td {
-    padding: 1.4vw;
+    padding: 1.0vw;
   }
   .item img {
-    width: 8vw;
-    height: 8vw;
+    width: 7.6vw;
+    height: 7.6vw;
   }
 }
 
