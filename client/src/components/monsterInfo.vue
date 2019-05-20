@@ -218,6 +218,7 @@ div.monsterImage {
   width: 1.25em;
   height: 1.25em;
   line-height: 1.125em;
+  margin-top: 0.3em;
   text-align: center;
   box-shadow: 0 0.1em 0.1em 0.03em rgba(0,0,0,0.4) inset;
   border-radius: 0.2em;
