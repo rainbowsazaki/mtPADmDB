@@ -8,9 +8,9 @@
         </router-link>
       </li>
       
-      <li v-for="n in paginationNos" :class="{ 'page-item': 1, 'active': n === page }" style="min-width: 2.2em; text-align: center;" :key="`page${n}`">
-        <router-link v-if="n !== page" class="page-link" style="padding:.25rem .2rem;" :to="createToObj(n)" append>{{ n }}</router-link>
-        <span v-else class="page-link" style="padding:.25rem .35rem;">{{ n }}</span>
+      <li v-for="n in paginationNos" class="numberPage" :class="{ 'page-item': 1, 'active': n === page }" :key="`page${n}`">
+        <router-link v-if="n !== page" class="page-link" :to="createToObj(n)" append>{{ n }}</router-link>
+        <span v-else class="page-link">{{ n }}</span>
       </li>
 
       <li class="page-item" :class="{ disabled: page >= pageCount }">
@@ -103,3 +103,17 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+li.numberPage {
+  min-width: 2.2em;
+  text-align: center;
+
+  a {
+    padding:.25rem .2rem;
+  }
+  span {
+    padding:.25rem .35rem;
+  }
+}
+</style>
