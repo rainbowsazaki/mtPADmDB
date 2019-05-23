@@ -418,7 +418,7 @@ export default {
     background: #FFF;
     cursor: pointer;
 
-    .open {
+    &.open {
       border-bottom-style: none;
       border-radius: 4px 4px 0 0;
     }
