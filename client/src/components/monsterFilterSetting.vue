@@ -410,18 +410,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   #filterTrigger {
     border: 1px solid #ced4da;
     border-radius: 4px;
     padding: 4px 4px 2px 4px;
     background: #FFF;
     cursor: pointer;
-  }
 
-  #filterTrigger.open {
-    border-bottom-style: none;
-    border-radius: 4px 4px 0 0;
+    .open {
+      border-bottom-style: none;
+      border-radius: 4px 4px 0 0;
+    }
   }
 
   #filterForm {
@@ -432,20 +432,23 @@ export default {
     padding: 8px 4px 4px 4px;
   }
 
-  input.imageCheckBox { display: none; }
-  input.imageCheckBox + label {
-    filter: opacity(50%) grayscale(95%);
-  }
+  input.imageCheckBox {
+    display: none;
 
-  input.imageCheckBox:checked + label {
-    filter: opacity(100%) grayscale(0%);
-  }
+    + label {
+      filter: opacity(50%) grayscale(95%);
+      
+      span {
+        border: 1px solid #999;
+        border-radius: 0.5em;
+        background: #eee;
+        padding: 0.25rem;
+      }
+    }
 
-  input.imageCheckBox + label span {
-    border: 1px solid #999;
-    border-radius: 0.5em;
-    background: #eee;
-    padding: 0.25rem;
+    &:checked + label {
+      filter: opacity(100%) grayscale(0%);
+    }
   }
 
   #filterForm {
