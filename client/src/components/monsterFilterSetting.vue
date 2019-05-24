@@ -1,6 +1,6 @@
 <template>
 
-  <div id="filter" style="margin-bottom: 4px;">
+  <div id="filter">
     <div v-if="!hideName" class="row">
       <div class="col-sm-12 mb-2">
         <input type="text" class="form-control" placeholder="モンスター名検索" v-model="filter.name">
@@ -10,8 +10,8 @@
     <span id="filterTrigger" :class="{ open: isOpenFilterTrigger }" @click="isVisibleFilter = !isVisibleFilter">
       その他絞り込み
       <svg viewBox="0 0 100 100" width="1em" height="1em">
-        <path v-if="isVisibleFilter" d="M50 0 L10 75 L90 75 Z" style="fill:black;" />
-        <path v-else d="M50 75 L10 0 L90 0 Z" style="fill:black;" />
+        <path v-if="isVisibleFilter" d="M50 0 L10 75 L90 75 Z" />
+        <path v-else d="M50 75 L10 0 L90 0 Z" />
       </svg>
     </span>
     <transition name="filter"
@@ -25,10 +25,10 @@
           <label class="col-sm-2 col-form-label">主属性</label>
           <div class="col-sm-10">
             <template v-for="(attrName, attr) in attributeTable">
-              <span style="margin-right: 0.5rem;" :key="`attr${attr}`" :style="{ visibility: attr === '0' ? 'hidden' : 'visible' }">
+              <span :key="`attr${attr}`">
                 <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
                 <label :for="`check_mainAttr_${attr}`">
-                  <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+                  <img v-if="attr !== '0' && attr !== 'null'" :src="`./image/attribute/${attr}.png`">
                   <span v-else>{{ attrName }}</span>
                 </label>
               </span>
@@ -39,10 +39,10 @@
           <label class="col-sm-2 col-form-label">複属性</label>
           <div class="col-sm-10">
             <template v-for="(attrName, attr) in attributeTable">
-              <span style="margin-right: 0.5rem;" :key="`attr${attr}`">
+              <span :key="`attr${attr}`">
                 <input type="checkbox" class="imageCheckBox" v-model="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
                 <label :for="`check_subAttr_${attr}`">
-                  <img v-if="attr !== '0' && attr !== 'null'" style="width: 24px; height: 24px;" :src="`./image/attribute/${attr}.png`">
+                  <img v-if="attr !== '0' && attr !== 'null'" :src="`./image/attribute/${attr}.png`">
                   <span v-else>{{ attrName }}</span>
                 </label>
               </span>
@@ -53,10 +53,10 @@
           <label class="col-sm-2 col-form-label">タイプ</label>
           <div class="col-sm-10">
             <template v-for="(typeInfo, type) in typeTable">
-              <span v-if="type !== '0'" style="margin-right: 0.5rem" :key="`type${type}`">
+              <span v-if="type !== '0'" :key="`type${type}`">
                 <input type="checkbox" class="imageCheckBox" v-model="filter.type" :value="type" :id="`type_${type}`">
                 <label :for="`type_${type}`">
-                  <img v-if="type !== 'null'" style="width: 24px; height: 24px;" :src="`./image/type/${type}.png`">
+                  <img v-if="type !== 'null'" :src="`./image/type/${type}.png`">
                   <span v-else>{{ typeInfo.name }}</span>
                 </label>
               </span>
@@ -411,6 +411,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  #filter {
+    margin-bottom: 4px;
+  }
+
   #filterTrigger {
     border: 1px solid #ced4da;
     border-radius: 4px;
@@ -422,6 +426,10 @@ export default {
       border-bottom-style: none;
       border-radius: 4px 4px 0 0;
     }
+
+    svg {
+      fill: #000;
+    }
   }
 
   #filterForm {
@@ -430,14 +438,21 @@ export default {
     background: #FFF;
     margin-top: -2px;
     padding: 8px 4px 4px 4px;
+    overflow: hidden;
   }
 
   input.imageCheckBox {
     display: none;
 
     + label {
+      margin-right: 0.5rem;
       filter: opacity(50%) grayscale(95%);
-      
+
+      img {
+        width: 24px;
+        height: 24px;
+      }
+
       span {
         border: 1px solid #999;
         border-radius: 0.5em;
@@ -451,8 +466,8 @@ export default {
     }
   }
 
-  #filterForm {
-    overflow: hidden;
+  #check_mainAttr_0 + label {
+    visibility: hidden;
   }
 
   .filter-enter-active {
