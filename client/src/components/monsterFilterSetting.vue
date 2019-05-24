@@ -82,6 +82,18 @@
           </div>
         </div>
         <div class="form-group row">
+          <label class="col-sm-2 col-form-label">スキルブースト数</label>
+          <div class="col-sm-10">
+            <input type="range" v-model.number="filter.skillBoostMin" min="0" max="9" step="1">
+            <input type="number" v-model.number="filter.skillBoostMin" required min="0" max="9">以上
+          </div>
+          <label class="col-sm-2 col-form-label" />
+          <div class="col-sm-10">
+            <input type="range" v-model.number="filter.skillBoostMax" min="0" max="9" step="1">
+            <input type="number" v-model.number="filter.skillBoostMax" required min="0" max="9">以下
+          </div>
+        </div>
+        <div class="form-group row">
           <label class="col-sm-2 col-form-label">アシスト</label>
           <div class="col-sm-10">
             <div class="custom-control custom-radio custom-control-inline">
@@ -116,6 +128,8 @@ const filterDefault = {
   awaken: [],
   skillTurnMin: 1,
   skillTurnMax: 99,
+  skillBoostMin: 0,
+  skillBoostMax: 9,
   assist: undefined
 };
 
@@ -191,6 +205,15 @@ export function getFilterFunction (setting) {
       return minTurn >= skillTurnMin && minTurn <= skillTurnMax;
     });
   }
+  const skillBoostMin = setting.hasOwnProperty('skillBoostMin') ? setting.skillBoostMin : filterDefault.skillBoostMin;
+  const skillBoostMax = setting.hasOwnProperty('skillBoostMax') ? setting.skillBoostMax : filterDefault.skillBoostMax;
+  if (skillBoostMin !== filterDefault.skillBoostMin ||
+      skillBoostMax !== filterDefault.skillBoostMax) {
+    functionArray.push(d => {
+      const skillBoost = (d.awakenCount[21] | 0) + (d.awakenCount[56] | 0) * 2;
+      return skillBoost >= skillBoostMin && skillBoost <= skillBoostMax;
+    });
+  }
   if (setting.assist !== undefined) {
     functionArray.push(d => d.assist === setting.assist);
   }
@@ -255,6 +278,23 @@ export default {
           this.filter.skillTurnMax = filterDefault.skillTurnMax;
         }
       }
+    },
+    /** スキルブーストの絞り込み設定の最小値と最大値を - でつないだもの。 */
+    skillBoostFilterStr: {
+      get: function () {
+        if (this.filter.skillBoostMin === filterDefault.skillBoostMin &
+            this.filter.skillBoostMax === filterDefault.skillBoostMax) { return undefined; }
+        return this.filter.skillBoostMin + '-' + this.filter.skillBoostMax;
+      },
+      set: function (val) {
+        if (/(\d+)-(\d+)/.test(val)) {
+          this.filter.skillBoostMin = RegExp.$1 | 0;
+          this.filter.skillBoostMax = RegExp.$2 | 0;
+        } else {
+          this.filter.skillBoostMin = filterDefault.skillBoostMin;
+          this.filter.skillBoostMax = filterDefault.skillBoostMax;
+        }
+      }
     }
   },
   watch: {
@@ -303,6 +343,13 @@ export default {
     '$route.query.skillTurn': function (newValue) {
       this.skillTurnFilterStr = newValue;
     },
+    'skillBoostFilterStr': function () {
+      this.updateRouteQuery({ 'skillBoost': this.skillBoostFilterStr });
+      this.emitInput();
+    },
+    '$route.query.skillBoost': function (newValue) {
+      this.skillBoostFilterStr = newValue;
+    },
     'filter.assist': function () {
       this.updateRouteQuery({ assist: this.filter.assist });
       this.emitInput();
@@ -320,6 +367,16 @@ export default {
       if (this.filter.skillTurnMax < this.filter.skillTurnMin) {
         this.filter.skillTurnMin = this.filter.skillTurnMax;
       }
+    },
+    'filter.skillBoostMin': function () {
+      if (this.filter.skillBoostMax < this.filter.skillBoostMin) {
+        this.filter.skillBoostMax = this.filter.skillBoostMin;
+      }
+    },
+    'filter.skillBoostMax': function () {
+      if (this.filter.skillBoostMax < this.filter.skillBoostMin) {
+        this.filter.skillBoostMin = this.filter.skillBoostMax;
+      }
     }
   },
   created: function () {
@@ -333,6 +390,8 @@ export default {
     isSetFilter |= this.queryToFilter('assist', Number);
     this.skillTurnFilterStr = this.$route.query.skillTurn;
     isSetFilter |= (this.skillTurnFilterStr !== undefined);
+    this.skillBoostFilterStr = this.$route.query.skillBoost;
+    isSetFilter |= (this.skillBoostFilterStr !== undefined);
     
     if (isSetFilter) {
       this.isVisibleFilter = this.isOpenFilterTrigger = true;
