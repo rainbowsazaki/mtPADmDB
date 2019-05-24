@@ -93,6 +93,13 @@
             <input type="number" v-model.number="filter.skillBoostMax" required min="0" max="9">以下
           </div>
         </div>
+        <div class="form-group row timeExtension">
+          <label class="col-sm-2 col-form-label">操作時間延長</label>
+          <div class="col-sm-10">
+            <input type="range" v-model.number="filter.timeExtensionMin" min="0" max="3" step="0.5">
+            <input type="number" v-model.number="filter.timeExtensionMin" required min="0" max="3" step="0.5">秒以上
+          </div>
+        </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">アシスト</label>
           <div class="col-sm-10">
@@ -130,6 +137,7 @@ const filterDefault = {
   skillTurnMax: 99,
   skillBoostMin: 0,
   skillBoostMax: 9,
+  timeExtensionMin: 0,
   assist: undefined
 };
 
@@ -214,6 +222,14 @@ export function getFilterFunction (setting) {
       return skillBoost >= skillBoostMin && skillBoost <= skillBoostMax;
     });
   }
+  const timeExtensionMin = setting.hasOwnProperty('timeExtensionMin') ? setting.timeExtensionMin : filterDefault.timeExtensionMin;
+  if (timeExtensionMin !== filterDefault.timeExtensionMin) {
+    functionArray.push(d => {
+      const timeExtension = (d.awakenCount[19] | 0) * 0.5 + (d.awakenCount[53] | 0) * 1;
+      return timeExtension >= timeExtensionMin;
+    });
+  }
+  
   if (setting.assist !== undefined) {
     functionArray.push(d => d.assist === setting.assist);
   }
@@ -350,6 +366,13 @@ export default {
     '$route.query.skillBoost': function (newValue) {
       this.skillBoostFilterStr = newValue;
     },
+    'filter.timeExtensionMin': function () {
+      this.updateRouteQuery({ timeExtensionMin: this.filter.timeExtensionMin });
+      this.emitInput();
+    },
+    '$route.query.timeExtensionMin': function () {
+      this.queryToFilter('timeExtensionMin');
+    },
     'filter.assist': function () {
       this.updateRouteQuery({ assist: this.filter.assist });
       this.emitInput();
@@ -392,6 +415,7 @@ export default {
     isSetFilter |= (this.skillTurnFilterStr !== undefined);
     this.skillBoostFilterStr = this.$route.query.skillBoost;
     isSetFilter |= (this.skillBoostFilterStr !== undefined);
+    isSetFilter |= this.queryToFilter('timeExtensionMin', Number);
     
     if (isSetFilter) {
       this.isVisibleFilter = this.isOpenFilterTrigger = true;
@@ -527,6 +551,10 @@ export default {
 
   #check_mainAttr_0 + label {
     visibility: hidden;
+  }
+
+  .timeExtension input[type="number"] {
+    width: 3em;
   }
 
   .filter-enter-active {
