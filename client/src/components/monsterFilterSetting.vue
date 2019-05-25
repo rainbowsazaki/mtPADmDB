@@ -367,7 +367,9 @@ export default {
       this.skillBoostFilterStr = newValue;
     },
     'filter.timeExtensionMin': function () {
-      this.updateRouteQuery({ timeExtensionMin: this.filter.timeExtensionMin });
+      let updateValue = this.filter.timeExtensionMin;
+      if (updateValue === filterDefault.timeExtensionMin) { updateValue = undefined; }
+      this.updateRouteQuery({ timeExtensionMin: updateValue });
       this.emitInput();
     },
     '$route.query.timeExtensionMin': function () {
