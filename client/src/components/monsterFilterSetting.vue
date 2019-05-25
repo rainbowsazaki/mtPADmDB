@@ -373,7 +373,7 @@ export default {
       this.emitInput();
     },
     '$route.query.timeExtensionMin': function () {
-      this.queryToFilter('timeExtensionMin');
+      this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
     },
     'filter.assist': function () {
       this.updateRouteQuery({ assist: this.filter.assist });
@@ -417,7 +417,7 @@ export default {
     isSetFilter |= (this.skillTurnFilterStr !== undefined);
     this.skillBoostFilterStr = this.$route.query.skillBoost;
     isSetFilter |= (this.skillBoostFilterStr !== undefined);
-    isSetFilter |= this.queryToFilter('timeExtensionMin', Number);
+    isSetFilter |= this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
     
     if (isSetFilter) {
       this.isVisibleFilter = this.isOpenFilterTrigger = true;
@@ -463,7 +463,7 @@ export default {
       return (this[name] !== undefined);
     },
     /** 特定のルートクエリーを使用して、フィルタリング設定を変更する。 */
-    queryToFilter: function (name, type) {
+    queryToFilter: function (name, type, defualtValue) {
       let value;
       const query = this.$route.query[name];
       const isArray = Array.isArray(this.filter[name]);
@@ -472,6 +472,7 @@ export default {
       } else {
         value = query;
         if (type === Number && value) { value *= 1; }
+        if (value === undefined) { value = defualtValue; } 
       }
       this.filter[name] = value;
       return isArray ? (value.length > 0) : value !== undefined;
