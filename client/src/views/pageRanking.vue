@@ -400,13 +400,22 @@ export default {
           let attack = NaN;
           let recovery = NaN;
           if (baseParam.hp !== null) {
-            hp = baseParam.hp + (this.awakenCount[1] || 0) * awakenTable[1].value;
+            const hpAddAwaken = 1;
+            const hpSubAwaken = 65;
+            hp = baseParam.hp + (this.awakenCount[hpAddAwaken] || 0) * awakenTable[hpAddAwaken].value +
+              (this.awakenCount[hpSubAwaken] || 0) * awakenTable[hpSubAwaken].value;
           }
           if (baseParam.attack !== null) {
-            attack = baseParam.attack + (this.awakenCount[2] || 0) * awakenTable[2].value;
+            const attackAddAwaken = 2;
+            const attackSubAwaken = 66;
+            attack = baseParam.attack + (this.awakenCount[attackAddAwaken] || 0) * awakenTable[attackAddAwaken].value +
+              (this.awakenCount[attackSubAwaken] || 0) * awakenTable[attackSubAwaken].value;
           }
           if (baseParam.recovery != null) {
-            recovery = baseParam.recovery + (this.awakenCount[3] || 0) * awakenTable[3].value;
+            const recoveryAddAwaken = 3;
+            const recoverySubAwaken = 67;
+            recovery = baseParam.recovery + (this.awakenCount[recoveryAddAwaken] || 0) * awakenTable[recoveryAddAwaken].value +
+              (this.awakenCount[recoverySubAwaken] || 0) * awakenTable[recoverySubAwaken].value;
           }
           return {
             hp: hp,
@@ -509,7 +518,7 @@ export default {
               };
             } else {
               const baseParam = this._targetParam;
-              const param = {
+              let param = {
                 hp: NaN,
                 attack: NaN,
                 recovery: NaN
@@ -524,9 +533,7 @@ export default {
                 param.recovery = ((baseParam.recovery + 3 * 99) * 0.15) | 0;
               }
               if (this.awakenCount[49]) {
-                param.hp += (this.awakenCount[1] || 0) * awakenTable[1].value;
-                param.attack += (this.awakenCount[2] || 0) * awakenTable[2].value;
-                param.recovery += (this.awakenCount[3] || 0) * awakenTable[3].value;
+                param = this.culcFullAwakenParam(param);
               }
               cache[propName] = param;
             }
