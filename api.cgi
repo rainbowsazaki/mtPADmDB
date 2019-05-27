@@ -535,7 +535,7 @@ sub mode_update_monster_data {
   );
 
 
-  &to_number_with_key($data, qw/ no attributes cost rate types awakens maxExp maxLevel maxParam 
+  &to_number_with_key($data, qw/ no attributes cost rare types awakens maxExp maxLevel maxParam 
     skill leaderSkill assist overLimit overLimitParam superAwakens evolutionType /);
 
   &to_hankaku_with_key($data, qw/ name /);
