@@ -475,7 +475,7 @@ export default {
         if (value === undefined) { value = defualtValue; } 
       }
       this.filter[name] = value;
-      return isArray ? (value.length > 0) : value !== undefined;
+      return isArray ? (value.length > 0) : value !== defualtValue;
     },
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
