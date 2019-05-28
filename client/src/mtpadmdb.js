@@ -399,7 +399,7 @@ export function toAimaiSearch (word) {
 export function leaderSkillDescriptionToDecoratedHtml (description) {
   if (typeof description !== 'string') { return description; }
   const escapedDescription = escapeHtml(description);
-  return escapedDescription.replace(/^(【.*】|ドロップを\d+個以下で消せない)+/, '<span style="color:rgba(224, 0, 0, 0.8);">$&</span>');
+  return escapedDescription.replace(/^(【.*】|ドロップを\d+個以下で消せない)+|ドロップ操作を[\d\.]+秒短縮。/, '<span style="color:rgba(224, 0, 0, 0.8);">$&</span>');
 }
 
 /** 現在のURLでの history 形式でのルートを求める */
