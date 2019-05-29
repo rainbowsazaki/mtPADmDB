@@ -4,7 +4,7 @@
     <td colspan="6">
       <input type="number" class="form-control" v-model.number="nowValue" :min="info.min" :max="info.max">
     </td>
-    <td colspan="3" class="text-right">{{ (typeof(nowValue) === "number") ? nowValue + info.plusValue * 99 : '-' }}</td>
+    <td colspan="3" class="text-right">{{ (typeof(nowValue) === "number") ? nowValue + info.plusValue * 99 : '-' | addComma }}</td>
   </tr>
 </template>
 
