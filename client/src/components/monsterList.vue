@@ -24,7 +24,7 @@
 <script>
 
 import { constData } from '../mtpadmdb.js';
-import { filterMonsterDataArray } from '../components/monsterFilterSetting.vue';
+import { getFilterDefault, filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
 
 /** モンスター一覧表示のコンポーネント */
 export default {
@@ -33,18 +33,7 @@ export default {
     return {
       inPageCount: 50,
       /** 表示するモンスターに対するフィルタ。 */
-      filterSetting: {
-        /** 主属性。 */
-        attr: [],
-        /** 複属性。 */
-        subAttr: [],
-        /** タイプ */
-        type: [],
-        /** スキルターンの最小値。 */
-        skillTurnMin: 1,
-        /** スキルターンの最大値。 */
-        skillTurnMax: 99
-      }
+      filterSetting: getFilterDefault()
     };
   },
   computed: {
@@ -68,6 +57,15 @@ export default {
     },
     monsterTableInPage () {
       return this.filteredMonsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
+    },
+    /** フィルタリング設定の内容を表したテキスト。 */
+    filterSettingText () {
+      return filterSettingText(this.filterSetting);
+    }
+  },
+  watch: {
+    filterSettingText: function () {
+      this.$emit('changeFilterSettingText', this.filterSettingText);
     }
   },
   created: function () {

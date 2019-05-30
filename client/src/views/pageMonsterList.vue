@@ -7,7 +7,7 @@
     <div v-if="isLoadingMonsterList">データの読み込み中です ...</div>
     <div v-else>現在の登録数：{{ monsterCount }}種類</div>
     
-    <monster-list />
+    <monster-list @changeFilterSettingText="onChangeFilterSettingText" />
 
   </div>
 </template>
@@ -21,12 +21,18 @@ const MonsterList = () => import('../components/monsterList.vue');
  */
 export default {
   name: 'PageMonsterList',
-  pageTitle: 'モンスター一覧',
+  pageTitle: function () {
+    let title = 'モンスター一覧';
+    if (this.filterSettingText) { title += ' ' + this.filterSettingText; }
+    return title;
+  },
   components: {
     'monster-list': MonsterList
   },
   data: function () {
     return {
+      /** モンスターフィルタリング設定の内容を表したテキスト。 */
+      filterSettingText: ''
     };
   },
   computed: {
@@ -39,6 +45,13 @@ export default {
   },
   created: function () {
     this.$store.commit('fetchCommonData');
+  },
+  methods: {
+    /** モンスターフィルタリング設定の内容を表したテキストが更新されたときに呼ばれるイベントハンドラ。 */
+    onChangeFilterSettingText: function (text) {
+      this.filterSettingText = text;
+      this.$_mixinForPage_updateTitle();
+    }
   }
 };
 </script>
