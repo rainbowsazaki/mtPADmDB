@@ -21,11 +21,7 @@ const MonsterList = () => import('../components/monsterList.vue');
  */
 export default {
   name: 'PageMonsterList',
-  pageTitle: function () {
-    let title = 'モンスター一覧';
-    if (this.filterSettingText) { title += ' ' + this.filterSettingText; }
-    return title;
-  },
+  pageTitle: function () { return this.pageTitle; },
   components: {
     'monster-list': MonsterList
   },
@@ -40,8 +36,19 @@ export default {
 
     monsterCount () { return Object.keys(this.monsterTable).length; },
     /** モンスター一覧情報を読込中かどうか。 現在の実装だとデータ未登録の場合、ずっと読み込み中判定となる。 */
-    isLoadingMonsterList () { return this.monsterCount === 0; }
+    isLoadingMonsterList () { return this.monsterCount === 0; },
+    /** ページタイトル。 */
+    pageTitle () {
+      let title = 'モンスター一覧';
+      if (this.filterSettingText) { title += ' ' + this.filterSettingText; }
+      return title;
+    }
 
+  },
+  watch: {
+    pageTitle: function () {
+      this.$_mixinForPage_updateTitle();
+    }
   },
   created: function () {
     this.$store.commit('fetchCommonData');
@@ -50,7 +57,6 @@ export default {
     /** モンスターフィルタリング設定の内容を表したテキストが更新されたときに呼ばれるイベントハンドラ。 */
     onChangeFilterSettingText: function (text) {
       this.filterSettingText = text;
-      this.$_mixinForPage_updateTitle();
     }
   }
 };
