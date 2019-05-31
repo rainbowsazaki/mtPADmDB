@@ -369,78 +369,40 @@ export default {
           this.filter.skillBoostMax = filterDefault.skillBoostMax;
         }
       }
+    },
+    /** 現在のフィルター設定を元にした、route の query 情報のオブジェクト。 */
+    routeQuery: function () {
+      /**  配列を、カンマで結合したテキストにする。 */
+      function array2text (array) {
+        return array.length ? array.slice().sort((a, b) => a - b).join(',') : undefined;
+      }
+
+      let timeExtensionMin = this.filter.timeExtensionMin;
+      if (timeExtensionMin === filterDefault.timeExtensionMin) { timeExtensionMin = undefined; }
+
+      const query = {
+        name: this.filter.name || undefined,
+        attr: array2text(this.filter.attr),
+        subAttr: array2text(this.filter.subAttr),
+        type: array2text(this.filter.type),
+        awaken: array2text(this.filter.awaken),
+        skillTurn: this.skillTurnFilterStr,
+        skillBoost: this.skillBoostFilterStr,
+        timeExtensionMin: timeExtensionMin,
+        assist: this.filter.assist
+      };
+
+      return query;
     }
   },
   watch: {
-    'filter': function () {
-      this.emitInput();
+    'routeQuery': function () {
+      this.updateRouteQuery(this.routeQuery);
+      this.$emit('input', this.filter);
     },
-    'filter.name': function () {
-      this.updateRouteQuery({ name: this.filter.name || undefined });
-      this.emitInput();
+    '$route.query': function () {
+      this.setFilterFromQuery();
     },
-    '$route.query.name': function () {
-      this.queryToFilter('name');
-    },
-    'filter.attr': function () {
-      this.updateRouteQueryFromArray('attr', this.filter.attr);
-      this.emitInput();
-    },
-    '$route.query.attr': function () {
-      this.queryToFilter('attr');
-    },
-    'filter.subAttr': function () {
-      this.updateRouteQueryFromArray('subAttr', this.filter.subAttr);
-      this.emitInput();
-    },
-    '$route.query.subAttr': function () {
-      this.queryToFilter('subAttr');
-    },
-    'filter.type': function () {
-      this.updateRouteQueryFromArray('type', this.filter.type);
-      this.emitInput();
-    },
-    '$route.query.type': function () {
-      this.queryToFilter('type');
-    },
-    'filter.awaken': function () {
-      this.updateRouteQueryFromArray('awaken', this.filter.awaken);
-      this.emitInput();
-    },
-    '$route.query.awaken': function () {
-      this.queryToFilter('awaken');
-    },
-    'skillTurnFilterStr': function () {
-      this.updateRouteQuery({ 'skillTurn': this.skillTurnFilterStr });
-      this.emitInput();
-    },
-    '$route.query.skillTurn': function (newValue) {
-      this.skillTurnFilterStr = newValue;
-    },
-    'skillBoostFilterStr': function () {
-      this.updateRouteQuery({ 'skillBoost': this.skillBoostFilterStr });
-      this.emitInput();
-    },
-    '$route.query.skillBoost': function (newValue) {
-      this.skillBoostFilterStr = newValue;
-    },
-    'filter.timeExtensionMin': function () {
-      let updateValue = this.filter.timeExtensionMin;
-      if (updateValue === filterDefault.timeExtensionMin) { updateValue = undefined; }
-      this.updateRouteQuery({ timeExtensionMin: updateValue });
-      this.emitInput();
-    },
-    '$route.query.timeExtensionMin': function () {
-      this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
-    },
-    'filter.assist': function () {
-      this.updateRouteQuery({ assist: this.filter.assist });
-      this.emitInput();
-    },
-    '$route.query.assist': function () {
-      this.queryToFilter('assist', Number);
-    },
-
     'filter.skillTurnMin': function () {
       if (this.filter.skillTurnMax < this.filter.skillTurnMin) {
         this.filter.skillTurnMax = this.filter.skillTurnMin;
@@ -463,20 +425,8 @@ export default {
     }
   },
   created: function () {
-    this.queryToFilter('name');
     // 名前以外の指定がある場合は『その他絞り込み』を開いた状態で作成する。
-    let isSetFilter = false;
-    isSetFilter |= this.queryToFilter('attr');
-    isSetFilter |= this.queryToFilter('subAttr');
-    isSetFilter |= this.queryToFilter('type');
-    isSetFilter |= this.queryToFilter('awaken');
-    isSetFilter |= this.queryToFilter('assist', Number);
-    this.skillTurnFilterStr = this.$route.query.skillTurn;
-    isSetFilter |= (this.skillTurnFilterStr !== undefined);
-    this.skillBoostFilterStr = this.$route.query.skillBoost;
-    isSetFilter |= (this.skillBoostFilterStr !== undefined);
-    isSetFilter |= this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
-    
+    const isSetFilter = this.setFilterFromQuery();
     if (isSetFilter) {
       this.isVisibleFilter = this.isOpenFilterTrigger = true;
     }
@@ -484,9 +434,23 @@ export default {
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
   methods: {
-    /** input イベントを発火して現在の設定を送る。 */
-    emitInput: function () {
-      this.$emit('input', this.filter);
+    /** $route.query を元にフィルター設定を作成する。 */
+    setFilterFromQuery: function () {
+      this.queryToFilter('name');
+      // 名前以外の指定がある場合は『その他絞り込み』を開いた状態で作成する。
+      let isSetFilter = false;
+      isSetFilter |= this.queryToFilter('attr');
+      isSetFilter |= this.queryToFilter('subAttr');
+      isSetFilter |= this.queryToFilter('type');
+      isSetFilter |= this.queryToFilter('awaken');
+      isSetFilter |= this.queryToFilter('assist', Number);
+      this.skillTurnFilterStr = this.$route.query.skillTurn;
+      isSetFilter |= (this.skillTurnFilterStr !== undefined);
+      this.skillBoostFilterStr = this.$route.query.skillBoost;
+      isSetFilter |= (this.skillBoostFilterStr !== undefined);
+      isSetFilter |= this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
+      
+      return isSetFilter;
     },
     /** 指定要素の現在の高さを style に設定する。親要素がない場合は指定された ID の要素に一時的に登録して計測する。 */
     setStyleHeight: function (elm, dummyParentId) {
@@ -508,12 +472,6 @@ export default {
       const margedQuery = Object.assign({}, this.$route.query, changeQuery);
       if (this.pageResetFlag) { margedQuery.page = undefined; }
       this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
-    },
-    /** 配列をカンマで結合した値を使用してルートのクエリーを変更する。 */
-    updateRouteQueryFromArray: function (name, array) {
-      const obj = {};
-      obj[name] = array.length ? array.slice().sort((a, b) => a - b).join(',') : undefined;
-      this.updateRouteQuery(obj);
     },
     /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
     queryToData: function (name) {
