@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { constData, commonData, escapeRegExp, toAimaiSearch } from '../mtpadmdb.js';
+import { constData, commonData, escapeRegExp, toAimaiSearch, MultiSendBlocker } from '../mtpadmdb.js';
 
 /** filterの初期値。 */
 const filterDefault = {
@@ -330,7 +330,9 @@ export default {
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
       isOpenFilterTrigger: false,
       /** 表示するモンスターに対するフィルタ。 */
-      filter: getFilterDefault()
+      filter: getFilterDefault(),
+      /** フォームの変更とそれによる query の変更の巡回によって起こる更新イベントの多重送信を防ぐオブジェクト。 */
+      multiSendBlocker: new MultiSendBlocker(1)
     };
   },
   computed: {
@@ -397,10 +399,18 @@ export default {
   },
   watch: {
     'routeQuery': function () {
+      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
+      if (this.multiSendBlocker.isSending) { return; }
+      this.multiSendBlocker.set();
+      
       this.updateRouteQuery(this.routeQuery);
       this.$emit('input', this.filter);
     },
     '$route.query': function () {
+      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
+      if (this.multiSendBlocker.isSending) { return; }
+      this.multiSendBlocker.set();
+      
       this.setFilterFromQuery();
     },
     'filter.skillTurnMin': function () {
