@@ -1,15 +1,14 @@
 <template>
   <div v-if="hasEvolution">
-    <monster-icon :no="no" width="2.5em" height="2.5em" />
-    <template v-if="stoneBaseMonsterData">
-      ← <monster-icon :no="stoneBaseMonsterData.no" width="2.5em" height="2.5em" />
-    </template>
-    {{ materialTargetMonsterData.name }}
-    <div class="baseAndMaterials">
-      <monster-icon :no="materialTargetMonsterData.evolution.baseNo" class="baseMonster" width="2.5em" height="2.5em" />
-      <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
-        <monster-icon class="materialMonster" v-if="material" :no="material" width="2.5em" height="2.5em" :key="`material_${i}`" />
-      </template>
+    <div style="margin-bottom: 0.5em;">
+      <div class="beforeMonster">
+        <monster-icon :no="no" width="2.7em" height="2.7em" />
+        <template v-if="stoneBaseMonsterData">
+          ← <monster-icon :no="stoneBaseMonsterData.no" width="2.7em" height="2.7em" />
+        </template>
+        {{ materialTargetMonsterData.name }}
+      </div>
+      <evolution-materials minimum style="font-size: 90%;" :type="materialTargetMonsterData.evolutionType" :before-no="materialTargetMonsterData.no" :target-no="materialTargetMonsterData.evolution.baseNo" :materials="materialTargetMonsterData.evolution.materials" />
     </div>
     <div style="margin-left: 0.5rem">
       <evolution-material :no="materialTargetMonsterData.evolution.baseNo" @onTotalMaterialCounts="onTotalMaterialCounts" />
@@ -22,11 +21,13 @@
 
 <script>
 import EvolutionMaterial from '../components/evolutionMaterial.vue';
+import EvolutionMaterials from './../components/monsterDataEvolutionMaterials.vue';
 
 export default {
   name: 'EvolutionMaterial',
   components: {
-    'EvolutionMaterial': EvolutionMaterial
+    'EvolutionMaterial': EvolutionMaterial,
+    EvolutionMaterials
   },
   props: {
     /** 表示するモンスターの番号。 */
@@ -103,5 +104,14 @@ div.baseAndMaterials {
   .materialMonster {
     margin-right: 1px;
   }
+}
+
+div.beforeMonster {
+  background: linear-gradient(#f6e6be, #f6d69e);
+  border: 1px solid #706050;
+  width: 16.04em;
+  padding: 0.2em 0.2em 1.1em 0.2em;
+  margin-bottom: -1em;
+  border-radius: 6px;
 }
 </style>
