@@ -47,11 +47,11 @@
     </div>
 
     <div v-if="monsterData.evolutionType !== 0">
-      <h3 class="h4">進化元モンスター</h3>
+      <h3 class="h4 decoHeader">進化元モンスター</h3>
       <evolution-materials origin-of-evolution :type="monsterData.evolutionType" :before-no="monsterData.no" :target-no="monsterData.evolution.baseNo" :materials="monsterData.evolution.materials" />
     </div>
     <div v-if="evolutionTable[monsterData.no]">
-      <h3 class="h4">このモンスターからの進化</h3>
+      <h3 class="h4 decoHeader">このモンスターからの進化</h3>
       <evolution-materials
         v-for="(evolution, n) in evolutionTable[monsterData.no]" :key="`evolutionNo${n}`"
         style="margin-bottom: 0.5em;"
@@ -71,11 +71,11 @@
       <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-primary">モンスター画像投稿</router-link>
     </div>
     <div v-if="!isHistory">
-      <h3 class="h4">コメント</h3>
+      <h3 class="h4 decoHeader">コメント</h3>
       <comment-list />
     </div>
     <div v-if="isShowEvaluationLinks" class="evaluationLink">
-      <h3 class="h4">外部サイトのモンスター評価ページへのリンク</h3>
+      <h3 class="h4 decoHeader">外部サイトのモンスター評価ページへのリンク</h3>
       <div v-if="!evaluationOfMonsterLinks">読み込み中...</div>
       <div v-else-if="evaluationOfMonsterLinks.length === 0">なし</div>
       <ul v-else class="list-unstyled">
@@ -89,11 +89,11 @@
       </ul>
     </div>
     <div v-if="monsterData.comment">
-      <h3 class="h4">編集コメント</h3>
+      <h3 class="h4 decoHeader">編集コメント</h3>
       <div>{{ monsterData.comment }}</div>
     </div>
     <div>
-      <h3 class="h4">JSON</h3>
+      <h3 class="h4 decoHeader">JSON</h3>
       <div class="row">
         <div class="col-12">
           <textarea readonly v-model="monsterDataJson" class="json" />
@@ -101,7 +101,7 @@
       </div>
     </div>
     <div style="margin-top: 1rem;">
-      <h3 class="h4">編集履歴</h3>
+      <h3 class="h4 decoHeader">編集履歴</h3>
       <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
         {{ isLoadingHistory ? '読み込み中…' : '編集履歴を確認する' }}
       </button>
@@ -323,14 +323,6 @@ export default {
 
 <style lang="scss" scoped>
 
-h3 {
-  color: #ffffff;
-  background: linear-gradient(#798320, #394a14);
-  border: 0.1em #b1ba39 solid;
-  border-left-width: 0.05em;
-  padding: 0.2em 0.2em;
-  border-radius: 0 0.5em 0.5em 0;
-}
 .paramAlert {
   color: rgba(224, 0, 0, 0.8);
 }
