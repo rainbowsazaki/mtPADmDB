@@ -57,21 +57,14 @@
 
 <script>
 import { escapeRegExp, toAimaiSearch } from '../mtpadmdb.js';
-import { getFilterDefault, getFilterFunction } from '../components/monsterFilterSetting.vue';
+import { getFilterDefault, getFilterFunction, filterSettingText } from '../components/monsterFilterSetting.vue';
 
 /**
  * スキル一覧のコンポーネント。
  */
 export default {
   name: 'PageSkillList',
-  pageTitle: function () {
-    const skillTypeSearch = this.skillTypeSearchArray[this.skillTypeSearchIndex];
-    let typeName = '';
-    if (skillTypeSearch) { typeName = ' ' + skillTypeSearch[0]; }
-
-    if (!this.$route.query.searchWord) { return this.targetName + '一覧' + typeName; }
-    return this.targetName + '検索' + typeName + ' ' + this.$route.query.searchWord;
-  },
+  pageTitle: function () { return this.pageTitle; },
   middleOfBreadcrumbs: function () {
     if (!this.$route.query.searchWord) { return undefined; }
     if (this.isLeaderSkill) {
@@ -250,15 +243,31 @@ export default {
     /** 現在のページで表示するデータの配列。 */
     skillArrayInPage () {
       return this.searchedSkillArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
+    },
+    /** ページタイトル。 */
+    pageTitle: function () {
+      const skillTypeSearch = this.skillTypeSearchArray[this.skillTypeSearchIndex];
+      let typeName = '';
+      if (skillTypeSearch) { typeName = ' ' + skillTypeSearch[0]; }
+
+      let title;
+      if (!this.$route.query.searchWord) {
+        title = this.targetName + '一覧' + typeName;
+      } else {
+        title = this.targetName + '検索' + typeName + ' ' + this.$route.query.searchWord;
+      }
+      const fst = filterSettingText(this.monsterFilterSetting);
+      if (fst) {
+        title += ' 対象モンスター ' + fst;
+      }
+      return title;
     }
   },
   watch: {
-    '$route': [
-      'updateSearchWordFromUrl',
-      '$_mixinForPage_updateTitle'
-    ],
+    '$route': 'updateSearchWordFromUrl',
     searchWord: 'search',
-    skillTypeSearchIndex: 'changeSkillType'
+    skillTypeSearchIndex: 'changeSkillType',
+    pageTitle: '$_mixinForPage_updateTitle'
   },
   created: function () {
     this.updateSearchWordFromUrl();
