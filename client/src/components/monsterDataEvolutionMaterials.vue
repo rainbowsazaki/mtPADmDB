@@ -100,6 +100,10 @@ export default {
 
 <style lang="scss" scoped>
 
+a.evolutionInfoLink {
+  color: rgba(0,0,0,0.8);
+}
+
 a.evolutionInfoLink:hover {
   text-decoration:none;
 }
