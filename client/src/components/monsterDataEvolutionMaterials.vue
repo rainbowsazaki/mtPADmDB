@@ -215,6 +215,7 @@ a.evolutionInfoLink:hover {
 .minimum {
   &.evolutionInfo {
     width: auto;
+    width: 17.9em;
   }
   
   .baseIcon {
