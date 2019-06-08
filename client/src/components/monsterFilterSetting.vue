@@ -451,11 +451,7 @@ export default {
     }
   },
   created: function () {
-    // 名前以外の指定がある場合は『その他絞り込み』を開いた状態で作成する。
-    const isSetFilter = this.setFilterFromQuery();
-    if (isSetFilter) {
-      this.isVisibleFilter = this.isOpenFilterTrigger = true;
-    }
+    this.setFilterFromQuery();
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
@@ -463,20 +459,14 @@ export default {
     /** $route.query を元にフィルター設定を作成する。 */
     setFilterFromQuery: function () {
       this.queryToFilter('name');
-      // 名前以外の指定がある場合は『その他絞り込み』を開いた状態で作成する。
-      let isSetFilter = false;
-      isSetFilter |= this.queryToFilter('attr');
-      isSetFilter |= this.queryToFilter('subAttr');
-      isSetFilter |= this.queryToFilter('type');
-      isSetFilter |= this.queryToFilter('awaken');
-      isSetFilter |= this.queryToFilter('assist', Number);
+      this.queryToFilter('attr');
+      this.queryToFilter('subAttr');
+      this.queryToFilter('type');
+      this.queryToFilter('awaken');
+      this.queryToFilter('assist', Number);
       this.skillTurnFilterStr = this.$route.query.skillTurn;
-      isSetFilter |= (this.skillTurnFilterStr !== undefined);
       this.skillBoostFilterStr = this.$route.query.skillBoost;
-      isSetFilter |= (this.skillBoostFilterStr !== undefined);
-      isSetFilter |= this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
-      
-      return isSetFilter;
+      this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
     },
     /** 指定要素の現在の高さを style に設定する。親要素がない場合は指定された ID の要素に一時的に登録して計測する。 */
     setStyleHeight: function (elm, dummyParentId) {
