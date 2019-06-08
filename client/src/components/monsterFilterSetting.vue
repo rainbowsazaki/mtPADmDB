@@ -120,6 +120,10 @@
         <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
       </form>
     </transition>
+
+    <ul class="settingText">
+      <li v-for="(text, n) in filterSettingTextArray" :key="`settingText${n}`">{{ text }}</li>
+    </ul>
   </div>
 </template>
 
@@ -249,30 +253,30 @@ export function filterMonsterDataArray (setting, target) {
   return target.filter(d => func(d.data || d));
 }
 
-/** フィルタリング設定の内容を表現したテキストを作成する。 */
-export function filterSettingText (setting) {
-  const functionArray = [];
+/** フィルタリング設定の内容を表現したテキストの配列を作成する。 */
+export function filterSettingTextArray (setting) {
+  const textArray = [];
   if (setting.name) {
-    functionArray.push(`名前に『${setting.name}』を含む`);
+    textArray.push(`名前に『${setting.name}』を含む`);
   }
   const hasMainAttr = setting.attr && setting.attr.length > 0;
   const hasSubAttr = setting.subAttr && setting.subAttr.length > 0;
   if (hasMainAttr) {
     if (hasSubAttr) {
-      functionArray.push('属性:' + setting.attr.map(a => constData.attributeTable[a]).join('') +
+      textArray.push('属性:' + setting.attr.map(a => constData.attributeTable[a]).join('') +
         '/' + setting.subAttr.map(a => constData.attributeTable[a]).join('')
       );
     } else {
-      functionArray.push('主属性:' + setting.attr.map(a => constData.attributeTable[a]).join(''));
+      textArray.push('主属性:' + setting.attr.map(a => constData.attributeTable[a]).join(''));
     }
   } else if (hasSubAttr) {
-    functionArray.push('複属性:' + setting.subAttr.map(a => constData.attributeTable[a]).join(''));
+    textArray.push('複属性:' + setting.subAttr.map(a => constData.attributeTable[a]).join(''));
   }
   if (setting.type && setting.type.length > 0) {
-    functionArray.push('タイプ:' + setting.type.map(a => { const info = constData.typeTable[a]; return info && info.name || ''; }).join('/'));
+    textArray.push('タイプ:' + setting.type.map(a => { const info = constData.typeTable[a]; return info && info.name || ''; }).join('/'));
   }
   if (setting.awaken && setting.awaken.length > 0) {
-    functionArray.push('覚醒:' + setting.awaken.map(a => { const info = constData.awakenTable[a]; return info && info.name || ''; }).join('/') + 'を含む');
+    textArray.push('覚醒:' + setting.awaken.map(a => { const info = constData.awakenTable[a]; return info && info.name || ''; }).join('/') + 'を含む');
   }
   function createRangeText (min, max, defaultMin, defaultMax, tanni) {
     if (tanni === undefined) { tanni = ''; }
@@ -286,25 +290,30 @@ export function filterSettingText (setting) {
   if (skillTurnMin !== filterDefault.skillTurnMin ||
       skillTurnMax !== filterDefault.skillTurnMax) {
     const valueText = createRangeText(skillTurnMin, skillTurnMax, filterDefault.skillTurnMin, filterDefault.skillTurnMax);
-    functionArray.push('Sターン:' + valueText);
+    textArray.push('Sターン:' + valueText);
   }
   const skillBoostMin = setting.hasOwnProperty('skillBoostMin') ? setting.skillBoostMin : filterDefault.skillBoostMin;
   const skillBoostMax = setting.hasOwnProperty('skillBoostMax') ? setting.skillBoostMax : filterDefault.skillBoostMax;
   if (skillBoostMin !== filterDefault.skillBoostMin ||
       skillBoostMax !== filterDefault.skillBoostMax) {
     const valueText = createRangeText(skillBoostMin, skillBoostMax, filterDefault.skillBoostMin, filterDefault.skillBoostMax);
-    functionArray.push('スキブ:' + valueText);
+    textArray.push('スキブ:' + valueText);
   }
   const timeExtensionMin = setting.hasOwnProperty('timeExtensionMin') ? setting.timeExtensionMin : filterDefault.timeExtensionMin;
   if (timeExtensionMin !== filterDefault.timeExtensionMin) {
-    functionArray.push(`指延長:${timeExtensionMin}秒以上`);
+    textArray.push(`指延長:${timeExtensionMin}秒以上`);
   }
 
   if (setting.assist !== undefined) {
-    functionArray.push('アシスト:' + constData.booleanTable[setting.assist]);
+    textArray.push('アシスト:' + constData.booleanTable[setting.assist]);
   }
 
-  return functionArray.join(' ');
+  return textArray;
+}
+
+/** フィルタリング設定の内容を表現したテキストを作成する。 */
+export function filterSettingText (setting) {
+  return filterSettingTextArray(setting).join(' ');
 }
 
 /** モンスター絞り込みの設定を行うコンポーネント。 */
@@ -338,6 +347,13 @@ export default {
   computed: {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
+
+    /** その他絞り込み部分のフィルタリング設定をもとに作成したテキスト。 */
+    filterSettingTextArray () {
+      const array = filterSettingTextArray(this.filter);
+      if (/^名前に/.test(array[0])) { array.shift(); }
+      return array;
+    },
     /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillTurnFilterStr: {
       get: function () {
@@ -580,6 +596,10 @@ export default {
 
   #check_mainAttr_0 + label {
     visibility: hidden;
+  }
+
+  .settingText {
+    margin-top: 0.5em;
   }
 
   .timeExtension input[type="number"] {
