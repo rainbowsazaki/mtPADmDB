@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS skill (
   name TEXT,
   description TEXT,
   baseTurn INTEGER,
+  minTurn INTEGER,
   maxLevel INTEGER,
   comment TEXT,
 
