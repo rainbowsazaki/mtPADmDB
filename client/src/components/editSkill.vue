@@ -15,22 +15,17 @@
     </tr>
     <tr v-if="!leaderSkill">
       <th style="width: calc(100% / 3);">SLv1時ターン</th>
-      <th style="width: calc(100% / 3);">最大SLv</th>
       <th style="width: calc(100% / 3);">最短ターン</th>
+      <th style="width: calc(100% / 3);">最大SLv</th>
     </tr>
     <tr v-if="!leaderSkill">
       <td>
         <input type="number" class="form-control" v-model.number="skillBaseTurn" min="1" max="199">
       </td>
       <td>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">SLv.</span>
-          </div>
-          <input type="number" class="form-control" v-model.number="skillMaxLevel" min="1" max="99">
-        </div>
+        <input type="number" class="form-control" v-model.number="skillMinTurn" min="1" max="99">
       </td>
-      <td>{{ (minimumSkillTurn) ? minimumSkillTurn + 'ターン' : '-' }}</td>
+      <td>{{ skillMaxLevel ? 'SLv.' + skillMaxLevel : '-' }}</td>
     </tr>
     <tr>
       <th colspan="3">効果</th>
@@ -111,19 +106,20 @@ export default {
       }
     },
     /** スキルの最大レベル。 */
-    skillMaxLevel: {
-      get: function () { return this.targetSkillDetails.maxLevel; },
+    skillMaxLevel: function () {
+      if (!this.targetSkillDetails.baseTurn || !this.targetSkillDetails.minTurn) { return NaN; }
+      const maxLevel = this.targetSkillDetails.baseTurn - this.targetSkillDetails.minTurn + 1;
+      if (maxLevel < 0) { return NaN; }
+      return maxLevel;
+    },
+    /** スキルレベル最大時のターン数。 */
+    skillMinTurn: {
+      get: function () { return this.targetSkillDetails.minTurn; },
       set: function (value) {
-        this.targetSkillDetails.maxLevel = value;
+        console.log(this.targetSkillDetails);
+        this.targetSkillDetails.minTurn = value;
         this.clearSkillNo();
       }
-    },
-    /** スキルレベル最大時の（最短の）スキルターン */
-    minimumSkillTurn: function () {
-      if (!this.targetSkillDetails.baseTurn || !this.targetSkillDetails.maxLevel) { return NaN; }
-      const turn = this.targetSkillDetails.baseTurn - this.targetSkillDetails.maxLevel + 1;
-      if (turn < 0) { return NaN; }
-      return turn;
     }
   },
   watch: {
