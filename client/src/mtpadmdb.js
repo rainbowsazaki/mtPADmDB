@@ -128,7 +128,7 @@ export const constData = {
       name: '',
       description: '',
       baseTurn: null,
-      maxLevel: null
+      minTurn: null
     },
     leaderSkill: 0,
     leaderSkillDetails: {
