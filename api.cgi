@@ -107,6 +107,7 @@ my %json_sort_ranks = (
 
   description => 0,
   baseTurn => 10,
+  minTurn => 20,
   #maxLevel は 80 で定義済み
 
   baseNo => 0,
@@ -337,12 +338,13 @@ sub mode_update_skill {
     return 1;
   }
   
-  &to_number_with_key($data->{updateData}, qw/ baseTurn maxLevel /);
+  &to_number_with_key($data->{updateData}, qw/ baseTurn minTurn /);
   &to_hankaku_with_key($data->{updateData}, qw/ name description /);
   &check_string_length('スキル名', $data->{updateData}{name}, 1, 50);
   &check_string_length('スキル詳細', $data->{updateData}{description}, 0, 200);
   &check_range('スキルLv1ターン', $data->{updateData}{baseTurn}, 1, 199, 0);
-  &check_range('スキル最大レベル', $data->{updateData}{maxLevel}, 1, 99, 0);
+  &check_range('スキル最短ターン', $data->{updateData}{minTurn}, 1, 199, 0);
+
 
   if ($response_data->has_error) {
     return;
@@ -391,7 +393,7 @@ sub set_skill_data {
 
   my @target_columns = qw/ no name description /;
   if (!$is_leader_skill) {
-    push @target_columns, qw/ baseTurn maxLevel /;
+    push @target_columns, qw/ baseTurn minTurn /;
   }
 
   # テーブルにある項目のみを取り出したハッシュを作成する。
@@ -443,6 +445,11 @@ sub set_skill_data {
   &update_disable_state($dbh, $table_name, (no => $target_data{no}, state => 1));
   &insert_table_data($dbh, $table_name, %target_data, %common_insert_data);
 
+  if (!$is_leader_skill) {
+    if ($target_data{baseTurn} && $target_data{minTurn}) {
+      $target_data{maxLevel} = $target_data{baseTurn} - $target_data{minTurn} + 1;
+    }
+  }
   return { result => 0, data => \%target_data };
 }
 
@@ -462,7 +469,7 @@ sub mode_skill_history {
     'id', 'no', 'name', 'description', 'comment', [ 'datetime', 'createdDatetime' ], 'state'
   );
   if (!$is_leader_skill) {
-    push @columns, 'baseTurn', 'maxLevel';
+    push @columns, 'baseTurn', 'minTurn';
   }
   my %where;
   if (defined $skill_id) {
@@ -567,12 +574,12 @@ sub mode_update_monster_data {
     if (!length $data->{skillDetails}{name} && !length $data->{skillDetails}{description}) {
       $data->{skill} = undef;
     } else {
-      &to_number_with_key($data->{skillDetails}, qw/ baseTurn maxLevel /);
+      &to_number_with_key($data->{skillDetails}, qw/ baseTurn minTurn /);
       &to_hankaku_with_key($data->{skillDetails}, qw/ name description /);
       &check_string_length('スキル名', $data->{skillDetails}{name}, 1, 50);
       &check_string_length('スキル詳細', $data->{skillDetails}{description}, 0, 200);
       &check_range('スキルLv1ターン', $data->{skillDetails}{baseTurn}, 1, 199, 0);
-      &check_range('スキル最大レベル', $data->{skillDetails}{maxLevel}, 1, 99, 0);
+      &check_range('スキル最短ターン', $data->{skillDetails}{minTurn}, 1, 199, 0);
     }
   }
   if ($data->{leaderSkill} == 0) {
@@ -905,8 +912,17 @@ sub save_monster_list_json {
 
 sub save_skill_list_json {
   my ($dbh) = @_;
-  my @keys = qw/ no name description baseTurn maxLevel /;
+  my @keys = qw/ no name description baseTurn minTurn /;
   my $data = table_to_hash($dbh, 'skill', \@keys, { state => 1 });
+  
+  for my $key (%$data) {
+    my $d = $data->{$key};
+    my $maxLevel = undef;
+    if ($d->{baseTurn} && $d->{minTurn}) {
+      $maxLevel = $d->{baseTurn} - $d->{minTurn} + 1;
+    }
+    $d->{maxLevel} = $maxLevel;
+  }
 
   &save_json_and_msgpack('./listJson/skill_list', $data);
 
