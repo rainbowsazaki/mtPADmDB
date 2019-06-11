@@ -54,6 +54,9 @@ sub run_sql_file {
   if ($sql_error == 0) {
     &addSuccess("Update DB '${db_path}' is success.");
     $dbh->commit;
+
+    local $dbh->{AutoCommit} = 1;
+    $dbh->do('VACUUM;');
   }
 }
 

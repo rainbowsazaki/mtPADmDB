@@ -29,4 +29,3 @@ INSERT INTO skill_copy
 	
 DROP TABLE skill;
 ALTER TABLE skill_copy RENAME TO skill;
-VACUUM;
