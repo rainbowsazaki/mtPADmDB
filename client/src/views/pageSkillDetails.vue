@@ -175,7 +175,7 @@ export default {
     /** スキル情報をJSONテキスト化したもの。 */
     skillDataJson: function () {
       const keys = [
-        'no', 'name', 'maxLevel', 'baseTurn', 'description'
+        'no', 'name', 'baseTurn', 'minTurn', 'description'
       ];
       return JSON.stringify(this.skillDetails, keys, 4);
     }
