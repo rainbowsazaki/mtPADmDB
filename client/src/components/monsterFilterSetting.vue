@@ -211,10 +211,9 @@ export function getFilterFunction (setting) {
     functionArray.push(d => {
       const skill = commonData.skillTable[d.skill];
       if (!skill) { return false; }
-      // スキルベースターン情報がない場合は弾く。
-      if (skill.baseTurn === null) { return false; }
-      const minTurn = skill.baseTurn - skill.maxLevel + 1;
-      return minTurn >= skillTurnMin && minTurn <= skillTurnMax;
+      // 最短ターン情報がない場合は弾く。
+      if (skill.minTurn === null) { return false; }
+      return skill.minTurn >= skillTurnMin && skill.minTurn <= skillTurnMax;
     });
   }
   const skillBoostMin = setting.hasOwnProperty('skillBoostMin') ? setting.skillBoostMin : filterDefault.skillBoostMin;

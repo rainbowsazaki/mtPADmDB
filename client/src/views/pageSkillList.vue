@@ -37,7 +37,7 @@
           <div class="box">
             <div class="skillName">
               <router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{ skill.name }}</router-link>
-              <span v-if="skill.baseTurn && skill.maxLevel" class="skillTurn">{{ (skill.baseTurn - skill.maxLevel + 1) }}ターン</span>
+              <span v-if="skill.minTurn" class="skillTurn">{{ (skill.minTurn) }}ターン</span>
             </div>
             <div class="skillDescription">{{ skill.description }}</div>
             <ul class="list-inline monsterUsingSkillIcons">

@@ -69,7 +69,8 @@
                 <router-link v-else :to="{ name: 'skillDetails', params: { no: skillDetails.no }}">{{ skillDetails.name }}</router-link>
               </div>
               <span v-if="skillDetails.baseTurn >= 1" class="skillTurn">
-                <span style="color: #0FF;">最大</span>Lv.<span v-if="skillDetails.maxLevel">{{ skillDetails.maxLevel }} ターン:{{ skillDetails.baseTurn - skillDetails.maxLevel + 1 }}</span><span v-else>不明</span>
+                <span style="color: #0FF;">最大</span>Lv.<span v-if="skillDetails.baseTurn && skillDetails.minTurn">{{ skillDetails.baseTurn - skillDetails.minTurn + 1 }}</span><span v-else>不明</span>
+                ターン:<span v-if="skillDetails.minTurn">{{ skillDetails.minTurn }}</span><span v-else>不明</span>
               </span>
             </div>
           </div>

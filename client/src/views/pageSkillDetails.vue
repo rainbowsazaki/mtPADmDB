@@ -10,8 +10,7 @@
       <template v-if="!isLeaderSkill">
         <h4 class="p-2 mt-3 bg-light">ターン</h4>
         <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{ skillDetails.baseTurn }}</span><span v-else>不明</span></div>
-        <div v-if="skillDetails.maxLevel">最大Lv.{{ skillDetails.maxLevel }} ターン:<span v-if="skillDetails.baseTurn">{{ minTurn }}</span><span v-else>不明</span></div>
-        <div v-else>最大lv.不明</div>
+        <div>最大Lv.{{ maxLevel || '不明' }} ターン:{{ skillDetails.minTurn || '不明' }}</div>
       </template>
       <h4 class="p-2 mt-3 bg-light">効果</h4>
       <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{ skillDetails.description }}</div>
@@ -149,9 +148,10 @@ export default {
         return this.skillTable[this.no] || { name: '' };
       }
     },
-    /** 最小ターン */
-    minTurn: function () {
-      return this.skillDetails.baseTurn - this.skillDetails.maxLevel + 1;
+    /** 最大レベル。 */
+    maxLevel: function () {
+      if (!this.skillDetails.baseTurn || !this.skillDetails.minTurn) { return null; }
+      return this.skillDetails.baseTurn - this.skillDetails.minTurn + 1;
     },
     /** スキル番号をキーとして、スキルを持っているモンスター番号の配列を格納したオブジェクト。 */
     skillToMonsterNosTable: function () {
@@ -164,13 +164,6 @@ export default {
     /** このスキルを持つモンスターが存在するかどうか。 */
     existsMonsterUsingThisSkill: function () {
       return this.monsterNosUsingThisSkill.length > 0;
-    },
-    /** スキルレベル最大時の（最短の）スキルターン */
-    minimumSkillTurn: function () {
-      if (!this.editData.baseTurn || !this.editData.maxLevel) { return NaN; }
-      const turn = this.editData.baseTurn - this.editData.maxLevel + 1;
-      if (turn < 0) { return NaN; }
-      return turn;
     },
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {

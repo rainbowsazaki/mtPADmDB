@@ -127,7 +127,7 @@
             <td v-if="data.skill === null">不明</td>
             <td v-else>
               <router-link :to="{ name: 'skillDetails', params: { no: data.skill }}">{{ getSkillData(data.skill).name }}</router-link>
-              <span style="font-size: 80%; float:right;">(最短ターン:<span v-if="getSkillData(data.skill).baseTurn && getSkillData(data.skill).maxLevel">{{ skillTable[data.skill].baseTurn - skillTable[data.skill].maxLevel + 1 }}</span><span v-else>不明</span>)</span>
+              <span style="font-size: 80%; float:right;">(最短ターン:<span v-if="getSkillData(data.skill).minTurn">{{ skillTable[data.skill].minTurn }}</span><span v-else>不明</span>)</span>
             </td>
           </tr>
           <tr v-if="data.skill" :key="`monsterNo${n}_2`"><td style="font-size: 90%; padding-left: 1em;">{{ getSkillData(data.skill).description }}</td></tr>
