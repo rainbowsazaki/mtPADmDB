@@ -71,7 +71,6 @@ CREATE TABLE IF NOT EXISTS skill (
   description TEXT,
   baseTurn INTEGER,
   minTurn INTEGER,
-  maxLevel INTEGER,
   comment TEXT,
 
 	createdDatetime TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')),
@@ -94,7 +93,7 @@ CREATE TABLE IF NOT EXISTS leader_skill (
 );
 
 
-  INSERT INTO skill (no , name , description, baseTurn, maxLevel, state)
+  INSERT INTO skill (no , name , description, baseTurn, minTurn, state)
     VALUES (1, '無し','', NULL, NULL, 1);
 
   INSERT INTO leader_skill (no , name , description, state)
