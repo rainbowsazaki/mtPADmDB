@@ -10,9 +10,7 @@
       "required": [
         "name",
         "description",
-        "no",
-        "maxLevel",
-        "baseTurn"
+        "no"
       ],
       "properties": {
         "no": {
