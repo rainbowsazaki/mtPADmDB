@@ -46,7 +46,7 @@ sub to_number_with_key {
 }
 
 # ハッシュ内の任意の要素の全角英数字ピリオドスペースを半角に変換し、
-# 半角括弧プラスパーセントアンパサンドを全角に変換する。
+# 半角括弧プラスパーセントアンパサンドイコールを全角に変換する。
 # 冒頭・末尾のスペースの取り除きも行う。
 # 第１引数 対象のハッシュのリファレンス
 # 第２引数以降 変換対象の要素のキー。
@@ -55,7 +55,7 @@ sub to_hankaku_with_key {
   foreach my $key (@keys) {
     if (!exists $target_ref->{$key}) { next; }
     $target_ref->{$key} =~ tr/０-９Ａ-Ｚａ-ｚ．　/0-9A-Za-z. /;
-    $target_ref->{$key} =~ tr/\(\)\+%&/（）＋％＆/;
+    $target_ref->{$key} =~ tr/\(\)\+%&=/（）＋％＆＝/;
     $target_ref->{$key} =~ s/^[\r\n\s　]*(.*?)[\r\n\s　]*$/$1/;
   }
 }
