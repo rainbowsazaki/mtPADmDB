@@ -28,16 +28,18 @@
     <div><tweet-button /></div>
     <pagination item-count="11" :page="page" :page-count="pageCount" />
     
-    <div class="row skillList" style="margin-bottom: 1rem;">
+    <div class="row skillList" :class="{ leaderSkill: isLeaderSkill }">
       <template v-for="(skill, n) in skillArrayInPage">
         <div v-if="skill.hit && (n === 0 || skill.isGroupHead)" class="col-md-12" :key="`skillHeader${n}`">
-          <h3>{{ skill.hit }}</h3>
+          <h3 class="decoHeader">{{ skill.hit }}</h3>
         </div>
         <div class="col-md-6" :key="`skillList${n}`">
           <div class="box">
             <div class="skillName">
-              <router-link :to="{ name: detailsPageName, params: { no: skill.no }}">{{ skill.name }}</router-link>
-              <span v-if="skill.minTurn" class="skillTurn">{{ (skill.minTurn) }}ターン</span>
+              <router-link style="display: inline-block; width: 100%;" :to="{ name: detailsPageName, params: { no: skill.no }}">
+                {{ skill.name }}
+                <span v-if="skill.minTurn" class="skillTurn">{{ (skill.minTurn) }}ターン</span>
+              </router-link>
             </div>
             <div class="skillDescription">{{ skill.description }}</div>
             <ul class="list-inline monsterUsingSkillIcons">
@@ -310,25 +312,30 @@ export default {
 
 <style lang="scss" scoped>
 .skillList {
+  margin-bottom: 1rem;
+
   .box {
-    border: 1px solid #dee2e6;
-    margin-bottom: -1px;
+    background: #B1AAAF;
+    border: #9b733f 0.1em solid;
+    border-radius: 0.4em;
+    overflow: hidden;
+    margin-bottom: 3px;
     padding: 4.8px;
   }
   .skillDescription {
     font-size: 90%;
     min-height: 3em;
-    padding-left: 1em;
     white-space: pre;
     overflow: scroll;
   }
   .monsterUsingSkillIcons {
     min-height: 1.5rem;
-    padding-left: 0.9rem;
     overflow: scroll;
     white-space: nowrap;
     margin: 0;
+    margin-top: 4.8px;
   }
+
   h3 {
     font-size: 1.25rem;
     margin-top: 1rem;
@@ -336,12 +343,35 @@ export default {
 
   .skillName {
     position: relative;
+    background: #39180f;
+    margin: -4.8px;
+    margin-bottom: 4.8px;
+    padding: 4.8px;
+
+    box-shadow: 0 0.2em 0.1em 0.03em rgba(0, 0, 0, 0.6) inset;
 
     .skillTurn {
+      color: #ffffff;
       position: absolute;
       font-size: 80%;
-      right: 0;
-      bottom: 0;
+      right: 4.8px;
+      bottom: 4.8px;
+    }
+  }
+
+  .box {
+    background: #B1AAAF;
+  }
+  .skillName a {
+      color: #85bcfd;
+  }
+
+  &.leaderSkill {
+    .box {
+      background: #d0cc82;
+    }
+    .skillName a {
+        color: #82ff81;
     }
   }
 }
