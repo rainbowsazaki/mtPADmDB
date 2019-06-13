@@ -14,8 +14,10 @@
           <span class="textMax">最大</span>Lv.{{ maxLevel || '不明' }} ターン: {{ skillDetails.minTurn || '不明' }}
         </div>
       </template>
-      <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{ skillDetails.description }}</div>
-      <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
+      <div class="stretch">
+        <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{ skillDetails.description }}</div>
+        <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
+      </div>
 
       <h4 class="decoHeader mt-3">所持モンスター</h4>
       <ul v-if="existsMonsterUsingThisSkill" class="monsters list-inline">
@@ -76,7 +78,7 @@
 </template>
 
 <script>
-import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml, MultiSendBlocker, gtagProductionOnly } from '../mtpadmdb.js';
+import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml, MultiSendBlocker, gtagProductionOnly, stretchElement } from '../mtpadmdb.js';
 import EditSkill from './../components/editSkill.vue';
 /**
  * スキル詳細のコンポーネント。
@@ -184,8 +186,25 @@ export default {
     skillDetails: '$_mixinForPage_updateTitle',
     '$route': 'update'
   },
-  mounted: function () { this.update(); },
+  mounted: function () {
+    this.update();
+    this.stretch();
+    window.addEventListener('resize', this.stretch);
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.stretch);
+  },
+  updated: function () {
+    this.stretch();
+  },
   methods: {
+    /** 効果文を、領域の横幅に合わせて縮小する。 */
+    stretch: function () {
+      const elms = document.getElementsByClassName('stretch');
+      for (const elm of elms) {
+        stretchElement(elm);
+      }
+    },
     /** 現在のルートに合わせて表示内容を更新する。 */
     update: function () {
       if (this.isHistory) {
