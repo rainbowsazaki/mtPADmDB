@@ -41,7 +41,9 @@
                 <span v-if="skill.minTurn" class="skillTurn">{{ (skill.minTurn) }}ターン</span>
               </router-link>
             </div>
-            <div class="skillDescription">{{ skill.description }}</div>
+            <div class="stretch skillDescription">
+              <div>{{ skill.description }}</div>
+            </div>
             <ul class="list-inline monsterUsingSkillIcons">
               <li v-for="(monsterNo, m) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="`hasMonster${m}`">
                 <monster-icon v-if="m < monsterIconCountMax" :no="monsterNo" width="2em" height="2em" />
@@ -58,7 +60,7 @@
 </template>
 
 <script>
-import { escapeRegExp, toAimaiSearch } from '../mtpadmdb.js';
+import { escapeRegExp, toAimaiSearch, stretchElement } from '../mtpadmdb.js';
 import { getFilterDefault, getFilterFunction, filterSettingText } from '../components/monsterFilterSetting.vue';
 
 /**
@@ -276,7 +278,24 @@ export default {
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
+  updated: function () {
+    this.stretch();
+  },
+  mounted: function () {
+    this.stretch();
+    window.addEventListener('resize', this.stretch);
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.stretch);
+  },
   methods: {
+    /** 効果文を、領域の横幅に合わせて縮小する。 */
+    stretch: function () {
+      const elms = document.getElementsByClassName('stretch');
+      for (const elm of elms) {
+        stretchElement(elm);
+      }
+    },
     /** URLで指定された検索ワードで searchWord を更新する。 */
     updateSearchWordFromUrl: function () {
       this.searchWord = this.$route.query.searchWord;
@@ -326,7 +345,6 @@ export default {
     font-size: 90%;
     min-height: 3em;
     white-space: pre;
-    overflow: scroll;
   }
   .monsterUsingSkillIcons {
     min-height: 1.5rem;
