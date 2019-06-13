@@ -7,71 +7,71 @@
     <template v-if="!isEditing">
       <h3>{{ skillDetails.name }}</h3>
       <div><tweet-button /></div>
+      <h4 class="decoHeader mt-3">説明</h4>
       <template v-if="!isLeaderSkill">
-        <h4 class="p-2 mt-3 bg-light">ターン</h4>
-        <div>Lv.1 ターン:<span v-if="skillDetails.baseTurn">{{ skillDetails.baseTurn }}</span><span v-else>不明</span></div>
-        <div>最大Lv.{{ maxLevel || '不明' }} ターン:{{ skillDetails.minTurn || '不明' }}</div>
+        <div class="mb-2">
+          Lv.1 ターン: <span v-if="skillDetails.baseTurn">{{ skillDetails.baseTurn }}</span><span v-else>不明</span>
+          <span class="textMax">最大</span>Lv.{{ maxLevel || '不明' }} ターン: {{ skillDetails.minTurn || '不明' }}
+        </div>
       </template>
-      <h4 class="p-2 mt-3 bg-light">効果</h4>
       <div v-if="skillDetails.description" style="white-space: pre;" v-html="getLeaderSkillDescriptionHtml(skillDetails)">{{ skillDetails.description }}</div>
       <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
-      <h4 class="p-2 mt-3 bg-light">{{ targetName }}所持モンスター</h4>
+
+      <h4 class="decoHeader mt-3">所持モンスター</h4>
       <ul v-if="existsMonsterUsingThisSkill" class="monsters list-inline">
         <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item" :key="`monster${monsterNo}`">
           <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
         </li>
       </ul>
       <div v-else>なし</div>
-      <hr>
-      <button type="button" class="btn btn-secondary" @click="startEdit">{{ isHistory ? '履歴をもとに編集する': '編集する' }}</button>
 
-      <h4 class="p-2 mt-3 bg-light">コメント</h4>
+      <h4 class="decoHeader mt-3">コメント</h4>
       <comment-list />
 
-      <h4 class="p-2 mt-3 bg-light">JSON</h4>
+      <h4 class="decoHeader mt-3">JSON</h4>
       <textarea readonly v-model="skillDataJson" class="json" />
+
+      <h4 class="decoHeader mt-3">編集履歴</h4>
+      <div>
+        <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
+          {{ isLoadingHistory ? '読み込み中…' : '編集履歴を確認する' }}
+        </button>
+        <ul v-if="histories">
+          <li v-for="history in histories" :key="`history${history.id}`">
+            <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="{ name: historyRouteName, params: { id: history.id } }">
+              {{ history.datetime }} -
+              <span v-if="history.comment">{{ history.comment }}</span>
+              <span v-else style="opacity: 0.6;">（コメントなし）</span>
+            </component>
+            <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>
+          </li>
+        </ul>
+      </div>
+
+      <button type="button" class="mt-3 btn btn-sm btn-secondary" @click="startEdit">{{ isHistory ? '履歴をもとに編集する': '編集する' }}</button>
+
     </template>
 
     <form v-else onsubmit="return false;" @submit="submit">
       <table class="table table-bordered table-sm">
         <tr>
-          <td colspan="12" style="padding: 0;">
-            <edit-skill style="width: 100%; margin: -1px;" :skill-details="editData" :leader-skill="isLeaderSkill" />
+          <td style="padding: 0;">
+            <edit-skill class="thead-light" style="width: 100%; margin: -1px;" :skill-details="editData" :leader-skill="isLeaderSkill" />
           </td>
         </tr>
         <tr class="thead-light">
-          <th colspan="12">編集コメント（任意）</th>
+          <th>編集コメント（任意）</th>
         </tr>
         <tr>
-          <td colspan="12">
+          <td>
             編集理由などを書いてください。（例：効果を更新）
             <textarea class="form-control" id="textareaComment" rows="3" v-model="editData.comment" minLength="0" maxLength="1000" />
           </td>
         </tr>
-        <tr>
-          <td v-for="n in 12" style="width:8.33333%; padding: 0; border: none;" :key="`margin${n}`" />
-        </tr>
       </table>
-      <button type="button" class="btn btn-secondary" :disabled="multiSendBlocker.isSending" @click="endEdit">キャンセル</button>
-      <button type="submit" class="btn btn-primary" :disabled="multiSendBlocker.isSending">{{ multiSendBlocker.isSending ? '送信中' :'送信する' }}</button>
+      <button type="button" class="btn btn-outline-secondary" :disabled="multiSendBlocker.isSending" @click="endEdit">キャンセル</button>
+      <button type="submit" class="ml-2 btn btn-primary" :disabled="multiSendBlocker.isSending">{{ multiSendBlocker.isSending ? '送信中' :'送信する' }}</button>
     </form>
-
-    <div style="margin-top: 1rem;">
-      <h3 class="h4">編集履歴</h3>
-      <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
-        {{ isLoadingHistory ? '読み込み中…' : '編集履歴を確認する' }}
-      </button>
-      <ul v-if="histories">
-        <li v-for="history in histories" :key="`history${history.id}`">
-          <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="{ name: historyRouteName, params: { id: history.id } }">
-            {{ history.datetime }} -
-            <span v-if="history.comment">{{ history.comment }}</span>
-            <span v-else style="opacity: 0.6;">（コメントなし）</span>
-          </component>
-          <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -281,6 +281,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.textMax {
+  color: #00cccc;
+  margin-left: 1em;
+}
+
   .monsters li {
     margin: 0;
     padding: 0;
