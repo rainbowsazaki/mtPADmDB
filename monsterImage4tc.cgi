@@ -4,6 +4,7 @@ use utf8;
 
 use Image::Magick;
 use CGI::Carp qw(fatalsToBrowser);
+use CGI;
 use JSON::PP ();
 use DBI;
 
@@ -42,6 +43,15 @@ my $file_name = "monsterImagesLog/${no}_$row_ary[0].jpg";
 
 my $canvas_width = '1200';
 my $canvas_height = '630';
+my $icon_scale = 1;
+
+my $q = CGI->new();
+if (CGI::param('small')) {
+  my $default_height = $canvas_height;
+  $canvas_width = 960;
+  $canvas_height = 540;
+  $icon_scale = $canvas_height / $default_height;
+}
 
 my $canvas = Image::Magick->new;
 $canvas->Set(size => $canvas_width . 'x' . $canvas_height);
@@ -50,8 +60,14 @@ $canvas->ReadImage('xc:black');
 # モンスター画像より少し広い背景画像。
 my $back_image = Image::Magick->new;
 $back_image->Read('tcBack.jpeg');
-$canvas->Composite(image => $back_image, compose=>'over', gravity=>'Center');
 
+my ($back_width, $back_height) = $back_image->Get('width', 'height');
+$back_image->Resize(
+  width => int($back_width * ($canvas_height / $back_height)),
+  height => $canvas_height
+);
+
+# モンスター画像
 my $src_image = Image::Magick->new;
 $src_image->Read($file_name);
 my($src_width, $src_height) = $src_image->Get('width', 'height');
@@ -62,6 +78,7 @@ $src_image->Resize(
 );
 
 # 画像を重ねる
+$canvas->Composite(image => $back_image, compose=>'over', gravity=>'Center');
 $canvas->Composite(image=>$src_image, compose=>'over', gravity=>'Center');
 
 my $opt_image_ext = 'png';
@@ -69,7 +86,7 @@ my $opt_image_ext = 'png';
 {
   my $src_image = Image::Magick->new;
   $src_image->Read("monsterIconsLog/icon_${no}_$row_ary[0].jpg");
-  my $icon_size = 160;
+  my $icon_size = 160 * $icon_scale;
   $src_image->Resize(width => $icon_size, height => $icon_size);
   $canvas->Composite(
     image => $src_image, compose => 'over', gravity => 'northwest',
@@ -104,7 +121,7 @@ sub composite_any_image {
   if ($no == 0 || $no == 99) { return; }
   my $src_image = Image::Magick->new;
   $src_image->Read("./image/${type}/${no}.${opt_image_ext}");
-  $src_image->Resize(width => 47, height => 48);
+  $src_image->Resize(width => 47 * $icon_scale, height => 48 * $icon_scale);
   $canvas->Composite(image => $src_image, compose => 'over', gravity => 'northwest', x => $x, y => $y);
 }
 # 指定した覚醒の画像をモンスター画像の指定した座標に重ねる。
@@ -115,12 +132,12 @@ sub composite_awaken_image {
 @row_ary = $dbh->selectrow_array($sql, undef, $monster_base_data_id);
 for (my $i; $i < 9; $i++) {
   my $awaken = $row_ary[$i];
-  &composite_awaken_image($awaken, $canvas_width - 72, 32 + 64 * $i);
+  &composite_awaken_image($awaken, $canvas_width - 72 * $icon_scale, (32 + 64 * $i) * $icon_scale);
 }
 # タイプ
 for (my $i = 0; $i < 3; $i++) {
   my $type = $row_ary[$i + 9];
-  &composite_any_image('type', $type, 24 + (48 + 4) * $i, 32);
+  &composite_any_image('type', $type, (24 + (48 + 4) * $i) * $icon_scale, 32 * $icon_scale);
 }
 
 #潜在覚醒
@@ -135,7 +152,7 @@ EOS
   my $super_awakens_count = @$super_awakens;
   for (my $i; $i < $super_awakens_count; $i++) {
     my $awaken = $super_awakens->[$i];
-    &composite_awaken_image($awaken, $canvas_width - 152, 32 + 64 * $i);
+    &composite_awaken_image($awaken, $canvas_width - 152 * $icon_scale, (32 + 64 * $i) * $icon_scale) ;
   }
 }
 
