@@ -9,15 +9,13 @@
       <div class="form-group row">
         <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
         <div class="col-sm-10">
-          <select class="form-control" v-model="skillTypeSearchIndex">
-            <option :value="-1">（なし）</option>
-            <option
-              v-for="(searchWordPair, index) in skillTypeSearchArray"
-              :value="index"
-              :key="`type_${index}`"
-            >
-              {{ searchWordPair[0] }}
-            </option>
+          <select class="form-control" v-model="skillTypeSearchInfo">
+            <option :value="null">（なし）</option>
+            <template v-for="(group, n) in skillTypeSearchArray">
+              <optgroup :label="group.label" :key="`group${n}`">
+                <option v-for="(setting, m) in group.settings" :value="setting" :key="`setting${m}`">{{ setting[0] }}</option>
+              </optgroup>
+            </template>
           </select>
         </div>
       </div>
@@ -86,54 +84,114 @@ export default {
   /** スキルタイプ検索情報。1つ目はスキル、2つ名はリーダースキル用。 */
   skillTypeSearchArrays: [
     [
-      ['威嚇系', '/(\\d+ターン)遅/'],
-      ['１体ブレス', '/敵1体に(.*倍)の.*攻撃。/'],
-      ['全体ブレス', '/敵全体に(.*倍)の.*攻撃。/'],
-      ['固定ダメージ', '/(敵.+?)の?固定/'],
-      ['ヘイスト', '/味方スキルが(\\d+ターン)溜まる/'],
-      ['陣（全ドロップ変化）', '/全ドロップを(.+?)に変化。/'],
-      ['操作延長', '/操作(?:時間)[がを]?(.+?)。/'],
-      ['CTW', '/[\\n。】](\\d+秒間)、時を止めて/'],
-      ['バインド回復', '/バインド状態(?:と覚醒無効状態)?を(.*?回復)/'],
-      ['覚醒無効状態回復', '/覚醒無効状態を(.*?回復)/'],
-      ['タイプエンハ', '/の間、(.*タイプ)の攻撃力が[\\d.]+倍/'],
-      ['属性エンハ', '/の間、(.*属性)の攻撃力が[\\d.]+倍/'],
-      ['覚醒エンハ', '/の間、チーム内の(.+)の.*攻撃力/'],
-      ['回復力エンハ', '/回復力.*?が.*?([\\d\\.]+倍)/'],
-      ['吸収無効化', '/(\\d+ターンの間、.*吸収を無効化)/'],
-      ['ダメージ無効貫通', '/(\\dターン)の間、ダメージ無効を貫通する/'],
-      ['ロック', '/[\\n。】](.+?)をロック/'],
-      ['ロック解除', 'ロック状態を解除'],
-      ['ダメージ減', '/\\d+ターンの間、受ける(ダメージを[^、。]*)/'],
-      ['横1列変換', '/横\\d+列を(.*ドロップ)に変化/'],
-      ['縦1列変換', '/縦\\d+列を(.*ドロップ)に変化/'],
-      ['正方形変換', '/正方形に(.+ドロップ)を/'],
-      ['十字型変換', '/十字型に(.+ドロップ)を/'],
-      ['L字型変換', '/L字型に(.+ドロップ)を/'],
-      ['コンボ加算', '/[\\n。】](\\d+ターンの間、\\d+コンボ加算)される/'],
-      ['落ちコンしなくなる', '/[\\n。】](\\d+ターン)の間、落ちコンしなくなる/'],
-      ['消せないドロップ回復', '/消せないドロップ状態を(.*?回復)。/']
+      {
+        label: 'ブレス',
+        settings: [
+          ['１体ブレス', '/敵1体に(.*倍)の.*攻撃。/'],
+          ['全体ブレス', '/敵全体に(.*倍)の.*攻撃。/'],
+          ['固定ダメージ', '/(敵.+?)の?固定/']
+        ]
+      },
+      {
+        label: 'ドロップ変換',
+        settings: [
+          ['陣（全ドロップ変化）', '/全ドロップを(.+?)に変化。/'],
+          ['横1列変換', '/横\\d+列を(.*ドロップ)に変化/'],
+          ['縦1列変換', '/縦\\d+列を(.*ドロップ)に変化/'],
+          ['正方形変換', '/正方形に(.+ドロップ)を/'],
+          ['十字型変換', '/十字型に(.+ドロップ)を/'],
+          ['L字型変換', '/L字型に(.+ドロップ)を/']
+        ]
+      },
+      {
+        label: '回復',
+        settings: [
+          ['バインド回復', '/バインド状態(?:と覚醒無効状態)?を(.*?回復)/'],
+          ['覚醒無効状態回復', '/覚醒無効状態を(.*?回復)/'],
+          ['消せないドロップ状態回復', '/消せないドロップ状態を(.*?回復)/']
+        ]
+      },
+      {
+        label: 'エンハンス',
+        settings: [
+          ['タイプエンハ', '/の間、(.*タイプ)の攻撃力が[\\d.]+倍/'],
+          ['属性エンハ', '/の間、(.*属性)の攻撃力が[\\d.]+倍/'],
+          ['覚醒エンハ', '/の間、チーム内の(.+)の.*攻撃力/'],
+          ['回復力エンハ', '/回復力.*?が.*?([\\d\\.]+倍)/']
+        ]
+      },
+      {
+        label: '自分対象補助',
+        settings: [
+          ['コンボ加算', '/[\\n。】](\\d+ターンの間、\\d+コンボ加算)される/'],
+          ['落ちコンしなくなる', '/[\\n。】](\\d+ターン)の間、落ちコンしなくなる/'],
+          ['ロック', '/[\\n。】](.+?)をロック/'],
+          ['ロック解除', 'ロック状態を解除'],
+          ['ダメージ減', '/\\d+ターンの間、受ける(ダメージを[^、。]*)/'],
+          ['ヘイスト', '/味方スキルが(\\d+ターン)溜まる/'],
+          ['操作延長', '/操作(?:時間)[がを]?(.+?)。/'],
+          ['CTW', '/[\\n。】](\\d+秒間)、時を止めて/']
+        ]
+      },
+      {
+        label: '敵対象補助',
+        settings: [
+          ['吸収無効化', '/(\\d+ターンの間、.*吸収を無効化)/'],
+          ['ダメージ無効貫通', '/(\\dターン)の間、ダメージ無効を貫通する/'],
+          ['威嚇系', '/(\\d+ターン)遅/']
+        ]
+      }
     ],
     [
-      ['無条件ダメージ軽減', '/[\\n。】](受けるダメージを.*?)[。、]/'],
-      ['属性ダメージ軽減', '/[\\n。】](.*属性)の敵から受けるダメージを.*[。、]/'],
-      ['条件付きダメージ軽減系', '/[\\n。】]([^\\nら]+ダメージ.*?減)/'],
-      ['属性同時攻撃', '/[\\n。】](.*同時攻撃)/'],
-      ['コンボ条件', '/[\\n。】](\\d*コンボ.*?)で/'],
-      ['指定色コンボ', '/[\\n。】](.*の\\d*コンボ.*?)で/'],
-      ['根性', 'ふんばることがある'],
-      ['追い打ち', '/(攻撃力×\\d+?倍)の追い打ち/'],
-      ['操作時間延長', '/ドロップ操作(?:時間)?[\\D]*(\\d+.*?)。/'],
-      ['操作時間固定', '/操作時間(\\d+秒固定)/'],
-      ['経験値アップ', '/ランク経験値が(.+?)。/'],
-      ['コンボ加算', '/(\\dコンボ加算)/'],
-      ['マルチプレイ強化', '/マルチプレイ時、(.*?)。/'],
-      ['反撃', '/受けると、(.*反撃)/'],
-      ['強化5個消し', '強化ドロップを含めて5個消'],
-      ['十字消し', '/[\\n。】](.*十字消し)/'],
-      ['7×6マス', '7×6マス'],
-      ['落ちコンなし', '落ちコンなし'],
-      ['HP条件', '/HP(\\d+％以[上下]|満タン)/']
+      {
+        label: '条件',
+        settings: [
+          ['HP条件', '/HP(\\d+％以[上下]|満タン)/'],
+          ['属性同時攻撃', '/[\\n。】](.*同時攻撃)/'],
+          ['コンボ条件', '/[\\n。】](\\d*コンボ.*?)で/'],
+          ['指定色コンボ', '/[\\n。】](.*の\\d*コンボ.*?)で/'],
+          ['強化5個消し', '強化ドロップを含めて5個消'],
+          ['マルチプレイ強化', '/マルチプレイ時、(.*?)。/'],
+          ['十字消し', '/[\\n。】](.*十字消し)/']
+        ]
+      },
+      {
+        label: '軽減',
+        settings: [
+          ['無条件ダメージ軽減', '/[\\n。】](受けるダメージを.*?)[。、]/'],
+          ['属性ダメージ軽減', '/[\\n。】](.*属性)の敵から受けるダメージを.*[。、]/'],
+          ['条件付きダメージ軽減系', '/[\\n。】]([^\\nら]+ダメージ.*?減)/']
+        ]
+      },
+      {
+        label: 'ドロップ消し時発動',
+        settings: [
+          ['追い打ち', '/(攻撃力×\\d+?倍)の追い打ち/']
+        ]
+      },
+      {
+        label: '補助',
+        settings: [
+          ['操作時間延長', '/ドロップ操作(?:時間)?[\\D]*(\\d+.*?)。/'],
+          ['コンボ加算', '/(\\dコンボ加算)/'],
+          ['反撃', '/受けると、(.*反撃)/'],
+          ['根性', 'ふんばることがある']
+        ]
+      },
+      {
+        label: 'リザルト変更',
+        settings: [
+          ['経験値アップ', '/ランク経験値が(.+?)。/']
+        ]
+      },
+      {
+        label: 'ルール変更',
+        settings: [
+          ['操作時間固定', '/操作時間(\\d+秒固定)/'],
+          ['7×6マス', '7×6マス'],
+          ['落ちコンなし', '落ちコンなし']
+        ]
+      }
     ]
   ],
   data: function () {
@@ -147,8 +205,8 @@ export default {
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
       monsterIconCountMax: 10,
 
-      /** 使用するスキルタイプ検索情報のインデックス。 */
-      skillTypeSearchIndex: -1,
+      /** 使用するスキルタイプ検索情報。 */
+      skillTypeSearchInfo: null,
       /** 特定条件を満たすモンスターが持つスキルのみを表示するためのモンスター条件のフィルタ。 */
       monsterFilterSetting: getFilterDefault()
     };
@@ -188,9 +246,9 @@ export default {
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
       let searchWord = this.$route.query.searchWord || '';
-      const skillTypeSearch = this.skillTypeSearchArray[this.skillTypeSearchIndex];
-      if (skillTypeSearch) {
-        searchWord = skillTypeSearch[1] + ' ' + searchWord;
+      // スキルタイプ検索情報の追加。
+      if (this.skillTypeSearchInfo) {
+        searchWord = this.skillTypeSearchInfo[1] + ' ' + searchWord;
       }
 
       if (!searchWord) { return this.skillArray; }
@@ -251,9 +309,8 @@ export default {
     },
     /** ページタイトル。 */
     pageTitle: function () {
-      const skillTypeSearch = this.skillTypeSearchArray[this.skillTypeSearchIndex];
       let typeName = '';
-      if (skillTypeSearch) { typeName = ' ' + skillTypeSearch[0]; }
+      if (this.skillTypeSearchInfo) { typeName = ' ' + this.skillTypeSearchInfo[0]; }
 
       let title;
       if (!this.$route.query.searchWord) {
@@ -271,7 +328,7 @@ export default {
   watch: {
     '$route': 'updateSearchWordFromUrl',
     searchWord: 'search',
-    skillTypeSearchIndex: 'changeSkillType',
+    skillTypeSearchInfo: 'changeSkillType',
     pageTitle: '$_mixinForPage_updateTitle'
   },
   created: function () {
@@ -300,18 +357,32 @@ export default {
     /** URLで指定された検索ワードで searchWord を更新する。 */
     updateSearchWordFromUrl: function () {
       this.searchWord = this.$route.query.searchWord;
-      this.skillTypeSearchIndex = this.$route.query.skillType;
-      if (this.skillTypeSearchIndex === undefined) { this.skillTypeSearchIndex = -1; }
+      const skillType = this.$route.query.skillType;
+      if (skillType === undefined) {
+        this.skillTypeSearchInfo = null;
+      } else {
+        this.skillTypeSearchArray.forEach(typeGroup => {
+          typeGroup.settings.forEach(typeInfo => {
+            if (typeInfo[0] === skillType) {
+              this.skillTypeSearchInfo = typeInfo;
+            }
+          });
+        });
+      }
     },
     /** searchWord の文字列を使用して検索を行う。 */
     search: function () {
       this.updateRouteQuery({ searchWord: this.searchWord || undefined });
     },
-    /** skillTypeSearchIndex の値を元に表示するスキルタイプの種類を変更する。 */
+    /** skillTypeSearchInfo の値を元に表示するスキルタイプの種類を変更する。 */
     changeSkillType: function () {
-      let skillType = this.skillTypeSearchIndex;
-      // -1 の場合は 無し なので、非表示にするために undefined にする。
-      if (skillType === -1) { skillType = undefined; }
+      let skillType;
+      // null の場合は 無し なので、非表示にするために undefined にする。
+      if (this.skillTypeSearchInfo === null) {
+        skillType = undefined;
+      } else {
+        skillType = this.skillTypeSearchInfo[0];
+      }
       this.updateRouteQuery({ skillType: skillType });
     },
     /** ルートのクエリーを更新する。 */
