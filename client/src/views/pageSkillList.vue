@@ -39,8 +39,8 @@
                 <span v-if="skill.minTurn" class="skillTurn">{{ (skill.minTurn) }}ターン</span>
               </router-link>
             </div>
-            <div class="stretch skillDescription">
-              <div>{{ skill.description }}</div>
+            <div class="skillDescription">
+              <div class="stretch">{{ skill.description }}</div>
             </div>
             <ul class="list-inline monsterUsingSkillIcons">
               <li v-for="(monsterNo, m) in monsterNosUsingThisSkill(skill.no)" class="list-inline-item" :key="`hasMonster${m}`">
@@ -429,23 +429,36 @@ export default {
 
   .box {
     background: #B1AAAF;
-    border: #9b733f 0.1em solid;
     border-radius: 0.4em;
-    overflow: hidden;
     margin-bottom: 3px;
-    padding: 4.8px;
   }
   .skillDescription {
+    z-index: 2;
+    position: relative;
+
+    border: #9b733f 0.111em solid;
+    border-top: none;
+    border-radius: 0 0 0.4em 0.4em;
+    
     font-size: 90%;
-    min-height: 3em;
+    min-height: 3.8em;
     white-space: pre;
+    
+    padding: 5.8px;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.4);
   }
   .monsterUsingSkillIcons {
-    min-height: 1.5rem;
+    z-index: 1;
+    position: relative;
+    border: 1px solid black;
+    border-radius: 0 0 0.4em 0.4em;
+    min-height: 2.6rem;
     overflow: scroll;
     white-space: nowrap;
     margin: 0;
-    margin-top: 4.8px;
+    margin-top: -10px;
+    padding: 4.8px;
+    padding-top: 14.8px;
   }
 
   h3 {
@@ -456,10 +469,11 @@ export default {
   .skillName {
     position: relative;
     background: #39180f;
-    margin: -4.8px;
-    margin-bottom: 4.8px;
-    padding: 4.8px;
 
+    border: #9b733f 0.1em solid;
+    border-bottom: none;
+    border-radius: 0.4em 0.4em 0 0;
+    padding: 4.8px;
     box-shadow: 0 0.2em 0.1em 0.03em rgba(0, 0, 0, 0.6) inset;
 
     .skillTurn {
@@ -471,8 +485,19 @@ export default {
     }
   }
 
+  $skillBgColor: #B1AAAF;
+  $leaderSkillBgColor: #d0cc82;
+  $bgColorLigntnPercent: 15%;
+  $borderDarkenPercent: 25%;
+
   .box {
-    background: #B1AAAF;
+    background: lighten($skillBgColor, $bgColorLigntnPercent);
+  }
+  .skillDescription {
+    background: $skillBgColor;
+  }
+  .monsterUsingSkillIcons {
+    border-color: darken($skillBgColor, $borderDarkenPercent);
   }
   .skillName a {
       color: #85bcfd;
@@ -480,7 +505,13 @@ export default {
 
   &.leaderSkill {
     .box {
-      background: #d0cc82;
+      background: lighten($leaderSkillBgColor, $bgColorLigntnPercent);
+    }
+    .skillDescription {
+      background: $leaderSkillBgColor;
+    }
+    .monsterUsingSkillIcons {
+      border-color: darken($leaderSkillBgColor, $borderDarkenPercent);
     }
     .skillName a {
         color: #82ff81;
