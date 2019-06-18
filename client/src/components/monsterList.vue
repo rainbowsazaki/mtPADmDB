@@ -5,15 +5,17 @@
     <pagination item-count="11" :page="page" :page-count="pageCount" />
 
     <div class="row">
-      <div v-for="data in monsterTableInPage" class="col-md-6 listItem" :key="`monster${data.no}`">
-        <router-link :to="{ name: 'monsterDetails', params: { no: data.no }}">
-          <monster-icon
-            no-link :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em"
-          /><div class="monsterName">
-            <span class="monsterNo">No.{{ data.no }}</span><br>
-            {{ data.name }}
-          </div>
-        </router-link>
+      <div v-for="data in monsterTableInPage" class="col-md-6" :key="`monster${data.no}`">
+        <div class="listItem">
+          <router-link :to="{ name: 'monsterDetails', params: { no: data.no }}">
+            <monster-icon
+              no-link :no="data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em"
+            /><div class="monsterName">
+              <div class="monsterNo">No.{{ data.no }}</div>
+              <div>{{ data.name }}</div>
+            </div>
+          </router-link>
+        </div>
       </div>
     </div>
 
@@ -82,6 +84,28 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 
+  border: #fddb70 solid 0.1em;
+  border-radius: 0.4em;
+  margin-bottom: 2px;
+  padding: 1px;
+  background: linear-gradient(#c49632, #e7bb5c 20%, #e7bb5c 40%, #a07b44 40%, #885727);
+  
+  text-shadow: 1px 1px 0 rgba(0,0,0, 0.5);
+
+  box-shadow:
+    0 0 0px 1px rgba(0, 0, 0, 0.5),
+
+    0 4px 2px -2px rgba(255, 255, 255, 0.5) inset,
+    -3px 0 2px -2px rgba(255, 255, 255, 0.5) inset,
+    0 -2px 2px -2px rgba(255, 255, 255, 0.5) inset,
+    
+    0 -4px 2px -2px rgba(0, 0, 0, 0.3) inset;
+
+  a {
+    display: inline-block;
+    width: 100%;
+    color: #ffffff;
+  }
   .monsterName {
     display: inline-block;
     padding-left: 4px;
@@ -90,6 +114,7 @@ export default {
 
     .monsterNo {
       font-size: 80%;
+      margin-bottom: 2px;
     }
   }
 }
