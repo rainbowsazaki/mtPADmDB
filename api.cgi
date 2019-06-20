@@ -536,6 +536,23 @@ sub mode_update_monster_data {
     accountName => $account_name
   );
 
+  # 属性、タイプ、覚醒の配列の長さが2,3,9に満たない場合は0(なし)で埋める。
+  while (scalar(@{$data->{attributes}}) < 2) {
+    push @{$data->{attributes}}, 0;
+  }
+  while (scalar(@{$data->{types}}) < 3) {
+    push @{$data->{types}}, 0;
+  }
+  while (scalar(@{$data->{awakens}}) < 9) {
+    push @{$data->{awakens}}, 0;
+  }
+  # 属性、タイプの先頭が『なし』になることはないので、そういうデータの場合は不明を示す値にする。
+  if ($data->{attributes}[0] == 0) {
+    $data->{attributes} = [ undef, 0 ];
+  }
+  if ($data->{types}[0] == 0) {
+    $data->{types} = [ undef, 0, 0 ];
+  }
 
   &to_number_with_key($data, qw/ no attributes cost rare types awakens maxExp maxLevel maxParam 
     skill leaderSkill assist overLimit overLimitParam superAwakens evolutionType /);
@@ -550,10 +567,6 @@ sub mode_update_monster_data {
   &check_range('レアリティ', $data->{rare}, 1, 99, 0);
   foreach my $i (0..3) {
     &check_range('タイプ${i}', $data->{types}[$i], 0, 99, 0);
-  }
-  # 覚醒配列の長さが9に満たない場合は0(なし)で埋める。
-  while (scalar(@{$data->{awakens}}) < 9) {
-    push @{$data->{awakens}}, 0;
   }
   foreach my $i (0..9) {
     &check_range('覚醒${i}', $data->{awakens}[$i], 0, 99, 0);
