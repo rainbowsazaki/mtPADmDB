@@ -43,22 +43,27 @@ import { constData } from '../mtpadmdb.js';
 
 export default {
   props: {
+    /** 値を格納する配列。 */
     'value': {
       type: Array,
       default: () => []
     },
+    /** 『なし』の入力を行えるようにするかどうか。 */
     'useNone': {
       type: Boolean,
       default: false
     },
+    /** 『不明』の入力を行えるようにするかどうか。 */
     'useUnknown': {
       type: Boolean,
       default: false
     },
+    /** 入力クリアのボタンを表示するかどうか。 */
     'useClear': {
       type: Boolean,
       default: false
     },
+    /** 項目をオンオフで切り替えるスタイルにするかどうか。 */
     'checkboxStyle': {
       type: Boolean,
       default: false

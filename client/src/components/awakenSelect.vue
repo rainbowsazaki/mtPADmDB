@@ -32,14 +32,17 @@
 <script>
 export default {
   props: {
+    /** 値を格納する配列。 */
     'value': {
       type: Array,
       default: () => []
     },
+    /** 『不明』の入力を行えるようにするかどうか。 */
     'useUnknown': {
       type: Boolean,
       default: false
     },
+    /** 項目をオンオフで切り替えるスタイルにするかどうか。 */
     'checkboxStyle': {
       type: Boolean,
       default: false
