@@ -22,30 +22,29 @@
             </div>
           </td>
         </tr>
-        <tr class="thead-light"><th colspan="12">タイプ</th></tr>
+        <tr class="thead-light">
+          <th colspan="12">タイプ</th>
+        </tr>
         <tr>
-          <td v-for="n in 3" colspan="4" :key="`typeNo${n}`">
-            <select class="custom-select" :id="'selectType' + n" v-model.number="monsterData.types[n - 1]">
-              <option v-for="(type, key) in typeTable" :disabled="key === ((n === 1) ? '0' : 'null')" :value="key" :key="`type${key}`" v-once>{{ type.name }}</option>
-            </select>
+          <td colspan="12">
+            <attr-select use-unknown use-clear mode="type" v-model="monsterData.types" />
           </td>
         </tr>
         <tr class="thead-light">
-          <th colspan="3">属性</th>
-          <th colspan="3">複属性</th>
-          <th colspan="3">レア</th>
-          <th colspan="3">コスト</th>
+          <th colspan="12">属性</th>
         </tr>
         <tr>
-          <td colspan="3">
-            <select class="custom-select" id="selectAttribute0" v-model.number="monsterData.attributes[0]">
-              <option v-for="(attribute, key) in attributeTable" :disabled="key === '0'" :value="key" :key="`attr${key}`" v-once>{{ attribute }}</option>
-            </select></td>
-          <td colspan="3">
-            <select class="custom-select" id="selectAttribute1" v-model.number="monsterData.attributes[1]">
-              <option v-for="(attribute, key) in attributeTable" :disabled="key === 'null'" :value="key" :key="`attr${key}`" v-once>{{ attribute }}</option>
-            </select></td>
-          <td colspan="3">
+          <td colspan="12">
+            <attr-select use-unknown use-clear v-model="monsterData.attributes" />
+          </td>
+        </tr>
+        <tr class="thead-light">
+          <th colspan="4">レア</th>
+          <th colspan="4">コスト</th>
+          <th colspan="4">アシスト</th>
+        </tr>
+        <tr>
+          <td colspan="4">
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" style="padding: 0.375rem; font-size: 80%;">★</span>
@@ -53,17 +52,25 @@
               <input type="number" class="form-control" id="inputRare" v-model.number="monsterData.rare" min="1" max="99">
             </div>
           </td>
-          <td colspan="3">
+          <td colspan="4">
             <input type="number" class="form-control" id="inputCost" v-model.number="monsterData.cost" min="1" max="999">
+          </td>
+          <td colspan="4">
+            <select class="custom-select" id="selectAssist" v-model.number="monsterData.assist">
+              <option v-for="(type, key) in booleanTable" :value="key" :key="`assist${key}`" v-once>{{ type }}</option>
+            </select>
           </td>
         </tr>
         <tr class="thead-light">
-          <th colspan="4">最大レベル</th>
-          <th colspan="4">最大レベルに必要な経験値</th>
-          <th colspan="4">アシスト</th>
+          <th colspan="6">最大レベル</th>
+          <th colspan="6">
+            <span class="d-inline-block">最大レベルに</span>
+            <span class="d-inline-block">必要な</span>
+            <span class="d-inline-block">経験値</span>
+          </th>
         </tr>
         <tr>
-          <td colspan="4">
+          <td colspan="6">
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text">Lv.</span>
@@ -71,13 +78,8 @@
               <input type="number" class="form-control" id="inputMaxLevel" v-model.number="monsterData.maxLevel" min="1" max="99">
             </div>
           </td>
-          <td colspan="4">
+          <td colspan="6">
             <input type="number" class="form-control" id="inputMaxExp" v-model.number="monsterData.maxExp" min="0" max="999999999">
-          </td>
-          <td colspan="4">
-            <select class="custom-select" id="selectAssist" v-model.number="monsterData.assist">
-              <option v-for="(type, key) in booleanTable" :value="key" :key="`assist${key}`" v-once>{{ type }}</option>
-            </select>
           </td>
         </tr>
         <tr class="thead-light">

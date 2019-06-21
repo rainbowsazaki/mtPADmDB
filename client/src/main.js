@@ -60,6 +60,7 @@ const ScopedStyle = () => import('./components/scopedStyle.vue');
 const SkillIncrementalInput = () => import('./components/skillIncrementalInput.vue');
 const MonsterFilterSetting = () => import('./components/monsterFilterSetting.vue');
 const AwakenSelect = () => import('./components/awakenSelect.vue');
+const AttrSelect = () => import('./components/attrSelect.vue');
 const CommentList = () => import('./components/commentList.vue');
 
 Vue.component('monster-icon', MonsterIcon);
@@ -72,6 +73,7 @@ Vue.component('skill-incremental-input', SkillIncrementalInput);
 Vue.component('tweet-button', TweetButton);
 Vue.component('monster-filter-setting', MonsterFilterSetting);
 Vue.component('awaken-select', AwakenSelect);
+Vue.component('attr-select', AttrSelect);
 Vue.component('comment-list', CommentList);
 
 // ページ用のコンポーネントで使用する処理のミックスイン
