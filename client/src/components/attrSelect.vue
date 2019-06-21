@@ -1,21 +1,21 @@
 <template>
   <div>
-    <div class="selectedList">
+    <div class="selectedList" :class="{ 'attributeSelect': !isTypeSelect, 'typeSelect': isTypeSelect }">
       <ul>
-        <li v-for="i in 2" :key="`selectedAwaken_${i}`" :class="{ hasItem: selectedArray[i - 1] }" @click="removeAwaken(i - 1, $event);">
+        <li v-for="i in targetCount" :key="`selectedAwaken_${i}`" :class="{ hasItem: selectedArray[i - 1] }" @click="removeAwaken(i - 1, $event);">
           <div v-if="selectedArray[i - 1] === 0" class="text">無</div>
           <div v-else-if="checkboxStyle && selectedArray[i - 1] === null" class="text">不</div>
-          <div v-else-if="selectedArray[i - 1]" :style="{ height: '24px',backgroundImage: `url(./image/attribute/${selectedArray[i - 1]}.png)`, backgroundSize: '24px 24px'}" :key="selectedArray[i - 1] ? i : '0'" />
+          <div v-else-if="selectedArray[i - 1]" :style="{ height: '24px',backgroundImage: `url(./image/${imageFolder}/${selectedArray[i - 1]}.png)`, backgroundSize: '24px 24px'}" :key="selectedArray[i - 1] ? i : '0'" />
         </li>
       </ul>
       <div v-if="isUnknown" class="unknownMessage">不明</div>
     </div>
     <div class="selectArea">
       <ul>
-        <li v-for="(n, i) in [1,2,3,4,5]" :key="`alTr_${i}`" class="item">
+        <li v-for="(n, i) in items" :key="`alTr_${i}`" class="item">
           <label>
             <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="n" @change="$emit('input', selectedArray);">
-            <img :src="`./image/attribute/${n}.png`" @click="addAwaken(n, $event);">
+            <img :src="`./image/${imageFolder}/${n}.png`" @click="addAwaken(n, $event);">
           </label>
         </li>
         <li v-if="useNone" class="item">
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { constData } from '../mtpadmdb.js';
+
 export default {
   props: {
     'value': {
@@ -60,6 +62,11 @@ export default {
     'checkboxStyle': {
       type: Boolean,
       default: false
+    },
+    /** 編集対象の指定。 'attribute' or 'type' */
+    'mode': {
+      type: String,
+      default: 'attribute'
     }
   },
   data: function () {
@@ -71,6 +78,23 @@ export default {
     /** 覚醒内容が不明であることを示す値が指定されているかどうか。 */
     isUnknown () {
       return !this.checkboxStyle && this.selectedArray[0] === null;
+    },
+    /** タイプの編集かどうか。 true の場合はタイプ、 false の場合は属性の編集。 */
+    isTypeSelect () {
+      return (this.mode === 'type');
+    },
+    /** 使用するアイコン画像があるフォルダの名前。 */
+    imageFolder () {
+      return (this.isTypeSelect) ? 'type' : 'attribute';
+    },
+    /** 表示する選択項目の番号の配列。 */
+    items () {
+      const table = this.isTypeSelect ? constData.typeTable : constData.attributeTable;
+      return Object.keys(table).filter(d => d !== '0' && d !== 'null');
+    },
+    /** チェックボックススタイルでない場合の、選択可能な項目の上限数。 */
+    targetCount () {
+      return this.isTypeSelect ? 3 : 2;
     }
   },
   watch: {
@@ -96,7 +120,7 @@ export default {
       // ただし、不明にする場合は除く。
       if (this.checkboxStyle && no !== null) { return; }
       if (event) { event.preventDefault(); }
-      if (this.selectedArray.length >= 2) { return; }
+      if (this.selectedArray.length >= this.targetCount) { return; }
       this.selectedArray.push(no);
       this.$emit('input', this.selectedArray);
     },
@@ -164,6 +188,11 @@ export default {
     }
   }
 
+  &.typeSelect{
+    li, .text {
+      border-radius: 4px;
+    }
+  }
 }
 
 .unknownMessage {
