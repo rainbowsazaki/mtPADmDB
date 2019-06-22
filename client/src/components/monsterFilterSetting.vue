@@ -24,43 +24,19 @@
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">主属性</label>
           <div class="col-sm-10">
-            <template v-for="(attrName, attr) in attributeTable">
-              <span :key="`attr${attr}`">
-                <input :disabled="attr === '0'" type="checkbox" class="imageCheckBox" v-model="filter.attr" :value="attr" :id="`check_mainAttr_${attr}`">
-                <label :for="`check_mainAttr_${attr}`">
-                  <img v-if="attr !== '0' && attr !== 'null'" :src="`./image/attribute/${attr}.png`">
-                  <span v-else>{{ attrName }}</span>
-                </label>
-              </span>
-            </template>
+            <attr-select use-unknown checkbox-style v-model="filter.attr" />
           </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">複属性</label>
           <div class="col-sm-10">
-            <template v-for="(attrName, attr) in attributeTable">
-              <span :key="`attr${attr}`">
-                <input type="checkbox" class="imageCheckBox" v-model="filter.subAttr" :value="attr" :id="`check_subAttr_${attr}`">
-                <label :for="`check_subAttr_${attr}`">
-                  <img v-if="attr !== '0' && attr !== 'null'" :src="`./image/attribute/${attr}.png`">
-                  <span v-else>{{ attrName }}</span>
-                </label>
-              </span>
-            </template>
+            <attr-select use-none checkbox-style v-model="filter.subAttr" />
           </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">タイプ</label>
           <div class="col-sm-10">
-            <template v-for="(typeInfo, type) in typeTable">
-              <span v-if="type !== '0'" :key="`type${type}`">
-                <input type="checkbox" class="imageCheckBox" v-model="filter.type" :value="type" :id="`type_${type}`">
-                <label :for="`type_${type}`">
-                  <img v-if="type !== 'null'" :src="`./image/type/${type}.png`">
-                  <span v-else>{{ typeInfo.name }}</span>
-                </label>
-              </span>
-            </template>
+            <attr-select use-unknown checkbox-style mode="type" v-model="filter.type" />
           </div>
         </div>
         <div class="form-group row">
@@ -556,35 +532,6 @@ export default {
     margin-top: -2px;
     padding: 8px 4px 4px 4px;
     overflow: hidden;
-  }
-
-  input.imageCheckBox {
-    display: none;
-
-    + label {
-      margin-right: 0.5rem;
-      filter: opacity(50%) grayscale(95%);
-
-      img {
-        width: 24px;
-        height: 24px;
-      }
-
-      span {
-        border: 1px solid #999;
-        border-radius: 0.5em;
-        background: #eee;
-        padding: 0.25rem;
-      }
-    }
-
-    &:checked + label {
-      filter: opacity(100%) grayscale(0%);
-    }
-  }
-
-  #check_mainAttr_0 + label {
-    visibility: hidden;
   }
 
   .settingText {
