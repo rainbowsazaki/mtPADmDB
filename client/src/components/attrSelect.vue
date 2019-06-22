@@ -26,7 +26,7 @@
         </li>
         <li v-if="useUnknown" class="item">
           <label>
-            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="null" @change="$emit('input', selectedArray);">
+            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" value="null" @change="$emit('input', selectedArray);">
             <span class="btn btn-secondary btn-sm" @click="(checkboxStyle) ? addAwaken(0, $event) : setUnknown()">不明</span>
           </label>
         </li>
