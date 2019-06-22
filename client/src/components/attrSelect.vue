@@ -154,6 +154,10 @@ export default {
 
 <style lang="scss" scoped>
 
+.btn-sm {
+  line-height: 1;
+}
+
 .selectedList {
   position: relative;
   display: inline-block;
