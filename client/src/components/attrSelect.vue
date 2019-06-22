@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'attributeSelect': !isTypeSelect, 'typeSelect': isTypeSelect }">
-    <div class="selectedList">
+    <div v-if="!checkboxStyle" class="selectedList">
       <ul>
         <li v-for="i in targetCount" :key="`selectedAwaken_${i}`" :class="{ hasItem: selectedArray[i - 1] }" @click="removeAwaken(i - 1, $event);">
           <div v-if="selectedArray[i - 1] === 0" class="text">無</div>
