@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="selectedList" :class="{ 'attributeSelect': !isTypeSelect, 'typeSelect': isTypeSelect }">
+  <div :class="{ 'attributeSelect': !isTypeSelect, 'typeSelect': isTypeSelect }">
+    <div class="selectedList">
       <ul>
         <li v-for="i in targetCount" :key="`selectedAwaken_${i}`" :class="{ hasItem: selectedArray[i - 1] }" @click="removeAwaken(i - 1, $event);">
           <div v-if="selectedArray[i - 1] === 0" class="text">無</div>
@@ -192,8 +192,10 @@ export default {
       padding: 3px;
     }
   }
+}
 
-  &.typeSelect{
+.typeSelect{
+  .selectedList {
     li, .text {
       border-radius: 4px;
     }
