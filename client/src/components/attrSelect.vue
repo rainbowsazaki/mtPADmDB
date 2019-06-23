@@ -11,29 +11,23 @@
       <div v-if="isUnknown" class="unknownMessage">不明</div>
     </div>
     <div class="selectArea">
-      <ul>
-        <li v-for="(n, i) in items" :key="`alTr_${i}`" class="item">
-          <label>
-            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="n" @change="$emit('input', selectedArray);">
-            <img :src="`./image/${imageFolder}/${n}.png`" @click="addAwaken(n, $event);">
-          </label>
-        </li>
-        <li v-if="useNone" class="item">
-          <label>
-            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="0" @change="$emit('input', selectedArray);">
-            <span class="btn btn-secondary btn-sm" @click="addAwaken(0, $event);">なし</span>
-          </label>
-        </li>
-        <li v-if="useUnknown" class="item">
-          <label>
-            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" value="null" @change="$emit('input', selectedArray);">
-            <span class="btn btn-secondary btn-sm" @click="(checkboxStyle) ? addAwaken(0, $event) : setUnknown()">不明</span>
-          </label>
-        </li>
-        <li v-if="useClear" class="item">
-          <span class="btn btn-secondary btn-sm" @click="clear">クリア</span>
-        </li>
-      </ul>
+      <span v-for="a in (Array.isArray(items[0])) ? items : [items]" :key="a.toString()" style="display: inline-block">
+        <label v-for="(m, j) in a" :key="`alTr_${j}`" class="item">
+          <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" @change="$emit('input', selectedArray);">
+          <img :src="`./image/${imageFolder}/${m}.png`" @click="addAwaken(m, $event);">
+        </label>
+      </span>
+      <label v-if="useNone" class="item">
+        <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="0" @change="$emit('input', selectedArray);">
+        <span class="btn btn-secondary btn-sm" @click="addAwaken(0, $event);">なし</span>
+      </label>
+      <label v-if="useUnknown" class="item">
+        <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" value="null" @change="$emit('input', selectedArray);">
+        <span class="btn btn-secondary btn-sm" @click="(checkboxStyle) ? addAwaken(0, $event) : setUnknown()">不明</span>
+      </label>
+      <span v-if="useClear" class="item">
+        <span class="btn btn-secondary btn-sm" @click="clear">クリア</span>
+      </span>
     </div>
   </div>
 </template>
@@ -95,7 +89,14 @@ export default {
     /** 表示する選択項目の番号の配列。 */
     items () {
       const table = this.isTypeSelect ? constData.typeTable : constData.attributeTable;
-      return Object.keys(table).filter(d => d !== '0' && d !== 'null');
+      const array = Object.keys(table).filter(d => d !== '0' && d !== 'null');
+      if (!this.isTypeSelect) { return array; }
+      
+      const array2 = [];
+      for (let i = 0; i < (array.length + 3) / 4; i++) {
+        array2.push(array.slice(i * 4, i * 4 + 4));
+      }
+      return array2;
     },
     /** チェックボックススタイルでない場合の、選択可能な項目の上限数。 */
     targetCount () {
@@ -220,16 +221,13 @@ export default {
 }
 
 .selectArea {
-
-  ul {
+  
+  label {
     margin: 0;
-    padding: 0;
   }
 
-  li {
-    display: inline;
-    list-style: none;
-    margin-right: 4px;
+  .item {
+    margin: 2px;
   }
 
   .item img {
@@ -248,6 +246,5 @@ export default {
   input[type="checkbox"]:checked + * {
     filter: none;
   }
-  label { margin: 0; }
 }
 </style>
