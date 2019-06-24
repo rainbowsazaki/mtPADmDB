@@ -83,6 +83,13 @@
           </td>
         </tr>
         <tr class="thead-light">
+          <th colspan="9">レベル最大時パラメータ</th>
+          <th colspan="3">+297時</th>
+        </tr>
+        <tr-param type="hp" v-model.number="monsterData.maxParam.hp" />
+        <tr-param type="attack" v-model.number="monsterData.maxParam.attack" />
+        <tr-param type="recovery" v-model.number="monsterData.maxParam.recovery" />
+        <tr class="thead-light">
           <th colspan="12">覚醒</th>
         </tr>
         <tr>
@@ -90,13 +97,6 @@
             <awaken-select use-unknown v-model="monsterData.awakens" />
           </td>
         </tr>
-        <tr class="thead-light">
-          <th colspan="9">レベル最大時パラメータ</th>
-          <th colspan="3">+297時</th>
-        </tr>
-        <tr-param type="hp" v-model.number="monsterData.maxParam.hp" />
-        <tr-param type="attack" v-model.number="monsterData.maxParam.attack" />
-        <tr-param type="recovery" v-model.number="monsterData.maxParam.recovery" />
         <tr class="thead-light">
           <th colspan="12">スキル</th>
         </tr>
