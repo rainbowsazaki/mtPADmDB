@@ -18,6 +18,21 @@
       <input type="checkbox" id="useMultiBoost" v-model="useMultiBoost" value="1">
       <label for="useMultiBoost">マルチブースト適用時のパラメータを使用する</label>
     </div>
+    <label>
+      <input type="checkbox" v-model="useEnemyState" value="1">
+      敵の属性による補正やキラーを反映する
+    </label>
+    <dl v-if="useEnemyState" class="enemyStateArea">
+      <dt>敵のタイプ</dt>
+      <dd>
+        <attr-select mode="type" use-clear v-model="enemyTypes" />
+      </dd>
+      <dt>敵の属性</dt>
+      <dd>
+        <attr-select use-clear v-model="enemyAttributes" />
+      </dd>
+    </dl>
+
     <h3>{{ rankingSetting.title }}ランキング</h3>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
@@ -87,7 +102,7 @@ export default {
           description: 'モンスターのレベル最大・+297・全覚醒時の攻撃のランキングです。',
           columns: [
             { name: 'HP', func: data => data.hyperMaxParam.hp },
-            { name: '攻撃', func: data => data.hyperMaxParam.attack },
+            { name: '攻撃', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate) | 0 },
             { name: '回復', func: data => data.hyperMaxParam.recovery }
           ],
           sortColumn: 1
@@ -136,7 +151,7 @@ export default {
           title: '2体攻撃消し時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の2体攻撃消し時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.wayAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.wayAttackRate) | 0 }
           ],
           sortColumn: 0
         },
@@ -145,7 +160,7 @@ export default {
           title: 'L字消し攻撃時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時のL字消し攻撃時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.lJiAttackRate) | 0 }
           ],
           sortColumn: 0
         },
@@ -154,7 +169,7 @@ export default {
           title: '7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0
         },
@@ -163,7 +178,7 @@ export default {
           title: '10コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の10コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
           ],
           sortColumn: 0
         },
@@ -172,7 +187,7 @@ export default {
           title: '2体攻撃消し7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の2体消し攻撃7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.wayAttackRate * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.wayAttackRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0
         },
@@ -181,7 +196,7 @@ export default {
           title: 'L字消し攻撃7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の消し7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0
         }
@@ -195,7 +210,7 @@ export default {
           title: '無効貫通時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.enemyTargetRate * data.a3x3AttackRate) | 0 : null }
           ],
           sortColumn: 0
         },
@@ -204,7 +219,7 @@ export default {
           title: '無効貫通７コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.enemyTargetRate * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0
         }
@@ -283,7 +298,13 @@ export default {
         skillTurnMin: 1,
         /** スキルターンの最大値。 */
         skillTurnMax: 99
-      }
+      },
+      /** 想定する敵のタイプ。 */
+      enemyAttributes: [],
+      /** 想定する敵の属性。 */
+      enemyTypes: [],
+      /** 敵のタイプ・属をを反映した攻撃力を使用するかどうか。 */
+      useEnemyState: false
     };
   },
   computed: {
@@ -393,6 +414,40 @@ export default {
         /** マルチブースト発動時のレートを取得する。 */
         get multiBoostRate () {
           return this.culcAwakenRate(30);
+        },
+        /** 属性相性による攻撃力レートを取得する。 */
+        get attrbuteRate () {
+          const rateTable = {
+            1: { 2: 0.5, 3: 2 },
+            2: { 3: 0.5, 1: 2 },
+            3: { 1: 0.5, 2: 2 },
+            4: { 5: 2 },
+            5: { 4: 2 }
+          };
+          let rate = 1;
+          const rateInfo = rateTable[this.baseData.attributes[0]];
+          if (rateInfo) { rate = rateInfo[manageObj.enemyAttributes[0]] || 1; }
+          return rate;
+        },
+        /** 現在設定されている敵に対してキラーを発動したときのレートを取得する。 */
+        get killerRate () {
+          let rate = 1;
+          const killerNos = {
+            1: 32, 2: 31, 3: 33, 4: 34, 5: 35, 6: 36, 7: 37,
+            8: 38, 9: 39, 10: 40, 11: 41
+          };
+          manageObj.enemyTypes.forEach(type => {
+            const killerAwakenNo = killerNos[type];
+            if (killerAwakenNo) {
+              rate *= this.culcAwakenRate(killerNos[type]);
+            }
+          });
+          return rate;
+        },
+        /** 敵のタイプ・属性を反映する攻撃力レート。 */
+        get enemyTargetRate () {
+          if (!manageObj.useEnemyState) { return 1; }
+          return this.attrbuteRate * this.killerRate;
         },
         /** 指定されたベースのパラメータを全覚醒状態のものにする。 */
         culcFullAwakenParam: function (baseParam) {
@@ -601,3 +656,11 @@ export default {
 };
 
 </script>
+
+<style lang="scss" scoped>
+.enemyStateArea {
+  border: 1px solid #CCC;
+  padding: 4px;
+  border-radius: 4px;
+}
+</style>
