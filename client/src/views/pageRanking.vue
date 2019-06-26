@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { constData, checkCanMixMonster } from '../mtpadmdb.js';
+import { constData, checkCanMixMonster, MultiSendBlocker } from '../mtpadmdb.js';
 import { filterMonsterDataArray } from '../components/monsterFilterSetting.vue';
 
 /**
@@ -304,7 +304,9 @@ export default {
       /** 想定する敵の属性。 */
       enemyTypes: [],
       /** 敵のタイプ・属をを反映した攻撃力を使用するかどうか。 */
-      useEnemyState: false
+      useEnemyState: false,
+      /** フォームの変更とそれによる query の変更の巡回によって起こる更新イベントの多重送信を防ぐオブジェクト。 */
+      multiSendBlocker: new MultiSendBlocker(1)
     };
   },
   computed: {
@@ -611,30 +613,56 @@ export default {
         array.push(new Proxy(data, handler));
       }
       return array;
+    },
+    /** 現在の設定を元にした、 route の query 情報のオブジェクト。 */
+    routeQuery () {
+      const obj = {
+        'useOverLimit': this.useOverLimit ? 1 : undefined,
+        'useMultiBoost': this.useMultiBoost ? 1 : undefined
+      };
+      if (this.useEnemyState) {
+        obj.useEnemyState = 1;
+        obj.enemyAttributes = this.enemyAttributes.join(',') || undefined;
+        obj.enemyTypes = this.enemyTypes.join(',') || undefined;
+      } else {
+        obj.useEnemyState = undefined;
+        obj.enemyAttributes = undefined;
+        obj.enemyTypes = undefined;
+      }
+      return obj;
     }
   },
   watch: {
     rankingSetting: '$_mixinForPage_updateTitle',
-    'useOverLimit': function () {
-      this.updateRouteQuery({ 'useOverLimit': this.useOverLimit ? 1 : undefined });
+    routeQuery: function () {
+      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
+      if (this.multiSendBlocker.isSending) { return; }
+      this.multiSendBlocker.set();
+
+      this.updateRouteQuery(this.routeQuery);
     },
-    '$route.query.useOverLimit': function (newValue) {
-      this.useOverLimit = !!newValue;
-    },
-    'useMultiBoost': function () {
-      this.updateRouteQuery({ 'useMultiBoost': this.useMultiBoost ? 1 : undefined });
-    },
-    '$route.query.useMultiBoost': function (newValue) {
-      this.useMultiBoost = !!newValue;
+    '$route.query': function () {
+      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
+      if (this.multiSendBlocker.isSending) { return; }
+      this.multiSendBlocker.set();
+
+      this.setSettingFromQuery();
     }
   },
   created: function () {
-    this.queryToData('useOverLimit');
-    this.queryToData('useMultiBoost');
+    this.setSettingFromQuery();
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
   methods: {
+    /** $route.queryを元に設定を変更する。 */
+    setSettingFromQuery () {
+      this.queryToData('useOverLimit');
+      this.queryToData('useMultiBoost');
+      this.enemyAttributes = this.$route.query.enemyAttributes ? this.$route.query.enemyAttributes.split(',') : [];
+      this.enemyTypes = this.$route.query.enemyTypes ? this.$route.query.enemyTypes.split(',') : [];
+      this.queryToData('useEnemyState');
+    },
     /** ルートのクエリーを更新する。 */
     updateRouteQuery: function (changeQuery) {
       const margedQuery = Object.assign({}, this.$route.query, changeQuery);
