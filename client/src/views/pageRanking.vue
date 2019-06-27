@@ -31,6 +31,10 @@
       <dd>
         <attr-select use-clear v-model="enemyAttributes" />
       </dd>
+      <label>
+        <input type="checkbox" v-model="useSenzaiKiller" value="1">
+        潜在キラーを使用する
+      </label>
     </dl>
 
     <h3>{{ rankingSetting.title }}ランキング</h3>
@@ -305,6 +309,8 @@ export default {
       enemyTypes: [],
       /** 敵のタイプ・属をを反映した攻撃力を使用するかどうか。 */
       useEnemyState: false,
+      /** 潜在キラーを使用するかどうか。 */
+      useSenzaiKiller: false,
       /** フォームの変更とそれによる query の変更の巡回によって起こる更新イベントの多重送信を防ぐオブジェクト。 */
       multiSendBlocker: new MultiSendBlocker(1)
     };
@@ -444,6 +450,10 @@ export default {
               rate *= this.culcAwakenRate(killerNos[type]);
             }
           });
+          // 潜在キラーが使えるかどうかの判定。
+          if (manageObj.useSenzaiKiller && this.baseData.types.some(d => manageObj.targetSenzaiKillerTypeTable[d])) {
+            rate *= 3.375;
+          }
           return rate;
         },
         /** 敵のタイプ・属性を反映する攻撃力レート。 */
@@ -624,10 +634,23 @@ export default {
         obj.useEnemyState = 1;
         obj.enemyAttributes = this.enemyAttributes.join(',') || undefined;
         obj.enemyTypes = this.enemyTypes.join(',') || undefined;
+        obj.useSenzaiKiller = this.useSenzaiKiller ? 1 : undefined;
       } else {
         obj.useEnemyState = undefined;
         obj.enemyAttributes = undefined;
         obj.enemyTypes = undefined;
+        obj.useSenzaiKiller = undefined;
+      }
+      return obj;
+    },
+    /** 現在の敵タイプに対する潜在キラーをつけられるタイプをキーにして true を格納しているオブジェクト。 */
+    targetSenzaiKillerTypeTable () {
+      const obj = {};
+      for (const key in this.typeTable) {
+        const value = this.typeTable[key];
+        if (value.senzaiKiller.some(d => this.enemyTypes.includes(d))) {
+          obj[key] = true;
+        }
       }
       return obj;
     }
@@ -659,8 +682,9 @@ export default {
     setSettingFromQuery () {
       this.queryToData('useOverLimit');
       this.queryToData('useMultiBoost');
-      this.enemyAttributes = this.$route.query.enemyAttributes ? this.$route.query.enemyAttributes.split(',') : [];
-      this.enemyTypes = this.$route.query.enemyTypes ? this.$route.query.enemyTypes.split(',') : [];
+      this.enemyAttributes = this.$route.query.enemyAttributes ? this.$route.query.enemyAttributes.split(',').map(d => Number(d)) : [];
+      this.enemyTypes = this.$route.query.enemyTypes ? this.$route.query.enemyTypes.split(',').map(d => Number(d)) : [];
+      this.queryToData('useSenzaiKiller');
       this.queryToData('useEnemyState');
     },
     /** ルートのクエリーを更新する。 */
