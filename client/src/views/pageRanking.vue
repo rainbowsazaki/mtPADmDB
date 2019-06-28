@@ -10,18 +10,28 @@
         </template>
       </select>
     </div>
-    <div>
-      <input type="checkbox" id="useOverLimit" v-model="useOverLimit" value="1">
-      <label for="useOverLimit">限界突破時のパラメータを使用する</label>
-    </div>
-    <div>
-      <input type="checkbox" id="useMultiBoost" v-model="useMultiBoost" value="1">
-      <label for="useMultiBoost">マルチブースト適用時のパラメータを使用する</label>
-    </div>
-    <label>
-      <input type="checkbox" v-model="useEnemyState" value="1">
-      敵の属性による補正やキラーを反映する
-    </label>
+    <ul class="list-unstyled">
+      <li>
+        <input type="checkbox" id="useOverLimit" v-model="useOverLimit" value="1">
+        <label for="useOverLimit">限界突破時のパラメータを使用する</label>
+      </li>
+      <li>
+        <input type="checkbox" id="useMultiBoost" v-model="useMultiBoost" value="1">
+        <label for="useMultiBoost">マルチブースト適用時のパラメータを使用する</label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" v-model="useSuperAwaken" value="1">
+          超覚醒を使用する
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" v-model="useEnemyState" value="1">
+          敵の属性による補正やキラーを反映する
+        </label>
+      </li>
+    </ul>
     <dl v-if="useEnemyState" class="enemyStateArea">
       <dt>敵のタイプ</dt>
       <dd>
@@ -60,6 +70,8 @@
               <monster-icon no-link :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
               {{ (_senzaiKillerNo = data.data.enableSenzaiKiller) && null }}
               <img v-if="_senzaiKillerNo" class="senzaiIcon" :src="`image/senzaiKiller/${_senzaiKillerNo}.png`">
+              {{ (_superAwakenNo = data.data.bestSuperAwaken) && null }}
+              <img v-if="_superAwakenNo" class="superAwakenIcon" :src="`image/awaken/${_superAwakenNo}.png`">
             </span>
             {{ data.data.name }}
           </router-link>
@@ -126,7 +138,7 @@ export default {
           description: 'モンスターのレベル最大・+297・全覚醒時の攻撃のランキングです。',
           columns: [
             { name: 'HP', func: data => data.hyperMaxParam.hp },
-            { name: '攻撃', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate) | 0 },
+            { name: '攻撃', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate) | 0 },
             { name: '回復', func: data => data.hyperMaxParam.recovery }
           ],
           sortColumn: 1,
@@ -179,7 +191,7 @@ export default {
           title: '2体攻撃消し時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の2体攻撃消し時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.wayAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.wayAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_A_WAY
@@ -189,7 +201,7 @@ export default {
           title: 'L字消し攻撃時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時のL字消し攻撃時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.lJiAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.lJiAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_A_L_JI
@@ -199,7 +211,7 @@ export default {
           title: '7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_A_COMBO_UP
@@ -209,7 +221,7 @@ export default {
           title: '10コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の10コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_A_COMBO_UP | F_A_SP_COMBO_UP
@@ -219,7 +231,7 @@ export default {
           title: '2体攻撃消し7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の2体消し攻撃7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.wayAttackRate * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.wayAttackRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_A_WAY | F_A_COMBO_UP
@@ -229,7 +241,7 @@ export default {
           title: 'L字消し攻撃7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の消し7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_A_L_JI | F_A_COMBO_UP
@@ -244,7 +256,7 @@ export default {
           title: '無効貫通時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.enemyTargetRate * data.a3x3AttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.a3x3AttackRate) | 0 : null }
           ],
           sortColumn: 0,
           awakenFlag: F_A_A3X3
@@ -254,7 +266,7 @@ export default {
           title: '無効貫通７コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.enemyTargetRate * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0,
           awakenFlag: F_A_A3X3 | F_A_COMBO_UP
@@ -343,6 +355,8 @@ export default {
       enemyAttributes: [],
       /** 想定する敵の属性。 */
       enemyTypes: [],
+      /** 超覚醒を使用するかどうか。 */
+      useSuperAwaken: false,
       /** 敵のタイプ・属をを反映した攻撃力を使用するかどうか。 */
       useEnemyState: false,
       /** 潜在キラーを使用するかどうか。 */
@@ -503,6 +517,61 @@ export default {
             }
           }
           return null;
+        },
+        /** 現在の覚醒発動条件で、最も攻撃力を挙げられる超覚醒を取得する。 */
+        get bestSuperAwaken () {
+          if (!manageObj.useSuperAwaken) { return null; }
+          if (!this.baseData.superAwakens) { return null; }
+          // 保持している覚醒をキーとして true を格納するオブジェクトを作成する。
+          const superAwakensTable = {};
+          const superAwakenLength = this.baseData.superAwakens.length;
+          for (let i = 0; i < superAwakenLength; i++) {
+            superAwakensTable[this.baseData.superAwakens[i]] = true;
+          }
+          
+          const checkTable = [
+            [F_A_SP_COMBO_UP, 61],
+            [F_A_A3X3, 48],
+            [F_A_COMBO_UP, 43],
+            [F_A_UNDER50, 58],
+            [F_A_WAY, 27],
+            [F_A_L_JI, 60],
+            [F_A_OVER80, 57]
+          ];
+          
+          let awakenNo = null;
+          const flag = manageObj.rankingSetting.awakenFlag;
+          const checkTablelength = checkTable.length;
+          for (let i = 0; i < checkTablelength; i++) {
+            const a = checkTable[i];
+            if ((flag & a[0]) && superAwakensTable[a[1]]) {
+              awakenNo = a[1];
+              break;
+            }
+          }
+          // キラーが有効で、超コンボ強化以外の場合はキラー確認。
+          if (manageObj.useEnemyState && awakenNo !== 61) {
+            const killerNos = {
+              1: 32, 2: 31, 3: 33, 4: 34, 5: 35, 6: 36, 7: 37,
+              8: 38, 9: 39, 10: 40, 11: 41
+            };
+            const enemyTypeLenght = manageObj.enemyTypes.length;
+            for (let i = 0; i < enemyTypeLenght; i++) {
+              const type = manageObj.enemyTypes[i];
+              const killerAwakenNo = killerNos[type];
+              if (superAwakensTable[killerAwakenNo]) {
+                awakenNo = killerAwakenNo;
+                break;
+              }
+            }
+          }
+          return awakenNo;
+        },
+        /** 現在の覚醒発動条件で、最も攻撃力を挙げられる超覚醒の攻撃力レートを取得する。 */
+        get bestSuperAwakenRate () {
+          const awakenNo = this.bestSuperAwaken;
+          if (!awakenTable[awakenNo]) { return 1; }
+          return awakenTable[awakenNo].rate || 1;
         },
         /** 敵のタイプ・属性を反映する攻撃力レート。 */
         get enemyTargetRate () {
@@ -676,7 +745,8 @@ export default {
     routeQuery () {
       const obj = {
         'useOverLimit': this.useOverLimit ? 1 : undefined,
-        'useMultiBoost': this.useMultiBoost ? 1 : undefined
+        'useMultiBoost': this.useMultiBoost ? 1 : undefined,
+        'useSuperAwaken': this.useSuperAwaken ? 1 : undefined
       };
       if (this.useEnemyState) {
         obj.useEnemyState = 1;
@@ -730,6 +800,7 @@ export default {
     setSettingFromQuery () {
       this.queryToData('useOverLimit');
       this.queryToData('useMultiBoost');
+      this.queryToData('useSuperAwaken');
       this.enemyAttributes = this.$route.query.enemyAttributes ? this.$route.query.enemyAttributes.split(',').map(d => Number(d)) : [];
       this.enemyTypes = this.$route.query.enemyTypes ? this.$route.query.enemyTypes.split(',').map(d => Number(d)) : [];
       this.queryToData('useSenzaiKiller');
@@ -775,5 +846,12 @@ export default {
   bottom: 0;
   width: 1.5em;
   height: auto;
+}
+.superAwakenIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 0.8em;
+  height: 0.8em;
 }
 </style>
