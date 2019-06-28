@@ -74,6 +74,21 @@
 import { constData, checkCanMixMonster, MultiSendBlocker } from '../mtpadmdb.js';
 import { filterMonsterDataArray } from '../components/monsterFilterSetting.vue';
 
+/** 2体攻撃発動のフラグ。 */
+const F_A_WAY = 1 << 0;
+/** L字消し攻撃発動のフラグ。 */
+const F_A_L_JI = 1 << 1;
+/** コンボ強化発動のフラグ。 */
+const F_A_COMBO_UP = 1 << 2;
+/** 超コンボ強化発動のフラグ。 */
+const F_A_SP_COMBO_UP = 1 << 3;
+/** ダメージ無効貫通発動のフラグ。 */
+const F_A_A3X3 = 1 << 4;
+/** HP80以上強化発動のフラグ。 */
+const F_A_OVER80 = 1 << 5;
+/** HP50以下強化発動のフラグ。 */
+const F_A_UNDER50 = 1 << 6;
+
 /**
  * モンスターのパラメータなどのランク付けを行うページのコンポーネント。
  */
@@ -102,7 +117,8 @@ export default {
             { name: '攻撃', func: data => data.hyperMaxParam.attack },
             { name: '回復', func: data => data.hyperMaxParam.recovery }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: 0
         },
         {
           id: 'attack',
@@ -113,7 +129,8 @@ export default {
             { name: '攻撃', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate) | 0 },
             { name: '回復', func: data => data.hyperMaxParam.recovery }
           ],
-          sortColumn: 1
+          sortColumn: 1,
+          awakenFlag: 0
         },
         {
           id: 'recovery',
@@ -124,7 +141,8 @@ export default {
             { name: '攻撃', func: data => data.hyperMaxParam.attack },
             { name: '回復', func: data => data.hyperMaxParam.recovery }
           ],
-          sortColumn: 2
+          sortColumn: 2,
+          awakenFlag: 0
         },
         {
           id: 'plus',
@@ -136,7 +154,8 @@ export default {
             { name: '回復', func: data => data.hyperPlusCount.recovery },
             { name: '+換算', func: data => data.hyperPlusCount.plus }
           ],
-          sortColumn: 3
+          sortColumn: 3,
+          awakenFlag: 0
         },
         {
           id: 'overlimitOffset',
@@ -147,7 +166,8 @@ export default {
             { name: 'Lv110', func: data => data.hyper110PlusCount.plus },
             { name: '増加量', func: data => data.overLimitOffset }
           ],
-          sortColumn: 2
+          sortColumn: 2,
+          awakenFlag: 0
         }
       ]
     },
@@ -161,7 +181,8 @@ export default {
           columns: [
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.wayAttackRate) | 0 }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: F_A_WAY
         },
         {
           id: 'lJiAttack',
@@ -170,7 +191,8 @@ export default {
           columns: [
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.lJiAttackRate) | 0 }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: F_A_L_JI
         },
         {
           id: '7comboAttack',
@@ -179,7 +201,8 @@ export default {
           columns: [
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.comboUpAttackRate) | 0 }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: F_A_COMBO_UP
         },
         {
           id: '10comboAttack',
@@ -188,7 +211,8 @@ export default {
           columns: [
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: F_A_COMBO_UP | F_A_SP_COMBO_UP
         },
         {
           id: 'way7comboAttack',
@@ -197,7 +221,8 @@ export default {
           columns: [
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.wayAttackRate * data.comboUpAttackRate) | 0 }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: F_A_WAY | F_A_COMBO_UP
         },
         {
           id: 'lJi7comboAttack',
@@ -206,7 +231,8 @@ export default {
           columns: [
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.enemyTargetRate * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: F_A_L_JI | F_A_COMBO_UP
         }
       ]
     },
@@ -220,7 +246,8 @@ export default {
           columns: [
             { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.enemyTargetRate * data.a3x3AttackRate) | 0 : null }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: F_A_A3X3
         },
         {
           id: 'a3x37comboAttack',
@@ -229,7 +256,8 @@ export default {
           columns: [
             { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.enemyTargetRate * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: F_A_A3X3 | F_A_COMBO_UP
         }
       ]
     },
@@ -245,7 +273,8 @@ export default {
             { name: '攻撃', func: data => data.assistMaxParam.attack },
             { name: '回復', func: data => data.assistMaxParam.recovery }
           ],
-          sortColumn: 0
+          sortColumn: 0,
+          awakenFlag: 0
         },
         {
           id: 'assistAttack',
@@ -256,7 +285,8 @@ export default {
             { name: '攻撃', func: data => data.assistMaxParam.attack },
             { name: '回復', func: data => data.assistMaxParam.recovery }
           ],
-          sortColumn: 1
+          sortColumn: 1,
+          awakenFlag: 0
         },
         {
           id: 'assistRecovery',
@@ -267,7 +297,8 @@ export default {
             { name: '攻撃', func: data => data.assistMaxParam.attack },
             { name: '回復', func: data => data.assistMaxParam.recovery }
           ],
-          sortColumn: 2
+          sortColumn: 2,
+          awakenFlag: 0
         },
         {
           id: 'assistPlus',
@@ -279,7 +310,8 @@ export default {
             { name: '回復', func: data => data.assistMaxParam.recovery },
             { name: '+換算', func: data => data.assist ? (data.assistMaxParam.hp / 10 + data.assistMaxParam.attack / 5 + data.assistMaxParam.recovery / 3).toFixed(1) : null }
           ],
-          sortColumn: 3
+          sortColumn: 3,
+          awakenFlag: 0
         }
       ]
     }
