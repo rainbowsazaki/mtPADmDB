@@ -89,7 +89,7 @@ export default {
     /** 表示する選択項目の番号の配列。 */
     items () {
       const table = this.isTypeSelect ? constData.typeTable : constData.attributeTable;
-      const array = Object.keys(table).filter(d => d !== '0' && d !== 'null');
+      const array = Object.keys(table).filter(d => d !== '0' && d !== 'null').map(d => Number(d));
       if (!this.isTypeSelect) { return array; }
       
       const array2 = [];
