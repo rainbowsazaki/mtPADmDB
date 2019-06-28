@@ -56,7 +56,11 @@
         <th class="text-right">{{ (page - 1) * inPageCount + n + 1 }}</th>
         <td>
           <router-link :to="{ name: 'monsterDetails', params: { no: data.data.no }}">
-            <monster-icon no-link :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
+            <span class="monsterIconWrapper">
+              <monster-icon no-link :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
+              {{ (_senzaiKillerNo = data.data.enableSenzaiKiller) && null }}
+              <img v-if="_senzaiKillerNo" class="senzaiIcon" :src="`image/senzaiKiller/${_senzaiKillerNo}.png`">
+            </span>
             {{ data.data.name }}
           </router-link>
         </td>
@@ -456,6 +460,18 @@ export default {
           }
           return rate;
         },
+        /** 現在の設定で有効な潜在キラーのタイプを取得する。 */
+        get enableSenzaiKiller () {
+          if (!manageObj.useSenzaiKiller) { return null; }
+          for (const enemyType of manageObj.enemyTypes) {
+            for (const myType of this.baseData.types) {
+              if (manageObj.typeTable[myType].senzaiKiller.includes(enemyType)) {
+                return enemyType;
+              }
+            }
+          }
+          return null;
+        },
         /** 敵のタイプ・属性を反映する攻撃力レート。 */
         get enemyTargetRate () {
           if (!manageObj.useEnemyState) { return 1; }
@@ -714,5 +730,18 @@ export default {
   border: 1px solid #CCC;
   padding: 4px;
   border-radius: 4px;
+}
+
+.monsterIconWrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.senzaiIcon {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 1.5em;
+  height: auto;
 }
 </style>
