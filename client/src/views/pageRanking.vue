@@ -463,11 +463,11 @@ export default {
         },
         /** HP80%以上強化発動時の攻撃力レートを取得する。 */
         get over80AttackRate () {
-          return this.culcAwakenRate(30);
+          return this.culcAwakenRate(57);
         },
         /** HP50%以下強化発動時の攻撃力レートを取得する。 */
         get under50AttackRate () {
-          return this.culcAwakenRate(30);
+          return this.culcAwakenRate(58);
         },
         /** マルチブースト発動時のレートを取得する。 */
         get multiBoostRate () {
