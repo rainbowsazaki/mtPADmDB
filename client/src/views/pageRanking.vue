@@ -494,7 +494,7 @@ export default {
             1: 32, 2: 31, 3: 33, 4: 34, 5: 35, 6: 36, 7: 37,
             8: 38, 9: 39, 10: 40, 11: 41
           };
-          manageObj.enemyTypes.forEach(type => {
+          manageObj.filteredEnemyTypes.forEach(type => {
             const killerAwakenNo = killerNos[type];
             if (killerAwakenNo) {
               rate *= this.culcAwakenRate(killerNos[type]);
@@ -509,7 +509,7 @@ export default {
         /** 現在の設定で有効な潜在キラーのタイプを取得する。 */
         get enableSenzaiKiller () {
           if (!manageObj.useSenzaiKiller) { return null; }
-          for (const enemyType of manageObj.enemyTypes) {
+          for (const enemyType of manageObj.filteredEnemyTypes) {
             for (const myType of this.baseData.types) {
               if (manageObj.typeTable[myType].senzaiKiller.includes(enemyType)) {
                 return enemyType;
@@ -555,9 +555,9 @@ export default {
               1: 32, 2: 31, 3: 33, 4: 34, 5: 35, 6: 36, 7: 37,
               8: 38, 9: 39, 10: 40, 11: 41
             };
-            const enemyTypeLenght = manageObj.enemyTypes.length;
+            const enemyTypeLenght = manageObj.filteredEnemyTypes.length;
             for (let i = 0; i < enemyTypeLenght; i++) {
-              const type = manageObj.enemyTypes[i];
+              const type = manageObj.filteredEnemyTypes[i];
               const killerAwakenNo = killerNos[type];
               if (superAwakensTable[killerAwakenNo]) {
                 awakenNo = killerAwakenNo;
@@ -761,12 +761,16 @@ export default {
       }
       return obj;
     },
+    /** 重複を除いた敵タイプ。 */
+    filteredEnemyTypes () {
+      return Array.from(new Set(this.enemyTypes));
+    },
     /** 現在の敵タイプに対する潜在キラーをつけられるタイプをキーにして true を格納しているオブジェクト。 */
     targetSenzaiKillerTypeTable () {
       const obj = {};
       for (const key in this.typeTable) {
         const value = this.typeTable[key];
-        if (value.senzaiKiller.some(d => this.enemyTypes.includes(d))) {
+        if (value.senzaiKiller.some(d => this.filteredEnemyTypes.includes(d))) {
           obj[key] = true;
         }
       }
