@@ -809,13 +809,29 @@ export default {
   methods: {
     /** $route.queryを元に設定を変更する。 */
     setSettingFromQuery () {
+      function compArray (a, b) {
+        const length = a.length;
+        if (length !== b.length) { return false; }
+        for (let i = 0; i < length; i++) {
+          if (a[i] !== b[i]) { return false; }
+        }
+        return true;
+      }
+
+      const queryToDataForNumberArray = (name) => {
+        const newValue = this.$route.query[name] ? this.$route.query[name].split(',').map(d => Number(d)) : [];
+        if (compArray(newValue, this[name])) { return false; }
+        this[name] = newValue;
+        return true;
+      }
+
       this.queryToData('useOverLimit');
       this.queryToData('useMultiBoost');
       this.queryToData('useSuperAwaken');
       this.queryToData('useEnemyState');
       if (this.useEnemyState) {
-        this.enemyAttributes = this.$route.query.enemyAttributes ? this.$route.query.enemyAttributes.split(',').map(d => Number(d)) : [];
-        this.enemyTypes = this.$route.query.enemyTypes ? this.$route.query.enemyTypes.split(',').map(d => Number(d)) : [];
+        queryToDataForNumberArray('enemyAttributes');
+        queryToDataForNumberArray('enemyTypes');
         this.queryToData('useSenzaiKiller');
       }
     },
