@@ -805,10 +805,12 @@ export default {
       this.queryToData('useOverLimit');
       this.queryToData('useMultiBoost');
       this.queryToData('useSuperAwaken');
-      this.enemyAttributes = this.$route.query.enemyAttributes ? this.$route.query.enemyAttributes.split(',').map(d => Number(d)) : [];
-      this.enemyTypes = this.$route.query.enemyTypes ? this.$route.query.enemyTypes.split(',').map(d => Number(d)) : [];
-      this.queryToData('useSenzaiKiller');
       this.queryToData('useEnemyState');
+      if (this.useEnemyState) {
+        this.enemyAttributes = this.$route.query.enemyAttributes ? this.$route.query.enemyAttributes.split(',').map(d => Number(d)) : [];
+        this.enemyTypes = this.$route.query.enemyTypes ? this.$route.query.enemyTypes.split(',').map(d => Number(d)) : [];
+        this.queryToData('useSenzaiKiller');
+      }
     },
     /** ルートのクエリーを更新する。 */
     updateRouteQuery: function (changeQuery) {
