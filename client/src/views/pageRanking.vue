@@ -764,7 +764,7 @@ export default {
         8: 38, 9: 39, 10: 40, 11: 41
       };
       const enableKillerNos = [];
-      const length = this.filteredEnemyTypes;
+      const length = this.filteredEnemyTypes.length;
       for (let i = 0; i < length; i++) {
         const type = this.filteredEnemyTypes[i];
         const killerNo = killerNoTable[type];
