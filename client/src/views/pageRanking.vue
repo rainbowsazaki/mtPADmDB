@@ -475,30 +475,15 @@ export default {
         },
         /** 属性相性による攻撃力レートを取得する。 */
         get attrbuteRate () {
-          const rateTable = {
-            1: { 2: 0.5, 3: 2 },
-            2: { 3: 0.5, 1: 2 },
-            3: { 1: 0.5, 2: 2 },
-            4: { 5: 2 },
-            5: { 4: 2 }
-          };
-          let rate = 1;
-          const rateInfo = rateTable[this.baseData.attributes[0]];
-          if (rateInfo) { rate = rateInfo[manageObj.enemyAttributes[0]] || 1; }
-          return rate;
+          const rateInfo = manageObj.enemyAttributeRateInfo;
+          if (!rateInfo) { return 1; }
+          return rateInfo[this.baseData.attributes[0]] || 1;
         },
         /** 現在設定されている敵に対してキラーを発動したときのレートを取得する。 */
         get killerRate () {
           let rate = 1;
-          const killerNos = {
-            1: 32, 2: 31, 3: 33, 4: 34, 5: 35, 6: 36, 7: 37,
-            8: 38, 9: 39, 10: 40, 11: 41
-          };
-          manageObj.filteredEnemyTypes.forEach(type => {
-            const killerAwakenNo = killerNos[type];
-            if (killerAwakenNo) {
-              rate *= this.culcAwakenRate(killerNos[type]);
-            }
+          manageObj.enableKillerNos.forEach(killerNo => {
+            rate *= this.culcAwakenRate(killerNo);
           });
           // 潜在キラーが使えるかどうかの判定。
           if (manageObj.useSenzaiKiller && this.baseData.types.some(d => manageObj.targetSenzaiKillerTypeTable[d])) {
@@ -551,14 +536,10 @@ export default {
           }
           // キラーが有効で、超コンボ強化以外の場合はキラー確認。
           if (manageObj.useEnemyState && awakenNo !== 61) {
-            const killerNos = {
-              1: 32, 2: 31, 3: 33, 4: 34, 5: 35, 6: 36, 7: 37,
-              8: 38, 9: 39, 10: 40, 11: 41
-            };
-            const enemyTypeLenght = manageObj.filteredEnemyTypes.length;
+            const killerNos = manageObj.enableKillerNos;
+            const enemyTypeLenght = killerNos.length;
             for (let i = 0; i < enemyTypeLenght; i++) {
-              const type = manageObj.filteredEnemyTypes[i];
-              const killerAwakenNo = killerNos[type];
+              const killerAwakenNo = killerNos[i];
               if (superAwakensTable[killerAwakenNo]) {
                 awakenNo = killerAwakenNo;
                 break;
@@ -761,9 +742,35 @@ export default {
       }
       return obj;
     },
+    /** 現在設定している敵属性に対して各属性で攻撃したときの攻撃力レートの配列 */
+    enemyAttributeRateInfo () {
+      const rateTable = {
+        1: { 2: 2, 3: 0.5 },
+        2: { 3: 2, 1: 0.5 },
+        3: { 1: 2, 2: 0.5 },
+        4: { 5: 2 },
+        5: { 4: 2 }
+      };
+      return rateTable[this.enemyAttributes[0]];
+    },
     /** 重複を除いた敵タイプ。 */
     filteredEnemyTypes () {
       return Array.from(new Set(this.enemyTypes));
+    },
+    /** 現在設定されている敵タイプに対して発動するキラー覚醒の番号。 */
+    enableKillerNos () {
+      const killerNoTable = {
+        1: 32, 2: 31, 3: 33, 4: 34, 5: 35, 6: 36, 7: 37,
+        8: 38, 9: 39, 10: 40, 11: 41
+      };
+      const enableKillerNos = [];
+      const length = this.filteredEnemyTypes;
+      for (let i = 0; i < length; i++) {
+        const type = this.filteredEnemyTypes[i];
+        const killerNo = killerNoTable[type];
+        if (killerNo) { enableKillerNos.push(killerNo); }
+      }
+      return enableKillerNos;
     },
     /** 現在の敵タイプに対する潜在キラーをつけられるタイプをキーにして true を格納しているオブジェクト。 */
     targetSenzaiKillerTypeTable () {
