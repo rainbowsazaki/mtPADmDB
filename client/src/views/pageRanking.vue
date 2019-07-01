@@ -2,7 +2,7 @@
   <div>
     <h2>モンスターランキング</h2>
     <div>
-      <select :value="id" @change="changeRouteId($event.target.value)">
+      <select class="custom-select" :value="id" @change="changeRouteId($event.target.value)">
         <template v-for="(group, n) in $options.rankingSettings">
           <optgroup :label="group.label" :key="`group${n}`">
             <option v-for="setting in group.settings" :value="setting.id" :key="`rankingSetting_${setting.id}`">{{ setting.title }}ランキング</option>
