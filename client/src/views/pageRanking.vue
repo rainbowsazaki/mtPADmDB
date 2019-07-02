@@ -32,20 +32,23 @@
         </label>
       </li>
     </ul>
-    <dl v-if="useEnemyState" class="enemyStateArea">
-      <dt>敵のタイプ</dt>
-      <dd>
-        <attr-select mode="type" use-clear v-model="enemyTypes" />
-      </dd>
-      <dt>敵の属性</dt>
-      <dd>
-        <attr-select use-clear v-model="enemyAttributes" />
-      </dd>
-      <label>
-        <input type="checkbox" v-model="useSenzaiKiller" value="1">
-        潜在キラーを使用する
-      </label>
-    </dl>
+
+    <transition name="fade">
+      <dl v-if="useEnemyState" class="enemyStateArea">
+        <dt>敵のタイプ</dt>
+        <dd>
+          <attr-select mode="type" use-clear v-model="enemyTypes" />
+        </dd>
+        <dt>敵の属性</dt>
+        <dd>
+          <attr-select use-clear v-model="enemyAttributes" />
+        </dd>
+        <label>
+          <input type="checkbox" v-model="useSenzaiKiller" value="1">
+          潜在キラーを使用する
+        </label>
+      </dl>
+    </transition>
 
     <h3>{{ rankingSetting.title }}ランキング</h3>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
@@ -883,4 +886,12 @@ export default {
   width: 0.8em;
   height: 0.8em;
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .2s ease-in;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 </style>
