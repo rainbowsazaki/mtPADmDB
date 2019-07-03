@@ -87,7 +87,7 @@
 
 <script>
 import { constData, checkCanMixMonster, MultiSendBlocker } from '../mtpadmdb.js';
-import { filterMonsterDataArray } from '../components/monsterFilterSetting.vue';
+import { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
 
 /** 2体攻撃発動のフラグ。 */
 const F_A_WAY = 1 << 0;
@@ -110,7 +110,7 @@ const F_A_UNDER50 = 1 << 6;
 export default {
   name: 'PageRanking',
   pageTitle: function () {
-    return this.rankingSetting.title + 'ランキング';
+    return this.pageTitle;
   },
   props: {
     id: {
@@ -378,6 +378,40 @@ export default {
     pageCount () { return ((this.rankInfos.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     /** 現在表示するページの番号。 1オリジン。 */
     page () { return (this.$route.query.page * 1) || 1; },
+    /** ページのタイトル。 */
+    pageTitle () {
+      let title = this.rankingSetting.title + 'ランキング';
+
+      const enables = [];
+      let enemyInfo = '';
+      if (this.useOverLimit) { enables.push('限突'); }
+      if (this.useMultiBoost) { enables.push('マルブ'); }
+      if (this.useSuperAwaken) { enables.push('超覚醒'); }
+
+      if (this.useEnemyState) {
+        if (this.enemyAttributes.length) {
+          enemyInfo += ' 属性:' + this.enemyAttributes.map(d => this.attributeTable[d]).join('/');
+        }
+        if (this.enemyTypes.length) {
+          enemyInfo += ' タイプ:' + this.enemyTypes.map(d => this.typeTable[d].name).join('/');
+          if (this.useSenzaiKiller) { enables.push('潜在キラー'); }
+        }
+      }
+
+      if (enables.length) {
+        title += ' ' + enables.join('/') + '使用';
+      }
+      if (enemyInfo) {
+        title += ' 敵モンスター ' + enemyInfo;
+      }
+      const fst = filterSettingText(this.filterSetting);
+      if (fst) {
+        title += ' 対象モンスター ' + fst;
+      }
+
+      return title;
+    },
+
     /** IDをキーとしてランキング設定を格納したオブジェクト。 */
     rankingSettingObj () {
       const obj = {};
@@ -788,7 +822,7 @@ export default {
     }
   },
   watch: {
-    rankingSetting: '$_mixinForPage_updateTitle',
+    pageTitle: '$_mixinForPage_updateTitle',
     routeQuery: function () {
       // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
       if (this.multiSendBlocker.isSending) { return; }
