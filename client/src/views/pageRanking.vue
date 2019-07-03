@@ -50,7 +50,7 @@
       </dl>
     </transition>
 
-    <h3>{{ rankingSetting.title }}ランキング</h3>
+    <h3 class="decoHeader">{{ rankingSetting.title }}ランキング</h3>
     <p v-if="rankingSetting.description">{{ rankingSetting.description }}</p>
     <p>※このサイトに登録されているモンスターでのランキングです。</p>
 
