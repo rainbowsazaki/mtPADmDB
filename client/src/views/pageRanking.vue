@@ -35,13 +35,13 @@
 
     <transition name="fade">
       <dl v-if="useEnemyState" class="enemyStateArea">
-        <dt>敵のタイプ</dt>
-        <dd>
-          <attr-select mode="type" use-clear v-model="enemyTypes" />
-        </dd>
         <dt>敵の属性</dt>
         <dd>
           <attr-select use-clear v-model="enemyAttributes" />
+        </dd>
+        <dt>敵のタイプ</dt>
+        <dd>
+          <attr-select mode="type" use-clear v-model="enemyTypes" />
         </dd>
         <label>
           <input type="checkbox" v-model="useSenzaiKiller" value="1">
