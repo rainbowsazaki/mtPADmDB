@@ -929,6 +929,10 @@ td.targetCell {
   background: #eef6ff;
 }
 
+td {
+  min-width: 3.4em;
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: all .2s ease-in;
 }
