@@ -63,7 +63,7 @@
       <tr class="thead-light">
         <th />
         <th>名前</th>
-        <th v-for="(column, n) in rankingSetting.columns" :key="`column${n}`">{{ column.name }}</th>
+        <th v-for="(column, n) in rankingSetting.columns" :key="`column${n}`" :class="{ targetCell: rankingSetting.sortColumn === n }">{{ column.name }}</th>
       </tr>
       <tr v-for="(data, n) in rankInfosInPage" class="thead-light" :key="`monster${data.data.no}`">
         <th class="text-right">{{ (page - 1) * inPageCount + n + 1 }}</th>
@@ -79,7 +79,7 @@
             {{ data.data.name }}
           </router-link>
         </td>
-        <td v-for="(column, m) in data.columns" class="text-right" :key="`column${m}`">{{ column | addComma }}</td>
+        <td v-for="(column, m) in data.columns" class="text-right" :class="{ targetCell: rankingSetting.sortColumn === m }" :key="`column${m}`">{{ column | addComma }}</td>
       </tr>
     </table>
   </div>
@@ -919,6 +919,14 @@ export default {
   top: 0;
   width: 0.8em;
   height: 0.8em;
+}
+
+th.targetCell {
+  background: #bbe6ff;
+}
+
+td.targetCell {
+  background: #eef6ff;
 }
 
 .fade-enter-active, .fade-leave-active {
