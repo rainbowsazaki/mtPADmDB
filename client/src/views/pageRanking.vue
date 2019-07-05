@@ -59,6 +59,38 @@
     <pagination item-count="11" :page="page" :page-count="pageCount" />
 
     <div><tweet-button /></div>
+
+    <div :class="`rankingTable column${rankingSetting.columns.length}`">
+      <div class="header">
+        <div class="cell head">_</div>
+        <div class="subRow">
+          <div class="cell head headerName">名前</div>
+          <div v-for="(column, n) in rankingSetting.columns" :key="`column${n}`" class="cell head data" :class="{ targetCell: rankingSetting.sortColumn === n }">{{ column.name }}</div>
+        </div>
+      </div>
+
+      <div v-for="(data, n) in rankInfosInPage" class="roww" :key="`monster${data.data.no}`">
+        <div class="cell head number text-right">{{ (page - 1) * inPageCount + n + 1 }}</div>
+        <div class="cell">
+          <span class="monsterIconWrapper">
+            <monster-icon style="line-height: 1em;" :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
+            {{ (_senzaiKillerNo = data.data.enableSenzaiKiller) && null }}
+            <img v-if="_senzaiKillerNo" class="senzaiIcon" :src="`image/senzaiKiller/${_senzaiKillerNo}.png`">
+            {{ (_superAwakenNo = data.data.bestSuperAwaken) && null }}
+            <img v-if="_superAwakenNo" class="superAwakenIcon" :src="`image/awaken/${_superAwakenNo}.png`">
+          </span>
+        </div>
+        <div class="subRow">
+          <div class="cell name">
+            <router-link :to="{ name: 'monsterDetails', params: { no: data.data.no }}">
+              {{ data.data.name }}
+            </router-link>
+          </div>
+          <div v-for="(column, m) in data.columns" class="cell text-right data" :class="{ targetCell: rankingSetting.sortColumn === m }" :key="`column${m}`">{{ column | addComma }}</div>
+        </div>
+      </div>
+    </div>
+
     <table class="table table-bordered table-sm">
       <tr class="thead-light">
         <th />
@@ -931,6 +963,123 @@ td.targetCell {
 
 td {
   min-width: 3.4em;
+}
+
+.rankingTable {
+  border: 1px rgb(222, 226, 230);
+  border-style: solid none none solid;
+
+  div.cell {
+    display: inline-block;
+    border: 1px rgb(222, 226, 230);
+    border-style: none solid solid none;
+    padding: 2px;
+    line-height: 3em;
+  }
+
+  div.roww {
+    display: flex;
+  }
+  
+  div.subRow {
+    display: inline-block;
+    width: calc(100% - 6em - 5px);
+  }
+
+  div.header {
+    position: sticky;
+    top: 56px;
+    z-index: 4;
+
+    > .cell {
+      width: calc(6em + 5px);
+      color: #00000000
+    }
+  }
+
+  div.header .cell {
+    line-height: 1.5em;
+  }
+
+  div.cell.head {
+    background: #e9ecef;
+  }
+
+  .targetCell {
+    background: #eef6ff;
+  }
+
+  .header .targetCell {
+    background: #bbe6ff !important;
+  }
+
+  div.headerName{
+    width: 50%;
+  }
+
+  div.number {
+    width: 3em;
+  }
+
+  .senzaiIcon {
+    width: 2em;
+    height: auto;
+  }
+  .superAwakenIcon {
+    width: 1em;
+    height: 1em;
+  }
+  div.name {
+    width: 50%;
+    white-space: nowrap;
+  }
+
+  &.column1 div.data {
+    width: calc(50% / 1);
+  }
+  &.column2 div.data {
+    width: calc(50% / 2);
+  }
+  &.column3 div.data {
+    width: calc(50% / 3);
+  }
+  &.column4 div.data {
+    width: calc(50% / 4);
+  }
+  &.column5 div.data {
+    width: calc(50% / 5);
+  }
+
+  @media (max-width: 767px) {
+    div.headerName {
+      display: none;
+    }
+
+    div.data, div.name {
+      line-height: 1.42em;
+    }
+    
+    div.name {
+      width: 100%;
+      font-size: 80%;
+    }
+
+    &.column1 div.data {
+      width: calc(100% / 1);
+    }
+    &.column2 div.data {
+      width: calc(100% / 2);
+    }
+    &.column3 div.data {
+      width: calc(100% / 3);
+    }
+    &.column4 div.data {
+      width: calc(100% / 4);
+    }
+    &.column5 div.data {
+      width: calc(100% / 5);
+    }
+  }
 }
 
 .fade-enter-active, .fade-leave-active {
