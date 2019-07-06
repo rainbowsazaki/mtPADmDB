@@ -22,6 +22,7 @@ const MonsterList = () => import('../components/monsterList.vue');
 export default {
   name: 'PageMonsterList',
   pageTitle: function () { return this.pageTitle; },
+  breadcrumbsTitle: 'モンスター一覧',
   components: {
     'monster-list': MonsterList
   },
