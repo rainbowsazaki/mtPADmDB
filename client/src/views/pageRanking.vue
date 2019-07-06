@@ -82,9 +82,11 @@
         </div>
         <div class="subRow">
           <div class="cell name">
-            <router-link :to="{ name: 'monsterDetails', params: { no: data.data.no }}">
-              {{ data.data.name }}
-            </router-link>
+            <div class="stretch">
+              <router-link :to="{ name: 'monsterDetails', params: { no: data.data.no }}">
+                {{ data.data.name }}
+              </router-link>
+            </div>
           </div>
           <div v-for="(column, m) in data.columns" class="cell text-right data" :class="{ targetCell: rankingSetting.sortColumn === m }" :key="`column${m}`">{{ column | addComma }}</div>
         </div>
@@ -118,7 +120,7 @@
 </template>
 
 <script>
-import { constData, checkCanMixMonster, MultiSendBlocker } from '../mtpadmdb.js';
+import { constData, checkCanMixMonster, MultiSendBlocker, stretchElement } from '../mtpadmdb.js';
 import { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
 
 /** 2体攻撃発動のフラグ。 */
@@ -875,7 +877,24 @@ export default {
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
+  updated: function () {
+    this.stretch();
+  },
+  mounted: function () {
+    this.stretch();
+    window.addEventListener('resize', this.stretch);
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.stretch);
+  },
   methods: {
+    /** モンスター名を、領域の横幅に合わせて縮小する。 */
+    stretch: function () {
+      const elms = this.$el.getElementsByClassName('stretch');
+      for (const elm of elms) {
+        stretchElement(elm);
+      }
+    },
     /** $route.queryを元に設定を変更する。 */
     setSettingFromQuery () {
       function compArray (a, b) {
