@@ -146,6 +146,9 @@ export default {
   pageTitle: function () {
     return this.pageTitle;
   },
+  breadcrumbsTitle: function () {
+    return this.rankingSetting.title + 'ランキング';
+  },
   props: {
     id: {
       type: String,
