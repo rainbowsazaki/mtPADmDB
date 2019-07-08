@@ -49,6 +49,12 @@
     <div v-if="monsterData.evolutionType !== 0">
       <h3 class="h4 decoHeader">進化元モンスター</h3>
       <evolution-materials origin-of-evolution :type="monsterData.evolutionType" :before-no="monsterData.no" :target-no="monsterData.evolution.baseNo" :materials="monsterData.evolution.materials" />
+
+      <div class="mt-1 p-1">
+        <router-link :to="{ name: 'evolutionMaterial', params: { no: monsterData.no } }">
+          {{ monsterData.name }}の作成に必要な全モンスター一覧へ
+        </router-link>
+      </div>
     </div>
     <div v-if="evolutionTable[monsterData.no]">
       <h3 class="h4 decoHeader">このモンスターからの進化</h3>
