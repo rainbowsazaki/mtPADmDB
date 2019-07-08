@@ -613,7 +613,6 @@ sub mode_update_monster_data {
       $n = to_number($n)
       &check_range('超覚醒', $n, 1, 99, 0);
     }
-    $data->{superawakens} = [ sort { $a <=> $b } @$data->{superawakens} ];
   }
   &to_number_with_key($data->{evolution}, qw/ baseNo materials /);
   &check_range('進化タイプ', $data->{evolutionType}, 0, 99, 0);
