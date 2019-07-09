@@ -1048,6 +1048,7 @@ export default {
     div.name {
       width: 100%;
       font-size: 80%;
+      padding-top: 5px;
     }
 
     &.column1 div.data {
