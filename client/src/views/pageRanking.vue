@@ -952,12 +952,14 @@ export default {
 }
 
 .rankingTable {
-  border: 1px rgb(222, 226, 230);
+  $borderColor: rgb(222, 226, 230);
+
+  border: 1px $borderColor;
   border-style: solid solid none solid;
 
   div.cell {
     display: inline-block;
-    border: 1px rgb(222, 226, 230);
+    border: 1px $borderColor;
     border-style: none solid solid none;
     padding: 2px;
     line-height: 3em;
@@ -1053,6 +1055,7 @@ export default {
       width: 100%;
       font-size: 80%;
       border-right: none;
+      border-bottom-color: rgba($borderColor, .5);
     }
 
     &.column1 div.data {
