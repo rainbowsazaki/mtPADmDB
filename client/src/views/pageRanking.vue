@@ -953,7 +953,7 @@ export default {
 
 .rankingTable {
   border: 1px rgb(222, 226, 230);
-  border-style: solid none none solid;
+  border-style: solid solid none solid;
 
   div.cell {
     display: inline-block;
@@ -961,6 +961,10 @@ export default {
     border-style: none solid solid none;
     padding: 2px;
     line-height: 3em;
+  }
+
+  div.cell:nth-last-of-type(1) {
+    border-right: none;
   }
 
   div.roww {
@@ -1048,7 +1052,7 @@ export default {
     div.name {
       width: 100%;
       font-size: 80%;
-      padding-top: 5px;
+      border-right: none;
     }
 
     &.column1 div.data {
