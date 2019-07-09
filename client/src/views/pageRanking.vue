@@ -92,30 +92,6 @@
         </div>
       </div>
     </div>
-
-    <table class="table table-bordered table-sm">
-      <tr class="thead-light">
-        <th />
-        <th>名前</th>
-        <th v-for="(column, n) in rankingSetting.columns" :key="`column${n}`" :class="{ targetCell: rankingSetting.sortColumn === n }">{{ column.name }}</th>
-      </tr>
-      <tr v-for="(data, n) in rankInfosInPage" class="thead-light" :key="`monster${data.data.no}`">
-        <th class="text-right">{{ (page - 1) * inPageCount + n + 1 }}</th>
-        <td>
-          <router-link :to="{ name: 'monsterDetails', params: { no: data.data.no }}">
-            <span class="monsterIconWrapper">
-              <monster-icon no-link :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="2em" height="2em" />
-              {{ (_senzaiKillerNo = data.data.enableSenzaiKiller) && null }}
-              <img v-if="_senzaiKillerNo" class="senzaiIcon" :src="`image/senzaiKiller/${_senzaiKillerNo}.png`">
-              {{ (_superAwakenNo = data.data.bestSuperAwaken) && null }}
-              <img v-if="_superAwakenNo" class="superAwakenIcon" :src="`image/awaken/${_superAwakenNo}.png`">
-            </span>
-            {{ data.data.name }}
-          </router-link>
-        </td>
-        <td v-for="(column, m) in data.columns" class="text-right" :class="{ targetCell: rankingSetting.sortColumn === m }" :key="`column${m}`">{{ column | addComma }}</td>
-      </tr>
-    </table>
   </div>
 </template>
 
@@ -973,18 +949,6 @@ export default {
   top: 0;
   width: 0.8em;
   height: 0.8em;
-}
-
-th.targetCell {
-  background: #bbe6ff;
-}
-
-td.targetCell {
-  background: #eef6ff;
-}
-
-td {
-  min-width: 3.4em;
 }
 
 .rankingTable {
