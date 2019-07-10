@@ -1055,7 +1055,11 @@ export default {
       width: 100%;
       font-size: 80%;
       border-right: none;
-      border-bottom-color: rgba($borderColor, .5);
+      border-bottom-color: rgba($borderColor, .6);
+    }
+
+    div.data {
+      border-right-color: rgba($borderColor, .6);
     }
 
     &.column1 div.data {
