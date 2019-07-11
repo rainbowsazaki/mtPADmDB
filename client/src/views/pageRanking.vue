@@ -92,6 +92,8 @@
         </div>
       </div>
     </div>
+
+    <pagination item-count="11" :page="page" :page-count="pageCount" />
   </div>
 </template>
 
@@ -956,6 +958,7 @@ export default {
 
   border: 1px $borderColor;
   border-style: solid solid none solid;
+  margin-bottom: 1em;
 
   div.cell {
     display: inline-block;
