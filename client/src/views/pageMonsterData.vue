@@ -257,7 +257,27 @@ export default {
     this.fetchData();
     this.updateEvaluationOfMonsterLinks();
   },
+  mounted: function () {
+    window.addEventListener('keydown', this.onKeydown);
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('keydown', this.onKeydown);
+  },
   methods: {
+    /** 指定された値の分、表示するモンスターの番号を前後させる。 */
+    moveMonsterNoBy: function (offset) {
+      const route = Object.assign({}, this.$route);
+      const params = Object.assign({}, route.params);
+
+      params.no = Number(params.no) + offset;
+      route.params = params;
+      this.$router.push(route);
+    },
+    /** キーボードのキーが押されたときに呼ばれるイベントハンドラ。 */
+    onKeydown: function (e) {
+      if (e.key === 'ArrowLeft') { this.moveMonsterNoBy(-1); }
+      if (e.key === 'ArrowRight') { this.moveMonsterNoBy(1); }
+    },
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
       this.histories = null;
