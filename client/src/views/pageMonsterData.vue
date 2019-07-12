@@ -251,7 +251,7 @@ export default {
     '$route': function () {
       this.fetchData();
     },
-    'monsterData': ['$_mixinForPage_updateTitle', 'updateEvaluationOfMonsterLinks']
+    no: ['$_mixinForPage_updateTitle', 'updateEvaluationOfMonsterLinks']
   },
   created: function () {
     this.fetchData();
