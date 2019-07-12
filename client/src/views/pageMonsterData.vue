@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div v-if="!monsterData">
+    指定されたモンスターのデータは存在しません。
+  </div>
+  <div v-else>
     <div v-if="isHistory" class="alert alert-primary" role="alert">
       {{ monsterData.datetime }} 時点のデータです
     </div>
@@ -138,7 +141,7 @@ import EvolutionMaterials from './../components/monsterDataEvolutionMaterials.vu
 export default {
   name: 'PageMonsterData',
   pageTitle: function () {
-    let str = `No.${this.no || this.monsterData.no} ${this.monsterData.name}`;
+    let str = `No.${this.no || this.monsterData.no} ${(this.monsterData || { name: '' }).name}`;
     if (this.isHistory) { str += ` (${this.monsterData.datetime})`; }
     return str;
   },
@@ -212,6 +215,7 @@ export default {
 
     /** プラスが振れるキャラクターかどうかを返す。 */
     canAddPlus: function () {
+      if (!this.monsterData) { return false; }
       return checkCanMixMonster(this.monsterData);
     },
     /** 現在表示しているのがモンスター評価ページのリストを表示する情報かどうかを返す。 */
