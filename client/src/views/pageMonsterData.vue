@@ -1,10 +1,18 @@
 <template>
   <div v-if="!monsterData">
+    <div v-if="!isHistory" class="prevNext">
+      <router-link class="prev" :to="createMoveMonsterNoByObject()">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
+      <router-link class="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
+    </div>
     指定されたモンスターのデータは存在しません。
   </div>
   <div v-else>
     <div v-if="isHistory" class="alert alert-primary" role="alert">
       {{ monsterData.datetime }} 時点のデータです
+    </div>
+    <div v-if="!isHistory" class="prevNext">
+      <router-link class="prev" :to="createMoveMonsterNoByObject()">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
+      <router-link class="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
     </div>
 
     <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
@@ -264,14 +272,23 @@ export default {
     window.removeEventListener('keydown', this.onKeydown);
   },
   methods: {
-    /** 指定された値の分、表示するモンスターの番号を前後させる。 */
-    moveMonsterNoBy: function (offset) {
+    /** 指定番号のモンスターの名前を取得する。未登録の場合は '（未登録）' を返す。 */
+    getMonsterName: function (no) {
+      const data = this.monsterTable[no] || { name: '（未登録）' };
+      return data.name;
+    },
+    /** 指定された値の分、表示するモンスターの番号を前後させるための route 指定オブジェクトを作成する。 */
+    createMoveMonsterNoByObject: function (offset) {
       const route = Object.assign({}, this.$route);
       const params = Object.assign({}, route.params);
 
       params.no = Number(params.no) + offset;
       route.params = params;
-      this.$router.push(route);
+      return route;
+    },
+    /** 指定された値の分、表示するモンスターの番号を前後させる。 */
+    moveMonsterNoBy: function (offset) {
+      this.$router.push(this.createMoveMonsterNoByObject(offset));
     },
     /** キーボードのキーが押されたときに呼ばれるイベントハンドラ。 */
     onKeydown: function (e) {
@@ -352,6 +369,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.prevNext {
+  text-align: right;
+
+  .prev {
+    float: left;
+  }
+
+  * {
+    white-space: nowrap;
+  }
+}
 
 .paramAlert {
   color: rgba(224, 0, 0, 0.8);
