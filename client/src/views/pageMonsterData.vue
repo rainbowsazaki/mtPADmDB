@@ -292,6 +292,8 @@ export default {
     },
     /** キーボードのキーが押されたときに呼ばれるイベントハンドラ。 */
     onKeydown: function (e) {
+      const targetName = e.target.tagName;
+      if (targetName === 'INPUT' || targetName === 'TEXTAREA' || targetName === 'SELECT') { return; }
       if (e.key === 'ArrowLeft') { this.moveMonsterNoBy(-1); }
       if (e.key === 'ArrowRight') { this.moveMonsterNoBy(1); }
     },
