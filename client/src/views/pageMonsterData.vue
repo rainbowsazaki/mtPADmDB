@@ -1,7 +1,7 @@
 <template>
   <div v-if="!monsterData">
     <div v-if="!isHistory" class="prevNext">
-      <router-link class="prev" :to="createMoveMonsterNoByObject()">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
+      <router-link class="prev" :to="createMoveMonsterNoByObject(-1)">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
       <router-link class="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
     </div>
     指定されたモンスターのデータは存在しません。
@@ -11,7 +11,7 @@
       {{ monsterData.datetime }} 時点のデータです
     </div>
     <div v-if="!isHistory" class="prevNext">
-      <router-link class="prev" :to="createMoveMonsterNoByObject()">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
+      <router-link class="prev" :to="createMoveMonsterNoByObject(-1)">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
       <router-link class="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
     </div>
 
