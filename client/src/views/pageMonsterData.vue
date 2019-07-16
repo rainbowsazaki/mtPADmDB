@@ -1,8 +1,9 @@
 <template>
   <div v-if="!monsterData">
     <div v-if="!isHistory" class="prevNext">
-      <router-link class="prev" :to="createMoveMonsterNoByObject(-1)">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
-      <router-link class="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
+      <router-link v-if="no > 1" class="prev" :to="createMoveMonsterNoByObject(-1)">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
+      <router-link v-if="no < 9999" fclass="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
+      <template v-else>&nbsp;</template>
     </div>
     指定されたモンスターのデータは存在しません。
   </div>
@@ -11,8 +12,9 @@
       {{ monsterData.datetime }} 時点のデータです
     </div>
     <div v-if="!isHistory" class="prevNext">
-      <router-link class="prev" :to="createMoveMonsterNoByObject(-1)">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
-      <router-link class="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
+      <router-link v-if="no > 1" class="prev" :to="createMoveMonsterNoByObject(-1)">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
+      <router-link v-if="no < 9999" fclass="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
+      <template v-else>&nbsp;</template>
     </div>
 
     <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
@@ -294,8 +296,8 @@ export default {
     onKeydown: function (e) {
       const targetName = e.target.tagName;
       if (targetName === 'INPUT' || targetName === 'TEXTAREA' || targetName === 'SELECT') { return; }
-      if (e.key === 'ArrowLeft') { this.moveMonsterNoBy(-1); }
-      if (e.key === 'ArrowRight') { this.moveMonsterNoBy(1); }
+      if (this.no > 1 && e.key === 'ArrowLeft') { this.moveMonsterNoBy(-1); }
+      if (this.no < 9999 && e.key === 'ArrowRight') { this.moveMonsterNoBy(1); }
     },
     fetchData: function () {
       this.$store.state.monsterData = constData.monsterClearData;
