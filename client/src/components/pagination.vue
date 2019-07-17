@@ -29,6 +29,11 @@
  */
 export default {
   name: 'Pagination',
+  /** コンポーネントの各実体で共有するデータのカスタムプロパティ。 */
+  common: {
+    /**  */
+    mountedCount: 0
+  },
   props: {
     'page': {
       type: Number,
@@ -46,7 +51,9 @@ export default {
   data: function () {
     return {
       /** 要素のサイズをもとに算出したページ切り替えの個数。 */
-      computedItemCount: 1
+      computedItemCount: 1,
+      /** このオブジェクトでイベントリスナー登録を行ったかどうか。 */
+      isAddKeydownEvent: false
     };
   },
   computed: {
@@ -74,11 +81,30 @@ export default {
   mounted: function () {
     this.updateCount();
     window.addEventListener('resize', this.updateCount);
+
+    if (this.$options.common.mountedCount === 0) {
+      window.addEventListener('keydown', this.onKeydown);
+      this.isAddKeydownEvent = true;
+    }
+    this.$options.common.mountedCount++;
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.updateCount);
+    if (this.isAddKeydownEvent) {
+      window.removeEventListener('keydown', this.onKeydown);
+    }
+
+    this.$options.common.mountedCount--;
   },
   methods: {
+    /** キーボードのキーが押されたときに呼ばれるイベントハンドラ。 */
+    onKeydown: function (e) {
+      if (e.repeat) { return; }
+      const targetName = e.target.tagName;
+      if (targetName === 'INPUT' || targetName === 'TEXTAREA' || targetName === 'SELECT') { return; }
+      if (e.key === 'ArrowLeft') { this.$router.push(this.createToObj(this.page - 1)); }
+      if (e.key === 'ArrowRight') { this.$router.push(this.createToObj(this.page + 1)); }
+    },
     /** ページ切り替えの表示個数を更新する。 */
     updateCount: function () {
       const elUl = this.$el.children[0];
