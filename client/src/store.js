@@ -31,6 +31,14 @@ export default new Vuex.Store({
         obj[leaderSkill].push(monsterData.no);
       }
       return obj;
+    },
+    /** 管理者権限のアカウントでログインしているかどうか。 */
+    isAdmin: state => {
+      const adminUids = [
+        'Js0u9nNHgJSDWZn5ppqPAhPXzYn1', // rainbowsazaki
+        'h67aDFc0auMhaEQh8KewLWNZBXM2' // mtPADmDB
+      ]
+      return state.accountData && adminUids.includes(state.accountData.uid);
     }
   },
   mutations: {
