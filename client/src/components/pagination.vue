@@ -31,7 +31,7 @@ export default {
   name: 'Pagination',
   /** コンポーネントの各実体で共有するデータのカスタムプロパティ。 */
   common: {
-    /**  */
+    /** このコンポーネントがマウントされている個数。 */
     mountedCount: 0
   },
   props: {
@@ -81,7 +81,7 @@ export default {
   mounted: function () {
     this.updateCount();
     window.addEventListener('resize', this.updateCount);
-
+    // keydown のイベントハンドラを複数登録すると一回押しただけで複数回呼び出されるので、最初の1つのみ登録する。
     if (this.$options.common.mountedCount === 0) {
       window.addEventListener('keydown', this.onKeydown);
       this.isAddKeydownEvent = true;
@@ -90,6 +90,7 @@ export default {
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.updateCount);
+    // keydonw のイベントハンドラを登録したもののみ、解除を行う。
     if (this.isAddKeydownEvent) {
       window.removeEventListener('keydown', this.onKeydown);
     }
