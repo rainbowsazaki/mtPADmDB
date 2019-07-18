@@ -14,6 +14,7 @@ const PageSkillList = () => import('./views/pageSkillList.vue');
 const PageRaniking = () => import('./views/pageRanking.vue');
 const PageEvolutionMaterial = () => import('./views/pageEvolutionMaterial.vue');
 const PageKiseki = () => import('./views/pageKiseki.vue');
+const PageAdmin = () => import('./views/pageAdmin.vue');
 
 /** router-view 要素のみのコンポーネント。 ネストされたルートの親要素で何も表示しない時用。 */
 const RouterViewComponent = {
@@ -205,6 +206,11 @@ export default new Router({
       path: '/kiseki',
       name: 'kisekiCheck',
       component: PageKiseki
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: PageAdmin
     },
     
     { path: '/:no', redirect: '/monster/:no' },

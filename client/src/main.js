@@ -10,6 +10,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+import './auth';
+
 Vue.config.productionTip = false;
 
 import { constData } from './mtpadmdb.js';

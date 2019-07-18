@@ -107,6 +107,10 @@ export default new Vuex.Store({
         this.commit('setErrors', [errorMessage]);
       });
     },
+    /** ログインしているアカウントの情報を更新する。 */
+    updateUserAccount: function (state, accountData) {
+      state.accountData = accountData;
+    },
 
     addMonsterData: function (state, monsterData) {
       Object.assign(state.monsterTable, monsterData);

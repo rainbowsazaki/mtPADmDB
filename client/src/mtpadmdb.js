@@ -89,7 +89,13 @@ export const commonData = {
   lastLoadCommonDataTime: 0,
 
   messages: [],
-  errors: []
+  errors: [],
+
+  /**
+   * 現在のログインアカウントの情報。ログイン情報未確認時は null、
+   * 未ログイン時は空オブジェクト、ログイン時はそのアカウントの情報が入ったオブジェクト。
+   */
+  accountData: null
 };
 
 export const constData = {
