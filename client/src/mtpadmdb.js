@@ -293,7 +293,12 @@ export const constData = {
 };
 
 /** 本番環境でのみ gtag を実行する関数 */
-export const gtagProductionOnly = (location.port !== '') ? function () {} : gtag;
+export const gtagProductionOnly = (location.port !== '')
+  ? function () {}
+  : function () {
+    if (store.getters.isAdmin) { return; }
+    gtag(...arguments);
+  };
 
 /** HTMLエスケープを行う。 */
 export function escapeHtml (str) {
