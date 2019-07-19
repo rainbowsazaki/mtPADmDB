@@ -34,11 +34,15 @@ export default new Vuex.Store({
     },
     /** 管理者権限のアカウントでログインしているかどうか。 */
     isAdmin: state => {
+      const accountData = state.accountData;
+      if (!accountData) { return false; }
+      const providerData = accountData.providerData;
+      if (!providerData) { return false; }
       const adminUids = [
-        'Js0u9nNHgJSDWZn5ppqPAhPXzYn1', // rainbowsazaki
-        'h67aDFc0auMhaEQh8KewLWNZBXM2' // mtPADmDB
-      ]
-      return state.accountData && adminUids.includes(state.accountData.uid);
+        '14495068', // rainbowsazaki
+        '1040124896972394496' // mtPADmDB
+      ];
+      return providerData[0].providerId === 'twitter.com' && adminUids.includes(providerData[0].uid);
     }
   },
   mutations: {
