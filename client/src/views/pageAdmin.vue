@@ -4,6 +4,12 @@
   </div>
   <div v-else-if="accountData.uid">
     <button class="btn btn-primary" @click="signOut">サインアウト</button>
+    <h2>管理ページリンク</h2>
+    <ul>
+      <li><router-link :to="{ name: 'monsterHistoryList' }">モンスター編集履歴</router-link></li>
+      <li><router-link :to="{ name: 'comment' }">新着コメント</router-link></li>
+      <li><router-link :to="{ name: 'kisekiCheck' }">希石チェック</router-link></li>
+    </ul>
     <div>
       {{ accountData }}
     </div>
