@@ -19,7 +19,7 @@ export function signIn () {
     firebase.auth().signInWithRedirect(provider);
   } else {
     firebase.auth().signInWithPopup(provider).then(function (result) {
-      console.log(result);
+      // console.log(result);
     });
   }
 }
@@ -31,7 +31,7 @@ export function signOut () {
 
 firebase.initializeApp(fbConfig);
 firebase.auth().getRedirectResult().then(function (result) {
-  console.log('login:', result);
+  // console.log('login:', result);
   store.commit('updateUserAccount', {});
   // if (result.credential) {
   //   // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
@@ -56,6 +56,6 @@ firebase.auth().getRedirectResult().then(function (result) {
 // オブザーバーの登録
 firebase.auth().onAuthStateChanged(user => {
   // ログイン状態ならuserが取得できる
-  console.log(user);
+  // console.log(user);
   store.commit('updateUserAccount', user || {});
 });
