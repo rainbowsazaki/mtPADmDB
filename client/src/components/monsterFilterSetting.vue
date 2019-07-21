@@ -43,12 +43,12 @@
           <label class="col-sm-2 col-form-label">スキルターン</label>
           <div class="col-sm-10">
             <input type="range" v-model.number="filter.skillTurnMin" min="1" max="99" step="1">
-            <input type="number" v-model.number="filter.skillTurnMin" required min="1" max="99">以上
+            <input type="number" v-model.number.lazy="filter.skillTurnMin" required min="1" max="99">以上
           </div>
           <label class="col-sm-2 col-form-label" />
           <div class="col-sm-10">
             <input type="range" v-model.number="filter.skillTurnMax" min="1" max="99" step="1">
-            <input type="number" v-model.number="filter.skillTurnMax" required min="1" max="99">以下
+            <input type="number" v-model.number.lazy="filter.skillTurnMax" required min="1" max="99">以下
           </div>
         </div>
         <div class="form-group row">
@@ -61,12 +61,12 @@
           <label class="col-sm-2 col-form-label">スキルブースト数</label>
           <div class="col-sm-10">
             <input type="range" v-model.number="filter.skillBoostMin" min="0" max="9" step="1">
-            <input type="number" v-model.number="filter.skillBoostMin" required min="0" max="9">以上
+            <input type="number" v-model.number.lazy="filter.skillBoostMin" required min="0" max="9">以上
           </div>
           <label class="col-sm-2 col-form-label" />
           <div class="col-sm-10">
             <input type="range" v-model.number="filter.skillBoostMax" min="0" max="9" step="1">
-            <input type="number" v-model.number="filter.skillBoostMax" required min="0" max="9">以下
+            <input type="number" v-model.number.lazy="filter.skillBoostMax" required min="0" max="9">以下
           </div>
         </div>
         <div class="form-group row timeExtension">
