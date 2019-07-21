@@ -39,6 +39,9 @@
             <attr-select use-unknown checkbox-style mode="type" v-model="filter.type" />
           </div>
         </div>
+        <div class="from-group row">
+          <label class="col-sm-12 col-form-label"><input type="checkbox" v-model="isUnder6Rare"> ★6以下のみ</label>
+        </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">スキルターン</label>
           <div class="col-sm-10">
@@ -113,6 +116,7 @@ const filterDefault = {
   subAttr: [],
   type: [],
   awaken: [],
+  rarityMax: 10,
   skillTurnMin: 1,
   skillTurnMax: 99,
   skillBoostMin: 0,
@@ -179,6 +183,11 @@ export function getFilterFunction (setting) {
     }
     const awakenKeys = Object.keys(awakenFilter);
     functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
+  }
+  if (setting.rarityMax !== filterDefault.rarityMax) {
+    functionArray.push(d => {
+      return d.rare <= setting.rarityMax;
+    });
   }
   const skillTurnMin = setting.skillTurnMin || filterDefault.skillTurnMin;
   const skillTurnMax = setting.skillTurnMax || filterDefault.skillTurnMax;
@@ -259,6 +268,9 @@ export function filterSettingTextArray (setting) {
     if (min === defaultMin) { return `${max}${tanni}以下`; }
     if (max === defaultMax) { return `${min}${tanni}以上`; }
     return `${min}〜${max}${tanni}`;
+  }
+  if (setting.rarityMax !== filterDefault.rarityMax) {
+    textArray.push(`★${setting.rarityMax}以下`);
   }
   const skillTurnMin = setting.skillTurnMin || filterDefault.skillTurnMin;
   const skillTurnMax = setting.skillTurnMax || filterDefault.skillTurnMax;
@@ -379,6 +391,7 @@ export default {
         subAttr: array2text(this.filter.subAttr),
         type: array2text(this.filter.type),
         awaken: array2text(this.filter.awaken),
+        rarityMax: (filterDefault.rarityMax === this.filter.rarityMax) ? undefined : this.filter.rarityMax,
         skillTurn: this.skillTurnFilterStr,
         skillBoost: this.skillBoostFilterStr,
         timeExtensionMin: timeExtensionMin,
@@ -386,6 +399,15 @@ export default {
       };
 
       return query;
+    },
+    /** ★6以下のみにするかどうか。 */
+    isUnder6Rare: {
+      get: function () {
+        return this.filter.rarityMax === 6;
+      },
+      set: function (value) {
+        this.filter.rarityMax = (value) ? 6 : filterDefault.rarityMax;
+      }
     }
   },
   watch: {
@@ -439,6 +461,7 @@ export default {
       this.queryToFilter('type');
       this.queryToFilter('awaken');
       this.queryToFilter('assist', Number);
+      this.queryToFilter('rarityMax', Number, filterDefault.rarityMax);
       this.skillTurnFilterStr = this.$route.query.skillTurn;
       this.skillBoostFilterStr = this.$route.query.skillBoost;
       this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
