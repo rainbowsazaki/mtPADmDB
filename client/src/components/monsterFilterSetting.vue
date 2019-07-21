@@ -72,8 +72,8 @@
         <div class="form-group row timeExtension">
           <label class="col-sm-2 col-form-label">操作時間延長</label>
           <div class="col-sm-10">
-            <input type="range" v-model.number="filter.timeExtensionMin" min="0" max="3" step="0.5">
-            <input type="number" v-model.number="filter.timeExtensionMin" required min="0" max="3" step="0.5">秒以上
+            <input type="range" v-model.number="filter.timeExtensionMin" min="0" max="4" step="0.5">
+            <input type="number" v-model.number="filter.timeExtensionMin" required min="0" max="4" step="0.5">秒以上
           </div>
         </div>
         <div class="form-group row">
