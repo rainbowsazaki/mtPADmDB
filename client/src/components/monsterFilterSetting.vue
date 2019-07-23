@@ -184,7 +184,7 @@ export function getFilterFunction (setting) {
     const awakenKeys = Object.keys(awakenFilter);
     functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
   }
-  if (setting.rarityMax !== filterDefault.rarityMax) {
+  if (setting.rarityMax && setting.rarityMax !== filterDefault.rarityMax) {
     functionArray.push(d => {
       return d.rare <= setting.rarityMax;
     });
