@@ -141,7 +141,7 @@ export default {
       if (!this.monsterData) { return; }
       const no = this.monsterData[this.noPropName];
       if (no !== 0) {
-        this.monsterData[this.detailsPropName] = $.extend(true, { name: '', description: '' }, this.skillTable[no]);
+        this.monsterData[this.detailsPropName] = Object.assign({ name: '', description: '' }, this.skillTable[no]);
         delete this.targetSkillDetails.no;
       }
     }
