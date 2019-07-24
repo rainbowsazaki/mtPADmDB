@@ -286,6 +286,11 @@ export const constData = {
     65: { name: 'HP弱化', description: 'HPが5000ダウンする(最小1まで)', value: -5000 },
     66: { name: '攻撃弱化', description: '攻撃力が1000ダウンする(最小1まで)', value: -1000 },
     67: { name: '回復弱化', description: '回復力が2000ダウンする', value: -2000 },
+    68: { name: '暗闇耐性+', description: '暗闇攻撃を無効化する', probability: 1 },
+    69: { name: 'お邪魔耐性+', description: 'お邪魔攻撃や爆弾攻撃を\n無効化する', probability: 1 },
+    70: { name: '毒耐性+', description: '毒攻撃を無効化する', probability: 1 },
+    71: { name: 'お邪魔ドロップの加護', description: 'お邪魔ドロップが落ちてくるようになり、\nお邪魔ドロップを消すと攻撃力がアップする' },
+    72: { name: '毒ドロップの加護', description: '毒ドロップが落ちてくるようになり、\n毒か猛毒ドロップを消すと攻撃力がアップする' },
 
     null: { name: '不明', description: '' }
   }
