@@ -195,10 +195,10 @@ export default {
           }
 
           // 公式サイトのプレイヤー情報部分のない画像への対応。
-          if (imgWidth === 640 && imgHeight >= 944 && imgHeight <= 948) {
+          if (imgWidth === 640 && imgHeight >= 944 && imgHeight <= 958) {
             imgTop = imgHeight - 1096;
           }
-          if (imgWidth === 750 && imgHeight >= 1117 && imgHeight <= 1119) {
+          if (imgWidth === 750 && imgHeight >= 1117 && imgHeight <= 1124) {
             imgTop = imgHeight - 1293;
           }
 
