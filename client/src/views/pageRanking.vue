@@ -115,6 +115,8 @@ const F_A_A3X3 = 1 << 4;
 const F_A_OVER80 = 1 << 5;
 /** HP50以下強化発動のフラグ。 */
 const F_A_UNDER50 = 1 << 6;
+/** 回復ドロップ強化の回復４個消し時回復力アップ発動のフラグ。 */
+const F_A_RECOVERY_PLUS = 1 << 7;
 
 /**
  * モンスターのパラメータなどのランク付けを行うページのコンポーネント。
@@ -263,6 +265,17 @@ export default {
           ],
           sortColumn: 0,
           awakenFlag: F_A_L_JI | F_A_COMBO_UP
+        },
+        {
+          id: 'recovery4',
+          title: '回復４個消し時回復力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の回復４個消し時の回復力ランキングです。',
+          columns: [
+            { name: '回復+99', func: data => data.hyperMaxParam.recovery },
+            { name: '回復力', func: data => (data.hyperMaxParam.recovery * data.bestSuperAwakenRate * data.recoveryUpRate) | 0 },
+          ],
+          sortColumn: 1,
+          awakenFlag: F_A_RECOVERY_PLUS
         }
       ]
     },
@@ -525,6 +538,10 @@ export default {
         get multiBoostRate () {
           return this.culcAwakenRate(30);
         },
+        /** 回復ドロップ強化による回復４個消し時の回復力レートを取得する。 */
+        get recoveryUpRate () {
+          return this.culcAwakenRate(29);
+        },
         /** 属性相性による攻撃力レートを取得する。 */
         get attrbuteRate () {
           const rateInfo = manageObj.enemyAttributeRateInfo;
@@ -573,7 +590,8 @@ export default {
             [F_A_UNDER50, 58],
             [F_A_WAY, 27],
             [F_A_L_JI, 60],
-            [F_A_OVER80, 57]
+            [F_A_OVER80, 57],
+            [F_A_RECOVERY_PLUS, 29]
           ];
           
           let awakenNo = null;
