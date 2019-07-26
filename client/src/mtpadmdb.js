@@ -247,7 +247,7 @@ export const constData = {
     26: { name: '闇属性強化', description: '闇ドロップを横一列でそろえて消すと\n火属性の攻撃力がアップする', rate: 0.15 },
     27: { name: '2体攻撃', description: '自分と同じ属性のドロップを4個消すと\n攻撃力がアップし、敵2体に攻撃する', rate: 1.5 },
     28: { name: '封印耐性', description: 'スキル封印攻撃を無効化することがある', probability: 0.2 },
-    29: { name: '回復ドロップ強化', description: '強化された回復ドロップの出現率と\n回復力がアップする\n回復の4個消しで回復力がアップする', probability: 0.2, rate: 0.05, rate2: 1.5 },
+    29: { name: '回復ドロップ強化', description: '強化された回復ドロップの出現率と\n回復力がアップする\n回復の4個消しで回復力がアップする', probability: 0.2, rate: 1.5, rate2: 0.05 },
     30: { name: 'マルチブースト', description: '協力プレイ時に\n自分の全パラメータがアップする', rate: 1.5 },
     31: { name: 'ドラゴンキラー', description: 'ドラゴンタイプの敵に対して\n攻撃力がアップする', rate: 3 },
     32: { name: '神キラー', description: '神タイプの敵に対して\n攻撃力がアップする', rate: 3 },
