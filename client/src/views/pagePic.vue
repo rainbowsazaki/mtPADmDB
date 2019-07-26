@@ -155,7 +155,7 @@ export default {
             function isRange (value, target, margin) {
               return value - margin <= target && value + margin >= target;
             }
-            const colorMargin = 64;
+            const colorMargin = 68;
             return isRange(array[startIndex + 0], targetColor[0], colorMargin) &&
                     isRange(array[startIndex + 1], targetColor[1], colorMargin) &&
                     isRange(array[startIndex + 2], targetColor[2], colorMargin);
@@ -195,8 +195,11 @@ export default {
           }
 
           // 公式サイトのプレイヤー情報部分のない画像への対応。
-          if (imgWidth === 640 && imgHeight >= 944 && imgHeight <= 958) {
+          if (imgWidth === 640 && imgHeight >= 944 && imgHeight <= 948) {
             imgTop = imgHeight - 1096;
+          }
+          if (imgWidth === 640 && imgHeight >= 949 && imgHeight <= 958) {
+            imgTop = imgHeight - 1104;
           }
           if (imgWidth === 750 && imgHeight >= 1117 && imgHeight <= 1124) {
             imgTop = imgHeight - 1293;
