@@ -11,3 +11,5 @@ sitemap_leader_skill.txt
 sitemap_monster.txt
 sitemap_skill.txt
 secret.json
+backup
+db/image_archive_last_count.txt
