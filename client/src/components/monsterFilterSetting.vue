@@ -21,6 +21,10 @@
                 @after-leave="isOpenFilterTrigger = false;"
     >
       <form id="filterForm" v-if="isVisibleFilter">
+        <div class="formMenu">
+          <div class="formMenuTitle">モンスター絞り込み</div>
+          <a class="btn" @click="isVisibleFilter = false;">×</a>
+        </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">主属性</label>
           <div class="col-sm-10">
@@ -555,6 +559,10 @@ export default {
     margin-top: -2px;
     padding: 8px 4px 4px 4px;
     overflow: hidden;
+
+    .formMenu {
+      display: none;
+    }
   }
 
   .settingText {
@@ -576,5 +584,48 @@ export default {
       height: 0em;
     }
   }
+
+@media (max-width: 575px) {
+  #filterForm {
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 1em;
+    padding-top: 0em;
+    height: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    
+    .formMenu {
+      display: block;
+      position: sticky;
+      left: -1rem;
+      top: 0;
+      width: calc(100% + 2em);
+      margin: 0;
+      margin-left: -1em;
+      z-index: 1;
+      text-align: right;
+      background: #e9ecef;
+      border-bottom: 1px solid #c9cccf;
+
+      .formMenuTitle {
+        text-align: center;
+        line-height: 2.5em;
+        margin-bottom: -2.5em;
+      }
+    }
+  }
+
+  @keyframes filter-in {
+    0% {
+      top: 100%;
+    }
+  }
+}
 
 </style>
