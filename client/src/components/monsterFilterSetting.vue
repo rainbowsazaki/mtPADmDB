@@ -25,79 +25,64 @@
           <div class="formMenuTitle">モンスター絞り込み</div>
           <a class="btn" @click="isVisibleFilter = false;">×</a>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">主属性</label>
-          <div class="col-sm-10">
+        <div class="row">
+          <label class="col-4 col-form-label">主属性</label>
+          <div class="col-8">
             <attr-select use-unknown checkbox-style v-model="filter.attr" />
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">複属性</label>
-          <div class="col-sm-10">
+        <div class="row">
+          <label class="col-4 col-form-label">複属性</label>
+          <div class="col-8">
             <attr-select use-none checkbox-style v-model="filter.subAttr" />
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">タイプ</label>
-          <div class="col-sm-10">
+        <div class="row">
+          <label class="col-4 col-form-label">タイプ</label>
+          <div class="col-8">
             <attr-select use-unknown checkbox-style mode="type" v-model="filter.type" />
           </div>
         </div>
         <div class="from-group row">
-          <label class="col-sm-12 col-form-label"><input type="checkbox" v-model="isUnder6Rare"> ★6以下のみ</label>
+          <label class="col-4 col-form-label">レアリティ</label>
+          <label class="col-8">
+            <input type="checkbox" v-model="isUnder6Rare"> ★6以下のみ
+          </label>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">スキルターン</label>
-          <div class="col-sm-10">
-            <input type="range" v-model.number="filter.skillTurnMin" min="1" max="99" step="1">
+        <div class="row">
+          <label class="col-4 col-form-label">スキルターン</label>
+          <div class="col-8">
             <input type="number" v-model.number.lazy="filter.skillTurnMin" required min="1" max="99">以上
-          </div>
-          <label class="col-sm-2 col-form-label" />
-          <div class="col-sm-10">
-            <input type="range" v-model.number="filter.skillTurnMax" min="1" max="99" step="1">
             <input type="number" v-model.number.lazy="filter.skillTurnMax" required min="1" max="99">以下
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">覚醒</label>
-          <div class="col-sm-10">
+        <div class="row">
+          <label class="col-sm-4 col-form-label">覚醒</label>
+          <div class="col-sm-8">
             <awaken-select v-model="filter.awaken" />
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">スキルブースト数</label>
-          <div class="col-sm-10">
-            <input type="range" v-model.number="filter.skillBoostMin" min="0" max="9" step="1">
+        <div class="row">
+          <label class="col-4 col-form-label">スキルブースト数</label>
+          <div class="col-8">
             <input type="number" v-model.number.lazy="filter.skillBoostMin" required min="0" max="9">以上
-          </div>
-          <label class="col-sm-2 col-form-label" />
-          <div class="col-sm-10">
-            <input type="range" v-model.number="filter.skillBoostMax" min="0" max="9" step="1">
             <input type="number" v-model.number.lazy="filter.skillBoostMax" required min="0" max="9">以下
           </div>
         </div>
-        <div class="form-group row timeExtension">
-          <label class="col-sm-2 col-form-label">操作時間延長</label>
-          <div class="col-sm-10">
-            <input type="range" v-model.number="filter.timeExtensionMin" min="0" max="4" step="0.5">
+        <div class="row timeExtension">
+          <label class="col-4 col-form-label">操作時間延長</label>
+          <div class="col-8">
             <input type="number" v-model.number="filter.timeExtensionMin" required min="0" max="4" step="0.5">秒以上
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">アシスト</label>
-          <div class="col-sm-10">
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="radioAssistAll" name="radioAssist" :value="undefined" v-model.number="filter.assist" class="custom-control-input">
-              <label class="custom-control-label" for="radioAssistAll">すべて</label>
-            </div>
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="radioAssistOk" name="radioAssist" value="1" v-model.number="filter.assist" class="custom-control-input">
-              <label class="custom-control-label" for="radioAssistOk">○</label>
-            </div>
-            <div class="custom-control custom-radio custom-control-inline">
-              <input type="radio" id="radioAssistNg" name="radioAssist" value="0" v-model.number="filter.assist" class="custom-control-input">
-              <label class="custom-control-label" for="radioAssistNg">×</label>
-            </div>
+        <div class="row">
+          <label class="col-4 col-form-label">アシスト</label>
+          <div class="col-8">
+            <select class="custom-select" v-model.number="filter.assist">
+              <option :value="undefined">すべて</option>
+              <option value="1">○</option>
+              <option value="0">×</option>
+            </select>
           </div>
         </div>
         <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
