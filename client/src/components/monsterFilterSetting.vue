@@ -25,6 +25,10 @@
           <div class="formMenuTitle">モンスター絞り込み</div>
           <a class="btn" @click="isVisibleFilter = false;">×</a>
         </div>
+        <div class="formBottomMenu">
+          <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
+          <button class="btn btn-primary btn-sm" type="button" @click="isVisibleFilter = false;">OK</button>
+        </div>
         <div class="row">
           <label class="col-4 col-form-label">主属性</label>
           <div class="col-8">
@@ -85,7 +89,9 @@
             </select>
           </div>
         </div>
-        <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
+        <div class="innerButtons">
+          <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
+        </div>
       </form>
     </transition>
 
@@ -545,7 +551,7 @@ export default {
     padding: 8px 4px 4px 4px;
     overflow: hidden;
 
-    .formMenu {
+    .formMenu, .formBottomMenu {
       display: none;
     }
   }
@@ -576,15 +582,22 @@ export default {
     z-index: 1050;
     left: 0;
     top: 0;
-    border: none;
-    border-radius: 0;
+    height: 100%;
     margin: 0;
     padding: 1em;
     padding-top: 0em;
-    height: 100%;
+    padding-bottom: 3em;
+    border: none;
+    border-radius: 0;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     
+    .innerButtons {
+      margin-bottom: 1em;
+      * {
+        display: none;
+      }
+    }
     .formMenu {
       display: block;
       position: sticky;
@@ -593,15 +606,38 @@ export default {
       width: calc(100% + 2em);
       margin: 0;
       margin-left: -1em;
+      border-bottom: 1px solid #c9cccf;
       z-index: 1;
       text-align: right;
       background: #e9ecef;
-      border-bottom: 1px solid #c9cccf;
 
       .formMenuTitle {
         text-align: center;
         line-height: 2.5em;
         margin-bottom: -2.5em;
+      }
+    }
+    
+    .formBottomMenu {
+      display: block;
+      position: sticky;
+      left: -1rem;
+      height: 3em;
+      top: 100%;
+      bottom: 3em;
+      width: calc(100% + 2em);
+      margin: 0;
+      margin-left: -1em;
+      margin-bottom: -3em;
+      padding: 0.5em;
+      border-top: 1px solid #c9cccf;
+      z-index: 1;
+      background: #e9ecef;
+      text-align: right;
+
+      button {
+        margin-left: 0.5em;
+        min-width: 5em;
       }
     }
   }
