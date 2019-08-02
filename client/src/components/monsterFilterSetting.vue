@@ -16,8 +16,8 @@
     </span>
     <transition name="filter"
                 @before-enter="setStyleHeight($event, 'filter'); isOpenFilterTrigger = true;"
-                @after-enter="clearStyleHeight($event);"
-                @before-leave="setStyleHeight($event);"
+                @after-enter="clearStyleHeight($event); isFullOpenFilterTrigger = true;"
+                @before-leave="setStyleHeight($event); isFullOpenFilterTrigger = false;"
                 @after-leave="isOpenFilterTrigger = false;"
     >
       <form id="filterForm" v-if="isVisibleFilter">
@@ -320,10 +320,16 @@ export default {
       isVisibleFilter: false,
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
       isOpenFilterTrigger: false,
+      /** フィルタリング設定領域がすべて表示されている状態かどうか。 */
+      isFullOpenFilterTrigger: false,
       /** 表示するモンスターに対するフィルタ。 */
       filter: getFilterDefault(),
       /** フォームの変更とそれによる query の変更の巡回によって起こる更新イベントの多重送信を防ぐオブジェクト。 */
-      multiSendBlocker: new MultiSendBlocker(1)
+      multiSendBlocker: new MultiSendBlocker(1),
+      /** ブラウザの横幅がフィルタリング設定領域を全画面で多い表示するものかどうか。 */
+      isBrowserWidthSmall: false,
+      /** フィルタリング設定領域を全画面で表示したときの、全体の縦スクロール位置。 */
+      tempScrollTop: 0
     };
   },
   computed: {
@@ -403,6 +409,10 @@ export default {
       set: function (value) {
         this.filter.rarityMax = (value) ? 6 : filterDefault.rarityMax;
       }
+    },
+    /** 設定領域を全画面で表示しているかどうか。 */
+    isFullOverSettingArea: function () {
+      return this.isBrowserWidthSmall && this.isFullOpenFilterTrigger;
     }
   },
   watch: {
@@ -440,6 +450,15 @@ export default {
       if (this.filter.skillBoostMax < this.filter.skillBoostMin) {
         this.filter.skillBoostMin = this.filter.skillBoostMax;
       }
+    },
+    isFullOverSettingArea: function (newValue) {
+      if (newValue) {
+        this.tempScrollTop = document.scrollingElement.scrollTop;
+        document.scrollingElement.scrollTop = 0;
+      } else {
+        document.scrollingElement.scrollTop = this.tempScrollTop;
+      }
+      document.body.className = newValue ? 'noScroll' : '';
     }
   },
   created: function () {
@@ -447,7 +466,18 @@ export default {
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
+  mounted: function () {
+    window.addEventListener('resize', this.checkBrowserWidthSmall);
+    this.checkBrowserWidthSmall();
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.checkBrowserWidthSmall);
+  },
   methods: {
+    /** 現在のウィンドウサイズが、設定領域を全画面表示するものかどうかを確認する。 */
+    checkBrowserWidthSmall: function () {
+      this.isBrowserWidthSmall = window.matchMedia('(max-width: 575px)').matches;
+    },
     /** $route.query を元にフィルター設定を作成する。 */
     setFilterFromQuery: function () {
       this.queryToFilter('name');
@@ -520,6 +550,15 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+@media (max-width: 575px) {
+  // 設定フォームを全画面表示している際に裏をスクロールさせないための設定。
+  body.noScroll {
+    position: fixed;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
   .inlineBlock {
