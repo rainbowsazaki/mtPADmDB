@@ -50,7 +50,8 @@
         <div class="from-group row">
           <label class="col-4 col-form-label">レアリティ</label>
           <label class="col-8">
-            <input type="checkbox" v-model="isUnder6Rare"> ★6以下のみ
+            <input type="number" v-model.number.lazy="filter.rarityMin" required min="1" max="10">以上
+            <input type="number" v-model.number.lazy="filter.rarityMax" required min="1" max="10">以下
           </label>
         </div>
         <div class="row">
@@ -111,6 +112,7 @@ const filterDefault = {
   subAttr: [],
   type: [],
   awaken: [],
+  rarityMin: 1,
   rarityMax: 10,
   skillTurnMin: 1,
   skillTurnMax: 99,
@@ -179,9 +181,12 @@ export function getFilterFunction (setting) {
     const awakenKeys = Object.keys(awakenFilter);
     functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
   }
-  if (setting.rarityMax && setting.rarityMax !== filterDefault.rarityMax) {
+  const rarityMin = setting.rarityMin || filterDefault.rarityMin;
+  const rarityMax = setting.rarityMax || filterDefault.rarityMax;
+  if (rarityMin !== filterDefault.rarityMin ||
+      rarityMax !== filterDefault.rarityMax) {
     functionArray.push(d => {
-      return d.rare <= setting.rarityMax;
+      return d.rare >= rarityMin && d.rare <= rarityMax;
     });
   }
   const skillTurnMin = setting.skillTurnMin || filterDefault.skillTurnMin;
@@ -264,8 +269,12 @@ export function filterSettingTextArray (setting) {
     if (max === defaultMax) { return `${min}${tanni}以上`; }
     return `${min}〜${max}${tanni}`;
   }
-  if (setting.rarityMax !== filterDefault.rarityMax) {
-    textArray.push(`★${setting.rarityMax}以下`);
+  const rarityMin = setting.rarityMin || filterDefault.rarityMin;
+  const rarityMax = setting.rarityMax || filterDefault.rarityMax;
+  if (rarityMin !== filterDefault.rarityMin ||
+      rarityMax !== filterDefault.rarityMax) {
+    const valueText = createRangeText(rarityMin, rarityMax, filterDefault.rarityMin, filterDefault.rarityMax);
+    textArray.push('レアリティ:' + valueText);
   }
   const skillTurnMin = setting.skillTurnMin || filterDefault.skillTurnMin;
   const skillTurnMax = setting.skillTurnMax || filterDefault.skillTurnMax;
@@ -392,6 +401,7 @@ export default {
         subAttr: array2text(this.filter.subAttr),
         type: array2text(this.filter.type),
         awaken: array2text(this.filter.awaken),
+        rarityMin: (filterDefault.rarityMin === this.filter.rarityMin) ? undefined : this.filter.rarityMin,
         rarityMax: (filterDefault.rarityMax === this.filter.rarityMax) ? undefined : this.filter.rarityMax,
         skillTurn: this.skillTurnFilterStr,
         skillBoost: this.skillBoostFilterStr,
@@ -400,15 +410,6 @@ export default {
       };
 
       return query;
-    },
-    /** ★6以下のみにするかどうか。 */
-    isUnder6Rare: {
-      get: function () {
-        return this.filter.rarityMax === 6;
-      },
-      set: function (value) {
-        this.filter.rarityMax = (value) ? 6 : filterDefault.rarityMax;
-      }
     },
     /** 設定領域を全画面で表示しているかどうか。 */
     isFullOverSettingArea: function () {
@@ -430,6 +431,16 @@ export default {
       this.multiSendBlocker.set();
       
       this.setFilterFromQuery();
+    },
+    'filter.rarityMin': function () {
+      if (this.filter.rarityMax < this.filter.rarityMin) {
+        this.filter.rarityMax = this.filter.rarityMin;
+      }
+    },
+    'filter.rarityMax': function () {
+      if (this.filter.rarityMax < this.filter.rarityMin) {
+        this.filter.rarityMin = this.filter.rarityMax;
+      }
     },
     'filter.skillTurnMin': function () {
       if (this.filter.skillTurnMax < this.filter.skillTurnMin) {
@@ -486,6 +497,7 @@ export default {
       this.queryToFilter('type');
       this.queryToFilter('awaken');
       this.queryToFilter('assist', Number);
+      this.queryToFilter('rarityMin', Number, filterDefault.rarityMin);
       this.queryToFilter('rarityMax', Number, filterDefault.rarityMax);
       this.skillTurnFilterStr = this.$route.query.skillTurn;
       this.skillBoostFilterStr = this.$route.query.skillBoost;
