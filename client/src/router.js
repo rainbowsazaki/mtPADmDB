@@ -4,6 +4,7 @@ const PageTop = () => import('./views/pageTop.vue');
 const PageAbout = () => import('./views/pageAbout.vue');
 const PageCompare = () => import('./views/pageCompare.vue');
 const PageHistory = () => import('./views/pageHistory.vue');
+const PageMonsterImageHisotry = () => import('./views/pageMonsterImageHistory.vue');
 const PageComment = () => import('./views/pageComment.vue');
 const PageMonsterData = () => import('./views/pageMonsterData.vue');
 const PageMonsterEdit = () => import('./views/pageMonsterEdit.vue');
@@ -133,9 +134,19 @@ export default new Router({
     },
     {
       path: '/pic',
-      name: 'monsterPicture',
-      component: PagePic,
-      props: true
+      component: RouterViewComponent,
+      children: [
+        {
+          path: '',
+          name: 'monsterPicture',
+          component: PagePic
+        },
+        {
+          path: 'history',
+          name: 'monsterImageHistory',
+          component: PageMonsterImageHisotry
+        }
+      ]
     },
     {
       path: '/about',
