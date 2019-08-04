@@ -126,6 +126,7 @@ my %modes = (
   'image' => \&mode_image,
   'monsterHistory' => \&mode_monster_history,
   'monsterHistoryDetails' => \&mode_monster_history_details,
+  'monsterImageHistory' => \&mode_monster_image_history,
   'updateSkill' => \&mode_update_skill,
   'skillHistory' => \&mode_skill_history,
   'updateMonster' => \&mode_update_monster_data,
@@ -290,6 +291,30 @@ sub mode_monster_history_details {
   }
   
   $response_data->set_data($data_ref->[0]);
+  $dbh->disconnect;
+}
+
+# モンスター画像履歴取得モード
+# パラメータ
+#   no - 取得対象のモンスターの番号。省略時はすべてのモンスター。
+sub mode_monster_image_history {
+  my ($q, $response_data) = @_;
+  my $monster_no = $q->param('no');
+  
+  my @columns = (
+    'id', [ 'datetime', 'createdDatetime' ], 'state'
+  );
+  my $dbh = &create_monster_db_dbh();
+  my %where;
+  if (defined $monster_no) {
+    $where{no} = $monster_no;
+  } else {
+    push @columns, 'no';
+  }
+
+  my $data_ref = &table_to_array($dbh, "monster_image", \@columns, \%where, { order => 'createdDatetime DESC', limit => 50 });
+
+  $response_data->set_data($data_ref);
   $dbh->disconnect;
 }
 
