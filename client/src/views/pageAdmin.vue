@@ -7,7 +7,7 @@
     <h2>管理ページリンク</h2>
     <ul>
       <li><router-link :to="{ name: 'monsterHistoryList' }">モンスター編集履歴</router-link></li>
-      <li><router-link :to="{ name: 'monsterImageHistory' }">モンスター画像投稿履歴</router-link></li>
+      <li><router-link :to="{ name: 'monsterImageHistory' }">モンスター画像投稿履歴一覧</router-link></li>
       <li><router-link :to="{ name: 'comment' }">新着コメント</router-link></li>
       <li><router-link :to="{ name: 'kisekiCheck' }">希石チェック</router-link></li>
       <li><a href="/monster_image_archive.cgi" target="_blank">モンスター画像アーカイブ</a></li>
