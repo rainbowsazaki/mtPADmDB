@@ -9,7 +9,6 @@
         <td>
           <a href="javascript:void(0);" @click="popupTarget = history;">
             <img :src="`./monsterIconsLog/icon_${history.no}_${history.id}.jpg`" style="width: 3em; height: 3em;">
-            <img :src="`./monsterImagesLog/${history.no}_${history.id}.jpg`" style="width: auto; height: 3em;">
           </a>
           <router-link :to="{ name: 'monsterDetails', params: { no: history.no }}">
             No.{{ history.no }} {{ monsterName(history.no) }}
