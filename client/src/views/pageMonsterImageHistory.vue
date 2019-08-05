@@ -4,11 +4,13 @@
     <table class="table table-sm">
       <tr v-for="history in histories" :key="`history${history.id}`">
         <td>
-          {{ history.datetime }}
+          <a href="javascript:void(0);" @click="popupTarget = history;">{{ history.datetime }}</a>
         </td>
         <td>
-          <img :src="`./monsterIconsLog/icon_${history.no}_${history.id}.jpg`" style="width: 3em; height: 3em;">
-          <img :src="`./monsterImagesLog/${history.no}_${history.id}.jpg`" style="width: auto; height: 3em;">
+          <a href="javascript:void(0);" @click="popupTarget = history;">
+            <img :src="`./monsterIconsLog/icon_${history.no}_${history.id}.jpg`" style="width: 3em; height: 3em;">
+            <img :src="`./monsterImagesLog/${history.no}_${history.id}.jpg`" style="width: auto; height: 3em;">
+          </a>
           <router-link :to="{ name: 'monsterDetails', params: { no: history.no }}">
             No.{{ history.no }} {{ monsterName(history.no) }}
           </router-link>
@@ -16,6 +18,10 @@
         <td><span v-if="isActiveHistory(history)">（現在のデータ）</span></td>
       </tr>
     </table>
+    <div class="imageBox" v-if="popupTarget" @click="popupTarget = null;">
+      <img :src="`./monsterImagesLog/${popupTarget.no}_${popupTarget.id}.jpg`" style="width: auto; height: auto;">
+      <img :src="`./monsterIconsLog/icon_${popupTarget.no}_${popupTarget.id}.jpg`" style="width: auto; height: auto;">
+    </div>
   </div>
 </template>
 
@@ -32,7 +38,9 @@ export default {
   data: function () {
     return {
       /** 履歴情報 */
-      histories: null
+      histories: null,
+      /** 画像をポップアップ表示する対象の画像の履歴情報。 */
+      popupTarget: null
     };
   },
   computed: {
@@ -68,3 +76,24 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.imageBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000a0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  img {
+    margin: 1em;
+    max-width: 90%;
+  }
+}
+</style>
