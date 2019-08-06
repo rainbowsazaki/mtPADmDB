@@ -12,6 +12,7 @@ const PageMonsterList = () => import('./views/pageMonsterList.vue');
 const PagePic = () => import('./views/pagePic.vue');
 const PageSkillDetails = () => import('./views/pageSkillDetails.vue');
 const PageSkillList = () => import('./views/pageSkillList.vue');
+const PageSkillHistory = () => import('./views/pageSkillHistory.vue');
 const PageRaniking = () => import('./views/pageRanking.vue');
 const PageEvolutionMaterial = () => import('./views/pageEvolutionMaterial.vue');
 const PageKiseki = () => import('./views/pageKiseki.vue');
@@ -170,6 +171,12 @@ export default new Router({
           props: true
         },
         {
+          path: 'history',
+          name: 'skillHistory',
+          component: PageSkillHistory,
+          props: true
+        },
+        {
           path: ':no',
           name: 'skillDetails',
           component: PageSkillDetails,
@@ -191,6 +198,12 @@ export default new Router({
           path: '',
           name: 'leaderSkillList',
           component: PageSkillList,
+          props: true
+        },
+        {
+          path: 'history',
+          name: 'leaderSkillHistory',
+          component: PageSkillHistory,
           props: true
         },
         {
