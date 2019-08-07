@@ -7,6 +7,9 @@
         <div class="col-md-12" v-for="(target, i) in targets" :key="`monsterSearch${i}`">
           <monster-incremental-search v-model="targets[i]" :monster-table="monsterTable" :image-table="imageTable" />
         </div>
+        <div class="col-md-12">
+          <button type="button" class="btn btn-primary" @click="addMonster">+</button>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary">{{ isEnableMonsterDatas ? '比較表を更新する' : '比較表を表示する' }}</button>
     </form>
@@ -280,6 +283,9 @@ export default {
   created: function () { this.load(); },
   
   methods: {
+    addMonster: function () {
+      this.targets.push(null);
+    },
     /** 比較表示するモンスターを現在している番号のものに変更する。 */
     updateCompareMonster: function () {
       if (!this.targets[0] || !this.targets[1]) {
