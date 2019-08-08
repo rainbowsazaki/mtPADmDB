@@ -8,7 +8,7 @@
           <monster-incremental-search v-model="targets[i]" :monster-table="monsterTable" :image-table="imageTable" />
         </div>
         <div class="col-md-12">
-          <button type="button" class="btn btn-primary" @click="addMonster">+</button>
+          <button type="button" class="btn btn-outline-secondary" @click="addMonster">+</button>
         </div>
       </div>
       <button type="submit" class="btn btn-primary">{{ isEnableMonsterDatas ? '比較表を更新する' : '比較表を表示する' }}</button>
