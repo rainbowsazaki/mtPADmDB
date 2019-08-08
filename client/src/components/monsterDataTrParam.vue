@@ -1,9 +1,9 @@
 <template>
   <tr v-if="value !== null">
     <th style="width: auto;">{{ info.name }}</th>
-    <td style="width: 25%;" class="text-right">{{ value | addComma }}</td>
-    <td v-if="isVisible297" style="width:25%;" class="text-right">{{ value + info.plusValue * 99 | addComma }}</td>
-    <td style="width: 25%;" class="text-right">{{ (value / info.plusValue).toFixed(1) | addComma }}</td>
+    <td style="width: 25%;" class="text-right" :class="{ paramAlert: value < 0 }">{{ value | addComma }}</td>
+    <td v-if="isVisible297" style="width:25%;" class="text-right" :class="{ paramAlert: value + info.plusValue * 99 < 0 }">{{ value + info.plusValue * 99 | addComma }}</td>
+    <td style="width: 25%;" class="text-right" :class="{ paramAlert: value < 0 }">{{ (value / info.plusValue).toFixed(1) | addComma }}</td>
   </tr>
   <tr v-else>
     <th style="width: auto;">{{ info.name }}</th>
@@ -60,6 +60,10 @@ export default {
 <style lang="scss" scoped>
   .unknownParam {
     color: rgba(0, 0, 0, 0.6);
+  }
+
+  .paramAlert {
+    color: rgba(224, 0, 0, 0.8);
   }
 </style>
 
