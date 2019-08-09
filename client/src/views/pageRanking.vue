@@ -70,7 +70,9 @@
       </div>
 
       <div v-for="(data, n) in rankInfosInPage" class="roww" :key="`monster${data.data.no}`">
-        <div class="cell head number text-right">{{ (page - 1) * inPageCount + n + 1 }}</div>
+        <div class="cell head number text-right">
+          <div class="stretch">{{ (page - 1) * inPageCount + n + 1 }}</div>
+        </div>
         <div class="cell">
           <span class="monsterIconWrapper">
             <monster-icon style="line-height: 1em;" :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
@@ -1066,6 +1068,16 @@ export default {
   @media (max-width: 767px) {
     div.headerName {
       display: none;
+    }
+
+    div.number {
+      width: 2em;
+    }
+    div.subRow {
+      width: calc(100% - 5em - 5px);
+    }
+    div.header > .cell {
+      width: calc(5em + 5px);
     }
 
     div.data, div.name {
