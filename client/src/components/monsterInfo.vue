@@ -45,7 +45,7 @@
       <dl class="paramater">
         <dt>HP:</dt><dd>{{ monsterData.maxParam.hp === null ? '不明' : monsterData.maxParam.hp | addComma }}</dd>
         <dt>攻撃:</dt><dd>{{ monsterData.maxParam.attack === null ? '不明' : monsterData.maxParam.attack | addComma }}</dd>
-        <dt>回復:</dt><dd :class="{ statusAlert: monsterData.maxParam.recovery < 0 }">
+        <dt>回復:</dt><dd :class="{ statusAlert: monsterData.maxParam.recovery < 0, negative9999:  monsterData.maxParam.recovery <= -9999 }">
           {{ monsterData.maxParam.recovery === null ? '不明' : monsterData.maxParam.recovery | addComma }}
         </dd>
       </dl>
@@ -349,6 +349,10 @@ div.monsterImage {
     dd {
       margin: 0;
       text-align: right;
+    }
+    dd.negative9999 {
+      width: 6em;
+      transform: scaleX(0.85);
     }
   }
 
