@@ -6,7 +6,7 @@
       <monster-icon :no="nullMonster.no" style="width: 2em; height: auto;" />
       <router-link :to="{ name: 'monsterDetails', params: { no: nullMonster.no } }">
         No.{{ nullMonster.no }} {{ monsterTable[nullMonster.no].name }}
-        {{ nullMonster.keys }}
+        {{ nullMonster.names }}
       </router-link>
     </div>
   </div>
@@ -60,10 +60,31 @@ export default {
           return nullCheck(d[key]);
         });
 
+        const key2NameTable = {
+          'attributes': '属性',
+          'cost': 'コスト',
+          'rare': 'レアリティ',
+          'types': 'タイプ',
+          'awakens': '覚醒',
+          'maxExp': '必要経験値',
+          'maxLevel': '最大レベル',
+          'maxParam': '最大パラメータ',
+          'skill': 'スキル',
+          'leaderSkill': 'リーダースキル',
+          'assist': 'アシスト可不可',
+          'overLimit': '限界突破可不可',
+          'overLimitParam': '限界突破時最大パラメータ',
+          'superAwakens': '超覚醒',
+          'evolutionType': '進化形式',
+          'evolution': '進化情報'
+        };
+        const names = nullKeys.map(d => key2NameTable[d] || d);
+
         if (nullKeys.length) {
           array.push({
             no: d.no,
-            keys: nullKeys
+            keys: nullKeys,
+            names: names
           });
         }
       });
