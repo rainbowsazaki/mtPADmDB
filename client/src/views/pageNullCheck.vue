@@ -2,12 +2,20 @@
 
   <div>
     <h2>空データ一覧</h2>
-    <div v-for="nullMonster in nullMonsterInfos" :key="`no${nullMonster.no}`">
-      <monster-icon :no="nullMonster.no" style="width: 2em; height: auto;" />
-      <router-link :to="{ name: 'monsterDetails', params: { no: nullMonster.no } }">
-        No.{{ nullMonster.no }} {{ monsterTable[nullMonster.no].name }}
-        {{ nullMonster.names }}
-      </router-link>
+    <div class="monsterInfo" v-for="nullMonster in nullMonsterInfos" :key="`no${nullMonster.no}`">
+      <div class="icon">
+        <monster-icon :no="nullMonster.no" style="width: 2.5em; height: auto;" />
+      </div>
+      <div>
+        <div class="monsterName">
+          <router-link :to="{ name: 'monsterDetails', params: { no: nullMonster.no } }">
+            No.{{ nullMonster.no }} {{ monsterTable[nullMonster.no].name }}
+          </router-link>
+          <router-link class="editLink" :to="{ name: 'monsterEdit', params: { no: nullMonster.no} }">編集</router-link>
+        </div>
+        <div class="itemNames">{{ nullMonster.names.join(' / ') }}</div>
+        
+      </div>
     </div>
   </div>
 </template>
@@ -93,3 +101,37 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+
+.monsterInfo {
+
+  margin-bottom: 8px;
+  padding: 4px;
+  box-shadow: #0003 0px 0px 6px;
+  border-radius: 4px;
+
+  .editLink {
+    float: right;
+    margin-right: 4px;
+    opacity: 0.4;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .icon {
+    float: left;
+    padding: 0.25em;
+  }
+
+  .monsterName {
+    min-height: 1.5em;
+  }
+
+  .itemNames {
+    min-height: 1.5em;
+  }
+}
+</style>
