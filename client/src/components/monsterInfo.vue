@@ -356,10 +356,6 @@ div.monsterImage {
     }
   }
 
-  dl.paramater + * {
-    margin-left: 47%;
-  }
-
   div {
     .cost {
       float: right;
@@ -378,9 +374,11 @@ div.monsterImage {
     }
 
     .levelInfo {
+      margin-left: 50%;
       white-space: pre;
-      padding-top: 1.45em;
-
+      padding-top: 1.4em;
+      line-height: 1.4em;
+      margin-bottom: -0.5em;
       .canOverLimit {
         color: #85bcfd;
       }
