@@ -12,7 +12,8 @@
       <li><router-link :to="{ name: 'leaderSkillHistory' }">リーダースキル編集履歴一覧</router-link></li>
       <li><router-link :to="{ name: 'comment' }">新着コメント</router-link></li>
       <li><router-link :to="{ name: 'kisekiCheck' }">希石チェック</router-link></li>
-      <li><router-link :to="{ name: 'nullCheck' }">空データチェック</router-link></li>
+      <li><router-link :to="{ name: 'nullCheck' }">空情報ありモンスターデータチェック</router-link></li>
+      <li><router-link :to="{ name: 'nullSkillCheck' }">空情報ありスキルデータチェック</router-link></li>
       <li><a href="/monster_image_archive.cgi" target="_blank">モンスター画像アーカイブ</a></li>
     </ul>
     <div>

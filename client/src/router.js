@@ -238,6 +238,11 @@ export default new Router({
       component: PageNullCheck
     },
     {
+      path: '/nullSkillCheck',
+      name: 'nullSkillCheck',
+      component: PageNullCheck
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: PageAdmin

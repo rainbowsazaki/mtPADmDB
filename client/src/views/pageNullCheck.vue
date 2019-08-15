@@ -1,17 +1,17 @@
 <template>
 
   <div>
-    <h2>空データ一覧</h2>
+    <h2>{{ title }}</h2>
     <div class="monsterInfo" v-for="nullMonster in nullMonsterInfos" :key="`no${nullMonster.no}`">
-      <div class="icon">
+      <div v-if="!isSkill" class="icon">
         <monster-icon :no="nullMonster.no" style="width: 2.5em; height: auto;" />
       </div>
       <div>
         <div class="monsterName">
-          <router-link :to="{ name: 'monsterDetails', params: { no: nullMonster.no } }">
-            No.{{ nullMonster.no }} {{ monsterTable[nullMonster.no].name }}
+          <router-link :to="{ name: detailPageName, params: { no: nullMonster.no } }">
+            No.{{ nullMonster.no }} {{ targetTable[nullMonster.no].name }}
           </router-link>
-          <router-link class="editLink" :to="{ name: 'monsterEdit', params: { no: nullMonster.no} }">編集</router-link>
+          <router-link v-if="!isSkill" class="editLink" :to="{ name: editPageName, params: { no: nullMonster.no} }">編集</router-link>
         </div>
         <div class="itemNames">{{ nullMonster.names.join(' / ') }}</div>
         
@@ -27,14 +27,23 @@
  */
 export default {
   name: 'PageNullCheck',
-  pageTitle: '空データチェック',
+  pageTitle: function () { return this.title; },
 
   data: function () {
     return {
     };
   },
   computed: {
-    monsterTable () { return this.$store.state.monsterTable; },
+    /** スキル情報に対する確認かどうか。 */
+    isSkill () { return this.$route.name === 'nullSkillCheck'; },
+    /** ページのタイトル。 */
+    title () { return (this.isSkill) ? '空情報ありスキルデータチェック' : '空情報ありモンスターデータチェック'; },
+    /** 情報の詳細ページのルート名。 */
+    detailPageName () { return (this.isSKill) ? 'monsterDetails' : 'skillDetails'; },
+    /** 情報の編集ページのルート名。 */
+    editPageName () { return (this.isSKill) ? 'monsterEdit' : ''; },
+    /** 確認対象の情報のテーブル。 */
+    targetTable () { return (this.isSkill) ? this.$store.state.skillTable : this.$store.state.monsterTable; },
     /** 空の情報を持つモンスターの番号及び空の情報のキーの配列。 */
     nullMonsterInfos () {
       function nullCheck (d) {
@@ -53,7 +62,7 @@ export default {
       }
 
       const array = [];
-      Object.values(this.monsterTable).forEach(d => {
+      Object.values(this.targetTable).forEach(d => {
         // 内容が空の項目のキーの配列。
         const nullKeys = Object.keys(d).filter(key => {
           // 進化種類が無しや不明の場合は進化情報はない。
@@ -84,7 +93,10 @@ export default {
           'overLimitParam': '限界突破時最大パラメータ',
           'superAwakens': '超覚醒',
           'evolutionType': '進化形式',
-          'evolution': '進化情報'
+          'evolution': '進化情報',
+
+          'baseTurn': 'レベル１時ターン',
+          'minTurn': '最短ターン'
         };
         const names = nullKeys.map(d => key2NameTable[d] || d);
 
