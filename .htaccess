@@ -9,6 +9,14 @@
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_URI} !\.(css|js|json|jpe?g|gif|png)$
   RewriteRule ^(.*)$ metaChenger.cgi/$1 [L,QSA]
+
+  # CORS指定対象を正規表現で指定するためのもの。
+  RewriteCond %{REQUEST_URI} \.json$
+  RewriteCond %{HTTP:Origin} \.?rainbowsite\.net$ [OR]
+  RewriteCond %{HTTP:Origin} ^https?://localhost [OR]
+  RewriteCond %{HTTP:Origin} 192\.168\.\d+\.\d+$
+  RewriteRule . - [E=CORS_OK:1]
+  Header set Access-Control-Allow-Origin "*" env=CORS_OK
 </IfModule>
 
 <Files ~ "\.(gif|png|jpe?g)$">
