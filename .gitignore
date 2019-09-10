@@ -2,9 +2,9 @@ TestImage/
 
 listJson/
 monsterJson/
-monsterImages/
+monsterImages/*.jpg
 db/*.db
-monsterImagesLog/
+monsterImagesLog/*.jpg
 monsterIcons/
 monsterIconsLog/
 sitemap_leader_skill.txt

@@ -1,0 +1,4 @@
+
+<Files ~ "^\d+_\d+\.jpg$">
+  ErrorDocument 404 https://padmdb.rainbowsite.net/monsterImages/notFound.jpg
+</Files>
