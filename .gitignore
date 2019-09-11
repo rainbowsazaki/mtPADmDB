@@ -5,8 +5,8 @@ monsterJson/
 monsterImages/*.jpg
 db/*.db
 monsterImagesLog/*.jpg
-monsterIcons/
-monsterIconsLog/
+monsterIcons/*.jpg
+monsterIconsLog/*.jpg
 sitemap_leader_skill.txt
 sitemap_monster.txt
 sitemap_skill.txt
