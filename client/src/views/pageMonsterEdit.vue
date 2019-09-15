@@ -331,10 +331,6 @@ export default {
       this.$store.commit('clearErrors');
       this.$store.commit('setMessages', ['送信中...']);
 
-      // データの整形
-      // 超覚醒を昇順ソート
-      this.monsterData.superAwakens.sort((a, b) => a - b);
-
       mtpadmdb.api('updateMonster', this.monsterData, (response) => {
         // レスポンス来なかったときの復帰処理を止める。
         this.multiSendBlocker.reset();
