@@ -297,6 +297,7 @@ export default {
       if (e.repeat) { return; }
       const targetName = e.target.tagName;
       if (targetName === 'INPUT' || targetName === 'TEXTAREA' || targetName === 'SELECT') { return; }
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) { return; }
       if (this.no > 1 && e.key === 'ArrowLeft') { this.moveMonsterNoBy(-1); }
       if (this.no < 9999 && e.key === 'ArrowRight') { this.moveMonsterNoBy(1); }
     },

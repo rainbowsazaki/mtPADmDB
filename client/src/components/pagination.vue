@@ -103,6 +103,7 @@ export default {
       if (e.repeat) { return; }
       const targetName = e.target.tagName;
       if (targetName === 'INPUT' || targetName === 'TEXTAREA' || targetName === 'SELECT') { return; }
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) { return; }
       if (e.key === 'ArrowLeft') { this.$router.push(this.createToObj(this.page - 1)); }
       if (e.key === 'ArrowRight') { this.$router.push(this.createToObj(this.page + 1)); }
     },
