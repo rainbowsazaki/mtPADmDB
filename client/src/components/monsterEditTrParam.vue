@@ -1,10 +1,12 @@
 <template>
   <tr>
-    <th colspan="3">{{ info.name }}</th>
-    <td colspan="6">
+    <th colspan="4">{{ info.name }}</th>
+    <td colspan="4">
       <input type="number" class="form-control" v-model.number="nowValue" :min="info.min" :max="info.max">
     </td>
-    <td colspan="3" class="text-right">{{ (typeof(nowValue) === "number") ? nowValue + info.plusValue * 99 : '-' | addComma }}</td>
+    <td colspan="4">
+      <input type="number" class="form-control" v-model.number="plus99Value" :min="info.min" :max="info.max + info.plusValue * 99">
+    </td>
   </tr>
 </template>
 
@@ -52,6 +54,11 @@ export default {
           plusValue: 3
         }
       }[this.type] || { name: '', min: 0, max: 1, plusValue: 0 };
+    },
+    /** 現在の設定値にプラスを99振ったときの値。 */
+    plus99Value: {
+      get: function () { return (typeof (this.nowValue) === 'number') ? this.nowValue + this.info.plusValue * 99 : null; },
+      set: function (value) { this.nowValue = value - this.info.plusValue * 99; }
     }
   },
   watch: {

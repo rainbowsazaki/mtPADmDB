@@ -83,8 +83,8 @@
           </td>
         </tr>
         <tr class="thead-light">
-          <th colspan="9">レベル最大時パラメータ</th>
-          <th colspan="3">+297時</th>
+          <th colspan="8">レベル最大時パラメータ</th>
+          <th colspan="4">+297時</th>
         </tr>
         <tr-param type="hp" v-model.number="monsterData.maxParam.hp" />
         <tr-param type="attack" v-model.number="monsterData.maxParam.attack" />
@@ -125,8 +125,8 @@
         </tr>
         <template v-if="monsterData.overLimit === 1">
           <tr class="thead-light">
-            <th colspan="9">限界突破時パラメータ</th>
-            <th colspan="3">+297時</th>
+            <th colspan="8">限界突破時パラメータ</th>
+            <th colspan="4">+297時</th>
           </tr>
           <tr-param type="hp" v-model.number="monsterData.overLimitParam.hp" />
           <tr-param type="attack" v-model.number="monsterData.overLimitParam.attack" />
