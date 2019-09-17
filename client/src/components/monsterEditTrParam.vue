@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <th colspan="4">{{ info.name }}</th>
+    <th colspan="4" class="subHead">{{ info.name }}</th>
     <td colspan="4">
       <input type="number" class="form-control" v-model.number="nowValue" :min="info.min" :max="info.max">
     </td>
@@ -83,3 +83,8 @@ export default {
 };
 </script>
 
+<style lang="scss" scoped>
+th.subHead {
+  vertical-align: middle;
+}
+</style>
