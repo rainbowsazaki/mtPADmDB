@@ -16,7 +16,7 @@
     <div class="selectArea">
       <span v-for="a in (Array.isArray(items[0])) ? items : [items]" :key="a.toString()" style="display: inline-block">
         <label v-for="(m, j) in a" :key="`alTr_${j}`" class="item">
-          <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" :value="m" @change="$emit('input', selectedArray);">
+          <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" :value="m" @change="$emit('input', selectedArray);" :disabled="isFillSelected && !selectedArray.includes(m)">
           <img :src="`./image/${imageFolder}/${m}.png`" @click="addAwaken(m, $event);">
         </label>
       </span>
@@ -104,6 +104,12 @@ export default {
     /** チェックボックススタイルでない場合の、選択可能な項目の上限数。 */
     targetCount () {
       return this.isTypeSelect ? 3 : 2;
+    },
+    /** 選択可能な項目の上限数まで埋まっているかどうか。 */
+    isFillSelected () {
+      /* チェックボックススタイルの場合は上限なし。 */
+      if (this.checkboxStyle) { return false; }
+      return this.selectedArray.length >= this.targetCount;
     }
   },
   watch: {
@@ -134,7 +140,7 @@ export default {
       // ただし、不明にする場合は除く。
       if ((this.checkboxStyle || this.isTypeSelect) && no !== null) { return; }
       if (event) { event.preventDefault(); }
-      if (this.selectedArray.length >= this.targetCount) { return; }
+      if (this.isFillSelected) { return; }
       this.selectedArray.push(no);
       this.$emit('input', this.selectedArray);
     },
@@ -265,6 +271,9 @@ export default {
 
   input[type="checkbox"]:checked + * {
     filter: none;
+  }
+  input[type="checkbox"]:disabled + img {
+    cursor: default;
   }
 }
 </style>
