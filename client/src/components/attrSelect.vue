@@ -16,16 +16,16 @@
     <div class="selectArea">
       <span v-for="a in (Array.isArray(items[0])) ? items : [items]" :key="a.toString()" style="display: inline-block">
         <label v-for="(m, j) in a" :key="`alTr_${j}`" class="item">
-          <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" @change="$emit('input', selectedArray);">
+          <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" :value="m" @change="$emit('input', selectedArray);">
           <img :src="`./image/${imageFolder}/${m}.png`" @click="addAwaken(m, $event);">
         </label>
       </span>
       <label v-if="useNone" class="item">
-        <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="0" @change="$emit('input', selectedArray);">
+        <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" :value="0" @change="$emit('input', selectedArray);">
         <span class="btn btn-secondary btn-sm" @click="addAwaken(0, $event);">なし</span>
       </label>
       <label v-if="useUnknown" class="item">
-        <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" value="null" @change="$emit('input', selectedArray);">
+        <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" value="null" @change="$emit('input', selectedArray);">
         <span class="btn btn-secondary btn-sm" @click="(checkboxStyle) ? addAwaken(0, $event) : setUnknown()">不明</span>
       </label>
       <span v-if="useClear" class="item">
@@ -130,9 +130,9 @@ export default {
     /** 選択中の覚醒を追加する。 */
     addAwaken: function (no, event) {
       if (this.isUnknown) { this.selectedArray = []; }
-      // チェックボックス形式の場合、 checkbox の v-model と change イベントで更新反映されるので、 不明解除以外の処理は行わない。
+      // チェックボックス形式やタイプ指定の場合は、 checkbox の v-model と change イベントで更新反映されるので、 不明解除以外の処理は行わない。
       // ただし、不明にする場合は除く。
-      if (this.checkboxStyle && no !== null) { return; }
+      if ((this.checkboxStyle || this.isTypeSelect) && no !== null) { return; }
       if (event) { event.preventDefault(); }
       if (this.selectedArray.length >= this.targetCount) { return; }
       this.selectedArray.push(no);
