@@ -3,9 +3,12 @@
     <div v-if="!checkboxStyle" class="selectedList">
       <ul>
         <li v-for="i in targetCount" :key="`selectedAwaken_${i}`" :class="{ hasItem: selectedArray[i - 1] }" @click="removeAwaken(i - 1, $event);">
-          <div v-if="selectedArray[i - 1] === 0" class="text">無</div>
-          <div v-else-if="checkboxStyle && selectedArray[i - 1] === null" class="text">不</div>
-          <div v-else-if="selectedArray[i - 1]" :style="{ height: '24px',backgroundImage: `url(./image/${imageFolder}/${selectedArray[i - 1]}.png)`, backgroundSize: '24px 24px'}" :key="selectedArray[i - 1] ? i : '0'" />
+          <div class="icon">
+            <div v-if="selectedArray[i - 1] === 0" class="text">無</div>
+            <div v-else-if="checkboxStyle && selectedArray[i - 1] === null" class="text">不</div>
+            <div v-else-if="selectedArray[i - 1]" :style="{ height: '24px',backgroundImage: `url(./image/${imageFolder}/${selectedArray[i - 1]}.png)`, backgroundSize: '24px 24px'}" :key="selectedArray[i - 1] ? i : '0'" />
+          </div>
+          <span v-if="isTypeSelect && selectedArray[i - 1]" class="typeName">{{ getTypeName(selectedArray[i - 1]) }}</span>
         </li>
       </ul>
       <div v-if="isUnknown" class="unknownMessage">不明</div>
@@ -110,6 +113,11 @@ export default {
     this.updateFromValue();
   },
   methods: {
+    /** 指定されたタイプ番号に対応するタイプの名前を返す。 */
+    getTypeName: function (value) {
+      const typeInfo = constData.typeTable[value];
+      return typeInfo && typeInfo.name;
+    },
     /** value プロパティの値で現在の値を更新する。 */
     updateFromValue: function () {
       // 末尾の 0（なし）と null は除いて処理する。
@@ -174,21 +182,33 @@ export default {
   }
   li {
     display: inline-Block;
-    text-align: center;
-    font-size: 16px;
-    width: 24px;
-    height: 24px;
-    background: #CCC;
-    border-radius: 12px;
     margin: 3px 5px;
-    line-height: 1em;
-    
-    div {
+    font-size: 16px;
+
+    &.hasItem {
       cursor: pointer;
     }
+    
+    div.icon {
+      display: inline-Block;
+      width: 24px;
+      height: 24px;
+      background: #CCC;
+      border-radius: 12px;
+      line-height: 1em;
+    }
 
+    .typeName {
+      display: inline-Block;
+      height: 20px;
+      margin-left: 2px;
+      line-height: 1em;
+      overflow: hidden;
+    }
+    
     .text {
       display: table-caption;
+      text-align: center;
       width: 24px;
       height: 24px;
       background: white;
@@ -201,7 +221,7 @@ export default {
 
 .typeSelect{
   .selectedList {
-    li, .text {
+    div.icon, .text {
       border-radius: 4px;
     }
   }
