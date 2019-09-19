@@ -469,7 +469,7 @@ export default {
       } else {
         document.scrollingElement.scrollTop = this.tempScrollTop;
       }
-      document.body.className = newValue ? 'noScroll' : '';
+      this.setDisableScroll(newValue);
     }
   },
   created: function () {
@@ -483,8 +483,18 @@ export default {
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.checkBrowserWidthSmall);
+    if (this.isFullOpenFilterTrigger) {
+      this.setDisableScroll(false);
+    }
   },
   methods: {
+    /**
+     * ページ全体のスクロールを無効にするかどうかを設定する。
+     * 引数に true を指定するとスクロールが無効になり、 false を指定するとスクロールが有効になる。
+     */
+    setDisableScroll: function (b) {
+      document.body.className = b ? 'noScroll' : '';
+    },
     /** 現在のウィンドウサイズが、設定領域を全画面表示するものかどうかを確認する。 */
     checkBrowserWidthSmall: function () {
       this.isBrowserWidthSmall = window.matchMedia('(max-width: 575px)').matches;
