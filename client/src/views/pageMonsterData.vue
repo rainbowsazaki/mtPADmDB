@@ -18,6 +18,10 @@
     </div>
 
     <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
+    <div v-if="!isHistory" class="lastUpdate">
+      最終更新:{{ monsterData.datetime }}
+    </div>
+
     <div class="row">
       <div class="col-md-6">
         <monster-info :monster-data="monsterData" />
@@ -386,6 +390,13 @@ export default {
   * {
     white-space: nowrap;
   }
+}
+
+.lastUpdate {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 75%;
+  text-align: right;
+  margin-top: -1.5em;
 }
 
 .paramAlert {
