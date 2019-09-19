@@ -9,6 +9,7 @@ use JSON::PP ();
 use DBI;
 
 use File::Copy;
+use Time::Piece;
 
 use lib qw(./modules);
 use Subroutine;
@@ -764,6 +765,9 @@ sub mode_update_monster_data {
               &joined_key_access($data, $json_append_key)
             );
           }
+          my $t = localtime;
+          my $update_date = $t->ymd("-") . " " . $t->hms;
+          &joined_key_access(\%to_json_data, 'datetime', $update_date);
           
           my $fileNo = $to_json_data{no};
           open(DATAFILE, "> ./monsterJson/${fileNo}.json") or die("error :$!");
@@ -879,7 +883,7 @@ sub save_monster_list_json {
   my ($dbh, $option) = @_;
   $option ||= {};
   my @column_infos = @{&create_monster_data_column_infos()};
-  push @column_infos, [ 'comment', 'monster_data.comment' ];
+  push @column_infos, [ 'comment', 'monster_data.comment' ], [ 'datetime', 'monster_data.createdDatetime' ];
 
   my $data_ref = &table_to_array($dbh, $monster_data_all_joined_table_name, \@column_infos, { 'monster_data.state' => 1 }, { 'order' => 'no' });
 
@@ -902,9 +906,10 @@ sub save_monster_list_json {
     }
   }
 
-  # JSON化する際に更新コメントは入れない。
+  # JSON化する際に更新コメントと更新日時は入れない。
   for my $value (@$data_ref) {
     delete $value->{comment};
+    delete $value->{datetime};
   }
 
   # JSON化してファイルに保存。
