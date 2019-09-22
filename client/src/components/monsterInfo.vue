@@ -43,10 +43,18 @@
     <div class="status">
       <monster-icon no-link class="monsterIcon" :no="monsterData.no" width="4.15em" height="4.15em" />
       <dl class="paramater">
-        <dt>HP:</dt><dd>{{ monsterData.maxParam.hp === null ? '不明' : monsterData.maxParam.hp | addComma }}</dd>
-        <dt>攻撃:</dt><dd>{{ monsterData.maxParam.attack === null ? '不明' : monsterData.maxParam.attack | addComma }}</dd>
-        <dt>回復:</dt><dd :class="{ statusAlert: monsterData.maxParam.recovery < 0, negative9999:  monsterData.maxParam.recovery <= -9999 }">
+        <dt>HP:</dt>
+        <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ monsterData.maxParam.hp === null ? '不明' : monsterData.maxParam.hp | addComma }}</dd>
+        <dd v-if="monsterData.overLimit" class="olAnim1">{{ monsterData.overLimitParam.hp === null ? '不明' : monsterData.overLimitParam.hp | addComma }}</dd>
+        <dt>攻撃:</dt>
+        <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ monsterData.maxParam.attack === null ? '不明' : monsterData.maxParam.attack | addComma }}</dd>
+        <dd v-if="monsterData.overLimit" class="olAnim1">{{ monsterData.overLimitParam.attack === null ? '不明' : monsterData.overLimitParam.attack | addComma }}</dd>
+        <dt>回復:</dt>
+        <dd :class="{ olAnim0: (monsterData.overLimit === 1), statusAlert: monsterData.maxParam.recovery < 0, negative9999: monsterData.maxParam.recovery <= -9999 }">
           {{ monsterData.maxParam.recovery === null ? '不明' : monsterData.maxParam.recovery | addComma }}
+        </dd>
+        <dd v-if="monsterData.overLimit" class="olAnim1" :class="{ statusAlert: monsterData.overLimitParam.recovery < 0, negative9999: monsterData.overLimitParam.recovery <= -9999 }">
+          {{ monsterData.overLimitParam.recovery === null ? '不明' : monsterData.overLimitParam.recovery | addComma }}
         </dd>
       </dl>
       <div>
@@ -54,8 +62,11 @@
           コスト:<span class="costValue">{{ monsterData.cost || '不明' }}</span>
         </div>
         <div class="levelInfo">
-          <div :class="{ canOverLimit: (monsterData.overLimit === 1) }">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
-          <div>経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp | addComma }}</div>
+          <div :class="{ 'olAnim0 canOverLimit': (monsterData.overLimit === 1) }">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
+          <div v-if="monsterData.overLimit" class="olAnim1 canOverLimit">限突Lv.110</div>
+          
+          <div :class="{ olAnim0: (monsterData.overLimit === 1) }">経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp | addComma }}</div>
+          <div v-if="monsterData.overLimit" class="olAnim1">経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp + 50000000 | addComma }}</div>
         </div>
       </div>
 
@@ -477,6 +488,37 @@ div.monsterImage {
 
   .statusAlert {
     color: #ff4040;
+  }
+
+  .olAnim0 {
+    animation: paramBlink 8s ease 0s infinite normal none running;
+    height: 0;
+  }
+  .olAnim1 {
+    animation: paramBlink 8s ease -4s infinite normal none running;
+  }
+
+  @keyframes paramBlink {
+    0% {
+      opacity: 1;
+    }
+    22% {
+      opacity: 1;
+    }
+
+    26% {
+      opacity: 0;
+    }
+    74% {
+      opacity: 0;
+    }
+
+    78% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 </style>
