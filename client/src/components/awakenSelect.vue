@@ -175,7 +175,7 @@ export default {
   }
 
   input[type="checkbox"] + label {
-    filter: opacity(35%) brightness(50%);
+    filter: opacity(40%) brightness(80%);
   }
 
   input[type="checkbox"]:checked + label {
