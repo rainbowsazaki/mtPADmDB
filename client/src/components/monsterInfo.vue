@@ -3,7 +3,7 @@
     <div class="monsterNameArea">
       <div>
         <span class="monsterNo">No.{{ monsterData.no }}</span>
-        <span class="rare"><template v-for="n in monsterData.rare">★</template></span>
+        <span class="rare">{{ '★'.repeat(monsterData.rare) }}</span>
       </div>
       <div>
         <div class="monsterName stretch">{{ monsterData.name }}</div>
