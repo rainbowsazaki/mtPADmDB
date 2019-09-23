@@ -44,17 +44,17 @@
       <monster-icon no-link class="monsterIcon" :no="monsterData.no" width="4.15em" height="4.15em" />
       <dl class="paramater">
         <dt>HP:</dt>
-        <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ monsterData.maxParam.hp === null ? '不明' : monsterData.maxParam.hp | addComma }}</dd>
-        <dd v-if="monsterData.overLimit" class="olAnim1">{{ monsterData.overLimitParam.hp === null ? '不明' : monsterData.overLimitParam.hp | addComma }}</dd>
+        <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ nullToFumei(monsterData.maxParam.hp) | addComma }}</dd>
+        <dd v-if="monsterData.overLimit" class="olAnim1">{{ nullToFumei(monsterData.overLimitParam.hp) | addComma }}</dd>
         <dt>攻撃:</dt>
-        <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ monsterData.maxParam.attack === null ? '不明' : monsterData.maxParam.attack | addComma }}</dd>
-        <dd v-if="monsterData.overLimit" class="olAnim1">{{ monsterData.overLimitParam.attack === null ? '不明' : monsterData.overLimitParam.attack | addComma }}</dd>
+        <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ nullToFumei(monsterData.maxParam.attack) | addComma }}</dd>
+        <dd v-if="monsterData.overLimit" class="olAnim1">{{ nullToFumei(monsterData.overLimitParam.attack) | addComma }}</dd>
         <dt>回復:</dt>
         <dd :class="{ olAnim0: (monsterData.overLimit === 1), statusAlert: monsterData.maxParam.recovery < 0, negative9999: monsterData.maxParam.recovery <= -9999 }">
-          {{ monsterData.maxParam.recovery === null ? '不明' : monsterData.maxParam.recovery | addComma }}
+          {{ nullToFumei(monsterData.maxParam.recovery) | addComma }}
         </dd>
         <dd v-if="monsterData.overLimit" class="olAnim1" :class="{ statusAlert: monsterData.overLimitParam.recovery < 0, negative9999: monsterData.overLimitParam.recovery <= -9999 }">
-          {{ monsterData.overLimitParam.recovery === null ? '不明' : monsterData.overLimitParam.recovery | addComma }}
+          {{ nullToFumei(monsterData.overLimitParam.recovery) | addComma }}
         </dd>
       </dl>
       <div>
@@ -65,7 +65,7 @@
           <div :class="{ 'olAnim0 canOverLimit': (monsterData.overLimit === 1) }">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
           <div v-if="monsterData.overLimit" class="olAnim1 canOverLimit">限突Lv.110</div>
           
-          <div :class="{ olAnim0: (monsterData.overLimit === 1) }">経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp | addComma }}</div>
+          <div :class="{ olAnim0: (monsterData.overLimit === 1) }">経験値:{{ nullToFumei(monsterData.maxExp) | addComma }}</div>
           <div v-if="monsterData.overLimit" class="olAnim1">経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp + 50000000 | addComma }}</div>
         </div>
       </div>
@@ -199,6 +199,10 @@ export default {
     /** 指定された要素の横幅が親要素より大きい場合に、親要素の横幅に収まるように縮小させる。 */
     stretchElement: function (elm) {
       stretchElement(elm);
+    },
+    /** 指定された値が null の場合は '不明' を、そうでない場合はそのままの値を返す。 */
+    nullToFumei: function (value) {
+      return (value === null) ? '不明' : value;
     }
   }
 };
