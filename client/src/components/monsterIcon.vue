@@ -92,6 +92,10 @@ export default {
   border: 1px solid #bbb;
   border-bottom-width: 2px;
 
+  * {
+    user-select: none;
+  }
+
   $attr_size: 23%;
   $attr_margin: 2%;
   
