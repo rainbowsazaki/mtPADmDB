@@ -39,9 +39,9 @@ export default {
     /** ページのタイトル。 */
     title () { return (this.isSkill) ? '空情報ありスキルデータチェック' : '空情報ありモンスターデータチェック'; },
     /** 情報の詳細ページのルート名。 */
-    detailPageName () { return (this.isSKill) ? 'monsterDetails' : 'skillDetails'; },
+    detailPageName () { return (this.isSkill) ? 'skillDetails' : 'monsterDetails'; },
     /** 情報の編集ページのルート名。 */
-    editPageName () { return (this.isSKill) ? 'monsterEdit' : ''; },
+    editPageName () { return (this.isSkill) ? '' : 'monsterEdit'; },
     /** 確認対象の情報のテーブル。 */
     targetTable () { return (this.isSkill) ? this.$store.state.skillTable : this.$store.state.monsterTable; },
     /** 空の情報を持つモンスターの番号及び空の情報のキーの配列。 */
