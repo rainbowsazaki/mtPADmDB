@@ -471,14 +471,14 @@ export default {
     },
     /** 現在の設定でのランキング結果を格納した配列。 */
     rankInfos () {
-      const rankInfos = [];
       const sortColumn = this.rankingSetting.sortColumn;
-      for (const key in this.wrapedMonsterDataArray) {
-        const data = this.wrapedMonsterDataArray[key];
-        const columns = this.rankingSetting.columns.map(o => o.func(data));
-        if (columns[sortColumn] === null) { continue; }
-        rankInfos.push({ columns: columns, data: data });
-      }
+      const columnsFuncs = this.rankingSetting.columns.map(o => o.func);
+      const rankInfos = this.wrapedMonsterDataArray.map(data => {
+        const columns = columnsFuncs.map(f => f(data));
+        if (columns[sortColumn] === null) { return null; }
+        return { columns: columns, data: data };
+      }).filter(o => o !== null);
+      
       rankInfos.sort((a, b) => {
         // NaNが含まれている場合、減算結果をそのままだ使うとNaNの値がソートされないので、事前に判定する。
         // （パラメータ不明のものの+297やプラス換算、アシスト時加算値の計算結果が NaN になっている）
