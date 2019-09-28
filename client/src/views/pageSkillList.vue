@@ -218,6 +218,8 @@ export default {
   ],
   data: function () {
     return {
+      /** リーダースキルの表示かどうか。 */
+      isLeaderSkill: false,
       /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
       pageResetFlag: false,
       /** 検索ワード。 */
@@ -234,8 +236,6 @@ export default {
     };
   },
   computed: {
-    /** リーダースキルの表示かどうか。 */
-    isLeaderSkill () { return this.$route.name === 'leaderSkillList'; },
     /** 現在の条件で表示する情報の名前。 */
     targetName () { return (this.isLeaderSkill) ? 'リーダースキル' : 'スキル'; },
     /** 現在の条件で表示するデータの詳細ページのルート名。 */
@@ -349,6 +349,7 @@ export default {
   },
   watch: {
     '$route': 'updateSearchWordFromUrl',
+    '$route.name': 'checkIsLeaderSkill',
     searchWord: 'search',
     skillTypeSearchInfo: 'changeSkillType',
     pageTitle: '$_mixinForPage_updateTitle'
@@ -369,6 +370,14 @@ export default {
     window.removeEventListener('resize', this.stretch);
   },
   methods: {
+    /**
+     * リーダースキルの表示かどうかを判定する。
+     * computed を使用すると $route が変更されたときに dirty flag がセットされて、
+     * これを利用している computed などがすべて再計算されて遅くなるので data に。
+     */
+    checkIsLeaderSkill: function () {
+      this.isLeaderSkill = (this.$route.name === 'leaderSkillList');
+    },
     /** 効果文を、領域の横幅に合わせて縮小する。 */
     stretch: function () {
       const elms = document.getElementsByClassName('stretch');
