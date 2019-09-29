@@ -267,7 +267,7 @@ export default {
     },
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
-      let searchWord = this.$route.query.searchWord || '';
+      let searchWord = this.searchWord || '';
       // スキルタイプ検索情報の追加。
       if (this.skillTypeSearchInfo) {
         searchWord = this.skillTypeSearchInfo[1] + ' ' + searchWord;
@@ -335,10 +335,10 @@ export default {
       if (this.skillTypeSearchInfo) { typeName = ' ' + this.skillTypeSearchInfo[0]; }
 
       let title;
-      if (!this.$route.query.searchWord) {
+      if (!this.searchWord) {
         title = this.targetName + '一覧' + typeName;
       } else {
-        title = this.targetName + '検索' + typeName + ' ' + this.$route.query.searchWord;
+        title = this.targetName + '検索' + typeName + ' ' + this.searchWord;
       }
       const fst = filterSettingText(this.monsterFilterSetting);
       if (fst) {
