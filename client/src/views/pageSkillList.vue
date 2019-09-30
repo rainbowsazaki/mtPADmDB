@@ -224,6 +224,8 @@ export default {
       pageResetFlag: false,
       /** 検索ワード。 */
       searchWord: '',
+      /** query で指定された、表示するページ。 */
+      queryPage: 0,
       /** １ページに表示するデータの個数。 */
       inPageCount: 50,
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
@@ -324,7 +326,7 @@ export default {
     /** 現在の条件を満たすデータを最後を表示するのに必要なページ数。 */
     pageCount () { return ((this.searchedSkillArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     /** 現在表示中のページ番号。 */
-    page () { return (this.$route.query.page * 1) || 1; },
+    page () { return (this.queryPage * 1) || 1; },
     /** 現在のページで表示するデータの配列。 */
     skillArrayInPage () {
       return this.searchedSkillArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
@@ -385,9 +387,10 @@ export default {
         stretchElement(elm);
       }
     },
-    /** URLで指定された検索ワードで searchWord を更新する。 */
+    /** URLで指定された検索ワードで searchWord などを更新する。 */
     updateSearchWordFromUrl: function () {
       this.searchWord = this.$route.query.searchWord;
+      this.queryPage = this.$route.query.page;
       const skillType = this.$route.query.skillType;
       if (skillType === undefined) {
         this.skillTypeSearchInfo = null;
