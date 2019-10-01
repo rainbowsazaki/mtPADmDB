@@ -352,8 +352,7 @@ export default {
     }
   },
   watch: {
-    '$route': 'updateSearchWordFromUrl',
-    '$route.name': 'checkIsLeaderSkill',
+    '$route': ['updateSearchWordFromUrl', 'checkIsLeaderSkill' ],
     searchWord: 'search',
     skillTypeSearchInfo: 'changeSkillType',
     pageTitle: '$_mixinForPage_updateTitle'
