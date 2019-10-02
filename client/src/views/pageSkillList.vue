@@ -259,15 +259,17 @@ export default {
       const filterFunc = getFilterFunction(this.monsterFilterSetting);
       if (filterFunc.isAll) { return nosTable; }
       const filteredNosTable = {};
+      const monsterTable = this.monsterTable;
       for (const skillNo in nosTable) {
-        const filteredNos = nosTable[skillNo].filter(monsterNo => filterFunc(this.monsterTable[monsterNo]));
+        const filteredNos = nosTable[skillNo].filter(monsterNo => filterFunc(monsterTable[monsterNo]));
         if (filteredNos.length) { filteredNosTable[skillNo] = filteredNos; }
       }
       return filteredNosTable;
     },
     /** 所持しているモンスターが存在するスキルテーブルの値を配列にしたもの。 */
     skillArray () {
-      return Object.values(this.skillTable).filter((skill) => skill.no in this.skillToMonsterNosTable);
+      const skillToMonsterNosTable = this.skillToMonsterNosTable;
+      return Object.values(this.skillTable).filter((skill) => skill.no in skillToMonsterNosTable);
     },
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
