@@ -387,20 +387,15 @@ export default {
     },
     /** 現在のフィルター設定を元にした、route の query 情報のオブジェクト。 */
     routeQuery: function () {
-      /**  配列を、カンマで結合したテキストにする。 */
-      function array2text (array) {
-        return array.length ? array.slice().sort((a, b) => a - b).join(',') : undefined;
-      }
-
       let timeExtensionMin = this.filter.timeExtensionMin;
       if (timeExtensionMin === filterDefault.timeExtensionMin) { timeExtensionMin = undefined; }
 
       const query = {
         name: this.filter.name || undefined,
-        attr: array2text(this.filter.attr),
-        subAttr: array2text(this.filter.subAttr),
-        type: array2text(this.filter.type),
-        awaken: array2text(this.filter.awaken),
+        attr: this.array2text(this.filter.attr),
+        subAttr: this.array2text(this.filter.subAttr),
+        type: this.array2text(this.filter.type),
+        awaken: this.array2text(this.filter.awaken),
         rarityMin: (filterDefault.rarityMin === this.filter.rarityMin) ? undefined : this.filter.rarityMin,
         rarityMax: (filterDefault.rarityMax === this.filter.rarityMax) ? undefined : this.filter.rarityMax,
         skillTurn: this.skillTurnFilterStr,
@@ -488,6 +483,10 @@ export default {
     }
   },
   methods: {
+    /**  配列を、カンマで結合したテキストにする。 */
+    array2text: function (array) {
+      return array.length ? array.slice().sort((a, b) => a - b).join(',') : undefined;
+    },
     /**
      * ページ全体のスクロールを無効にするかどうかを設定する。
      * 引数に true を指定するとスクロールが無効になり、 false を指定するとスクロールが有効になる。
@@ -545,7 +544,12 @@ export default {
       const query = this.$route.query[name];
       const isArray = Array.isArray(this.filter[name]);
       if (isArray) {
-        value = query ? query.split(',') : [];
+        const now = this.array2text(this.filter[name]);
+        if (now !== query) {
+          value = query ? query.split(',') : [];
+        } else {
+          value = this.filter[name];
+        }
       } else {
         value = query;
         if (type === Number && value) { value *= 1; }
