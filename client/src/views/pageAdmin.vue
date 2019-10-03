@@ -14,6 +14,7 @@
       <li><router-link :to="{ name: 'kisekiCheck' }">希石チェック</router-link></li>
       <li><router-link :to="{ name: 'nullCheck' }">空情報ありモンスターデータチェック</router-link></li>
       <li><router-link :to="{ name: 'nullSkillCheck' }">空情報ありスキルデータチェック</router-link></li>
+      <li><router-link :to="{ name: 'noImageCheck' }">画像なしモンスターチェック</router-link></li>
       <li><a href="/monster_image_archive.cgi" target="_blank">モンスター画像アーカイブ</a></li>
     </ul>
     <div>

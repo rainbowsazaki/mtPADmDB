@@ -17,6 +17,7 @@ const PageRaniking = () => import('./views/pageRanking.vue');
 const PageEvolutionMaterial = () => import('./views/pageEvolutionMaterial.vue');
 const PageKiseki = () => import('./views/pageKiseki.vue');
 const PageNullCheck = () => import('./views/pageNullCheck.vue');
+const PageNoImageCheck = () => import('./views/pageNoImageCheck.vue');
 const PageAdmin = () => import('./views/pageAdmin.vue');
 
 /** router-view 要素のみのコンポーネント。 ネストされたルートの親要素で何も表示しない時用。 */
@@ -241,6 +242,11 @@ export default new Router({
       path: '/nullSkillCheck',
       name: 'nullSkillCheck',
       component: PageNullCheck
+    },
+    {
+      path: '/noImageCheck',
+      name: 'noImageCheck',
+      component: PageNoImageCheck
     },
     {
       path: '/admin',
