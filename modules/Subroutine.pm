@@ -1,13 +1,19 @@
 use strict;
 use utf8;
+use Compress::Zlib;
 
 # JSON と MessagePack で指定データを保存する。
 sub save_json_and_msgpack {
   my ($path_base, $data_ref) = @_;
 
+  my $json = JSON::PP::encode_json($data_ref);
   open(DATAFILE, "> ${path_base}.json") or die("error :$!");
-  print DATAFILE JSON::PP::encode_json($data_ref);
+  print DATAFILE $json;
   close(DATAFILE);
+
+  my $ot_gz = gzopen("${path_base}.json.gz", 'wb');
+  $ot_gz->gzwrite($json);
+  $ot_gz->gzclose();
 
   # MessagePack での保存は休止中
   # my $mp = Data::MessagePack->new;
