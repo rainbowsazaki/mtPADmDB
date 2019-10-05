@@ -37,16 +37,18 @@ export default {
     }
   },
   computed: {
-    monsterTable () { return this.$store.state.monsterTable; },
-    imageTable () { return this.$store.state.imageTable; },
+    imageInfo () { return this.$store.state.imageTable[this.no]; },
 
-    hasImage: function () { return !!this.imageTable[this.no]; },
-    monsterData: function () { return (this.monsterTable[this.no] || {}); },
-    monsterNoAndName: function () { return `No.${this.monsterData.no} ${this.monsterData.name}`; },
+    hasImage: function () { return !!this.imageInfo; },
+    monsterData: function () { return (this.$store.state.monsterTable[this.no] || {}); },
+    monsterNoAndName: function () {
+      const monsterData = this.monsterData;
+      return `No.${monsterData.no} ${monsterData.name}`;
+    },
     attributes: function () { return this.monsterData.attributes || []; },
     hasAttr0: function () { const attr = this.attributes[0]; return (attr && attr !== 0 && attr !== 99); },
     hasAttr1: function () { const attr = this.attributes[1]; return (attr && attr !== 0 && attr !== 99); },
-    iconPath: function () { return `./monsterIconsLog/icon_${this.no}_${this.imageTable[this.no].id}.jpg`; },
+    iconPath: function () { return `./monsterIconsLog/icon_${this.no}_${this.imageInfo.id}.jpg`; },
     attrPath0: function () { return `./image/attribute/${this.attributes[0]}.png`; },
     attrPath1: function () { return `./image/attribute/${this.attributes[1]}.png`; },
     
