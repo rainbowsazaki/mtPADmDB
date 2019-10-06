@@ -405,7 +405,7 @@ export default {
     typeTable () { return constData.typeTable; },
     awakenTable () { return constData.awakenTable; },
     /** 表示対象のモンスター数に対する、表示ページの枚数 */
-    pageCount () { return ((this.rankInfos.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+    pageCount () { return ((this.filteredRankInfos.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     /** 現在表示するページの番号。 1オリジン。 */
     page () { return (this.$route.query.page * 1) || 1; },
     /** ページのタイトル。 */
