@@ -1,5 +1,5 @@
 <template>
-  <div :class="`type${type} ` + (originOfEvolution ? 'type_originOfEvolution' : '' )">
+  <div :class="`base type${type} ` + (originOfEvolution ? 'type_originOfEvolution' : '' )">
     <router-link class="evolutionInfoLink" :to="{ name: 'monsterDetails', params: { no: targetNo }}">
       <div class="evolutionInfo" :class="{ minimum: minimum }">
         <div class="baseIcon">
@@ -100,6 +100,10 @@ export default {
 
 <style lang="scss" scoped>
 
+.base {
+  display: inline-block;
+}
+
 a.evolutionInfoLink {
   color: rgba(0,0,0,0.8);
 }
@@ -156,8 +160,7 @@ a.evolutionInfoLink:hover {
     vertical-align:top;
     border: 2px solid #2d261b;
     border-left: none;
-    padding-top: 0.5em;
-    padding-left: 0.3em;
+    padding: 0.5em 0.3em 0 0.3em;
     border-radius: 0 6px 6px 0;
     
     box-shadow:
