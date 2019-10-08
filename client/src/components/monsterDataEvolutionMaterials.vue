@@ -3,7 +3,7 @@
     <router-link class="evolutionInfoLink" :to="{ name: 'monsterDetails', params: { no: targetNo }}">
       <div class="evolutionInfo" :class="{ minimum: minimum }">
         <div class="baseIcon">
-          <div v-if="!minimum" class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeTable[type] }}</div>
+          <div v-if="!minimum" class="typeName" style="-webkit-background-clip: text;">{{ getEvolutionTypeName(type) }}</div>
           <div>
             <monster-icon v-if="minimum" :no="targetNo" width="2.7em" height="2.7em" />
             <monster-icon v-else :no="targetNo" width="3.6em" height="3.6em" />
@@ -13,8 +13,8 @@
           <div v-if="!minimum" class="monsterName">
             <div class="monsterNameText">{{ monsterTable[targetNo] ? monsterTable[targetNo].name : '？？？？' }}</div>
           </div>
-          <ul v-if="materials[0]">
-            <template v-for="(material, n) in materials">
+          <ul v-if="materials === null || materials[0]">
+            <template v-for="(material, n) in materials || []">
               <li v-if="material" :key="`materialNo${n}`">
                 <router-link :to="{ name:'monsterDetails', params: { no: material }}">
                   <monster-icon :no="material" width="2.7em" height="2.7em" />
@@ -26,7 +26,7 @@
         </div>
       </div>
     </router-link>
-    <div v-if="!minimum" class="relatedLinks">
+    <div v-if="!minimum && beforeNo" class="relatedLinks">
       <ul>
         <li v-if="!originOfEvolution">
           <router-link :to="{ name: 'evolutionMaterial', params: { no: targetNo } }">
@@ -68,7 +68,7 @@ export default {
     /** 進化素材の番号が入った配列。 */
     materials: {
       type: Array,
-      required: true
+      default: null
     },
     /** 進化元のモンスターの表示かどうか。 */
     originOfEvolution: {
@@ -82,13 +82,17 @@ export default {
     }
   },
   computed: {
-    evolutionTypeTable: function () { return constData.evolutionTypeTable; },
     monsterTable: function () { return this.$store.state.monsterTable; },
     evolutionTable: function () { return this.$store.state.evolutionTable; }
   },
   mounted: function () { this.stretchMonsterName(); },
   updated: function () { this.stretchMonsterName(); },
   methods: {
+    /** 進化種類に対する表示名を取得する。 */
+    getEvolutionTypeName: function (type) {
+      if (type === 0) { return 'ベース'; }
+      return constData.evolutionTypeTable[type];
+    },
     /** モンスター名が長い場合に、枠のサイズに収まるように縮小する。 */
     stretchMonsterName: function () {
       const elm = this.$el.getElementsByClassName('monsterNameText')[0];
@@ -231,6 +235,24 @@ a.evolutionInfoLink:hover {
 }
 
 $bgColorLigntnPercent: 30%;
+
+// ベース
+.type0 {
+  $bgColor: #d6b67e;
+
+  .materials {
+    background: $bgColor;
+  }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
+  .typeName {
+    background: linear-gradient(#fcf15c, #d7e14b)
+  }
+}
 
 // 通常進化
 .type1 {

@@ -1,21 +1,21 @@
 <template>
   <div v-if="hasEvolution">
-    <div style="margin-bottom: 0.5em;">
-      <div class="beforeMonster">
-        <monster-icon :no="no" width="2.7em" height="2.7em" />
-        <template v-if="stoneBaseMonsterData">
-          ← <monster-icon :no="stoneBaseMonsterData.no" width="2.7em" height="2.7em" />
-        </template>
-        {{ materialTargetMonsterData.name }}
-      </div>
-      <evolution-materials minimum style="font-size: 90%;" :type="materialTargetMonsterData.evolutionType" :before-no="materialTargetMonsterData.no" :target-no="materialTargetMonsterData.evolution.baseNo" :materials="materialTargetMonsterData.evolution.materials" />
+    <div v-if="stoneBaseMonsterData" class="stoneChange">
+      <monster-icon :no="no" width="2em" height="2em" />
+      <template v-if="stoneBaseMonsterData">
+        ← <monster-icon :no="stoneBaseMonsterData.no" width="2em" height="2em" />
+      </template>
     </div>
+    <evolution-materials style="font-size: 85%;" :type="materialTargetMonsterData.evolutionType" :target-no="materialTargetMonsterData.no" :materials="materialTargetMonsterData.evolution.materials" />
     <div style="margin-left: 0.5rem">
       <evolution-material :no="materialTargetMonsterData.evolution.baseNo" @onTotalMaterialCounts="onTotalMaterialCounts" />
       <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
         <evolution-material v-if="material" :no="material" @onTotalMaterialCounts="onTotalMaterialCounts" :key="`material_${i}`" />
       </template>
     </div>
+  </div>
+  <div v-else-if="materialTargetMonsterData.types[0] < 9">
+    <evolution-materials style="font-size: 85%;" :type="materialTargetMonsterData.evolutionType" :target-no="materialTargetMonsterData.no" :materials="null" />
   </div>
 </template>
 
@@ -106,10 +106,10 @@ div.baseAndMaterials {
   }
 }
 
-div.beforeMonster {
+div.stoneChange {
   background: linear-gradient(#f6e6be, #f6d69e);
   border: 1px solid #706050;
-  width: 16.04em;
+  width: 16.1em;
   padding: 0.2em 0.2em 1.1em 0.2em;
   margin-bottom: -1em;
   border-radius: 6px;
