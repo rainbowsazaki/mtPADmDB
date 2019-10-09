@@ -20,7 +20,9 @@
                   <monster-icon :no="material" width="2.7em" height="2.7em" />
                 </router-link>
               </li>
+              <li v-else class="nullMaterial" :key="`materialNo${n}`" />
             </template>
+            <li v-for="n in (5 - (materials || []).length)" class="nullMaterial" :key="`materialNull${n}`" />
           </ul>
           <span v-else>進化素材不明</span>
         </div>
@@ -192,7 +194,15 @@ a.evolutionInfoLink:hover {
       padding: 0px;
 
       li {
-        display: inline-block;
+        float: left;
+
+        &.nullMaterial {
+          width: 2.7em;
+          height: 2.7em;
+          background: rgba(0, 0, 0, 0.3);
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          border-radius: 7.5%;
+        }
       }
       li + li {
         margin-left: (14em - 2.7em * 5) / 4;
