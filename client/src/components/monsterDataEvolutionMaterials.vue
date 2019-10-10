@@ -12,7 +12,7 @@
           <div class="monsterName">
             <div class="monsterNameText">{{ dispMonsterData ? dispMonsterData.name : '？？？？' }}</div>
           </div>
-          <ul v-if="materials === null || materials[0]">
+          <ul v-if="type === 0 || materials === null || materials[0]">
             <template v-for="(material, n) in materials || []">
               <li v-if="material" :key="`materialNo${n}`">
                 <router-link :to="{ name:'monsterDetails', params: { no: material }}">
