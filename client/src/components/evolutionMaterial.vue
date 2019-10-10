@@ -6,7 +6,7 @@
         ← <monster-icon :no="stoneBaseMonsterData.no" width="2em" height="2em" />
       </template>
     </div>
-    <evolution-materials style="font-size: 85%;" :type="materialTargetMonsterData.evolutionType" :target-no="materialTargetMonsterData.no" :materials="materialTargetMonsterData.evolution.materials" />
+    <evolution-materials style="font-size: 85%;" :target-no="materialTargetMonsterData.no" />
     <div style="margin-left: 0.5rem">
       <evolution-material :no="materialTargetMonsterData.evolution.baseNo" @onTotalMaterialCounts="onTotalMaterialCounts" />
       <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
@@ -15,7 +15,7 @@
     </div>
   </div>
   <div v-else-if="materialTargetMonsterData.types[0] < 9">
-    <evolution-materials style="font-size: 85%;" :type="materialTargetMonsterData.evolutionType" :target-no="materialTargetMonsterData.no" :materials="null" />
+    <evolution-materials style="font-size: 85%;" :target-no="materialTargetMonsterData.no" />
   </div>
 </template>
 

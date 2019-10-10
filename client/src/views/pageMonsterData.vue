@@ -65,7 +65,7 @@
 
     <div v-if="monsterData.evolutionType !== 0">
       <h3 class="h4 decoHeader">進化元モンスター</h3>
-      <evolution-materials origin-of-evolution :type="monsterData.evolutionType" :before-no="monsterData.no" :target-no="monsterData.evolution.baseNo" :materials="monsterData.evolution.materials" />
+      <evolution-materials origin-of-evolution related-links :target-no="monsterData.no" />
 
       <div class="mt-1 p-1">
         <router-link :to="{ name: 'evolutionMaterial', params: { no: monsterData.no } }">
@@ -77,8 +77,7 @@
       <h3 class="h4 decoHeader">このモンスターからの進化</h3>
       <evolution-materials
         v-for="(evolution, n) in evolutionTable[monsterData.no]" :key="`evolutionNo${n}`"
-        style="margin-bottom: 0.5em;"
-        :type="evolution.type" :before-no="monsterData.no" :target-no="evolution.no" :materials="evolution.materials"
+        related-links style="margin-bottom: 0.5em;" :target-no="evolution.no"
       />
 
       <router-link

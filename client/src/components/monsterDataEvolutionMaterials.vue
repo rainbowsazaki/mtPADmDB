@@ -5,13 +5,13 @@
         <div class="baseIcon">
           <div v-if="!minimum" class="typeName" style="-webkit-background-clip: text;">{{ getEvolutionTypeName(type) }}</div>
           <div>
-            <monster-icon v-if="minimum" :no="targetNo" width="2.7em" height="2.7em" />
-            <monster-icon v-else :no="targetNo" width="3.6em" height="3.6em" />
+            <monster-icon v-if="minimum" :no="dispMonsterData.no" width="2.7em" height="2.7em" />
+            <monster-icon v-else :no="dispMonsterData.no" width="3.6em" height="3.6em" />
           </div>
         </div>
         <div class="materials">
           <div v-if="!minimum" class="monsterName">
-            <div class="monsterNameText">{{ monsterTable[targetNo] ? monsterTable[targetNo].name : '？？？？' }}</div>
+            <div class="monsterNameText">{{ dispMonsterData ? dispMonsterData.name : '？？？？' }}</div>
           </div>
           <ul v-if="materials === null || materials[0]">
             <template v-for="(material, n) in materials || []">
@@ -28,7 +28,7 @@
         </div>
       </div>
     </router-link>
-    <div v-if="!minimum && beforeNo" class="relatedLinks">
+    <div v-if="relatedLinks" class="relatedLinks">
       <ul>
         <li v-if="!originOfEvolution">
           <router-link :to="{ name: 'evolutionMaterial', params: { no: targetNo } }">
@@ -52,24 +52,9 @@ import { constData, stretchElement } from '../mtpadmdb.js';
 export default {
   name: 'MonsterDataEvolutionMaterials',
   props: {
-    /** 進化形式を示す番号。 */
-    type: {
-      type: Number,
-      default: 99
-    },
-    /** 表示する内容において基準となるモンスターの番号。 */
-    beforeNo: {
-      type: Number,
-      default: null
-    },
-    /** 進化後（or 進化前）のモンスターの番号。 */
+    /** 表示対象のモンスターの番号。 */
     targetNo: {
       type: Number,
-      default: null
-    },
-    /** 進化素材の番号が入った配列。 */
-    materials: {
-      type: Array,
       default: null
     },
     /** 進化元のモンスターの表示かどうか。 */
@@ -81,11 +66,31 @@ export default {
     minimum: {
       type: Boolean,
       default: false
+    },
+    /** 関連リンクを表示するかどうか。 */
+    relatedLinks: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
-    monsterTable: function () { return this.$store.state.monsterTable; },
-    evolutionTable: function () { return this.$store.state.evolutionTable; }
+    monsterData: function () {
+      return this.$store.state.monsterTable[this.targetNo];
+    },
+    beforeNo: function () {
+      return this.monsterData.evolution.baseNo;
+    },
+    dispMonsterData: function () {
+      return (this.originOfEvolution) ? this.$store.state.monsterTable[this.beforeNo] : this.monsterData;
+    },
+    /** 進化素材の番号が入った配列。 */
+    materials: function () {
+      return this.monsterData.evolution.materials;
+    },
+    /** 進化形式を示す番号。 */
+    type: function () {
+      return this.monsterData.evolutionType;
+    }
   },
   mounted: function () { this.stretchMonsterName(); },
   updated: function () { this.stretchMonsterName(); },
