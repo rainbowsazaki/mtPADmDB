@@ -1,16 +1,15 @@
 <template>
   <div :class="`base type${type} ` + (originOfEvolution ? 'type_originOfEvolution' : '' )">
     <router-link class="evolutionInfoLink" :to="{ name: 'monsterDetails', params: { no: targetNo }}">
-      <div class="evolutionInfo" :class="{ minimum: minimum }">
+      <div class="evolutionInfo">
         <div class="baseIcon">
-          <div v-if="!minimum" class="typeName" style="-webkit-background-clip: text;">{{ getEvolutionTypeName(type) }}</div>
+          <div class="typeName" style="-webkit-background-clip: text;">{{ getEvolutionTypeName(type) }}</div>
           <div>
-            <monster-icon v-if="minimum" :no="dispMonsterData.no" width="2.7em" height="2.7em" />
-            <monster-icon v-else :no="dispMonsterData.no" width="3.6em" height="3.6em" />
+            <monster-icon :no="dispMonsterData.no" width="3.6em" height="3.6em" />
           </div>
         </div>
         <div class="materials">
-          <div v-if="!minimum" class="monsterName">
+          <div class="monsterName">
             <div class="monsterNameText">{{ dispMonsterData ? dispMonsterData.name : '？？？？' }}</div>
           </div>
           <ul v-if="materials === null || materials[0]">
@@ -59,11 +58,6 @@ export default {
     },
     /** 進化元のモンスターの表示かどうか。 */
     originOfEvolution: {
-      type: Boolean,
-      default: false
-    },
-    /** 進化後（or 進化前）のモンスターと素材のみの表示のモードかどうか。 */
-    minimum: {
       type: Boolean,
       default: false
     },
@@ -230,21 +224,6 @@ a.evolutionInfoLink:hover {
   ul {
     list-style: none;
     margin: 0px;
-    padding: 0.2em;
-  }
-}
-
-.minimum {
-  &.evolutionInfo {
-    width: auto;
-    width: 17.9em;
-  }
-  
-  .baseIcon {
-    width: 3em;
-    padding: 0.2em;
-  }
-  .materials {
     padding: 0.2em;
   }
 }
