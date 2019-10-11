@@ -35,6 +35,9 @@
 
     <transition name="fade">
       <dl v-if="useEnemyState" class="enemyStateArea">
+        <dd>
+          <monster-incremental-search v-model="enemyNo" :monster-table="monsterTable" :image-table="imageTable" />
+        </dd>
         <dt>敵の属性</dt>
         <dd>
           <attr-select use-clear v-model="enemyAttributes" />
@@ -384,10 +387,12 @@ export default {
         /** スキルターンの最大値。 */
         skillTurnMax: 99
       },
+      /** 想定する敵の番号。 */
+      enemyNo: null,
       /** 想定する敵のタイプ。 */
-      enemyAttributes: [],
+      enemyAttributes_: [],
       /** 想定する敵の属性。 */
-      enemyTypes: [],
+      enemyTypes_: [],
       /** 超覚醒を使用するかどうか。 */
       useSuperAwaken: false,
       /** 敵のタイプ・属をを反映した攻撃力を使用するかどうか。 */
@@ -803,11 +808,19 @@ export default {
       };
       if (this.useEnemyState) {
         obj.useEnemyState = 1;
-        obj.enemyAttributes = this.enemyAttributes.join(',') || undefined;
-        obj.enemyTypes = this.enemyTypes.join(',') || undefined;
+        if (this.enemyNo !== null) {
+          obj.enemyNo = this.enemyNo;
+          obj.enemyAttributes = undefined;
+          obj.enemyTypes = undefined;
+        } else {
+          obj.enemyNo = undefined;
+          obj.enemyAttributes = this.enemyAttributes.join(',') || undefined;
+          obj.enemyTypes = this.enemyTypes.join(',') || undefined;
+        }
         obj.useSenzaiKiller = this.useSenzaiKiller ? 1 : undefined;
       } else {
         obj.useEnemyState = undefined;
+        obj.enemyNo = undefined;
         obj.enemyAttributes = undefined;
         obj.enemyTypes = undefined;
         obj.useSenzaiKiller = undefined;
@@ -854,6 +867,44 @@ export default {
         }
       }
       return obj;
+    },
+    /** 想定する敵の属性。 */
+    enemyAttributes: {
+      get: function () {
+        if (this.enemyNo !== null) {
+          const enemyData = this.monsterTable[this.enemyNo];
+          if (!enemyData) { return []; }
+          return enemyData.attributes;
+        } else {
+          return this.enemyAttributes_;
+        }
+      },
+      set: function (d) {
+        if (this.enemyNo !== null) {
+          this.enemyTypes_ = this.enemyTypes;
+          this.enemyNo = null;
+        }
+        this.enemyAttributes_ = d;
+      }
+    },
+    /** 想定する敵のタイプ。 */
+    enemyTypes: {
+      get: function () {
+        if (this.enemyNo !== null) {
+          const enemyData = this.monsterTable[this.enemyNo];
+          if (!enemyData) { return []; }
+          return enemyData.types;
+        } else {
+          return this.enemyTypes_;
+        }
+      },
+      set: function (d) {
+        if (this.enemyNo !== null) {
+          this.enemyAttributes_ = this.enemyAttributes;
+          this.enemyNo = null;
+        }
+        this.enemyTypes_ = d;
+      }
     }
   },
   watch: {
@@ -919,8 +970,11 @@ export default {
       this.queryToData('useSuperAwaken');
       this.queryToData('useEnemyState');
       if (this.useEnemyState) {
-        queryToDataForNumberArray('enemyAttributes');
-        queryToDataForNumberArray('enemyTypes');
+        this.queryToData('enemyNo', Number);
+        if (this.EnemyNo === null) {
+          queryToDataForNumberArray('enemyAttributes');
+          queryToDataForNumberArray('enemyTypes');
+        }
         this.queryToData('useSenzaiKiller');
       }
     },
@@ -931,9 +985,13 @@ export default {
       this.$router.push({ name: this.$route.name, params: this.$route.params, query: margedQuery });
     },
     /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
-    queryToData: function (name) {
-      this[name] = this.$route.query[name];
-      return (this[name] !== undefined);
+    queryToData: function (name, type) {
+      let value = this.$route.query[name];
+      if (type === Number && value) {
+        value |= 0;
+      }
+      this[name] = value;
+      return (value !== undefined);
     },
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
