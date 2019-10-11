@@ -36,8 +36,8 @@ export default {
   },
   computed: {
     filteredMonsterTable: function () {
-      // 文字が入力されていない場合は表示しない。
-      if (this.filter.length < 1) { return {}; }
+      // 文字が2文字以上入力されていない場合は表示しない。
+      if (this.filter.length < 2) { return {}; }
       const func = getFilterFunction({ name: this.filter });
       const array = [];
       for (const key in this.monsterTable) {
