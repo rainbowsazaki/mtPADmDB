@@ -3,7 +3,7 @@
     <input v-model="filter" placeholder="モンスター名で検索" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
     <div class="dropdown-menu">
       <a v-for="monsterData in filteredMonsterTable" class="dropdown-item" @click="updateValue(monsterData.no)" href="javascript:void(0)" :key="`monster${monsterData.no}`">
-        <monster-icon v-if="imageTable" no-link :no="monsterData.no" :monster-table="monsterTable" :image-table="imageTable" width="1.6em" height="1.6em" />
+        <monster-icon no-link :no="monsterData.no" width="1.6em" height="1.6em" />
         {{ monsterData.name }}
       </a>
     </div>
@@ -39,14 +39,7 @@ export default {
       // 文字が2文字以上入力されていない場合は表示しない。
       if (this.filter.length < 2) { return {}; }
       const func = getFilterFunction({ name: this.filter });
-      const array = [];
-      for (const key in this.monsterTable) {
-        const value = this.monsterTable[key];
-        if (func(value)) {
-          array.push(value);
-        }
-      }
-      return array;
+      return Object.values(this.monsterTable).filter(d => func(d));
     }
   },
   watch: {
