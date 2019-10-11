@@ -804,26 +804,22 @@ export default {
       const obj = {
         'useOverLimit': this.useOverLimit ? 1 : undefined,
         'useMultiBoost': this.useMultiBoost ? 1 : undefined,
-        'useSuperAwaken': this.useSuperAwaken ? 1 : undefined
+        'useSuperAwaken': this.useSuperAwaken ? 1 : undefined,
+        'useEnemyState': undefined,
+        'enemyNo': undefined,
+        'enemyAttributes': undefined,
+        'enemyTypes': undefined,
+        'useSenzaiKiller': undefined
       };
       if (this.useEnemyState) {
         obj.useEnemyState = 1;
         if (this.enemyNo !== null) {
           obj.enemyNo = this.enemyNo;
-          obj.enemyAttributes = undefined;
-          obj.enemyTypes = undefined;
         } else {
-          obj.enemyNo = undefined;
           obj.enemyAttributes = this.enemyAttributes.join(',') || undefined;
           obj.enemyTypes = this.enemyTypes.join(',') || undefined;
         }
         obj.useSenzaiKiller = this.useSenzaiKiller ? 1 : undefined;
-      } else {
-        obj.useEnemyState = undefined;
-        obj.enemyNo = undefined;
-        obj.enemyAttributes = undefined;
-        obj.enemyTypes = undefined;
-        obj.useSenzaiKiller = undefined;
       }
       return obj;
     },
@@ -963,7 +959,7 @@ export default {
         if (compArray(newValue, this[name])) { return false; }
         this[name] = newValue;
         return true;
-      }
+      };
 
       this.queryToData('useOverLimit');
       this.queryToData('useMultiBoost');
