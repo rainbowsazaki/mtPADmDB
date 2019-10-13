@@ -10,7 +10,7 @@
       </span>
     </div>
     <h3 class="decoHeader">個々の進化素材</h3>
-    <evolution-material :no="Number(no)" @onTotalMaterialCounts="onTotalMaterialCounts" />
+    <evolution-material :evo-info="evoInfo" />
     <h3 class="decoHeader">必要モンスター一覧</h3>
     <ul class="list-group" style="max-width: 600px;">
       <li v-for="materialCountInfo in sortedMaterialList" class="list-group-item d-flex justify-content-between align-items-center" :key="`materialCount_${materialCountInfo.no}`">
@@ -91,23 +91,6 @@ export default {
     this.createEvoInfo();
   },
   methods: {
-    /** 必要素材数を受け取るメソッド。 */
-    onTotalMaterialCounts (obj) {
-      const array = [];
-      for (const no in obj) {
-        array.push({ no: no, count: obj[no] });
-      }
-      // 指定された番号のモンスターが進化のための素材となるモンスターかどうかを取得する。
-      const isMaterial = (no) => {
-        const monsterData = this.monsterTable[no];
-        if (!monsterData) { return false; }
-        const type = monsterData.types[0];
-        // 進化系と強化系を素材系タイプとみなす。
-        return type === 9 || type === 11;
-      };
-      array.sort((a, b) => isMaterial(a.no) - isMaterial(b.no));
-      this.sortedMaterialList = array;
-    },
     /** 表示するモンスターの進化情報をツリー形式で格納したオブジェクトを作成する。 */
     createEvoInfo () {
       const needMaterialCounts = {};

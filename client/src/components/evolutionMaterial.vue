@@ -1,21 +1,13 @@
 <template>
-  <div v-if="hasEvolution">
-    <div v-if="stoneBaseMonsterData" class="stoneChange">
-      <monster-icon :no="no" width="2em" height="2em" />
-      <template v-if="stoneBaseMonsterData">
-        ← <monster-icon :no="stoneBaseMonsterData.no" width="2em" height="2em" />
-      </template>
+  <div>
+    <div v-if="evoInfo.kiseki" class="kisekiHeader">
+      <monster-icon :no="evoInfo.kiseki" width="2.3em" height="2.3em" />
     </div>
-    <evolution-materials style="font-size: 85%;" :target-no="materialTargetMonsterData.no" />
-    <div style="margin-left: 0.5rem">
-      <evolution-material :no="materialTargetMonsterData.evolution.baseNo" @onTotalMaterialCounts="onTotalMaterialCounts" />
-      <template v-for="(material, i) in materialTargetMonsterData.evolution.materials">
-        <evolution-material v-if="material" :no="material" @onTotalMaterialCounts="onTotalMaterialCounts" :key="`material_${i}`" />
-      </template>
+    <evolution-materials style="font-size: 85%;" :target-no="evoInfo.no" />
+    <div style="margin-left: 0.5em;">
+      <evolution-material v-if="evoInfo.evo" :evo-info="evoInfo.evo" />
+      <evolution-material v-for="materialInfo in evoInfo.materials || []" :evo-info="materialInfo" :key="`material${materialInfo.no}`" />
     </div>
-  </div>
-  <div v-else-if="materialTargetMonsterData.types[0] < 9">
-    <evolution-materials style="font-size: 85%;" :target-no="materialTargetMonsterData.no" />
   </div>
 </template>
 
@@ -26,13 +18,13 @@ import EvolutionMaterials from './../components/monsterDataEvolutionMaterials.vu
 export default {
   name: 'EvolutionMaterial',
   components: {
-    'EvolutionMaterial': EvolutionMaterial,
+    EvolutionMaterial,
     EvolutionMaterials
   },
   props: {
-    /** 表示するモンスターの番号。 */
-    no: {
-      type: Number,
+    /** 進化情報。 */
+    evoInfo: {
+      type: Object,
       required: true
     }
   },
@@ -95,23 +87,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-div.baseAndMaterials {
-  margin: 0.25rem 0 1rem;
-
-  .baseMonster {
-    margin-right: 0.25rem;
-  }
-  .materialMonster {
-    margin-right: 1px;
-  }
-}
-
-div.stoneChange {
-  background: linear-gradient(#f6e6be, #f6d69e);
-  border: 1px solid #706050;
-  width: 16.1em;
-  padding: 0.2em 0.2em 1.1em 0.2em;
-  margin-bottom: -1em;
-  border-radius: 6px;
+.kisekiHeader {
+  margin: 0.2em 0;
 }
 </style>
