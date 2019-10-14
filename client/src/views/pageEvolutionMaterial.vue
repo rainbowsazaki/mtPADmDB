@@ -106,6 +106,10 @@ export default {
 
       function func (monsterNo, evoObj, evoMaterials, kiseki) {
         let monsterData = monsterTable[monsterNo];
+        if (!monsterData) {
+          if (monsterNo !== null) { AddNeedMaterials(monsterNo); }
+          return null;
+        }
         const obj = { no: monsterNo };
         if (/^(.+)の希石$/.test(monsterData.name)) {
           const baseName = RegExp.$1;
