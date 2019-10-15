@@ -4,7 +4,8 @@
       <monster-icon :no="evoInfo.kiseki" width="2.3em" height="2.3em" />
     </div>
     <evolution-materials style="font-size: 85%;" :target-no="evoInfo.no" />
-    <div style="margin-left: 0.5em;">
+    <div style="padding-left: 1em; position: relative;">
+      <div v-if="evoInfo.evo" class="evoArrow" />
       <evolution-material v-if="evoInfo.evo" :evo-info="evoInfo.evo" />
       <evolution-material v-for="materialInfo in evoInfo.materials || []" :evo-info="materialInfo" :key="`material${materialInfo.no}`" />
     </div>
@@ -89,5 +90,33 @@ export default {
 <style lang="scss" scoped>
 .kisekiHeader {
   margin: 0.2em 0;
+}
+
+.evoArrow {
+  $width: 0.8em;
+  $overHeight: 0em;
+  $lineWidth: 0.18em;
+
+  position: relative;
+  float: left;
+  width: $width - 0.2em;
+  height: $overHeight + 2.6em;
+  margin-left: -$width;
+  margin-right: 0.2em;
+  margin-top: -$overHeight;
+  border-color: #f90;
+  border-width: 0.18em;
+  border-style: none none solid solid;
+  border-radius: 0 0 0 0.3em;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -0.38em;
+    right: -0.5em;
+
+    border: 0.3em solid transparent;
+    border-left: 0.3em solid #f90;
+  }
 }
 </style>
