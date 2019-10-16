@@ -5,9 +5,9 @@
     </div>
     <evolution-materials style="font-size: 85%;" :target-no="evoInfo.no" />
     <div style="padding-left: 1em; position: relative;">
+      <evolution-material v-for="materialInfo in evoInfo.materials || []" :evo-info="materialInfo" :key="`material${materialInfo.no}`" />
       <div v-if="evoInfo.evo" class="evoArrow" />
       <evolution-material v-if="evoInfo.evo" :evo-info="evoInfo.evo" />
-      <evolution-material v-for="materialInfo in evoInfo.materials || []" :evo-info="materialInfo" :key="`material${materialInfo.no}`" />
     </div>
   </div>
 </template>

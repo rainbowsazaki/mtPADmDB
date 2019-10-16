@@ -59,7 +59,7 @@ export default {
      * {
      *   no: 表示するモンスターの番号。
      *   kiseki: 希石化して使用する場合の希石の番号。ベースのモンスターに入れておく。
-     *   materials: このモンスターを進化させる場合に必要な素材の進化情報配列。
+     *   materials: このモンスターに進化させるのに必要な素材の進化情報配列。
      *              中身はevoInfoと同じ構造のオブジェクト。
      *   evo: 進化後のモンスターの進化情報。中身はevoInfoと同じ構造のオブジェクト。
      * }
@@ -104,7 +104,7 @@ export default {
       const monsterTable = this.monsterTable;
       const monsterArray = Object.values(monsterTable);
 
-      function func (monsterNo, evoObj, evoMaterials, kiseki) {
+      function func (monsterNo, evoObj, kiseki) {
         let monsterData = monsterTable[monsterNo];
         if (!monsterData) {
           if (monsterNo !== null) { AddNeedMaterials(monsterNo); }
@@ -130,7 +130,6 @@ export default {
         }
 
         if (evoObj) { obj.evo = evoObj; }
-        if (evoMaterials && evoMaterials.length) { obj.materials = evoMaterials; }
         if (!monsterData.evolution.baseNo) {
           AddNeedMaterials(obj.no);
           if (kiseki) { obj.kiseki = kiseki; }
@@ -138,7 +137,8 @@ export default {
         }
 
         const needMaterials = monsterData.evolution.materials.map(d => func(d)).filter(d => d);
-        return func(monsterData.evolution.baseNo, obj, needMaterials, kiseki);
+        if (needMaterials.length) { obj.materials = needMaterials; }
+        return func(monsterData.evolution.baseNo, obj, kiseki);
       }
       this.evoInfo = func(this.no);
 
