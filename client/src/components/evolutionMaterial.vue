@@ -6,8 +6,11 @@
     <evolution-materials style="font-size: 85%;" :target-no="evoInfo.no" />
     <div style="padding-left: 1em; position: relative;">
       <evolution-material v-for="materialInfo in evoInfo.materials || []" :evo-info="materialInfo" :key="`material${materialInfo.no}`" />
-      <div v-if="evoInfo.evo" class="evoArrow" />
-      <evolution-material v-if="evoInfo.evo" :evo-info="evoInfo.evo" />
+      <template v-if="evoInfo.evo">
+        <div v-if="evoInfo.materials && evoInfo.materials.length" class="evoLine" />
+        <div class="evoArrow" />
+        <evolution-material :evo-info="evoInfo.evo" />
+      </template>
     </div>
   </div>
 </template>
@@ -59,6 +62,11 @@ export default {
     /** 進化後のモンスターかどうか。 */
     hasEvolution () {
       return this.materialTargetMonsterData.evolution && this.materialTargetMonsterData.evolution.baseNo;
+    },
+    /** 進化関係を示す矢印の上側に伸ばす線が必要かどうか。 */
+    isNeedEvoLine () {
+      const materials = this.evoInfo.materials;
+      return materials && materials.length;
     }
   },
   mounted: function () {
@@ -66,8 +74,22 @@ export default {
       this.totalMaterialCounts[this.materialTargetMonsterData.no || this.no] = 1;
       this.$emit('onTotalMaterialCounts', this.totalMaterialCounts);
     }
+    this.udpateEvoLine();
   },
   methods: {
+    /** 進化関係を示す矢印の上側を伸ばす要素のサイズを調整する。 */
+    udpateEvoLine () {
+      if (!this.isNeedEvoLine) { return; }
+      const elm = this.$el.getElementsByClassName('evoLine')[0];
+      if (!elm) { return; }
+      const offsetTop = elm.offsetTop;
+      if (!offsetTop) { return; }
+      const fontSizePx = window.getComputedStyle(elm).getPropertyValue('font-size');
+      const fontSize = fontSizePx.match(/(\d+)/)[0];
+      // サイズ変更などで間が開く可能性を考慮して、少し長めにする。
+      elm.style.height = (offsetTop / fontSize + 1) + 'em';
+      elm.style.top = 0;
+    },
     /** 必要素材数を受け取るメソッド。 */
     onTotalMaterialCounts (obj) {
       for (const key in obj) {
@@ -92,20 +114,26 @@ export default {
   margin: 0.2em 0;
 }
 
+$arrowLineWidth: 0.18em;
+$arrowColor: #f90;
+$arrowMarginLeft: 0.2em;
+
+.evoLine {
+  position: absolute;
+  left: $arrowMarginLeft;
+  border-left: $arrowLineWidth solid $arrowColor;
+}
+
 .evoArrow {
   $width: 0.8em;
-  $overHeight: 0em;
-  $lineWidth: 0.18em;
 
   position: relative;
   float: left;
-  width: $width - 0.2em;
-  height: $overHeight + 2.6em;
-  margin-left: -$width;
-  margin-right: 0.2em;
-  margin-top: -$overHeight;
-  border-color: #f90;
-  border-width: 0.18em;
+  width: $width - $arrowMarginLeft;
+  height: 2.6em;
+  margin-left: -$width + $arrowMarginLeft - 0.2em;
+  border-color: $arrowColor;
+  border-width: $arrowLineWidth;
   border-style: none none solid solid;
   border-radius: 0 0 0 0.3em;
 
@@ -116,7 +144,7 @@ export default {
     right: -0.5em;
 
     border: 0.3em solid transparent;
-    border-left: 0.3em solid #f90;
+    border-left: 0.3em solid $arrowColor;
   }
 }
 </style>
