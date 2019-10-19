@@ -2,7 +2,10 @@
   <div class="dropdown show">
     <input v-model="filter" placeholder="モンスター名で検索" class="form-control dropdown-toggle" @input="showPopup($event.target);" data-toggle="dropdown">
     <div class="dropdown-menu">
-      <a v-for="monsterData in filteredMonsterTable" class="dropdown-item" @click="updateValue(monsterData.no)" href="javascript:void(0)" :key="`monster${monsterData.no}`">
+      <span v-if="filteredMonsterTable.length > 150" class="overCount">
+        候補が多すぎます。
+      </span>
+      <a v-else v-for="monsterData in filteredMonsterTable" class="dropdown-item" @click="updateValue(monsterData.no)" href="javascript:void(0)" :key="`monster${monsterData.no}`">
         <monster-icon no-link :no="monsterData.no" width="1.6em" height="1.6em" />
         {{ monsterData.name }}
       </a>
@@ -77,5 +80,10 @@ export default {
   height: auto;
   max-height: 200px;
   overflow-x: hidden;
+}
+
+.overCount {
+  color: rgba(0, 0, 0, 0.4);
+  padding: 1.5em;
 }
 </style>
