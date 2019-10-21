@@ -26,15 +26,15 @@
         </label>
       </li>
       <li>
-        <label>
-          <input type="checkbox" v-model="useEnemyState" value="1">
+        <label :disabled="!isDamageRanking">
+          <input type="checkbox" v-model="useEnemyState" value="1" :disabled="!isDamageRanking">
           敵の属性による補正やキラーを反映する
         </label>
       </li>
     </ul>
 
     <transition name="fade">
-      <dl v-if="useEnemyState" class="enemyStateArea">
+      <dl v-if="useEnemyState && isDamageRanking" class="enemyStateArea">
         <dd>
           <monster-incremental-search v-model="enemyNo" :monster-table="monsterTable" :image-table="imageTable" />
         </dd>
@@ -122,6 +122,8 @@ const F_A_OVER80 = 1 << 5;
 const F_A_UNDER50 = 1 << 6;
 /** 回復ドロップ強化の回復４個消し時回復力アップ発動のフラグ。 */
 const F_A_RECOVERY_PLUS = 1 << 7;
+/** 攻撃力（与えるダメージ）のランキングのフラグ。 */
+const F_DAMAGE_RANKING = 1 << 8;
 
 /**
  * モンスターのパラメータなどのランク付けを行うページのコンポーネント。
@@ -167,7 +169,7 @@ export default {
             { name: '回復', func: data => data.hyperMaxParam.recovery }
           ],
           sortColumn: 1,
-          awakenFlag: 0
+          awakenFlag: F_DAMAGE_RANKING
         },
         {
           id: 'recovery',
@@ -219,7 +221,7 @@ export default {
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.wayAttackRate) | 0 }
           ],
           sortColumn: 0,
-          awakenFlag: F_A_WAY
+          awakenFlag: F_DAMAGE_RANKING | F_A_WAY
         },
         {
           id: 'lJiAttack',
@@ -229,7 +231,7 @@ export default {
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.lJiAttackRate) | 0 }
           ],
           sortColumn: 0,
-          awakenFlag: F_A_L_JI
+          awakenFlag: F_DAMAGE_RANKING | F_A_L_JI
         },
         {
           id: '7comboAttack',
@@ -239,7 +241,7 @@ export default {
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
-          awakenFlag: F_A_COMBO_UP
+          awakenFlag: F_DAMAGE_RANKING | F_A_COMBO_UP
         },
         {
           id: '10comboAttack',
@@ -249,7 +251,7 @@ export default {
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
-          awakenFlag: F_A_COMBO_UP | F_A_SP_COMBO_UP
+          awakenFlag: F_DAMAGE_RANKING | F_A_COMBO_UP | F_A_SP_COMBO_UP
         },
         {
           id: 'way7comboAttack',
@@ -259,7 +261,7 @@ export default {
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.wayAttackRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
-          awakenFlag: F_A_WAY | F_A_COMBO_UP
+          awakenFlag: F_DAMAGE_RANKING | F_A_WAY | F_A_COMBO_UP
         },
         {
           id: 'lJi7comboAttack',
@@ -269,7 +271,7 @@ export default {
             { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
-          awakenFlag: F_A_L_JI | F_A_COMBO_UP
+          awakenFlag: F_DAMAGE_RANKING | F_A_L_JI | F_A_COMBO_UP
         },
         {
           id: 'recovery4',
@@ -295,7 +297,7 @@ export default {
             { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.a3x3AttackRate) | 0 : null }
           ],
           sortColumn: 0,
-          awakenFlag: F_A_A3X3
+          awakenFlag: F_DAMAGE_RANKING | F_A_A3X3
         },
         {
           id: 'a3x37comboAttack',
@@ -305,7 +307,7 @@ export default {
             { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0,
-          awakenFlag: F_A_A3X3 | F_A_COMBO_UP
+          awakenFlag: F_DAMAGE_RANKING | F_A_A3X3 | F_A_COMBO_UP
         }
       ]
     },
@@ -468,6 +470,10 @@ export default {
         s = { name: '' };
       }
       return s;
+    },
+    /** 攻撃力（与えるダメージ）のランキングかどうか。 */
+    isDamageRanking () {
+      return !!(this.rankingSetting.awakenFlag & F_DAMAGE_RANKING);
     },
     /** 現在のページで表示するランキング結果を格納した配列。 */
     rankInfosInPage () {
@@ -1001,6 +1007,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+label[disabled] {
+  color: #999999;
+}
+
 .enemyStateArea {
   border: 1px solid #CCC;
   padding: 4px;
