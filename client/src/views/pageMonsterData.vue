@@ -258,6 +258,38 @@ export default {
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
       return (this.$route.name === 'monsterHistory');
+    },
+    /** 表示するモンスターの進化系統情報をツリー形式で格納したオブジェクト。
+     * {
+     *   no: 表示するモンスターの番号。
+     *   evo: 進化後のモンスターの進化情報の配列。中身はevoInfoと同じ構造のオブジェクト。
+     *   target: 進化系統を表示する対象のモンスターかどうか。
+     * }
+     */
+    evoInfo () {
+      const targetNo = this.monsterData.no;
+      // ベースモンスターを求める。
+      let baseNo = targetNo;
+      const monsterTable = this.monsterTable;
+      while (1) {
+        const monsterData = monsterTable[baseNo];
+        if (!monsterData) { break; }
+        const baseNo_ = monsterData.evolution.baseNo;
+        if (!baseNo_) { break; }
+        baseNo = baseNo_;
+      }
+      // 再帰で進化後を巡っていってツリー構造を作成する。
+      const evolutionTable = this.evolutionTable;
+      function func (no) {
+        const obj = { no: no };
+        const evolutionData = evolutionTable[no];
+        if (evolutionData) {
+          obj.evo = evolutionData.map(d => func(d.no));
+        }
+        if (no === targetNo) { obj.target = true; }
+        return obj;
+      }
+      return func(baseNo);
     }
   },
   watch: {
