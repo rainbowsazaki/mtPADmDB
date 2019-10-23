@@ -6,7 +6,14 @@
     <evolution-materials style="font-size: 85%;" :target-no="evoInfo.no" />
     <div style="padding-left: 1em; position: relative;">
       <evolution-material v-for="materialInfo in evoInfo.materials || []" :evo-info="materialInfo" :key="`material${materialInfo.no}`" />
-      <template v-if="evoInfo.evo">
+      <template v-if="Array.isArray(evoInfo.evo)">
+        <template v-for="(evo, n) in evoInfo.evo">
+          <div v-if="isNeedEvoLine && n === evoInfo.evo.length - 1" class="evoLine" :key="`line-${evo.no}`" />
+          <div class="evoArrow" :key="`arrow-${evo.no}`" />
+          <evolution-material :evo-info="evo" :key="`materials-${evo.no}`" />
+        </template>
+      </template>
+      <template v-else-if="evoInfo.evo">
         <div v-if="evoInfo.materials && evoInfo.materials.length" class="evoLine" />
         <div class="evoArrow" />
         <evolution-material :evo-info="evoInfo.evo" />
@@ -35,6 +42,8 @@ export default {
   computed: {
     /** 進化関係を示す矢印の上側に伸ばす線が必要かどうか。 */
     isNeedEvoLine () {
+      const evoInfo = this.evoInfo;
+      if (evoInfo.evo && evoInfo.evo.length > 1) { return true; }
       const materials = this.evoInfo.materials;
       return materials && materials.length;
     }
