@@ -63,30 +63,16 @@
       </div>
     </div>
 
-    <div v-if="monsterData.evolutionType !== 0">
-      <h3 class="h4 decoHeader">進化元モンスター</h3>
-      <evolution-materials origin-of-evolution related-links :target-no="monsterData.no" />
-
-      <div class="mt-1 p-1">
+    <div v-if="evoInfo.evo">
+      <h3 class="h4 decoHeader">進化系統</h3>
+      <div v-if="monsterData.evolutionType !== 0" class="mt-1 p-1">
         <router-link :to="{ name: 'evolutionMaterial', params: { no: monsterData.no } }">
           {{ monsterData.name }}の作成に必要な全モンスター一覧へ
         </router-link>
       </div>
+      <evolution-material :evo-info="evoInfo" />
     </div>
-    <div v-if="evolutionTable[monsterData.no]">
-      <h3 class="h4 decoHeader">このモンスターからの進化</h3>
-      <evolution-materials
-        v-for="(evolution, n) in evolutionTable[monsterData.no]" :key="`evolutionNo${n}`"
-        related-links style="margin-bottom: 0.5em;" :target-no="evolution.no"
-      />
-
-      <router-link
-        v-if="evolutionTable[monsterData.no].length >= 2" class="btn btn-secondary btn-sm" style="margin-bottom: 1em;"
-        :to="{ name: 'compare', params: { nos: evolutionTable[monsterData.no].map(e => e.no).join(',') } }"
-      >
-        進化後{{ evolutionTable[monsterData.no].length }}種類のパラメータ比較へ
-      </router-link>
-    </div>
+    
     <div class="editButtons">
       <router-link v-if="isHistory" :to="{ name:'monsterHistoryEdit', params: { id: $route.params.id }}" class="btn btn-primary">履歴をもとに編集する</router-link>
       <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-primary">編集する</router-link>
@@ -147,6 +133,7 @@ import { mtpadmdb, constData, checkCanMixMonster } from '../mtpadmdb.js';
 import MonsterInfo from './../components/monsterInfo.vue';
 import TrParam from './../components/monsterDataTrParam.vue';
 import EvolutionMaterials from './../components/monsterDataEvolutionMaterials.vue';
+import EvolutionMaterial from '../components/evolutionMaterial.vue';
 
 /**
  * モンスター情報ページコンポーネント
@@ -167,7 +154,8 @@ export default {
   components: {
     MonsterInfo,
     TrParam,
-    EvolutionMaterials
+    EvolutionMaterials,
+    EvolutionMaterial
   },
   props: {
     no: {
