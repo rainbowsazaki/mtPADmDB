@@ -3,7 +3,7 @@
     <div v-if="evoInfo.kiseki" class="kisekiHeader">
       <monster-icon :no="evoInfo.kiseki" width="2.3em" height="2.3em" />
     </div>
-    <evolution-materials style="font-size: 85%;" :target-no="evoInfo.no" />
+    <evolution-materials style="font-size: 85%;" :highlight="evoInfo.target" :target-no="evoInfo.no" />
     <div style="padding-left: 1em; position: relative;">
       <evolution-material v-for="materialInfo in evoInfo.materials || []" :evo-info="materialInfo" :key="`material${materialInfo.no}`" />
       <template v-if="Array.isArray(evoInfo.evo)">
