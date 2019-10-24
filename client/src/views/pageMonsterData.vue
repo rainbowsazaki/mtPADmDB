@@ -73,11 +73,6 @@
       <evolution-material :evo-info="evoInfo" />
     </div>
     
-    <div class="editButtons">
-      <router-link v-if="isHistory" :to="{ name:'monsterHistoryEdit', params: { id: $route.params.id }}" class="btn btn-primary">履歴をもとに編集する</router-link>
-      <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-primary">編集する</router-link>
-      <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-primary">モンスター画像投稿</router-link>
-    </div>
     <div v-if="!isHistory">
       <h3 class="h4 decoHeader">コメント</h3>
       <comment-list />
@@ -123,6 +118,11 @@
           <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>
         </li>
       </ul>
+    </div>
+    <div class="editButtons">
+      <router-link v-if="isHistory" :to="{ name:'monsterHistoryEdit', params: { id: $route.params.id }}" class="btn btn-sm btn-secondary">履歴をもとに編集する</router-link>
+      <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-sm btn-secondary">編集する</router-link>
+      <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-sm btn-secondary">モンスター画像投稿</router-link>
     </div>
   </div>
 </template>
@@ -423,7 +423,7 @@ export default {
 }
 
 .editButtons {
-  margin-top: 1rem;
+  margin-top: 2rem;
 
   a {
     margin-right: 0.5rem;
