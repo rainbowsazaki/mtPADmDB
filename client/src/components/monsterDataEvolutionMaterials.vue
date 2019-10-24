@@ -126,10 +126,10 @@ export default {
 
 .highlight .evolutionInfo {
   $highlightColor: #ff8800;
-  $borderWidth: 0.3em;
+  $borderWidth: 0.25em;
   border: $borderWidth solid $highlightColor;
   margin: -$borderWidth;
-  border-radius: 10px;
+  border-radius: 0.6em;
   filter: drop-shadow(0 0 0.3em $highlightColor);
 }
 

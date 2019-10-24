@@ -4,7 +4,7 @@
       <monster-icon :no="evoInfo.kiseki" width="2.3em" height="2.3em" />
     </div>
     <evolution-materials style="font-size: 85%;" :highlight="evoInfo.target" :target-no="evoInfo.no" />
-    <div style="padding-left: 1em; position: relative;">
+    <div class="wrapper">
       <evolution-material v-for="materialInfo in evoInfo.materials || []" :evo-info="materialInfo" :key="`material${materialInfo.no}`" />
       <template v-if="Array.isArray(evoInfo.evo)">
         <template v-for="(evo, n) in evoInfo.evo">
@@ -74,9 +74,15 @@ export default {
   margin: 0.2em 0;
 }
 
+$indent: 1.2em;
 $arrowLineWidth: 0.18em;
 $arrowColor: #f90;
 $arrowMarginLeft: 0.2em;
+$arrowMarginRight: 0.4em;
+.wrapper {
+  padding-left: $indent;
+  position: relative;
+}
 
 .evoLine {
   position: absolute;
@@ -85,13 +91,13 @@ $arrowMarginLeft: 0.2em;
 }
 
 .evoArrow {
-  $width: 0.8em;
+  $width: $indent - $arrowMarginRight;
 
   position: relative;
   float: left;
   width: $width - $arrowMarginLeft;
   height: 2.6em;
-  margin-left: -$width + $arrowMarginLeft - 0.2em;
+  margin-left: -$indent + $arrowMarginLeft;
   border-color: $arrowColor;
   border-width: $arrowLineWidth;
   border-style: none none solid solid;
