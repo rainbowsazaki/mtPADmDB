@@ -1,5 +1,5 @@
 <template>
-  <div :class="`base type${type} ` + (originOfEvolution ? 'type_originOfEvolution' : '' )">
+  <div :class="classObject">
     <router-link class="evolutionInfoLink" :to="{ name: 'monsterDetails', params: { no: targetNo }}">
       <div class="evolutionInfo">
         <div class="baseIcon">
@@ -51,6 +51,11 @@ import { constData, stretchElement } from '../mtpadmdb.js';
 export default {
   name: 'MonsterDataEvolutionMaterials',
   props: {
+    /** 強調表示を行うかどうか。 */
+    highlight: {
+      type: Boolean,
+      default: false
+    },
     /** 表示対象のモンスターの番号。 */
     targetNo: {
       type: Number,
@@ -84,6 +89,16 @@ export default {
     /** 進化形式を示す番号。 */
     type: function () {
       return this.monsterData.evolutionType;
+    },
+    /** コンポーネントのルート要素のクラス指定に使用するオブジェクト。 */
+    classObject: function () {
+      const obj = {
+        base: true,
+        type_originOfEvolution: this.originOfEvolution,
+        highlight: this.highlight
+      };
+      obj[`type${this.type}`] = true;
+      return obj;
     }
   },
   mounted: function () { this.stretchMonsterName(); },
@@ -107,6 +122,15 @@ export default {
 
 .base {
   display: inline-block;
+}
+
+.highlight .evolutionInfo {
+  $highlightColor: #ff8800;
+  $borderWidth: 0.3em;
+  border: $borderWidth solid $highlightColor;
+  margin: -$borderWidth;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 0.3em $highlightColor);
 }
 
 a.evolutionInfoLink {
