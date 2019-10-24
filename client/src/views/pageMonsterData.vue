@@ -435,6 +435,8 @@ h3 {
 }
 
 .evaluationLink {
+  min-height: 36em;
+
   a { display: block; }
   li li { color: #060; font-size: 90%; }
   li { margin-bottom: 0.5em; }
