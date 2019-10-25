@@ -124,13 +124,29 @@ export default {
   display: inline-block;
 }
 
+$highlightColor0: #ff8855;
+$highlightColor1: #ffdd33;
+
 .highlight .evolutionInfo {
-  $highlightColor: #ff8800;
   $borderWidth: 0.25em;
-  border: $borderWidth solid $highlightColor;
+  border: $borderWidth solid $highlightColor0;
   margin: -$borderWidth;
-  border-radius: 0.6em;
-  filter: drop-shadow(0 0 0.3em $highlightColor);
+  border-radius: 0.66em;
+  filter: drop-shadow(0 0 0.3em $highlightColor0);
+
+  animation: highlightBlink 0.5s ease-in-out 0s infinite alternate none running;
+}
+
+@keyframes highlightBlink {
+  0% {
+    border-color: $highlightColor0;
+    filter: drop-shadow(0 0 0.3em $highlightColor0);
+  }
+
+  100% {
+    border-color: $highlightColor1;
+    filter: drop-shadow(0 0 0.3em $highlightColor1);
+  }
 }
 
 a.evolutionInfoLink {
