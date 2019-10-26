@@ -924,6 +924,13 @@ export default {
       this.multiSendBlocker.set();
 
       this.setSettingFromQuery();
+    },
+    useMultiBoost: function () {
+      console.log('まるぶ', this.useMultiBoost, this.useSuperAwaken);
+      if (this.useMultiBoost) { this.useSuperAwaken = false; }
+    },
+    useSuperAwaken: function () {
+      if (this.useSuperAwaken) { this.useMultiBoost = false; }
     }
   },
   created: function () {
