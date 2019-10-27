@@ -926,7 +926,7 @@ export default {
       this.setSettingFromQuery();
     },
     useMultiBoost: function () {
-      console.log('まるぶ', this.useMultiBoost, this.useSuperAwaken);
+      // マルチブーストと超覚醒を排他的にする。
       if (this.useMultiBoost) { this.useSuperAwaken = false; }
     },
     useSuperAwaken: function () {
