@@ -143,17 +143,30 @@ export default {
       this.evoInfo = func(this.no);
 
       const array = Object.keys(needMaterialCounts).map(
-        no => ({ no: no, count: needMaterialCounts[no] })
+        no => ({ no: Number(no), count: needMaterialCounts[no] })
       );
       // 指定された番号のモンスターが進化のための素材となるモンスターかどうかを取得する。
-      const isMaterial = (no) => {
+      const baseMonsterNo = this.evoInfo.no;
+      const createSortValue = (no) => {
         const monsterData = this.monsterTable[no];
-        if (!monsterData) { return false; }
-        const type = monsterData.types[0];
-        // 進化系と強化系を素材系タイプとみなす。
-        return type === 9 || type === 11;
+        if (!monsterData) { return 999999; }
+        let sortRank = 1;
+        // ベースモンスターは最初に。
+        if (no === baseMonsterNo) {
+          sortRank = 0;
+        } else {
+          const type = monsterData.types[0];
+          // 進化系と強化系を素材系タイプとみなして後ろ側に。
+          if (type === 9 || type === 11) {
+            sortRank = 2;
+          // 売却用（虹メダル）は最後に
+          } else if (type === 12) {
+            sortRank = 3;
+          }
+        }
+        return sortRank * 100000 + no;
       };
-      array.sort((a, b) => isMaterial(a.no) - isMaterial(b.no));
+      array.sort((a, b) => createSortValue(a.no) - createSortValue(b.no));
       this.sortedMaterialList = array;
     }
   }
