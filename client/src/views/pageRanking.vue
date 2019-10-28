@@ -308,6 +308,16 @@ export default {
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_A3X3 | F_A_COMBO_UP
+        },
+        {
+          id: 'a3x310comboAttack',
+          title: '無効貫通10コンボ時攻撃力',
+          description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通10コンボ時の攻撃力ランキングです。',
+          columns: [
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.a3x3AttackRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 : null }
+          ],
+          sortColumn: 0,
+          awakenFlag: F_DAMAGE_RANKING | F_A_COMBO_UP | F_A_SP_COMBO_UP
         }
       ]
     },
