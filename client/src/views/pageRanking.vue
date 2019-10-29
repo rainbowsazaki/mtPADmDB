@@ -46,10 +46,26 @@
         <dd>
           <attr-select mode="type" use-clear v-model="enemyTypes" />
         </dd>
-        <label>
-          <input type="checkbox" v-model="useSenzaiKiller" value="1">
-          潜在キラーを使用する
-        </label>
+        <dd>
+          <label>
+            <input type="checkbox" v-model="useSenzaiKiller" value="1">
+            潜在キラーを使用する
+          </label>
+        </dd>
+        <dt class="damageHalf" @click="visibleDamageHalf = !visibleDamageHalf">
+          <span class="triggerMark">{{ visibleDamageHalf ? '-' : '+' }}</span>
+          ダメージ半減属性・タイプ指定
+        </dt>
+        <transition name="fade">
+          <dd v-if="visibleDamageHalf">
+            <attr-select use-clear v-model="damageHalfAttributes" />
+          </dd>
+        </transition>
+        <transition name="fade">
+          <dd v-if="visibleDamageHalf">
+            <attr-select mode="type" use-clear v-model="damageHalfTypes" />
+          </dd>
+        </transition>
       </dl>
     </transition>
 
@@ -405,6 +421,12 @@ export default {
       enemyAttributes_: [],
       /** 想定する敵の属性。 */
       enemyTypes_: [],
+      /** ダメージ半減指定のフォームを表示するかどうか。 */
+      visibleDamageHalf: false,
+      /** 与えるダメージを半減させるタイプの配列。 */
+      damageHalfTypes: [],
+      /** 与えるダメージを半減させる属性の配列。 */
+      damageHalfAttributes: [],
       /** 超覚醒を使用するかどうか。 */
       useSuperAwaken: false,
       /** 敵のタイプ・属をを反映した攻撃力を使用するかどうか。 */
@@ -1033,6 +1055,20 @@ label[disabled] {
   border: 1px solid #CCC;
   padding: 4px;
   border-radius: 4px;
+}
+
+.damageHalf {
+  cursor: pointer;
+  .triggerMark {
+    display: inline-block;
+    border: 1px solid #999;
+    border-radius: 0.3em;
+    width: 1.2em;
+    height: 1.2em;
+    line-height: 1em;
+    color: #999;
+    text-align: center;
+  }
 }
 
 .monsterIconWrapper {
