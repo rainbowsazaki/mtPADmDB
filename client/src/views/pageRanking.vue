@@ -181,7 +181,7 @@ export default {
           description: 'モンスターのレベル最大・+297・全覚醒時の攻撃のランキングです。',
           columns: [
             { name: 'HP', func: data => data.hyperMaxParam.hp },
-            { name: '攻撃', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate) | 0 },
+            { name: '攻撃', func: data => (data.attackWithToTarget) | 0 },
             { name: '回復', func: data => data.hyperMaxParam.recovery }
           ],
           sortColumn: 1,
@@ -234,7 +234,7 @@ export default {
           title: '2体攻撃消し時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の2体攻撃消し時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.wayAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.attackWithToTarget * data.wayAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_WAY
@@ -244,7 +244,7 @@ export default {
           title: 'L字消し攻撃時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時のL字消し攻撃時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.lJiAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.attackWithToTarget * data.lJiAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_L_JI
@@ -254,7 +254,7 @@ export default {
           title: '7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.attackWithToTarget * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_COMBO_UP
@@ -264,7 +264,7 @@ export default {
           title: '10コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の10コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.attackWithToTarget * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_COMBO_UP | F_A_SP_COMBO_UP
@@ -274,7 +274,7 @@ export default {
           title: '2体攻撃消し7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の2体消し攻撃7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.wayAttackRate * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.attackWithToTarget * data.wayAttackRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_WAY | F_A_COMBO_UP
@@ -284,7 +284,7 @@ export default {
           title: 'L字消し攻撃7コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の消し7コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
+            { name: '攻撃力', func: data => (data.attackWithToTarget * data.lJiAttackRate * data.comboUpAttackRate) | 0 }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_L_JI | F_A_COMBO_UP
@@ -310,7 +310,7 @@ export default {
           title: '無効貫通時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.a3x3AttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.attackWithToTarget * data.a3x3AttackRate) | 0 : null }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_A3X3
@@ -320,7 +320,7 @@ export default {
           title: '無効貫通７コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.attackWithToTarget * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_A3X3 | F_A_COMBO_UP
@@ -330,7 +330,7 @@ export default {
           title: '無効貫通10コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通10コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.hyperMaxParam.attack * data.bestSuperAwakenRate * data.enemyTargetRate * data.a3x3AttackRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.attackWithToTarget * data.a3x3AttackRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_COMBO_UP | F_A_SP_COMBO_UP
@@ -673,6 +673,15 @@ export default {
         get enemyTargetRate () {
           if (!manageObj.useEnemyState) { return 1; }
           return this.attrbuteRate * this.killerRate;
+        },
+        /** 指定されている敵情報に対する攻撃力。 */
+        get attackWithToTarget () {
+          let attack = this.hyperMaxParam.attack * this.bestSuperAwakenRate * this.enemyTargetRate;
+          const types = this.baseData.types;
+          if (manageObj.damageHalfAttributes.includes(this.baseData.attributes[0]) |
+            manageObj.damageHalfTypes.some(type => types.includes(type))
+          ) { attack /= 2; }
+          return attack;
         },
         /** 指定されたベースのパラメータを全覚醒状態のものにする。 */
         culcFullAwakenParam: function (baseParam) {
