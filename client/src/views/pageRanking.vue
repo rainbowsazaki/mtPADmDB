@@ -58,12 +58,12 @@
         </dt>
         <transition name="fade">
           <dd v-if="visibleDamageHalf">
-            <attr-select use-clear v-model="damageHalfAttributes" />
+            <attr-select use-clear checkbox-style v-model="damageHalfAttributes" />
           </dd>
         </transition>
         <transition name="fade">
           <dd v-if="visibleDamageHalf">
-            <attr-select mode="type" use-clear v-model="damageHalfTypes" />
+            <attr-select mode="type" use-clear checkbox-style v-model="damageHalfTypes" />
           </dd>
         </transition>
       </dl>
