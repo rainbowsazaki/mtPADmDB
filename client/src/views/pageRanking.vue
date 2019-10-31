@@ -465,6 +465,13 @@ export default {
           enemyInfo += ' タイプ:' + this.enemyTypes.map(d => this.typeTable[d].name).join('/');
           if (this.useSenzaiKiller) { enables.push('潜在キラー'); }
         }
+
+        if (this.damageHalfAttributes.length) {
+          enemyInfo += ' ダメージ半減属性:' + this.damageHalfAttributes.map(d => this.attributeTable[d]).join('/');
+        }
+        if (this.damageHalfTypes.length) {
+          enemyInfo += ' ダメージ半減タイプ:' + this.damageHalfTypes.map(d => this.typeTable[d].name).join('/');
+        }
       }
 
       if (enables.length) {
