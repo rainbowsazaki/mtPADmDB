@@ -856,7 +856,9 @@ export default {
         'enemyNo': undefined,
         'enemyAttributes': undefined,
         'enemyTypes': undefined,
-        'useSenzaiKiller': undefined
+        'useSenzaiKiller': undefined,
+        'damageHalfAttributes': undefined,
+        'damageHalfTypes': undefined
       };
       if (this.useEnemyState) {
         obj.useEnemyState = 1;
@@ -867,6 +869,8 @@ export default {
           obj.enemyTypes = this.enemyTypes.join(',') || undefined;
         }
         obj.useSenzaiKiller = this.useSenzaiKiller ? 1 : undefined;
+        obj.damageHalfAttributes = this.damageHalfAttributes.join(',') || undefined;
+        obj.damageHalfTypes = this.damageHalfTypes.join(',') || undefined;
       }
       return obj;
     },
@@ -1026,6 +1030,9 @@ export default {
           queryToDataForNumberArray('enemyTypes');
         }
         this.queryToData('useSenzaiKiller');
+        queryToDataForNumberArray('damageHalfAttributes');
+        queryToDataForNumberArray('damageHalfTypes');
+        this.visibleDamageHalf = this.damageHalfAttributes.length || this.damageHalfTypes.length;
       }
     },
     /** ルートのクエリーを更新する。 */
