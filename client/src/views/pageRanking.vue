@@ -55,6 +55,12 @@
         <dt class="damageHalf" @click="visibleDamageHalf = !visibleDamageHalf">
           <span class="triggerMark">{{ visibleDamageHalf ? '-' : '+' }}</span>
           ダメージ半減属性・タイプ指定
+          <transition-group name="fade">
+            <template v-if="!visibleDamageHalf">
+              <img v-for="attr in damageHalfAttributes" :key="`attr${attr}`" class="damageHalfIcon" :src="`/image/attribute/${attr}.png`">
+              <img v-for="type in damageHalfTypes" :key="`type${type}`" class="damageHalfIcon" :src="`/image/type/${type}.png`">
+            </template>
+          </transition-group>
         </dt>
         <transition name="fade">
           <dd v-if="visibleDamageHalf">
@@ -1091,6 +1097,11 @@ label[disabled] {
     line-height: 1em;
     color: #999;
     text-align: center;
+  }
+
+  .damageHalfIcon {
+    width: auto;
+    height: 1.3em;
   }
 }
 
