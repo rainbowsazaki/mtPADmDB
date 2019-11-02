@@ -32,6 +32,25 @@ export default new Vuex.Store({
       }
       return obj;
     },
+    /** モンスター番号をキーとして、そのモンスターを素材にして進化するモンスターの番号の配列を格納したテーブル。 */
+    materialUseMonstersTable: state => {
+      const ret = {};
+      for (const key in state.monsterTable) {
+        const monsterData = state.monsterTable[key];
+        const evolution = monsterData.evolution;
+        if (!evolution) { continue; }
+        const materials = evolution.materials;
+        if (!materials) { continue; }
+        materials.forEach(mat => {
+          const a = ret[mat] || (ret[mat] = []);
+          const no = Number(key);
+          if (a[a.length - 1] !== no) {
+            a.push(no);
+          }
+        });
+      }
+      return ret;
+    },
     /** 管理者権限のアカウントでログインしているかどうか。 */
     isAdmin: state => {
       const accountData = state.accountData;
