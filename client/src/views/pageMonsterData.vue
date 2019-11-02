@@ -72,6 +72,11 @@
       </div>
       <evolution-material :evo-info="evoInfo" />
     </div>
+
+    <div v-if="materialUseMonsters">
+      <h3 class="h4 decoHeader">このモンスターを素材にして進化するモンスター</h3>
+      <monster-icon v-for="useMonster in materialUseMonsters" :no="useMonster" width="3em" height="3em" :key="`useMonster${useMonster}`" />
+    </div>
     
     <div v-if="!isHistory">
       <h3 class="h4 decoHeader">コメント</h3>
@@ -278,6 +283,10 @@ export default {
         return obj;
       }
       return func(baseNo);
+    },
+    /** このモンスターを素材に進化するモンスターの番号の配列。 */
+    materialUseMonsters () {
+      return this.$store.getters.materialUseMonstersTable[this.no];
     }
   },
   watch: {
