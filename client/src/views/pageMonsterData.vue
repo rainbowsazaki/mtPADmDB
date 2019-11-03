@@ -73,9 +73,11 @@
       <evolution-material :evo-info="evoInfo" />
     </div>
 
-    <div v-if="materialUseMonsters">
+    <div v-if="materialUseMonstersDisp">
       <h3 class="h4 decoHeader">このモンスターを素材にして進化するモンスター</h3>
-      <monster-icon v-for="useMonster in materialUseMonsters" :no="useMonster" width="3em" height="3em" :key="`useMonster${useMonster}`" />
+      <monster-icon v-for="useMonster in materialUseMonstersDisp" :no="useMonster" width="3em" height="3em" :key="`useMonster${useMonster}`" />
+      <span v-if="!isMaterialsDispAll"> ... </span>
+      <button v-if="!isMaterialsDispAll" class="btn btn-sm btn-outline-secondary" @click="isMaterialsDispAll = true;">すべてを表示する</button>
     </div>
     
     <div v-if="!isHistory">
@@ -185,7 +187,9 @@ export default {
       /** 履歴情報の読み込み中かどうか。 */
       isLoadingHistory: false,
       /** 履歴情報 */
-      histories: null
+      histories: null,
+      /** 進化素材として使用するモンスターのアイコンをすべて表示するかどうか。 */
+      isMaterialsDispAll: false
     };
   },
   computed: {
@@ -285,8 +289,19 @@ export default {
       return func(baseNo);
     },
     /** このモンスターを素材に進化するモンスターの番号の配列。 */
-    materialUseMonsters () {
-      return this.$store.getters.materialUseMonstersTable[this.no];
+    materialUseMonstersAll () {
+      const array = this.$store.getters.materialUseMonstersTable[this.no];
+      // 常に降順ソードで使用するだろうから、受け取った配列そのものに対して並び替えを行う。
+      if (array) { array.sort((a, b) => b - a); }
+      return array;
+    },
+    /** モンスターを素材に進化するモンスターの番号の表示する分の配列。 */
+    materialUseMonstersDisp () {
+      let array = this.materialUseMonstersAll;
+      if (array && !this.isMaterialsDispAll) {
+        array = array.slice(0, 10);
+      }
+      return array;
     }
   },
   watch: {
@@ -337,6 +352,7 @@ export default {
       this.$store.state.monsterData = constData.monsterClearData;
       this.histories = null;
       this.isLoadingHistory = false;
+      this.isMaterialsDispAll = this.materialUseMonstersAll && this.materialUseMonstersAll.length <= 10;
 
       // 現在のデータの取得の場合は読み込み処理は行わず、monsterTable 内から取得する処理が computed の monsterData で行われる。
 
