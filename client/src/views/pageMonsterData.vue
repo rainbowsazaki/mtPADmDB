@@ -290,6 +290,8 @@ export default {
     },
     /** このモンスターを素材に進化するモンスターの番号の配列。 */
     materialUseMonstersAll () {
+      const type = this.monsterData.types[0];
+      if (type !== 9 && type !== 11) { return undefined; }
       const array = this.$store.getters.materialUseMonstersTable[this.no];
       // 常に降順ソードで使用するだろうから、受け取った配列そのものに対して並び替えを行う。
       if (array) { array.sort((a, b) => b - a); }
