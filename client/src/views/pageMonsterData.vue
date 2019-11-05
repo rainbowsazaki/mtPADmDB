@@ -74,7 +74,7 @@
     </div>
 
     <div v-if="materialUseMonstersDisp">
-      <h3 class="h4 decoHeader">このモンスターを素材にして進化するモンスター</h3>
+      <h3 class="h4 decoHeader">このモンスターを素材にして進化するモンスター ({{ materialUseMonstersAll.length }})</h3>
       <monster-icon v-for="useMonster in materialUseMonstersDisp" :no="useMonster" width="3em" height="3em" :key="`useMonster${useMonster}`" />
       <span v-if="!isMaterialsDispAll"> ... </span>
       <button v-if="!isMaterialsDispAll" class="btn btn-sm btn-outline-secondary" @click="isMaterialsDispAll = true;">すべてを表示する</button>
