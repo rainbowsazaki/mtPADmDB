@@ -73,6 +73,11 @@
       <evolution-material :evo-info="evoInfo" />
     </div>
 
+    <div v-if="rareStoneExchangeMonsters">
+      <h3 class="h4 decoHeader">交換元モンスター</h3>
+      <monster-icon v-for="monster in rareStoneExchangeMonsters" :no="monster" width="3em" height="3em" :key="`monster${monster}`" />
+    </div>
+    
     <div v-if="materialUseMonstersDisp">
       <h3 class="h4 decoHeader">このモンスターを素材にして進化するモンスター ({{ materialUseMonstersAll.length }})</h3>
       <monster-icon v-for="useMonster in materialUseMonstersDisp" :no="useMonster" width="3em" height="3em" :key="`useMonster${useMonster}`" />
@@ -304,6 +309,14 @@ export default {
         array = array.slice(0, 10);
       }
       return array;
+    },
+    /** この希石に交換可能なモンスターの番号の配列。 */
+    rareStoneExchangeMonsters () {
+      if (!this.monsterData.name.match(/^(.*)の希石/)) { return undefined; }
+      const baseName = RegExp.$1;
+      const hitData = Object.values(this.monsterTable).find(d => d.name === baseName);
+      if (hitData) { return [hitData.no]; }
+      return constData.rareStoneExchangeTable[this.no];
     }
   },
   watch: {
