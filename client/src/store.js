@@ -51,6 +51,33 @@ export default new Vuex.Store({
       }
       return ret;
     },
+    /** 希石へ交換できるモンスター番号をキーとして交換後のモンスター番号を格納したオブジェクト。 */
+    exchangeToRareStoneTable: state => {
+      const monsterTable = state.monsterTable;
+      const kisekiNameTable = {};
+      for (const key in monsterTable) {
+        const d = monsterTable[key];
+        if (d.types[0] === 9 && d.name.match(/^(.*)の希石/)) {
+          kisekiNameTable[RegExp.$1] = d.no;
+        }
+      }
+      const obj = {};
+      for (const key in monsterTable) {
+        const d = monsterTable[key];
+        if (!d.awakens || !d.awakens[0]) { continue; }
+        const no = kisekiNameTable[d.name];
+        if (no) {
+          obj[d.no] = no;
+        }
+      }
+      for (const key in constData.rareStoneExchangeTable) {
+        const kisekiNo = Number(key);
+        constData.rareStoneExchangeTable[kisekiNo].forEach(no => {
+          obj[no] = kisekiNo;
+        });
+      }
+      return obj;
+    },
     /** 管理者権限のアカウントでログインしているかどうか。 */
     isAdmin: state => {
       const accountData = state.accountData;
