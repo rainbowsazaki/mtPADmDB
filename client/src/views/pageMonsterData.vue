@@ -282,15 +282,21 @@ export default {
       }
       // 再帰で進化後を巡っていってツリー構造を作成する。
       const evolutionTable = this.evolutionTable;
-      function func (no) {
+      const func = (no) => {
         const obj = { no: no };
         const evolutionData = evolutionTable[no];
         if (evolutionData) {
           obj.evo = evolutionData.map(d => func(d.no));
         }
+        // 希石への交換の情報を組み込む
+        const toRareStone = this.$store.getters.exchangeToRareStoneTable[no];
+        if (toRareStone) {
+          const evo = obj.evo || (obj.evo = []);
+          evo.push({ no: toRareStone });
+        }
         if (no === targetNo) { obj.target = true; }
         return obj;
-      }
+      };
       return func(baseNo);
     },
     /** このモンスターを素材に進化するモンスターの番号の配列。 */
