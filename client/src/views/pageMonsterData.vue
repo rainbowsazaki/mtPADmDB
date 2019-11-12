@@ -292,7 +292,7 @@ export default {
         const toRareStone = this.$store.getters.exchangeToRareStoneTable[no];
         if (toRareStone) {
           const evo = obj.evo || (obj.evo = []);
-          evo.push({ no: toRareStone });
+          evo.push({ no: toRareStone, isExchange: true });
         }
         if (no === targetNo) { obj.target = true; }
         return obj;

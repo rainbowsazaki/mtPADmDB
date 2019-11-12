@@ -3,7 +3,7 @@
     <router-link class="evolutionInfoLink" :to="{ name: 'monsterDetails', params: { no: targetNo }}">
       <div class="evolutionInfo">
         <div class="baseIcon">
-          <div class="typeName" style="-webkit-background-clip: text;">{{ getEvolutionTypeName(type) }}</div>
+          <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeName }}</div>
           <div>
             <monster-icon :no="dispMonsterData.no" width="3.6em" height="3.6em" />
           </div>
@@ -66,6 +66,11 @@ export default {
       type: Boolean,
       default: false
     },
+    /** モンスター交換かどうか。 */
+    exchange: {
+      type: Boolean,
+      default: false
+    },
     /** 関連リンクを表示するかどうか。 */
     relatedLinks: {
       type: Boolean,
@@ -97,18 +102,23 @@ export default {
         type_originOfEvolution: this.originOfEvolution,
         highlight: this.highlight
       };
-      obj[`type${this.type}`] = true;
+      if (this.exchange) {
+        obj.typeExchange = true;
+      } else {
+        obj[`type${this.type}`] = true;
+      }
       return obj;
+    },
+    /** 進化種類に対する表示名。 */
+    evolutionTypeName: function () {
+      if (this.exchange) { return '交換'; }
+      if (this.type === 0) { return 'ベース'; }
+      return constData.evolutionTypeTable[this.type];
     }
   },
   mounted: function () { this.stretchMonsterName(); },
   updated: function () { this.stretchMonsterName(); },
   methods: {
-    /** 進化種類に対する表示名を取得する。 */
-    getEvolutionTypeName: function (type) {
-      if (type === 0) { return 'ベース'; }
-      return constData.evolutionTypeTable[type];
-    },
     /** モンスター名が長い場合に、枠のサイズに収まるように縮小する。 */
     stretchMonsterName: function () {
       const elm = this.$el.getElementsByClassName('monsterNameText')[0];
@@ -402,6 +412,24 @@ $bgColorLigntnPercent: 30%;
     margin-right: -1em;
     transform: scaleX(1 / 5 * 4);
     transform-origin: left top;
+  }
+}
+
+// 交換
+.typeExchange {
+  $bgColor: #cc7673;
+
+  .materials {
+    background: $bgColor;
+  }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
+  .typeName {
+    background: linear-gradient(#fdc5d9, #c47d95)
   }
 }
 
