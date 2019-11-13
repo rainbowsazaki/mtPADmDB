@@ -72,8 +72,7 @@
       </div>
       <evolution-material :evo-info="evoInfo" />
     </div>
-
-    <div v-if="rareStoneExchangeMonsters">
+    <div v-else-if="rareStoneExchangeMonsters">
       <h3 class="h4 decoHeader">交換元モンスター</h3>
       <monster-icon v-for="monster in rareStoneExchangeMonsters" :no="monster" width="3em" height="3em" :key="`monster${monster}`" />
     </div>
@@ -272,6 +271,11 @@ export default {
       const targetNo = this.monsterData.no;
       // ベースモンスターを求める。
       let baseNo = targetNo;
+      // この希石への交換元モンスターが１種類のみの場合は、そのモンスターの進化系統を表示する。
+      const rareStoneTable = this.rareStoneExchangeMonsters;
+      if (rareStoneTable && rareStoneTable.length === 1) {
+        baseNo = rareStoneTable[0];
+      }
       const monsterTable = this.monsterTable;
       while (1) {
         const monsterData = monsterTable[baseNo];
@@ -292,7 +296,7 @@ export default {
         const toRareStone = this.$store.getters.exchangeToRareStoneTable[no];
         if (toRareStone) {
           const evo = obj.evo || (obj.evo = []);
-          evo.push({ no: toRareStone, isExchange: true });
+          evo.push({ no: toRareStone, isExchange: true, target: (toRareStone === targetNo) });
         }
         if (no === targetNo) { obj.target = true; }
         return obj;
