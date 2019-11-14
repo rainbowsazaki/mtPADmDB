@@ -76,7 +76,9 @@ export default {
 
 .monsterIcon {
   display: inline-block;
-  background-color: #ccc;
+  background-color: #444;
+  background-image: url('../assets/image/icon_null.jpg');
+  background-size: contain;
   vertical-align: bottom;
   border-radius: 7.5%;
   overflow: hidden;
@@ -91,8 +93,6 @@ export default {
 
 .monsterIconDummy {
   position: relative;
-  border: 1px solid #bbb;
-  border-bottom-width: 2px;
 
   * {
     user-select: none;
@@ -118,7 +118,7 @@ export default {
   .iconDummy {
     text-align: center;
     overflow: hidden;
-    color: #aaa;
+    color: #999;
   }
 }
 </style>
