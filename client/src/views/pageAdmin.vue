@@ -15,7 +15,9 @@
       <li><router-link :to="{ name: 'nullCheck' }">空情報ありモンスターデータチェック</router-link></li>
       <li><router-link :to="{ name: 'nullSkillCheck' }">空情報ありスキルデータチェック</router-link></li>
       <li><router-link :to="{ name: 'noImageCheck' }">画像なしモンスターチェック</router-link></li>
-      <li><a href="/monster_image_archive.cgi" target="_blank">モンスター画像アーカイブ</a></li>
+    </ul>
+    <ul>
+      <li><a href="javascript:void(0);" @click="monsterImageArchiveCheck">モンスター画像アーカイブ</a></li>
     </ul>
     <div>
       {{ accountData }}
@@ -52,6 +54,12 @@ export default {
     /** ログアウト処理。 */
     signOut: function () {
       signOut();
+    },
+    /** モンスター画像のアーカイブ処理を実行するページを、確認を行ってから別タブで表示する。 */
+    monsterImageArchiveCheck: function () {
+      if (confirm('モンスター画像のアーカイブ化を実行しますか？')) {
+        window.open('/monster_image_archive.cgi');
+      }
     }
   }
 };
