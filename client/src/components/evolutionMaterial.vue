@@ -28,6 +28,34 @@ import EvolutionMaterials from './../components/monsterDataEvolutionMaterials.vu
 
 export default {
   name: 'EvolutionMaterial',
+  common: {
+    /** ページ内にある進化関係を示す矢印の上側を伸ばす要素全てのサイズを調整する。 */
+    updateEvoLine: function () {
+      this.isReservedUpdateEvoLine = false;
+
+      const elms = document.getElementsByClassName('evoLine');
+      for (const n in elms) {
+        const elm = elms[n];
+        const offsetTop = elm.offsetTop;
+        if (!offsetTop) { return; }
+        const fontSizePx = window.getComputedStyle(elm).getPropertyValue('font-size');
+        const fontSize = fontSizePx.match(/(\d+)/)[0];
+        // サイズ変更などで間が開く可能性を考慮して、少し長めにする。
+        elm.style.height = (offsetTop / fontSize + 1) + 'em';
+        elm.style.top = 0;
+      }
+    },
+    /** 進化関係を示す矢印の上側の伸ばす要素のサイズの調整を予約する。 */
+    reserveUpdateEvoLine: function () {
+      // 予約済みなら実行しない。
+      if (this.isReservedUpdateEvoLine) { return; }
+      this.isReservedUpdateEvoLine = true;
+      setTimeout(() => this.updateEvoLine(), 1);
+    },
+    /** reserveUpdateEvoLine() による予約が行われているかどうか。 */
+    isReservedUpdateEvoLine: false
+  },
+
   components: {
     EvolutionMaterial,
     EvolutionMaterials
@@ -49,21 +77,8 @@ export default {
     }
   },
   mounted: function () {
-    this.udpateEvoLine();
-  },
-  methods: {
-    /** 進化関係を示す矢印の上側を伸ばす要素のサイズを調整する。 */
-    udpateEvoLine () {
-      if (!this.isNeedEvoLine) { return; }
-      const elm = this.$el.getElementsByClassName('evoLine')[0];
-      if (!elm) { return; }
-      const offsetTop = elm.offsetTop;
-      if (!offsetTop) { return; }
-      const fontSizePx = window.getComputedStyle(elm).getPropertyValue('font-size');
-      const fontSize = fontSizePx.match(/(\d+)/)[0];
-      // サイズ変更などで間が開く可能性を考慮して、少し長めにする。
-      elm.style.height = (offsetTop / fontSize + 1) + 'em';
-      elm.style.top = 0;
+    if (this.isNeedEvoLine) {
+      this.$options.common.reserveUpdateEvoLine();
     }
   }
 };
