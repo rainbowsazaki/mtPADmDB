@@ -103,6 +103,7 @@ $arrowMarginRight: 0.4em;
   position: absolute;
   left: $arrowMarginLeft;
   border-left: $arrowLineWidth solid $arrowColor;
+  padding: 1px; // レンダリングの関係か、先の太さが矢印と異なることがまれにあったが、padding を指定したらなくなった。
 }
 
 .evoArrow {
