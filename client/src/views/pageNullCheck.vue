@@ -4,7 +4,7 @@
     <h2>{{ title }}</h2>
     <div class="monsterInfo" v-for="nullMonster in nullMonsterInfos" :key="`no${nullMonster.no}`">
       <div v-if="!isSkill" class="icon">
-        <monster-icon :no="nullMonster.no" style="width: 2.5em; height: auto;" />
+        <monster-icon :no="nullMonster.no" width="2.5em" height="2.5em" />
       </div>
       <div>
         <div class="monsterName">
