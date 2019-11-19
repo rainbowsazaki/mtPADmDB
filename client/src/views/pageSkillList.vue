@@ -60,6 +60,7 @@
 <script>
 import { escapeRegExp, toAimaiSearch, stretchElement } from '../mtpadmdb.js';
 import { getFilterDefault, getFilterFunction, filterSettingText } from '../components/monsterFilterSetting.vue';
+import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /**
  * スキル一覧のコンポーネント。
@@ -217,6 +218,9 @@ export default {
         ]
       }
     ]
+  ],
+  mixins: [
+    RouteQueryWrapper
   ],
   data: function () {
     return {
