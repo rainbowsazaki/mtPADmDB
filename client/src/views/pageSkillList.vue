@@ -240,7 +240,19 @@ export default {
       /** 使用するスキルタイプ検索情報。 */
       skillTypeSearchInfo: null,
       /** 特定条件を満たすモンスターが持つスキルのみを表示するためのモンスター条件のフィルタ。 */
-      monsterFilterSetting: getFilterDefault()
+      monsterFilterSetting: getFilterDefault(),
+      /** $route.query ラッパー設定 兼 値格納オブジェクト。 */
+      routeQueryWrapper: {
+        searchWord: {
+          type: String
+        },
+        skillType: {
+          type: String
+        },
+        page: {
+          type: Number
+        }
+      }
     };
   },
   computed: {
