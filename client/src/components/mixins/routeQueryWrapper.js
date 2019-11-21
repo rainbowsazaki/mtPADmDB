@@ -7,6 +7,7 @@ export default {
     };
   },
   watch: {
+    '$route': 'readRouteQuery'
   },
   created: function () {
     const rqw = this.routeQueryWrapper;
@@ -18,7 +19,27 @@ export default {
       info[key] = value;
     }
     this.$data.$routeQueryWrapper_info = info;
+    this.readRouteQuery();
   },
   methods: {
+    /** 設定に基づき、$route.query からデータを読み込む。 */
+    readRouteQuery: function () {
+      const query = this.$route.query;
+      const info = this.$data.$routeQueryWrapper_info;
+      for (const key in info) {
+        let value = query[key];
+        if (value === undefined) {
+          value = info[key].default;
+        } else {
+          // 型指定に応じた加工。
+          switch (info[key].type) {
+          case Number:
+            value = Number(value);
+            break;
+          }
+        }
+        this.routeQueryWrapper[key] = value;
+      }
+    }
   }
 };
