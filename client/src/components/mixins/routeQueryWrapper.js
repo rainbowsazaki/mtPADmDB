@@ -6,8 +6,32 @@ export default {
       '$routeQueryWrapper_info': {}
     };
   },
+  computed: {
+    /** このミックスインで管理している情報を $route.query に指定するオブジェクト。 */
+    '$routeQueryWrapper_routeQueryObject': function () {
+      const obj = {};
+      const rqw = this.routeQueryWrapper;
+      const info = this.$data.$routeQueryWrapper_info;
+      for (const key in info) {
+        let value = rqw[key];
+        if (info[key].default === value) {
+          value = undefined;
+        } else {
+          switch (info[key].type) {
+            // todo
+          }
+        }
+        obj[key] = value;
+      }
+      return obj;
+    }
+  },
   watch: {
-    '$route': 'readRouteQuery'
+    '$route': 'readRouteQuery',
+    '$routeQueryWrapper_routeQueryObject': function () {
+      const margedQuery = Object.assign({}, this.$route.query, this.$routeQueryWrapper_routeQueryObject);
+      this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
+    }
   },
   created: function () {
     const rqw = this.routeQueryWrapper;
