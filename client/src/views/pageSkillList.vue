@@ -4,7 +4,7 @@
 
     <form @submit="$event.preventDefault(); search();">
       <div class="input-group mb-3">
-        <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="searchWord">
+        <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="routeQueryWrapper.searchWord">
       </div>
       <div class="form-group row">
         <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
@@ -69,7 +69,7 @@ export default {
   name: 'PageSkillList',
   pageTitle: function () { return this.pageTitle; },
   middleOfBreadcrumbs: function () {
-    if (!this.$route.query.searchWord) { return undefined; }
+    if (!this.routeQueryWrapper.searchWord) { return undefined; }
     if (this.isLeaderSkill) {
       return {
         text: 'リーダースキル一覧',
@@ -228,10 +228,6 @@ export default {
       isLeaderSkill: false,
       /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
       pageResetFlag: false,
-      /** 検索ワード。 */
-      searchWord: '',
-      /** query で指定された、表示するページ。 */
-      queryPage: 0,
       /** １ページに表示するデータの個数。 */
       inPageCount: 50,
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
@@ -243,12 +239,15 @@ export default {
       monsterFilterSetting: getFilterDefault(),
       /** $route.query ラッパー設定 兼 値格納オブジェクト。 */
       routeQueryWrapper: {
+        /** 検索ワード。 */
         searchWord: {
           type: String
         },
+        /** 使用するスキルタイプ名。 */
         skillType: {
           type: String
         },
+        /** 表示するページ。 */
         page: {
           type: Number
         }
@@ -289,7 +288,7 @@ export default {
     },
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
-      let searchWord = this.searchWord || '';
+      let searchWord = this.routeQueryWrapper.searchWord || '';
       // スキルタイプ検索情報の追加。
       if (this.skillTypeSearchInfo) {
         searchWord = this.skillTypeSearchInfo[1] + ' ' + searchWord;
@@ -346,7 +345,7 @@ export default {
     /** 現在の条件を満たすデータを最後を表示するのに必要なページ数。 */
     pageCount () { return ((this.searchedSkillArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     /** 現在表示中のページ番号。 */
-    page () { return (this.queryPage * 1) || 1; },
+    page () { return (this.routeQueryWrapper.page * 1) || 1; },
     /** 現在のページで表示するデータの配列。 */
     skillArrayInPage () {
       return this.searchedSkillArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
@@ -357,10 +356,10 @@ export default {
       if (this.skillTypeSearchInfo) { typeName = ' ' + this.skillTypeSearchInfo[0]; }
 
       let title;
-      if (!this.searchWord) {
+      if (!this.routeQueryWrapper.searchWord) {
         title = this.targetName + '一覧' + typeName;
       } else {
-        title = this.targetName + '検索' + typeName + ' ' + this.searchWord;
+        title = this.targetName + '検索' + typeName + ' ' + this.routeQueryWrapper.searchWord;
       }
       const fst = filterSettingText(this.monsterFilterSetting);
       if (fst) {
@@ -370,13 +369,14 @@ export default {
     }
   },
   watch: {
-    '$route': ['updateSearchWordFromUrl', 'checkIsLeaderSkill' ],
-    searchWord: 'search',
+    '$route': 'checkIsLeaderSkill',
+    'routeQueryWrapper.searchWord': 'search',
+    'routeQueryWrapper.skillType': 'changeSkillTypeSearchInfo',
     skillTypeSearchInfo: 'changeSkillType',
     pageTitle: '$_mixinForPage_updateTitle'
   },
   created: function () {
-    this.updateSearchWordFromUrl();
+    this.checkIsLeaderSkill();
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
@@ -406,11 +406,9 @@ export default {
         stretchElement(elm);
       }
     },
-    /** URLで指定された検索ワードで searchWord などを更新する。 */
-    updateSearchWordFromUrl: function () {
-      this.searchWord = this.$route.query.searchWord;
-      this.queryPage = this.$route.query.page;
-      const skillType = this.$route.query.skillType;
+    /** URLで指定されたスキルタイプで skillTypeSearchInfo を更新する。 */
+    changeSkillTypeSearchInfo: function () {
+      const skillType = this.routeQueryWrapper.skillType;
       if (skillType === undefined) {
         this.skillTypeSearchInfo = null;
       } else {
@@ -425,24 +423,17 @@ export default {
     },
     /** searchWord の文字列を使用して検索を行う。 */
     search: function () {
-      this.updateRouteQuery({ searchWord: this.searchWord || undefined });
+      if (this.pageResetFlag) { this.routeQueryWrapper.page = undefined; }
     },
     /** skillTypeSearchInfo の値を元に表示するスキルタイプの種類を変更する。 */
     changeSkillType: function () {
-      let skillType;
       // null の場合は 無し なので、非表示にするために undefined にする。
       if (this.skillTypeSearchInfo === null) {
-        skillType = undefined;
+        this.routeQueryWrapper.skillType = undefined;
       } else {
-        skillType = this.skillTypeSearchInfo[0];
+        this.routeQueryWrapper.skillType = this.skillTypeSearchInfo[0];
       }
-      this.updateRouteQuery({ skillType: skillType });
-    },
-    /** ルートのクエリーを更新する。 */
-    updateRouteQuery: function (changeQuery) {
-      const margedQuery = Object.assign({}, this.$route.query, changeQuery);
-      if (this.pageResetFlag) { margedQuery.page = undefined; }
-      this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
+      if (this.pageResetFlag) { this.routeQueryWrapper.page = undefined; }
     },
     /** このスキルを持つモンスターの番号の配列を取得する。 */
     monsterNosUsingThisSkill: function (no) {
