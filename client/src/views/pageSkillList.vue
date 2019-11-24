@@ -249,7 +249,8 @@ export default {
         },
         /** 表示するページ。 */
         page: {
-          type: Number
+          type: Number,
+          default: 1
         }
       }
     };
