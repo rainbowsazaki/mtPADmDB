@@ -40,6 +40,13 @@ export default {
     for (const key in rqw) {
       let value = rqw[key];
       if (!value.type) { value = { type: value }; }
+      if (!value.hasOwnProperty('default')) {
+        switch (value.type) {
+        case String:
+          value.default = '';
+          break;
+        }
+      }
       info[key] = value;
     }
     this.$data.$routeQueryWrapper_info = info;
