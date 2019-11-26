@@ -2,18 +2,18 @@
   <div>
     <h2>{{ targetName }}一覧</h2>
 
-    <form @submit="$event.preventDefault(); search();">
+    <form @submit="$event.preventDefault();">
       <div class="input-group mb-3">
         <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="routeQueryWrapper.searchWord">
       </div>
       <div class="form-group row">
         <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
         <div class="col-sm-10">
-          <select class="form-control" v-model="skillTypeSearchInfo">
+          <select class="form-control" v-model="routeQueryWrapper.skillType">
             <option :value="null">（なし）</option>
             <template v-for="(group, n) in skillTypeSearchArray">
               <optgroup :label="group.label" :key="`group${n}`">
-                <option v-for="(setting, m) in group.settings" :value="setting" :key="`setting${m}`">{{ setting[0] }}</option>
+                <option v-for="(setting, m) in group.settings" :value="setting[0]" :key="`setting${m}`">{{ setting[0] }}</option>
               </optgroup>
             </template>
           </select>
@@ -233,8 +233,6 @@ export default {
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
       monsterIconCountMax: 10,
 
-      /** 使用するスキルタイプ検索情報。 */
-      skillTypeSearchInfo: null,
       /** 特定条件を満たすモンスターが持つスキルのみを表示するためのモンスター条件のフィルタ。 */
       monsterFilterSetting: getFilterDefault(),
       /** $route.query ラッパー設定 兼 値格納オブジェクト。 */
@@ -286,6 +284,21 @@ export default {
     skillArray () {
       const skillToMonsterNosTable = this.skillToMonsterNosTable;
       return Object.values(this.skillTable).filter((skill) => skill.no in skillToMonsterNosTable);
+    },
+    /** 使用するスキルタイプ検索情報。 */
+    skillTypeSearchInfo: function () {
+      console.log('stsi');
+      const skillType = this.routeQueryWrapper.skillType;
+      let result = null;
+      if (skillType !== undefined) {
+        this.skillTypeSearchArray.forEach(typeGroup => {
+          if (result) { return; }
+          result = typeGroup.settings.find(typeInfo => {
+            return typeInfo[0] === skillType;
+          });
+        });
+      }
+      return result;
     },
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
@@ -371,9 +384,8 @@ export default {
   },
   watch: {
     '$route': 'checkIsLeaderSkill',
-    'routeQueryWrapper.searchWord': 'search',
-    'routeQueryWrapper.skillType': 'changeSkillTypeSearchInfo',
-    skillTypeSearchInfo: 'changeSkillType',
+    'routeQueryWrapper.searchWord': 'resetPage',
+    'routeQueryWrapper.skillType': 'resetPage',
     pageTitle: '$_mixinForPage_updateTitle'
   },
   created: function () {
@@ -407,33 +419,8 @@ export default {
         stretchElement(elm);
       }
     },
-    /** URLで指定されたスキルタイプで skillTypeSearchInfo を更新する。 */
-    changeSkillTypeSearchInfo: function () {
-      const skillType = this.routeQueryWrapper.skillType;
-      if (skillType === undefined) {
-        this.skillTypeSearchInfo = null;
-      } else {
-        this.skillTypeSearchArray.forEach(typeGroup => {
-          typeGroup.settings.forEach(typeInfo => {
-            if (typeInfo[0] === skillType) {
-              this.skillTypeSearchInfo = typeInfo;
-            }
-          });
-        });
-      }
-    },
-    /** searchWord の文字列を使用して検索を行う。 */
-    search: function () {
-      if (this.pageResetFlag) { this.routeQueryWrapper.page = undefined; }
-    },
-    /** skillTypeSearchInfo の値を元に表示するスキルタイプの種類を変更する。 */
-    changeSkillType: function () {
-      // null の場合は 無し なので、非表示にするために undefined にする。
-      if (this.skillTypeSearchInfo === null) {
-        this.routeQueryWrapper.skillType = undefined;
-      } else {
-        this.routeQueryWrapper.skillType = this.skillTypeSearchInfo[0];
-      }
+    /** 先頭ページへ移動する。表示条件が変更されたときに呼び出す。 */
+    resetPage: function () {
       if (this.pageResetFlag) { this.routeQueryWrapper.page = undefined; }
     },
     /** このスキルを持つモンスターの番号の配列を取得する。 */
