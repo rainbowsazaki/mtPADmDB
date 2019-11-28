@@ -1,19 +1,36 @@
 
 export default {
   data: function () {
-    return {
-      /** 読み込み対象の情報を格納するオブジェクト。 */
-      '$routeQueryWrapper_info': {}
-    };
+    const queryInfoBase = this.$options.queries;
+    if (!queryInfoBase) { return {}; }
+    const dataObj = {};
+    // 設定情報を取得する。
+    const info = {};
+    for (const key in queryInfoBase) {
+      let value = queryInfoBase[key];
+      if (!value.type) { value = { type: value }; }
+      if (!value.hasOwnProperty('default')) {
+        switch (value.type) {
+        case String:
+          value.default = '';
+          break;
+        }
+      }
+      info[key] = value;
+      dataObj[key] = value.default;
+    }
+      
+    dataObj['$routeQueryWrapper_info'] = info;
+    return dataObj;
   },
   computed: {
     /** このミックスインで管理している情報を $route.query に指定するオブジェクト。 */
     '$routeQueryWrapper_routeQueryObject': function () {
       const obj = {};
-      const rqw = this.routeQueryWrapper;
-      const info = this.$data.$routeQueryWrapper_info;
+      const data = this.$data;
+      const info = data.$routeQueryWrapper_info;
       for (const key in info) {
-        let value = rqw[key];
+        let value = data[key];
         if (info[key].default === value) {
           value = undefined;
         } else {
@@ -34,29 +51,14 @@ export default {
     }
   },
   created: function () {
-    const rqw = this.routeQueryWrapper;
-    if (!rqw) { return; }
-    const info = {};
-    for (const key in rqw) {
-      let value = rqw[key];
-      if (!value.type) { value = { type: value }; }
-      if (!value.hasOwnProperty('default')) {
-        switch (value.type) {
-        case String:
-          value.default = '';
-          break;
-        }
-      }
-      info[key] = value;
-    }
-    this.$data.$routeQueryWrapper_info = info;
     this.readRouteQuery();
   },
   methods: {
     /** 設定に基づき、$route.query からデータを読み込む。 */
     readRouteQuery: function () {
       const query = this.$route.query;
-      const info = this.$data.$routeQueryWrapper_info;
+      const data = this.$data;
+      const info = data.$routeQueryWrapper_info;
       for (const key in info) {
         let value = query[key];
         if (value === undefined) {
@@ -69,7 +71,7 @@ export default {
             break;
           }
         }
-        this.routeQueryWrapper[key] = value;
+        data[key] = value;
       }
     }
   }
