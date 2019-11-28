@@ -4,12 +4,12 @@
 
     <form @submit="$event.preventDefault();">
       <div class="input-group mb-3">
-        <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="routeQueryWrapper.searchWord">
+        <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="searchWord">
       </div>
       <div class="form-group row">
         <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
         <div class="col-sm-10">
-          <select class="form-control" v-model="routeQueryWrapper.skillType">
+          <select class="form-control" v-model="skillType">
             <option :value="null">（なし）</option>
             <template v-for="(group, n) in skillTypeSearchArray">
               <optgroup :label="group.label" :key="`group${n}`">
@@ -69,7 +69,7 @@ export default {
   name: 'PageSkillList',
   pageTitle: function () { return this.pageTitle; },
   middleOfBreadcrumbs: function () {
-    if (!this.routeQueryWrapper.searchWord) { return undefined; }
+    if (!this.searchWord) { return undefined; }
     if (this.isLeaderSkill) {
       return {
         text: 'リーダースキル一覧',
@@ -222,6 +222,22 @@ export default {
   mixins: [
     RouteQueryWrapper
   ],
+  /** $route.query ラッパー設定 */
+  queries: {
+    /** 検索ワード。 */
+    searchWord: {
+      type: String
+    },
+    /** 使用するスキルタイプ名。 */
+    skillType: {
+      type: String
+    },
+    /** 表示するページ。 */
+    page: {
+      type: Number,
+      default: 1
+    }
+  },
   data: function () {
     return {
       /** リーダースキルの表示かどうか。 */
@@ -234,23 +250,7 @@ export default {
       monsterIconCountMax: 10,
 
       /** 特定条件を満たすモンスターが持つスキルのみを表示するためのモンスター条件のフィルタ。 */
-      monsterFilterSetting: getFilterDefault(),
-      /** $route.query ラッパー設定 兼 値格納オブジェクト。 */
-      routeQueryWrapper: {
-        /** 検索ワード。 */
-        searchWord: {
-          type: String
-        },
-        /** 使用するスキルタイプ名。 */
-        skillType: {
-          type: String
-        },
-        /** 表示するページ。 */
-        page: {
-          type: Number,
-          default: 1
-        }
-      }
+      monsterFilterSetting: getFilterDefault()
     };
   },
   computed: {
@@ -287,7 +287,7 @@ export default {
     },
     /** 使用するスキルタイプ検索情報。 */
     skillTypeSearchInfo: function () {
-      const skillType = this.routeQueryWrapper.skillType;
+      const skillType = this.skillType;
       let result = null;
       if (skillType !== undefined) {
         this.skillTypeSearchArray.forEach(typeGroup => {
@@ -301,7 +301,7 @@ export default {
     },
     /** 検索条件を満たすデータの配列。 */
     searchedSkillArray () {
-      let searchWord = this.routeQueryWrapper.searchWord || '';
+      let searchWord = this.searchWord || '';
       // スキルタイプ検索情報の追加。
       if (this.skillTypeSearchInfo) {
         searchWord = this.skillTypeSearchInfo[1] + ' ' + searchWord;
@@ -357,8 +357,6 @@ export default {
     },
     /** 現在の条件を満たすデータを最後を表示するのに必要なページ数。 */
     pageCount () { return ((this.searchedSkillArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
-    /** 現在表示中のページ番号。 */
-    page () { return (this.routeQueryWrapper.page * 1) || 1; },
     /** 現在のページで表示するデータの配列。 */
     skillArrayInPage () {
       return this.searchedSkillArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
@@ -369,10 +367,10 @@ export default {
       if (this.skillTypeSearchInfo) { typeName = ' ' + this.skillTypeSearchInfo[0]; }
 
       let title;
-      if (!this.routeQueryWrapper.searchWord) {
+      if (!this.searchWord) {
         title = this.targetName + '一覧' + typeName;
       } else {
-        title = this.targetName + '検索' + typeName + ' ' + this.routeQueryWrapper.searchWord;
+        title = this.targetName + '検索' + typeName + ' ' + this.searchWord;
       }
       const fst = filterSettingText(this.monsterFilterSetting);
       if (fst) {
@@ -383,8 +381,8 @@ export default {
   },
   watch: {
     '$route': 'checkIsLeaderSkill',
-    'routeQueryWrapper.searchWord': 'resetPage',
-    'routeQueryWrapper.skillType': 'resetPage',
+    searchWord: 'resetPage',
+    skillType: 'resetPage',
     pageTitle: '$_mixinForPage_updateTitle'
   },
   created: function () {
@@ -420,7 +418,7 @@ export default {
     },
     /** 先頭ページへ移動する。表示条件が変更されたときに呼び出す。 */
     resetPage: function () {
-      if (this.pageResetFlag) { this.routeQueryWrapper.page = undefined; }
+      if (this.pageResetFlag) { this.page = 1; }
     },
     /** このスキルを持つモンスターの番号の配列を取得する。 */
     monsterNosUsingThisSkill: function (no) {
