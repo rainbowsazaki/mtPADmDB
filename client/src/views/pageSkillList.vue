@@ -10,7 +10,7 @@
         <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
         <div class="col-sm-10">
           <select class="form-control" v-model="skillType">
-            <option :value="null">（なし）</option>
+            <option value="（なし）">（なし）</option>
             <template v-for="(group, n) in skillTypeSearchArray">
               <optgroup :label="group.label" :key="`group${n}`">
                 <option v-for="(setting, m) in group.settings" :value="setting[0]" :key="`setting${m}`">{{ setting[0] }}</option>
@@ -230,7 +230,8 @@ export default {
     },
     /** 使用するスキルタイプ名。 */
     skillType: {
-      type: String
+      type: String,
+      default: '（なし）'
     },
     /** 表示するページ。 */
     page: {
