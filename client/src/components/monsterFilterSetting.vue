@@ -104,6 +104,7 @@
 
 <script>
 import { constData, commonData, escapeRegExp, toAimaiSearch, MultiSendBlocker } from '../mtpadmdb.js';
+import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /** filterの初期値。 */
 const filterDefault = {
@@ -310,6 +311,37 @@ export function filterSettingText (setting) {
 /** モンスター絞り込みの設定を行うコンポーネント。 */
 export default {
   name: 'MonsterFilterSetting',
+  mixins: [
+    RouteQueryWrapper
+  ],
+  queries: {
+    name: String,
+    attr: Array,
+    subAttr: Array,
+    type: Array,
+    awaken: String,
+    assist: Number,
+    rarityMin: {
+      type: Number,
+      default: filterDefault.rarityMin
+    },
+    rarityMax: {
+      type: Number,
+      default: filterDefault.rarityMax
+    },
+    skillTurn: {
+      type: String,
+      default: '1-99'
+    },
+    skillBoost: {
+      type: String,
+      default: '0-9'
+    },
+    timeExtensionMin: {
+      type: Number,
+      default: filterDefault.timeExtensionMin
+    }
+  },
   props: {
     'value': {
       type: Object,
