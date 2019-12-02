@@ -20,6 +20,12 @@ export default {
         case String:
           value.default = '';
           break;
+        case Array:
+          value.default = [];
+          break;
+        case Object:
+          value.default = {};
+          break;
         }
       }
       info[key] = value;
@@ -41,7 +47,12 @@ export default {
           value = undefined;
         } else {
           switch (info[key].type) {
-            // todo
+          case Array:
+            value = JSON.stringify(value).replace(/^\[|\]$/g, '');
+            break;
+          case Object:
+            value = JSON.stringify(value);
+            break;
           }
         }
         obj[key] = value;
@@ -87,6 +98,16 @@ export default {
           switch (info[key].type) {
           case Number:
             value = Number(value);
+            break;
+          case Array:
+            try {
+              value = JSON.parse(`[${value}]`);
+            } catch {}
+            break;
+          case Object:
+            try {
+              value = JSON.parse(value);
+            } catch {}
             break;
           }
         }
