@@ -29,7 +29,9 @@ export default {
         }
       }
       info[key] = value;
-      dataObj[key] = value.default;
+      if (!value.computed) {
+        dataObj[key] = value.default;
+      }
     }
       
     dataObj['$routeQueryWrapper_info'] = info;
@@ -39,10 +41,9 @@ export default {
     /** このミックスインで管理している情報を $route.query に指定するオブジェクト。 */
     '$routeQueryWrapper_routeQueryObject': function () {
       const obj = {};
-      const data = this.$data;
-      const info = data.$routeQueryWrapper_info;
+      const info = this.$data.$routeQueryWrapper_info;
       for (const key in info) {
-        let value = data[key];
+        let value = this[key];
         if (info[key].default === value) {
           value = undefined;
         } else {
@@ -87,8 +88,7 @@ export default {
     readRouteQuery: function () {
       if (!this.setCancelUpdate()) { return; }
       const query = this.$route.query;
-      const data = this.$data;
-      const info = data.$routeQueryWrapper_info;
+      const info = this.$data.$routeQueryWrapper_info;
       for (const key in info) {
         let value = query[key];
         if (value === undefined) {
@@ -111,7 +111,7 @@ export default {
             break;
           }
         }
-        data[key] = value;
+        this[key] = value;
       }
     }
   }
