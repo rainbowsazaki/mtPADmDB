@@ -11,7 +11,7 @@ export default {
       cancelUpdate: false
     };
     // 設定情報を取得する。
-    const info = {};
+    const info = [];
     for (const key in queryInfoBase) {
       let value = queryInfoBase[key];
       if (!value.type) { value = { type: value }; }
@@ -28,7 +28,13 @@ export default {
           break;
         }
       }
-      info[key] = value;
+      if (!value.hasOwnProperty('queryKey')) {
+        value.queryKey = key;
+      }
+      if (!value.hasOwnProperty('propName')) {
+        value.propName = key;
+      }
+      info.push(value);
       if (!value.computed) {
         dataObj[key] = value.default;
       }
@@ -41,13 +47,14 @@ export default {
     /** このミックスインで管理している情報を $route.query に指定するオブジェクト。 */
     '$routeQueryWrapper_routeQueryObject': function () {
       const obj = {};
-      const info = this.$data.$routeQueryWrapper_info;
-      for (const key in info) {
-        let value = this[key];
-        if (info[key].default === value) {
+      const infos = this.$data.$routeQueryWrapper_info;
+      for (const i in infos) {
+        const info = infos[i];
+        let value = this[info.propName];
+        if (info.default === value) {
           value = undefined;
         } else {
-          switch (info[key].type) {
+          switch (info.type) {
           case Array:
             value = JSON.stringify(value).replace(/^\[|\]$/g, '');
             break;
@@ -56,13 +63,13 @@ export default {
             break;
           }
         }
-        obj[key] = value;
+        obj[info.queryKey] = value;
       }
       return obj;
     }
   },
   watch: {
-    '$route': 'readRouteQuery',
+    '$route.query': 'readRouteQuery',
     '$routeQueryWrapper_routeQueryObject': function () {
       if (!this.setCancelUpdate()) { return; }
       const margedQuery = Object.assign({}, this.$route.query, this.$routeQueryWrapper_routeQueryObject);
@@ -88,14 +95,15 @@ export default {
     readRouteQuery: function () {
       if (!this.setCancelUpdate()) { return; }
       const query = this.$route.query;
-      const info = this.$data.$routeQueryWrapper_info;
-      for (const key in info) {
-        let value = query[key];
+      const infos = this.$data.$routeQueryWrapper_info;
+      for (const i in infos) {
+        const info = infos[i];
+        let value = query[info.queryKey];
         if (value === undefined) {
-          value = info[key].default;
+          value = info.default;
         } else {
           // 型指定に応じた加工。
-          switch (info[key].type) {
+          switch (info.type) {
           case Number:
             value = Number(value);
             break;
@@ -111,7 +119,7 @@ export default {
             break;
           }
         }
-        this[key] = value;
+        this[info.propName] = value;
       }
     }
   }
