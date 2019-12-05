@@ -1079,7 +1079,7 @@ export default {
       this.queryToData('useEnemyState');
       if (this.useEnemyState) {
         this.queryToData('enemyNo', Number);
-        if (this.EnemyNo === null) {
+        if (this.enemyNo === undefined) {
           queryToDataForNumberArray('enemyAttributes');
           queryToDataForNumberArray('enemyTypes');
         }
