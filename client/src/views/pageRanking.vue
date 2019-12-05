@@ -47,10 +47,20 @@
           <attr-select mode="type" use-clear v-model="enemyTypes" />
         </dd>
         <dd>
-          <label>
-            <input type="checkbox" v-model="useSenzaiKiller" value="1">
-            潜在キラーを使用する
-          </label>
+          <ul class="list-unstyled">
+            <li>
+              <label>
+                <input type="checkbox" v-model="useSenzaiKiller" value="1">
+                潜在キラーを使用する
+              </label>
+            </li>
+            <li>
+              <label :disabled="!useSenzaiKiller">
+                <input type="checkbox" :disabled="!useSenzaiKiller" v-model="useRelasedSenzaiAwaken" value="1">
+                潜在覚醒枠の解放分を使用する
+              </label>
+            </li>
+          </ul>
         </dd>
         <dt class="damageHalf" @click="visibleDamageHalf = !visibleDamageHalf">
           <span class="triggerMark">{{ visibleDamageHalf ? '-' : '+' }}</span>
@@ -439,6 +449,8 @@ export default {
       useEnemyState: false,
       /** 潜在キラーを使用するかどうか。 */
       useSenzaiKiller: false,
+      /** 潜在覚醒枠の解放分を使用するかどうか。 */
+      useRelasedSenzaiAwaken: false,
       /** フォームの変更とそれによる query の変更の巡回によって起こる更新イベントの多重送信を防ぐオブジェクト。 */
       multiSendBlocker: new MultiSendBlocker(1)
     };
@@ -470,6 +482,7 @@ export default {
         if (this.enemyTypes.length) {
           enemyInfo += ' タイプ:' + this.enemyTypes.map(d => this.typeTable[d].name).join('/');
           if (this.useSenzaiKiller) { enables.push('潜在キラー'); }
+          if (this.useRelasedSenzaiAwaken) { enables.push('潜在覚醒枠解放'); }
         }
 
         if (this.damageHalfAttributes.length) {
@@ -614,7 +627,11 @@ export default {
           });
           // 潜在キラーが使えるかどうかの判定。
           if (manageObj.useSenzaiKiller && this.baseData.types.some(d => manageObj.targetSenzaiKillerTypeTable[d])) {
-            rate *= 3.375;
+            if (manageObj.useRelasedSenzaiAwaken && this.isEnableAppendSenzai) {
+              rate *= 5.0625;
+            } else {
+              rate *= 3.375;
+            }
           }
           return rate;
         },
@@ -629,6 +646,28 @@ export default {
             }
           }
           return null;
+        },
+        /** 潜在覚醒枠の解放を行えるモンスターかどうか。 */
+        get isEnableAppendSenzai () {
+          let monsterData = this.baseData;
+          while (monsterData) {
+            const evoType = monsterData.evolutionType;
+            switch (evoType) {
+            // 転生・超転生
+            case 3:
+            case 6:
+              return true;
+            // 究極進化
+            case 2:
+              // 進化前の進化種類を確認する。
+              monsterData = manageObj.monsterTable[monsterData.evolution.baseNo];
+              break;
+            default:
+              monsterData = null;
+              break;
+            }
+          }
+          return false;
         },
         /** 現在の覚醒発動条件で、最も攻撃力を挙げられる超覚醒を取得する。 */
         get bestSuperAwaken () {
@@ -870,6 +909,7 @@ export default {
         'enemyAttributes': undefined,
         'enemyTypes': undefined,
         'useSenzaiKiller': undefined,
+        'useRelasedSenzaiAwaken': undefined,
         'damageHalfAttributes': undefined,
         'damageHalfTypes': undefined
       };
@@ -882,6 +922,7 @@ export default {
           obj.enemyTypes = this.enemyTypes.join(',') || undefined;
         }
         obj.useSenzaiKiller = this.useSenzaiKiller ? 1 : undefined;
+        obj.useRelasedSenzaiAwaken = this.useRelasedSenzaiAwaken ? 1 : undefined;
         obj.damageHalfAttributes = this.damageHalfAttributes.join(',') || undefined;
         obj.damageHalfTypes = this.damageHalfTypes.join(',') || undefined;
       }
@@ -1043,6 +1084,7 @@ export default {
           queryToDataForNumberArray('enemyTypes');
         }
         this.queryToData('useSenzaiKiller');
+        this.queryToData('useRelasedSenzaiAwaken');
         queryToDataForNumberArray('damageHalfAttributes');
         queryToDataForNumberArray('damageHalfTypes');
         this.visibleDamageHalf = this.damageHalfAttributes.length || this.damageHalfTypes.length;
