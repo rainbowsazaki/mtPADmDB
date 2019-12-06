@@ -315,31 +315,56 @@ export default {
     RouteQueryWrapper
   ],
   queries: {
-    name: String,
-    attr: Array,
-    subAttr: Array,
-    type: Array,
-    awaken: String,
-    assist: Number,
+    name: {
+      type: String,
+      computed: true
+    },
+    attr: {
+      type: Array,
+      computed: true
+    },
+    subAttr: {
+      type: Array,
+      computed: true
+    },
+    type: {
+      type: Array,
+      computed: true
+    },
+    awaken: {
+      type: Array,
+      computed: true
+    },
+    assist: {
+      type: Number,
+      computed: true
+    },
     rarityMin: {
       type: Number,
-      default: filterDefault.rarityMin
+      default: filterDefault.rarityMin,
+      computed: true
     },
     rarityMax: {
       type: Number,
-      default: filterDefault.rarityMax
+      default: filterDefault.rarityMax,
+      computed: true
     },
-    skillTurn: {
+    skillTurnFilterStr: {
       type: String,
-      default: '1-99'
+      default: '1-99',
+      queryKey: 'skillTurn',
+      computed: true
     },
-    skillBoost: {
+    skillBoostFilterStr: {
       type: String,
-      default: '0-9'
+      default: '0-9',
+      queryKey: 'skillBoost',
+      computed: true
     },
     timeExtensionMin: {
       type: Number,
-      default: filterDefault.timeExtensionMin
+      default: filterDefault.timeExtensionMin,
+      computed: true
     }
   },
   props: {
@@ -376,6 +401,43 @@ export default {
   computed: {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
+
+    name: {
+      get: function () { return this.filter.name; },
+      set: function (v) { this.filter.name = v; }
+    },
+    attr: {
+      get: function () { return this.filter.attr; },
+      set: function (v) { this.filter.attr = v; }
+    },
+    subAttr: {
+      get: function () { return this.filter.subAttr; },
+      set: function (v) { this.filter.subAttr = v; }
+    },
+    type: {
+      get: function () { return this.filter.type; },
+      set: function (v) { this.filter.type = v; }
+    },
+    awaken: {
+      get: function () { return this.filter.awaken; },
+      set: function (v) { this.filter.awaken = v; }
+    },
+    assist: {
+      get: function () { return this.filter.assist; },
+      set: function (v) { this.filter.assist = v; }
+    },
+    rarityMin: {
+      get: function () { return this.filter.rarityMin; },
+      set: function (v) { this.filter.rarityMin = v; }
+    },
+    rarityMax: {
+      get: function () { return this.filter.rarityMax; },
+      set: function (v) { this.filter.rarityMax = v; }
+    },
+    timeExtensionMin: {
+      get: function () { return this.filter.timeExtensionMin; },
+      set: function (v) { this.filter.timeExtensionMin = v; }
+    },
 
     /** その他絞り込み部分のフィルタリング設定をもとに作成したテキスト。 */
     filterSettingTextArray () {
@@ -417,47 +479,18 @@ export default {
         }
       }
     },
-    /** 現在のフィルター設定を元にした、route の query 情報のオブジェクト。 */
-    routeQuery: function () {
-      let timeExtensionMin = this.filter.timeExtensionMin;
-      if (timeExtensionMin === filterDefault.timeExtensionMin) { timeExtensionMin = undefined; }
-
-      const query = {
-        name: this.filter.name || undefined,
-        attr: this.array2text(this.filter.attr),
-        subAttr: this.array2text(this.filter.subAttr),
-        type: this.array2text(this.filter.type),
-        awaken: this.array2text(this.filter.awaken),
-        rarityMin: (filterDefault.rarityMin === this.filter.rarityMin) ? undefined : this.filter.rarityMin,
-        rarityMax: (filterDefault.rarityMax === this.filter.rarityMax) ? undefined : this.filter.rarityMax,
-        skillTurn: this.skillTurnFilterStr,
-        skillBoost: this.skillBoostFilterStr,
-        timeExtensionMin: timeExtensionMin,
-        assist: this.filter.assist
-      };
-
-      return query;
-    },
     /** 設定領域を全画面で表示しているかどうか。 */
     isFullOverSettingArea: function () {
       return this.isBrowserWidthSmall && this.isFullOpenFilterTrigger;
     }
   },
   watch: {
-    'routeQuery': function () {
-      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
-      if (this.multiSendBlocker.isSending) { return; }
-      this.multiSendBlocker.set();
-      
-      this.updateRouteQuery(this.routeQuery);
+    '$routeQueryWrapper_routeQueryObject': function () {
+      if (this.pageResetFlag) {
+        const margedQuery = Object.assign({}, this.$route.query, { page: undefined });
+        this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
+      }
       this.$emit('input', this.filter);
-    },
-    '$route.query': function () {
-      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
-      if (this.multiSendBlocker.isSending) { return; }
-      this.multiSendBlocker.set();
-      
-      this.setFilterFromQuery();
     },
     'filter.rarityMin': function () {
       if (this.filter.rarityMax < this.filter.rarityMin) {
@@ -500,7 +533,6 @@ export default {
     }
   },
   created: function () {
-    this.setFilterFromQuery();
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
@@ -515,10 +547,6 @@ export default {
     }
   },
   methods: {
-    /**  配列を、カンマで結合したテキストにする。 */
-    array2text: function (array) {
-      return array.length ? array.slice().sort((a, b) => a - b).join(',') : undefined;
-    },
     /**
      * ページ全体のスクロールを無効にするかどうかを設定する。
      * 引数に true を指定するとスクロールが無効になり、 false を指定するとスクロールが有効になる。
@@ -529,20 +557,6 @@ export default {
     /** 現在のウィンドウサイズが、設定領域を全画面表示するものかどうかを確認する。 */
     checkBrowserWidthSmall: function () {
       this.isBrowserWidthSmall = window.matchMedia('(max-width: 575px)').matches;
-    },
-    /** $route.query を元にフィルター設定を作成する。 */
-    setFilterFromQuery: function () {
-      this.queryToFilter('name');
-      this.queryToFilter('attr');
-      this.queryToFilter('subAttr');
-      this.queryToFilter('type');
-      this.queryToFilter('awaken');
-      this.queryToFilter('assist', Number);
-      this.queryToFilter('rarityMin', Number, filterDefault.rarityMin);
-      this.queryToFilter('rarityMax', Number, filterDefault.rarityMax);
-      this.skillTurnFilterStr = this.$route.query.skillTurn;
-      this.skillBoostFilterStr = this.$route.query.skillBoost;
-      this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
     },
     /** 指定要素の現在の高さを style に設定する。親要素がない場合は指定された ID の要素に一時的に登録して計測する。 */
     setStyleHeight: function (elm, dummyParentId) {
@@ -558,37 +572,6 @@ export default {
     /** style に設定されている高さを空にする。 */
     clearStyleHeight: function (elm) {
       elm.style.height = '';
-    },
-    /** ルートのクエリーを更新する。 */
-    updateRouteQuery: function (changeQuery) {
-      const margedQuery = Object.assign({}, this.$route.query, changeQuery);
-      if (this.pageResetFlag) { margedQuery.page = undefined; }
-      this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
-    },
-    /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
-    queryToData: function (name) {
-      this[name] = this.$route.query[name];
-      return (this[name] !== undefined);
-    },
-    /** 特定のルートクエリーを使用して、フィルタリング設定を変更する。 */
-    queryToFilter: function (name, type, defualtValue) {
-      let value;
-      const query = this.$route.query[name];
-      const isArray = Array.isArray(this.filter[name]);
-      if (isArray) {
-        const now = this.array2text(this.filter[name]);
-        if (now !== query) {
-          value = query ? query.split(',') : [];
-        } else {
-          value = this.filter[name];
-        }
-      } else {
-        value = query;
-        if (type === Number && value) { value *= 1; }
-        if (value === undefined) { value = defualtValue; } 
-      }
-      this.filter[name] = value;
-      return isArray ? (value.length > 0) : value !== defualtValue;
     },
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
