@@ -46,12 +46,30 @@ export default {
   computed: {
     /** このミックスインで管理している情報を $route.query に指定するオブジェクト。 */
     '$routeQueryWrapper_routeQueryObject': function () {
+      /** 2つの値が同一かどうかを確認する。 */
+      function isEqual (a, b) {
+        if (a === b) { return true; }
+        if (typeof a === 'object' && typeof b === 'object') {
+          if (Array.isArray(a)) {
+            if (a.length === b.length) {
+              return a.every((element, index) => isEqual(element, b[index]));
+            }
+          } else {
+            const keys = Object.keys(a);
+            if (keys.length === Object.keys(b).length) {
+              return keys.every(key => isEqual(a[key], b[key]));
+            }
+          }
+        }
+        return false;
+      }
+
       const obj = {};
       const infos = this.$data.$routeQueryWrapper_info;
       for (const i in infos) {
         const info = infos[i];
         let value = this[info.propName];
-        if (info.default === value) {
+        if (isEqual(info.default, value)) {
           value = undefined;
         } else {
           switch (info.type) {
