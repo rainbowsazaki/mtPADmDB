@@ -16,16 +16,16 @@
     <div class="selectArea">
       <span v-for="a in (Array.isArray(items[0])) ? items : [items]" :key="a.toString()" style="display: inline-block">
         <label v-for="(m, j) in a" :key="`alTr_${j}`" class="item">
-          <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" :value="m" @change="$emit('input', selectedArray);" :disabled="isFillSelected && !selectedArray.includes(m)">
+          <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" :value="m" @change="emitInput();" :disabled="isFillSelected && !selectedArray.includes(m)">
           <img :src="`./image/${imageFolder}/${m}.png`" @click="addAwaken(m, $event);">
         </label>
       </span>
       <label v-if="useNone" class="item">
-        <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" :value="0" @change="$emit('input', selectedArray);">
+        <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" :value="0" @change="emitInput();">
         <span class="btn btn-secondary btn-sm" @click="addAwaken(0, $event);">なし</span>
       </label>
       <label v-if="useUnknown" class="item">
-        <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" value="null" @change="$emit('input', selectedArray);">
+        <input v-if="checkboxStyle || isTypeSelect" type="checkbox" v-model="selectedArray" value="null" @change="emitInput();">
         <span class="btn btn-secondary btn-sm" @click="(checkboxStyle) ? addAwaken(0, $event) : setUnknown()">不明</span>
       </label>
       <span v-if="useClear" class="item">
@@ -142,13 +142,13 @@ export default {
       if (event) { event.preventDefault(); }
       if (this.isFillSelected) { return; }
       this.selectedArray.push(no);
-      this.$emit('input', this.selectedArray);
+      this.emitInput();
     },
     /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
     removeAwaken: function (index, event) {
       if (event) { event.preventDefault(); }
       this.selectedArray.splice(index, 1);
-      this.$emit('input', this.selectedArray);
+      this.emitInput();
     },
     /** 覚醒内容が不明であることを示す値を設定する。 */
     setUnknown: function (event) {
@@ -160,6 +160,11 @@ export default {
     clear: function (event) {
       if (event) { event.preventDefault(); }
       this.selectedArray = [];
+      this.emitInput();
+    },
+    /** 値の変更を通知する。 */
+    emitInput: function () {
+      if (this.checkboxStyle) { this.selectedArray.sort(); }
       this.$emit('input', this.selectedArray);
     }
   }
