@@ -380,8 +380,6 @@ export default {
   },
   data: function () {
     return {
-      /** フィルタリング設定が変更されたときに表示ページ指定をリセットするかどうか。 */
-      pageResetFlag: false,
       /** フィルタリング設定領域を表示するかどうか。 */
       isVisibleFilter: false,
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
@@ -486,10 +484,6 @@ export default {
   },
   watch: {
     '$routeQueryWrapper_routeQueryObject': function () {
-      if (this.pageResetFlag) {
-        const margedQuery = Object.assign({}, this.$route.query, { page: undefined });
-        this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
-      }
       this.$emit('input', this.filter);
     },
     'filter.rarityMin': function () {
@@ -531,10 +525,6 @@ export default {
       }
       this.setDisableScroll(newValue);
     }
-  },
-  created: function () {
-    // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
-    setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
   mounted: function () {
     window.addEventListener('resize', this.checkBrowserWidthSmall);
