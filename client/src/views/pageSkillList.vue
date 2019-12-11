@@ -382,8 +382,7 @@ export default {
   },
   watch: {
     '$route': 'checkIsLeaderSkill',
-    searchWord: 'resetPage',
-    skillType: 'resetPage',
+    searchedSkillArray: 'resetPage',
     pageTitle: '$_mixinForPage_updateTitle'
   },
   created: function () {

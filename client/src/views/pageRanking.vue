@@ -989,6 +989,12 @@ export default {
     },
     useSuperAwaken: function () {
       if (this.useSuperAwaken) { this.useMultiBoost = false; }
+    },
+    filteredRankInfos: function () {
+      if (this.pageResetFlag) {
+        const query = Object.assign({}, this.$route.query, { page: undefined });
+        this.$router.push({ name: this.$route.name, params: this.$route.params, query: query });
+      }
     }
   },
   created: function () {
@@ -1051,7 +1057,6 @@ export default {
     /** ルートのクエリーを更新する。 */
     updateRouteQuery: function (changeQuery) {
       const margedQuery = Object.assign({}, this.$route.query, changeQuery);
-      if (this.pageResetFlag) { margedQuery.page = undefined; }
       this.$router.push({ name: this.$route.name, params: this.$route.params, query: margedQuery });
     },
     /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
@@ -1065,9 +1070,7 @@ export default {
     },
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
-      let query = this.$route.query;
-      if (this.pageResetFlag) { query = Object.assign({}, query, { page: undefined }); }
-      this.$router.push({ name: this.$route.name, params: { id: newId }, query: query });
+      this.$router.push({ name: this.$route.name, params: { id: newId }, query: this.$route.query });
     }
   }
 };

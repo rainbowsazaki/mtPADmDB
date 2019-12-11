@@ -68,6 +68,13 @@ export default {
   watch: {
     filterSettingText: function () {
       this.$emit('changeFilterSettingText', this.filterSettingText);
+    },
+    filteredMonsterTableArray: function () {
+      // ページリセット予約
+      this.$nextTick(() => {
+        const query = Object.assign({}, this.$route.query, { page: undefined });
+        this.$router.push({ name: this.$route.name, params: this.$route.params, query: query });
+      });
     }
   },
   created: function () {
