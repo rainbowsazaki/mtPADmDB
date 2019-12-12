@@ -1,5 +1,31 @@
 
 export default {
+  /** 各オブジェクトで共通で扱うデータ・関数群。 */
+  $routeQueryWrapper: {
+    /** $route.query 更新の要約が行われているオブジェクトの配列。予約がない場合は null 。 */
+    reservedComponents: null,
+    /** $route.query の更新の予約を行う。
+     * @param target 更新に使用する情報を持つコンポーネント
+     */
+    reserveUpdateRouteQuery: function (target) {
+      if (!this.reservedComponents) {
+        this.reservedComponents = [];
+        target.$nextTick(() => this.updateRouteQuery());
+      }
+      this.reservedComponents.push(target);
+    },
+    /** 予約された情報を使って $route.query の更新を行う。 */
+    updateRouteQuery: function () {
+      const component = this.reservedComponents[0];
+      const route = component.$route;
+      const margedQuery = Object.assign({}, route.query);
+      this.reservedComponents.forEach(value => {
+        Object.assign(margedQuery, value.$routeQueryWrapper_routeQueryObject);
+      });
+      component.$router.replace({ path: route.path, params: route.params, query: margedQuery });
+      this.reservedComponents = null;
+    }
+  },
   data: function () {
     const queryInfoBase = this.$options.queries;
     if (!queryInfoBase) { return {}; }
@@ -71,9 +97,7 @@ export default {
   watch: {
     '$route.query': 'readRouteQuery',
     '$routeQueryWrapper_routeQueryObject': function () {
-      if (!this.setCancelUpdate()) { return; }
-      const margedQuery = Object.assign({}, this.$route.query, this.$routeQueryWrapper_routeQueryObject);
-      this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
+      this.$options.$routeQueryWrapper.reserveUpdateRouteQuery(this);
     }
   },
   created: function () {
