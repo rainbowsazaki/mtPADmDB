@@ -29,13 +29,7 @@ export default {
   data: function () {
     const queryInfoBase = this.$options.queries;
     if (!queryInfoBase) { return {}; }
-    const dataObj = {
-      /**
-       * $route の更新や route の読み込みをキャンセルするかどうか。
-       * このコンポーネントから $route を更新した直後の watch 呼び出しを無視するためのもの。
-       */
-      cancelUpdate: false
-    };
+    const dataObj = {};
     // 設定情報を取得する。
     const info = [];
     for (const key in queryInfoBase) {
@@ -124,20 +118,8 @@ export default {
       };
       return f(a, b);
     },
-    /**
-     * この関数の呼び出しの直後に行われる $route の変更や query の読み込みを行わないようにする。
-     * @retval true 設定に成功した。
-     * @retval false すでにキャンセル状態になっている。
-     */
-    setCancelUpdate: function () {
-      if (this.cancelUpdate) { return false; }
-      this.cancelUpdate = true;
-      this.$nextTick(() => { this.cancelUpdate = false; });
-      return true;
-    },
     /** 設定に基づき、$route.query からデータを読み込む。 */
     readRouteQuery: function () {
-      if (!this.setCancelUpdate()) { return; }
       const query = this.$route.query;
       const infos = this.$data.$routeQueryWrapper_info;
       for (const i in infos) {
