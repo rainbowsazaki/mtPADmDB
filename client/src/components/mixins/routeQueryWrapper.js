@@ -68,6 +68,7 @@ export default {
     '$routeQueryWrapper_routeQueryObject': function () {
       const obj = {};
       const infos = this.$data.$routeQueryWrapper_info;
+      let isUpdated = false;
       for (const i in infos) {
         const info = infos[i];
         let value = this[info.propName];
@@ -83,15 +84,21 @@ export default {
             break;
           }
         }
-        obj[info.queryKey] = value;
+        if (this.$route.query[info.queryKey] !== value) {
+          obj[info.queryKey] = value;
+          isUpdated = true;
+        }
       }
+      if (!isUpdated) { return null; }
       return obj;
     }
   },
   watch: {
     '$route.query': 'readRouteQuery',
-    '$routeQueryWrapper_routeQueryObject': function () {
-      this.$options.$routeQueryWrapper.reserveUpdateRouteQuery(this);
+    '$routeQueryWrapper_routeQueryObject': function (newValue) {
+      if (newValue) {
+        this.$options.$routeQueryWrapper.reserveUpdateRouteQuery(this);
+      }
     }
   },
   created: function () {
