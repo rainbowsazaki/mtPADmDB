@@ -27,10 +27,22 @@
 
 import { constData } from '../mtpadmdb.js';
 import { getFilterDefault, filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
+import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /** モンスター一覧表示のコンポーネント */
 export default {
   name: 'MonsterList',
+  mixins: [
+    RouteQueryWrapper
+  ],
+  /** $route.query ラッパー設定 */
+  queries: {
+    // 表示するページ
+    page: {
+      type: Number,
+      default: 1
+    }
+  },
   data: function () {
     return {
       inPageCount: 50,
@@ -44,7 +56,6 @@ export default {
     attrColors () { return constData.attrColors; },
     
     pageCount () { return ((this.filteredMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
-    page () { return (this.$route.query.page * 1) || 1; },
 
     monsterTableArray: function () {
       const array = [];
@@ -70,11 +81,8 @@ export default {
       this.$emit('changeFilterSettingText', this.filterSettingText);
     },
     filteredMonsterTableArray: function () {
-      // ページリセット予約
-      this.$nextTick(() => {
-        const query = Object.assign({}, this.$route.query, { page: undefined });
-        this.$router.push({ name: this.$route.name, params: this.$route.params, query: query });
-      });
+      // ページリセット
+      this.page = 1;
     }
   },
   created: function () {
