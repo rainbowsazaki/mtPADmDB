@@ -40,6 +40,9 @@ export default {
         case String:
           value.default = '';
           break;
+        case Boolean:
+          value.default = false;
+          break;
         case Array:
           value.default = [];
           break;
@@ -76,6 +79,9 @@ export default {
           value = undefined;
         } else {
           switch (info.type) {
+          case Boolean:
+            value = value ? null : 'false';
+            break;
           case Array:
             value = JSON.stringify(value).replace(/^\[|\]$/g, '');
             break;
@@ -139,6 +145,14 @@ export default {
           switch (info.type) {
           case Number:
             value = Number(value);
+            break;
+          case Boolean:
+            // このテーブルにあるもの以外は null も含め true とする。
+            const falseTable = {
+              'false': true,
+              '0': true
+            };
+            value = !falseTable[value];
             break;
           case Array:
             try {
