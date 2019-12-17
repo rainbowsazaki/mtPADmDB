@@ -127,6 +127,7 @@
 <script>
 import { constData, checkCanMixMonster, MultiSendBlocker, stretchElement } from '../mtpadmdb.js';
 import { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
+import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /** 2体攻撃発動のフラグ。 */
 const F_A_WAY = 1 << 0;
@@ -157,6 +158,33 @@ export default {
   },
   breadcrumbsTitle: function () {
     return this.rankingSetting.title + 'ランキング';
+  },
+  mixins: [
+    RouteQueryWrapper
+  ],
+  /** $route.query ラッパー設定 */
+  queries: {
+    /** 表示するページの番号。 */
+    page: {
+      type: Number,
+      default: 1
+    },
+    /** 限界突破時のパラメータを使用するかどうか。 */
+    useOverLimit: {
+      type: Boolean
+    },
+    /** マルチブースト適用時のパラメータを使用するかどうか。 */
+    useMultiBoost: {
+      type: Boolean
+    },
+    /** 超覚醒を使用するかどうか。 */
+    useSuperAwaken: {
+      type: Boolean
+    },
+    /** 敵のタイプ・属性を反映した攻撃力を使用するかどうか。 */
+    useEnemyState: {
+      type: Boolean
+    }
   },
   props: {
     id: {
@@ -402,10 +430,6 @@ export default {
     return {
       /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
       pageResetFlag: false,
-      /** 限界突破時のパラメータを使用するかどうか。 */
-      useOverLimit: false,
-      /** マルチブースト適用時のパラメータを使用するかどうか。 */
-      useMultiBoost: false,
       /** 1ページ内に表示するモンスターの件数。 */
       inPageCount: 20,
       /** 表示するモンスターに対するフィルタ。 */
@@ -433,10 +457,6 @@ export default {
       damageHalfTypes: [],
       /** 与えるダメージを半減させる属性の配列。 */
       damageHalfAttributes: [],
-      /** 超覚醒を使用するかどうか。 */
-      useSuperAwaken: false,
-      /** 敵のタイプ・属をを反映した攻撃力を使用するかどうか。 */
-      useEnemyState: false,
       /** 潜在キラーを使用するかどうか。 */
       useSenzaiKiller: false,
       /** フォームの変更とそれによる query の変更の巡回によって起こる更新イベントの多重送信を防ぐオブジェクト。 */
@@ -451,8 +471,7 @@ export default {
     awakenTable () { return constData.awakenTable; },
     /** 表示対象のモンスター数に対する、表示ページの枚数 */
     pageCount () { return ((this.filteredRankInfos.length + this.inPageCount - 1) / this.inPageCount) | 0; },
-    /** 現在表示するページの番号。 1オリジン。 */
-    page () { return (this.$route.query.page * 1) || 1; },
+    
     /** ページのタイトル。 */
     pageTitle () {
       let title = this.rankingSetting.title + 'ランキング';
@@ -862,10 +881,6 @@ export default {
     /** 現在の設定を元にした、 route の query 情報のオブジェクト。 */
     routeQuery () {
       const obj = {
-        'useOverLimit': this.useOverLimit ? 1 : undefined,
-        'useMultiBoost': this.useMultiBoost ? 1 : undefined,
-        'useSuperAwaken': this.useSuperAwaken ? 1 : undefined,
-        'useEnemyState': undefined,
         'enemyNo': undefined,
         'enemyAttributes': undefined,
         'enemyTypes': undefined,
@@ -992,8 +1007,7 @@ export default {
     },
     filteredRankInfos: function () {
       if (this.pageResetFlag) {
-        const query = Object.assign({}, this.$route.query, { page: undefined });
-        this.$router.push({ name: this.$route.name, params: this.$route.params, query: query });
+        this.page = 1;
       }
     }
   },
@@ -1038,10 +1052,6 @@ export default {
         return true;
       };
 
-      this.queryToData('useOverLimit');
-      this.queryToData('useMultiBoost');
-      this.queryToData('useSuperAwaken');
-      this.queryToData('useEnemyState');
       if (this.useEnemyState) {
         this.queryToData('enemyNo', Number);
         if (this.EnemyNo === null) {
