@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { constData, checkCanMixMonster, MultiSendBlocker, stretchElement } from '../mtpadmdb.js';
+import { constData, checkCanMixMonster, stretchElement } from '../mtpadmdb.js';
 import { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
 import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
@@ -184,6 +184,43 @@ export default {
     /** 敵のタイプ・属性を反映した攻撃力を使用するかどうか。 */
     useEnemyState: {
       type: Boolean
+    },
+    /** 想定する敵の番号。 */
+    enemyNoWrapper: {
+      type: Number,
+      queryKey: 'enemyNo',
+      default: null,
+      computed: true
+    },
+    /** 想定する敵のタイプ。 */
+    enemyAttributesWrapper: {
+      type: Array,
+      queryKey: 'enemyAttributes',
+      computed: true
+    },
+    /** 想定する敵の属性。 */
+    enemyTypesWrapper: {
+      type: Array,
+      queryKey: 'enemyTypes',
+      computed: true
+    },
+    /** 潜在キラーを使用するかどうか。 */
+    useSenzaiKillerWrapper: {
+      type: Boolean,
+      queryKey: 'useSenzaiKiller',
+      computed: true
+    },
+    /** 与えるダメージを半減させる属性の配列。 */
+    damageHalfAttributesWrapper: {
+      type: Array,
+      queryKey: 'damageHalfAttributes',
+      computed: true
+    },
+    /** 与えるダメージを半減させるタイプの配列。 */
+    damageHalfTypesWrapper: {
+      type: Array,
+      queryKey: 'damageHalfTypes',
+      computed: true
     }
   },
   props: {
@@ -458,9 +495,7 @@ export default {
       /** 与えるダメージを半減させる属性の配列。 */
       damageHalfAttributes: [],
       /** 潜在キラーを使用するかどうか。 */
-      useSenzaiKiller: false,
-      /** フォームの変更とそれによる query の変更の巡回によって起こる更新イベントの多重送信を防ぐオブジェクト。 */
-      multiSendBlocker: new MultiSendBlocker(1)
+      useSenzaiKiller: false
     };
   },
   computed: {
@@ -472,6 +507,33 @@ export default {
     /** 表示対象のモンスター数に対する、表示ページの枚数 */
     pageCount () { return ((this.filteredRankInfos.length + this.inPageCount - 1) / this.inPageCount) | 0; },
     
+    enemyNoWrapper: {
+      get: function () { return (this.useEnemyState) ? this.enemyNo : null; },
+      set: function (no) { if (this.useEnemyState) { this.enemyNo = no; } }
+    },
+    /** 想定する敵属性・タイプの query への取得・設定を行うかどうか。 */
+    isEnableEnemyStatus: function () { return (this.useEnemyState && this.enemyNo === null); },
+    enemyAttributesWrapper: {
+      get: function () { return (this.isEnableEnemyStatus) ? this.enemyAttributes : []; },
+      set: function (array) { if (this.isEnableEnemyStatus) { this.enemyAttributes = array; } }
+    },
+    enemyTypesWrapper: {
+      get: function () { return (this.isEnableEnemyStatus) ? this.enemyTypes : []; },
+      set: function (array) { if (this.isEnableEnemyStatus) { this.enemyTypes = array; } }
+    },
+    useSenzaiKillerWrapper: {
+      get: function () { return (this.useEnemyState) ? this.useSenzaiKiller : false; },
+      set: function (b) { if (this.useEnemyState) { this.useSenzaiKiller = b; } }
+    },
+    damageHalfAttributesWrapper: {
+      get: function () { return (this.useEnemyState) ? this.damageHalfAttributes : []; },
+      set: function (array) { if (this.useEnemyState) { this.damageHalfAttributes = array; } }
+    },
+    damageHalfTypesWrapper: {
+      get: function () { return (this.useEnemyState) ? this.damageHalfTypes : []; },
+      set: function (array) { if (this.useEnemyState) { this.damageHalfTypes = array; } }
+    },
+
     /** ページのタイトル。 */
     pageTitle () {
       let title = this.rankingSetting.title + 'ランキング';
@@ -878,30 +940,6 @@ export default {
       }
       return array;
     },
-    /** 現在の設定を元にした、 route の query 情報のオブジェクト。 */
-    routeQuery () {
-      const obj = {
-        'enemyNo': undefined,
-        'enemyAttributes': undefined,
-        'enemyTypes': undefined,
-        'useSenzaiKiller': undefined,
-        'damageHalfAttributes': undefined,
-        'damageHalfTypes': undefined
-      };
-      if (this.useEnemyState) {
-        obj.useEnemyState = 1;
-        if (this.enemyNo !== null) {
-          obj.enemyNo = this.enemyNo;
-        } else {
-          obj.enemyAttributes = this.enemyAttributes.join(',') || undefined;
-          obj.enemyTypes = this.enemyTypes.join(',') || undefined;
-        }
-        obj.useSenzaiKiller = this.useSenzaiKiller ? 1 : undefined;
-        obj.damageHalfAttributes = this.damageHalfAttributes.join(',') || undefined;
-        obj.damageHalfTypes = this.damageHalfTypes.join(',') || undefined;
-      }
-      return obj;
-    },
     /** 現在設定している敵属性に対して各属性で攻撃したときの攻撃力レートの配列 */
     enemyAttributeRateInfo () {
       const rateTable = {
@@ -984,18 +1022,7 @@ export default {
   },
   watch: {
     pageTitle: '$_mixinForPage_updateTitle',
-    routeQuery: function () {
-      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
-      if (this.multiSendBlocker.isSending) { return; }
-      this.multiSendBlocker.set();
-
-      this.updateRouteQuery(this.routeQuery);
-    },
     '$route.query': function () {
-      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
-      if (this.multiSendBlocker.isSending) { return; }
-      this.multiSendBlocker.set();
-
       this.setSettingFromQuery();
     },
     useMultiBoost: function () {
@@ -1036,31 +1063,7 @@ export default {
     },
     /** $route.queryを元に設定を変更する。 */
     setSettingFromQuery () {
-      function compArray (a, b) {
-        const length = a.length;
-        if (length !== b.length) { return false; }
-        for (let i = 0; i < length; i++) {
-          if (a[i] !== b[i]) { return false; }
-        }
-        return true;
-      }
-
-      const queryToDataForNumberArray = (name) => {
-        const newValue = this.$route.query[name] ? this.$route.query[name].split(',').map(d => Number(d)) : [];
-        if (compArray(newValue, this[name])) { return false; }
-        this[name] = newValue;
-        return true;
-      };
-
       if (this.useEnemyState) {
-        this.queryToData('enemyNo', Number);
-        if (this.EnemyNo === null) {
-          queryToDataForNumberArray('enemyAttributes');
-          queryToDataForNumberArray('enemyTypes');
-        }
-        this.queryToData('useSenzaiKiller');
-        queryToDataForNumberArray('damageHalfAttributes');
-        queryToDataForNumberArray('damageHalfTypes');
         this.visibleDamageHalf = this.damageHalfAttributes.length || this.damageHalfTypes.length;
       }
     },
