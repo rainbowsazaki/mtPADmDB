@@ -446,8 +446,6 @@ export default {
     /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillTurnFilterStr: {
       get: function () {
-        if (this.filter.skillTurnMin === filterDefault.skillTurnMin &
-            this.filter.skillTurnMax === filterDefault.skillTurnMax) { return undefined; }
         return this.filter.skillTurnMin + '-' + this.filter.skillTurnMax;
       },
       set: function (val) {
@@ -463,8 +461,6 @@ export default {
     /** スキルブーストの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillBoostFilterStr: {
       get: function () {
-        if (this.filter.skillBoostMin === filterDefault.skillBoostMin &
-            this.filter.skillBoostMax === filterDefault.skillBoostMax) { return undefined; }
         return this.filter.skillBoostMin + '-' + this.filter.skillBoostMax;
       },
       set: function (val) {
