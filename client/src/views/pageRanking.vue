@@ -223,6 +223,10 @@ export default {
       computed: true
     }
   },
+  /** $route.query の変更を受けてデータが変更されたときに呼ばれるフック。 */
+  queriesReceived: function () {
+    this.visibleDamageHalf = this.damageHalfAttributes.length || this.damageHalfTypes.length;
+  },
   props: {
     id: {
       type: String,
@@ -1022,9 +1026,6 @@ export default {
   },
   watch: {
     pageTitle: '$_mixinForPage_updateTitle',
-    '$route.query': function () {
-      this.setSettingFromQuery();
-    },
     useMultiBoost: function () {
       // マルチブーストと超覚醒を排他的にする。
       if (this.useMultiBoost) { this.useSuperAwaken = false; }
@@ -1039,7 +1040,6 @@ export default {
     }
   },
   created: function () {
-    this.setSettingFromQuery();
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
@@ -1059,12 +1059,6 @@ export default {
       const elms = this.$el.getElementsByClassName('stretch');
       for (const elm of elms) {
         stretchElement(elm);
-      }
-    },
-    /** $route.queryを元に設定を変更する。 */
-    setSettingFromQuery () {
-      if (this.useEnemyState) {
-        this.visibleDamageHalf = this.damageHalfAttributes.length || this.damageHalfTypes.length;
       }
     },
     /** ルートのクエリーを更新する。 */
