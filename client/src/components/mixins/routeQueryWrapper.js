@@ -110,6 +110,8 @@ export default {
   created: function () {
     this.readRouteQuery();
   },
+  /** $route.query の変更を受けてデータが変更されたときに呼ばれるフック。 */
+  queriesReceived: function () {},
   methods: {
     /** 2つの値が同一かどうかを確認する。 */
     isEqual: function (a, b) {
@@ -135,6 +137,7 @@ export default {
     readRouteQuery: function () {
       const query = this.$route.query;
       const infos = this.$data.$routeQueryWrapper_info;
+      let isUpdated = false;
       for (const i in infos) {
         const info = infos[i];
         let value = query[info.queryKey];
@@ -168,7 +171,11 @@ export default {
         }
         if (!this.isEqual(this[info.propName], value)) {
           this[info.propName] = value;
+          isUpdated = true;
         }
+      }
+      if (isUpdated) {
+        this.$options.queriesReceived.call(this);
       }
     }
   }
