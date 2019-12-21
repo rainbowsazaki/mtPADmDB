@@ -23,6 +23,9 @@ export default {
         Object.assign(margedQuery, value.$routeQueryWrapper_routeQueryObject);
       });
       component.$router.replace({ path: route.path, params: route.params, query: margedQuery });
+      this.reservedComponents.forEach(value => {
+        value.$options.queriesSended.call(value);
+      });
       this.reservedComponents = null;
     }
   },
@@ -110,6 +113,8 @@ export default {
   created: function () {
     this.readRouteQuery();
   },
+  /** データの変更を受けて $route.query が変更されたときに呼ばれるフック。 */
+  queriesSended: function () {},
   /** $route.query の変更を受けてデータが変更されたときに呼ばれるフック。 */
   queriesReceived: function () {},
   methods: {
