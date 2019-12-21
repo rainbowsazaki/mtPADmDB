@@ -367,6 +367,10 @@ export default {
       computed: true
     }
   },
+  /** データの変更を受けて $route.query が変更されたときに呼ばれるフック。 */
+  queriesSended: function () {
+    this.$emit('input', this.filter);
+  },
   props: {
     'value': {
       type: Object,
@@ -479,9 +483,6 @@ export default {
     }
   },
   watch: {
-    '$routeQueryWrapper_routeQueryObject': function () {
-      this.$emit('input', this.filter);
-    },
     'filter.rarityMin': function () {
       if (this.filter.rarityMax < this.filter.rarityMin) {
         this.filter.rarityMax = this.filter.rarityMin;
