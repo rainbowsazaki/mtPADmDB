@@ -1061,20 +1061,6 @@ export default {
         stretchElement(elm);
       }
     },
-    /** ルートのクエリーを更新する。 */
-    updateRouteQuery: function (changeQuery) {
-      const margedQuery = Object.assign({}, this.$route.query, changeQuery);
-      this.$router.push({ name: this.$route.name, params: this.$route.params, query: margedQuery });
-    },
-    /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
-    queryToData: function (name, type) {
-      let value = this.$route.query[name];
-      if (type === Number && value) {
-        value |= 0;
-      }
-      this[name] = value;
-      return (value !== undefined);
-    },
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
       this.$router.push({ name: this.$route.name, params: { id: newId }, query: this.$route.query });
