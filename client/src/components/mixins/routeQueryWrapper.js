@@ -12,7 +12,9 @@ export default {
         this.reservedComponents = [];
         target.$nextTick(() => this.updateRouteQuery());
       }
-      this.reservedComponents.push(target);
+      if (this.reservedComponents.every(element => element !== target)) {
+        this.reservedComponents.push(target);
+      }
     },
     /** 予約された情報を使って $route.query の更新を行う。 */
     updateRouteQuery: function () {
