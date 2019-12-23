@@ -317,43 +317,49 @@ export default {
   queries: {
     name: {
       type: String,
+      default: filterDefault.name,
       computed: true
     },
     attr: {
       type: Array,
+      default: filterDefault.attr,
       computed: true
     },
     subAttr: {
       type: Array,
+      default: filterDefault.subAttr,
       computed: true
     },
     type: {
       type: Array,
+      default: filterDefault.type,
       computed: true
     },
     awaken: {
       type: Array,
+      default: filterDefault.awaken,
       computed: true
     },
     assist: {
       type: Number,
+      default: filterDefault.assist,
       computed: true
     },
     rarityFilterStr: {
       type: String,
-      default: '1-10',
+      default: filterDefault.rarityMin + '-' + filterDefault.rarityMax,
       queryKey: 'rarity',
       computed: true
     },
     skillTurnFilterStr: {
       type: String,
-      default: '1-99',
+      default: filterDefault.skillTurnMin + '-' + filterDefault.skillTurnMax,
       queryKey: 'skillTurn',
       computed: true
     },
     skillBoostFilterStr: {
       type: String,
-      default: '0-9',
+      default: filterDefault.skillBoostMin + '-' + filterDefault.skillBoostMax,
       queryKey: 'skillBoost',
       computed: true
     },
