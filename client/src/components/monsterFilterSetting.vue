@@ -108,7 +108,7 @@ import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /** filterの初期値。 */
 const filterDefault = {
-  name: undefined,
+  name: '',
   attr: [],
   subAttr: [],
   type: [],
