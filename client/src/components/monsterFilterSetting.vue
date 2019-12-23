@@ -339,14 +339,10 @@ export default {
       type: Number,
       computed: true
     },
-    rarityMin: {
-      type: Number,
-      default: filterDefault.rarityMin,
-      computed: true
-    },
-    rarityMax: {
-      type: Number,
-      default: filterDefault.rarityMax,
+    rarityFilterStr: {
+      type: String,
+      default: '1-10',
+      queryKey: 'rarity',
       computed: true
     },
     skillTurnFilterStr: {
@@ -446,6 +442,21 @@ export default {
       const array = filterSettingTextArray(this.filter);
       if (/^名前に/.test(array[0])) { array.shift(); }
       return array;
+    },
+    /** レアリティの絞り込み設定の最小値と最大値を - でつないだもの。 */
+    rarityFilterStr: {
+      get: function () {
+        return this.filter.rarityMin + '-' + this.filter.rarityMax;
+      },
+      set: function (val) {
+        if (/(\d+)-(\d+)/.test(val)) {
+          this.filter.rarityMin = RegExp.$1 | 0;
+          this.filter.rarityMax = RegExp.$2 | 0;
+        } else {
+          this.filter.rarityMin = filterDefault.rarityMin;
+          this.filter.rarityMax = filterDefault.rarityMax;
+        }
+      }
     },
     /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillTurnFilterStr: {
