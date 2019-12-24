@@ -9,7 +9,7 @@
         <input
           :id="id" type="number" class="form-control"
           :value="value"
-          @input="updateValue(parseInt($event.target.value));" min="1" max="9999"
+          @input="updateValue($event.target.value);" min="1" max="9999"
         >
       </div>
     </div>
@@ -54,7 +54,8 @@ export default {
   },
   methods: {
     updateValue: function (value) {
-      this.$emit('input', value);
+      const persedValue = value = (value === '') ? null : parseInt(value, 10);
+      this.$emit('input', persedValue);
     }
   }
 };

@@ -18,7 +18,7 @@
         </tr>
         <tr v-for="(n, i) in awakenSortList" :key="`alTr_${i}`">
           <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
-            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" :id="`awaken_${m}`" @change="$emit('input', selectedArray);">
+            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" :id="`awaken_${m}`" @change="emitInput();">
             <label :for="`awaken_${m}`">
               <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m, $event);">
             </label>
@@ -97,13 +97,13 @@ export default {
       if (event) { event.preventDefault(); }
       if (this.selectedArray.length >= 9) { return; }
       this.selectedArray.push(no);
-      this.$emit('input', this.selectedArray);
+      this.emitInput();
     },
     /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
     removeAwaken: function (index, event) {
       if (event) { event.preventDefault(); }
       this.selectedArray.splice(index, 1);
-      this.$emit('input', this.selectedArray);
+      this.emitInput();
     },
     /** 覚醒内容が不明であることを示す値を設定する。 */
     setUnknown: function (event) {
@@ -115,6 +115,11 @@ export default {
     clear: function (event) {
       if (event) { event.preventDefault(); }
       this.selectedArray = [];
+      this.emitInput();
+    },
+    /** 値の変更を通知する。 */
+    emitInput: function () {
+      if (this.checkboxStyle) { this.selectedArray.sort(); }
       this.$emit('input', this.selectedArray);
     }
   }

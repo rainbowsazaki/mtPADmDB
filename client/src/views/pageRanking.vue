@@ -135,8 +135,9 @@
 </template>
 
 <script>
-import { constData, checkCanMixMonster, MultiSendBlocker, stretchElement } from '../mtpadmdb.js';
+import { constData, checkCanMixMonster, stretchElement } from '../mtpadmdb.js';
 import { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
+import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /** 2体攻撃発動のフラグ。 */
 const F_A_WAY = 1 << 0;
@@ -167,6 +168,80 @@ export default {
   },
   breadcrumbsTitle: function () {
     return this.rankingSetting.title + 'ランキング';
+  },
+  mixins: [
+    RouteQueryWrapper
+  ],
+  /** $route.query ラッパー設定 */
+  queries: {
+    /** 表示するページの番号。 */
+    page: {
+      type: Number,
+      default: 1
+    },
+    /** 限界突破時のパラメータを使用するかどうか。 */
+    useOverLimit: {
+      type: Boolean
+    },
+    /** マルチブースト適用時のパラメータを使用するかどうか。 */
+    useMultiBoost: {
+      type: Boolean
+    },
+    /** 超覚醒を使用するかどうか。 */
+    useSuperAwaken: {
+      type: Boolean
+    },
+    /** 敵のタイプ・属性を反映した攻撃力を使用するかどうか。 */
+    useEnemyState: {
+      type: Boolean
+    },
+    /** 想定する敵の番号。 */
+    enemyNoWrapper: {
+      type: Number,
+      queryKey: 'enemyNo',
+      default: null,
+      computed: true
+    },
+    /** 想定する敵のタイプ。 */
+    enemyAttributesWrapper: {
+      type: Array,
+      queryKey: 'enemyAttributes',
+      computed: true
+    },
+    /** 想定する敵の属性。 */
+    enemyTypesWrapper: {
+      type: Array,
+      queryKey: 'enemyTypes',
+      computed: true
+    },
+    /** 潜在キラーを使用するかどうか。 */
+    useSenzaiKillerWrapper: {
+      type: Boolean,
+      queryKey: 'useSenzaiKiller',
+      computed: true
+    },
+    /** 潜在覚醒枠の解放分を使用するかどうか。 */
+    useRelasedSenzaiAwakenWrapper: {
+      type: Boolean,
+      queryKey: 'useRelasedSenzaiAwaken',
+      computed: true
+    }, 
+    /** 与えるダメージを半減させる属性の配列。 */
+    damageHalfAttributesWrapper: {
+      type: Array,
+      queryKey: 'damageHalfAttributes',
+      computed: true
+    },
+    /** 与えるダメージを半減させるタイプの配列。 */
+    damageHalfTypesWrapper: {
+      type: Array,
+      queryKey: 'damageHalfTypes',
+      computed: true
+    }
+  },
+  /** $route.query の変更を受けてデータが変更されたときに呼ばれるフック。 */
+  queriesReceived: function () {
+    this.visibleDamageHalf = this.damageHalfAttributes.length || this.damageHalfTypes.length;
   },
   props: {
     id: {
@@ -412,10 +487,6 @@ export default {
     return {
       /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
       pageResetFlag: false,
-      /** 限界突破時のパラメータを使用するかどうか。 */
-      useOverLimit: false,
-      /** マルチブースト適用時のパラメータを使用するかどうか。 */
-      useMultiBoost: false,
       /** 1ページ内に表示するモンスターの件数。 */
       inPageCount: 20,
       /** 表示するモンスターに対するフィルタ。 */
@@ -443,16 +514,10 @@ export default {
       damageHalfTypes: [],
       /** 与えるダメージを半減させる属性の配列。 */
       damageHalfAttributes: [],
-      /** 超覚醒を使用するかどうか。 */
-      useSuperAwaken: false,
-      /** 敵のタイプ・属をを反映した攻撃力を使用するかどうか。 */
-      useEnemyState: false,
       /** 潜在キラーを使用するかどうか。 */
       useSenzaiKiller: false,
       /** 潜在覚醒枠の解放分を使用するかどうか。 */
-      useRelasedSenzaiAwaken: false,
-      /** フォームの変更とそれによる query の変更の巡回によって起こる更新イベントの多重送信を防ぐオブジェクト。 */
-      multiSendBlocker: new MultiSendBlocker(1)
+      useRelasedSenzaiAwaken: false
     };
   },
   computed: {
@@ -463,8 +528,38 @@ export default {
     awakenTable () { return constData.awakenTable; },
     /** 表示対象のモンスター数に対する、表示ページの枚数 */
     pageCount () { return ((this.filteredRankInfos.length + this.inPageCount - 1) / this.inPageCount) | 0; },
-    /** 現在表示するページの番号。 1オリジン。 */
-    page () { return (this.$route.query.page * 1) || 1; },
+    
+    enemyNoWrapper: {
+      get: function () { return (this.useEnemyState) ? this.enemyNo : null; },
+      set: function (no) { if (this.useEnemyState) { this.enemyNo = no; } }
+    },
+    /** 想定する敵属性・タイプの query への取得・設定を行うかどうか。 */
+    isEnableEnemyStatus: function () { return (this.useEnemyState && this.enemyNo === null); },
+    enemyAttributesWrapper: {
+      get: function () { return (this.isEnableEnemyStatus) ? this.enemyAttributes : []; },
+      set: function (array) { if (this.isEnableEnemyStatus) { this.enemyAttributes = array; } }
+    },
+    enemyTypesWrapper: {
+      get: function () { return (this.isEnableEnemyStatus) ? this.enemyTypes : []; },
+      set: function (array) { if (this.isEnableEnemyStatus) { this.enemyTypes = array; } }
+    },
+    useSenzaiKillerWrapper: {
+      get: function () { return (this.useEnemyState) ? this.useSenzaiKiller : false; },
+      set: function (b) { if (this.useEnemyState) { this.useSenzaiKiller = b; } }
+    },
+    useRelasedSenzaiAwakenWrapper: {
+      get: function () { return (this.useEnemyState) ? this.useRelasedSenzaiAwaken : false; },
+      set: function (b) { if (this.useEnemyState) { this.useRelasedSenzaiAwaken = b; } }
+    },
+    damageHalfAttributesWrapper: {
+      get: function () { return (this.useEnemyState) ? this.damageHalfAttributes : []; },
+      set: function (array) { if (this.useEnemyState) { this.damageHalfAttributes = array; } }
+    },
+    damageHalfTypesWrapper: {
+      get: function () { return (this.useEnemyState) ? this.damageHalfTypes : []; },
+      set: function (array) { if (this.useEnemyState) { this.damageHalfTypes = array; } }
+    },
+
     /** ページのタイトル。 */
     pageTitle () {
       let title = this.rankingSetting.title + 'ランキング';
@@ -898,36 +993,6 @@ export default {
       }
       return array;
     },
-    /** 現在の設定を元にした、 route の query 情報のオブジェクト。 */
-    routeQuery () {
-      const obj = {
-        'useOverLimit': this.useOverLimit ? 1 : undefined,
-        'useMultiBoost': this.useMultiBoost ? 1 : undefined,
-        'useSuperAwaken': this.useSuperAwaken ? 1 : undefined,
-        'useEnemyState': undefined,
-        'enemyNo': undefined,
-        'enemyAttributes': undefined,
-        'enemyTypes': undefined,
-        'useSenzaiKiller': undefined,
-        'useRelasedSenzaiAwaken': undefined,
-        'damageHalfAttributes': undefined,
-        'damageHalfTypes': undefined
-      };
-      if (this.useEnemyState) {
-        obj.useEnemyState = 1;
-        if (this.enemyNo !== null) {
-          obj.enemyNo = this.enemyNo;
-        } else {
-          obj.enemyAttributes = this.enemyAttributes.join(',') || undefined;
-          obj.enemyTypes = this.enemyTypes.join(',') || undefined;
-        }
-        obj.useSenzaiKiller = this.useSenzaiKiller ? 1 : undefined;
-        obj.useRelasedSenzaiAwaken = this.useRelasedSenzaiAwaken ? 1 : undefined;
-        obj.damageHalfAttributes = this.damageHalfAttributes.join(',') || undefined;
-        obj.damageHalfTypes = this.damageHalfTypes.join(',') || undefined;
-      }
-      return obj;
-    },
     /** 現在設定している敵属性に対して各属性で攻撃したときの攻撃力レートの配列 */
     enemyAttributeRateInfo () {
       const rateTable = {
@@ -1010,30 +1075,20 @@ export default {
   },
   watch: {
     pageTitle: '$_mixinForPage_updateTitle',
-    routeQuery: function () {
-      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
-      if (this.multiSendBlocker.isSending) { return; }
-      this.multiSendBlocker.set();
-
-      this.updateRouteQuery(this.routeQuery);
-    },
-    '$route.query': function () {
-      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
-      if (this.multiSendBlocker.isSending) { return; }
-      this.multiSendBlocker.set();
-
-      this.setSettingFromQuery();
-    },
     useMultiBoost: function () {
       // マルチブーストと超覚醒を排他的にする。
       if (this.useMultiBoost) { this.useSuperAwaken = false; }
     },
     useSuperAwaken: function () {
       if (this.useSuperAwaken) { this.useMultiBoost = false; }
+    },
+    filteredRankInfos: function () {
+      if (this.pageResetFlag) {
+        this.page = 1;
+      }
     }
   },
   created: function () {
-    this.setSettingFromQuery();
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     setTimeout(() => { this.pageResetFlag = true; }, 0);
   },
@@ -1055,61 +1110,9 @@ export default {
         stretchElement(elm);
       }
     },
-    /** $route.queryを元に設定を変更する。 */
-    setSettingFromQuery () {
-      function compArray (a, b) {
-        const length = a.length;
-        if (length !== b.length) { return false; }
-        for (let i = 0; i < length; i++) {
-          if (a[i] !== b[i]) { return false; }
-        }
-        return true;
-      }
-
-      const queryToDataForNumberArray = (name) => {
-        const newValue = this.$route.query[name] ? this.$route.query[name].split(',').map(d => Number(d)) : [];
-        if (compArray(newValue, this[name])) { return false; }
-        this[name] = newValue;
-        return true;
-      };
-
-      this.queryToData('useOverLimit');
-      this.queryToData('useMultiBoost');
-      this.queryToData('useSuperAwaken');
-      this.queryToData('useEnemyState');
-      if (this.useEnemyState) {
-        this.queryToData('enemyNo', Number);
-        if (this.enemyNo === undefined) {
-          queryToDataForNumberArray('enemyAttributes');
-          queryToDataForNumberArray('enemyTypes');
-        }
-        this.queryToData('useSenzaiKiller');
-        this.queryToData('useRelasedSenzaiAwaken');
-        queryToDataForNumberArray('damageHalfAttributes');
-        queryToDataForNumberArray('damageHalfTypes');
-        this.visibleDamageHalf = this.damageHalfAttributes.length || this.damageHalfTypes.length;
-      }
-    },
-    /** ルートのクエリーを更新する。 */
-    updateRouteQuery: function (changeQuery) {
-      const margedQuery = Object.assign({}, this.$route.query, changeQuery);
-      if (this.pageResetFlag) { margedQuery.page = undefined; }
-      this.$router.push({ name: this.$route.name, params: this.$route.params, query: margedQuery });
-    },
-    /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
-    queryToData: function (name, type) {
-      let value = this.$route.query[name];
-      if (type === Number && value) {
-        value |= 0;
-      }
-      this[name] = value;
-      return (value !== undefined);
-    },
     /** ルート上のランキング設定IDを変更する。 */
     changeRouteId: function (newId) {
-      let query = this.$route.query;
-      if (this.pageResetFlag) { query = Object.assign({}, query, { page: undefined }); }
-      this.$router.push({ name: this.$route.name, params: { id: newId }, query: query });
+      this.$router.push({ name: this.$route.name, params: { id: newId }, query: this.$route.query });
     }
   }
 };

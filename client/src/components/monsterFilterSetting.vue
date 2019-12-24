@@ -104,10 +104,11 @@
 
 <script>
 import { constData, commonData, escapeRegExp, toAimaiSearch, MultiSendBlocker } from '../mtpadmdb.js';
+import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /** filterの初期値。 */
 const filterDefault = {
-  name: undefined,
+  name: '',
   attr: [],
   subAttr: [],
   type: [],
@@ -310,6 +311,68 @@ export function filterSettingText (setting) {
 /** モンスター絞り込みの設定を行うコンポーネント。 */
 export default {
   name: 'MonsterFilterSetting',
+  mixins: [
+    RouteQueryWrapper
+  ],
+  queries: {
+    name: {
+      type: String,
+      default: filterDefault.name,
+      computed: true
+    },
+    attr: {
+      type: Array,
+      default: filterDefault.attr,
+      computed: true
+    },
+    subAttr: {
+      type: Array,
+      default: filterDefault.subAttr,
+      computed: true
+    },
+    type: {
+      type: Array,
+      default: filterDefault.type,
+      computed: true
+    },
+    awaken: {
+      type: Array,
+      default: filterDefault.awaken,
+      computed: true
+    },
+    assist: {
+      type: Number,
+      default: filterDefault.assist,
+      computed: true
+    },
+    rarityFilterStr: {
+      type: String,
+      default: filterDefault.rarityMin + '-' + filterDefault.rarityMax,
+      queryKey: 'rarity',
+      computed: true
+    },
+    skillTurnFilterStr: {
+      type: String,
+      default: filterDefault.skillTurnMin + '-' + filterDefault.skillTurnMax,
+      queryKey: 'skillTurn',
+      computed: true
+    },
+    skillBoostFilterStr: {
+      type: String,
+      default: filterDefault.skillBoostMin + '-' + filterDefault.skillBoostMax,
+      queryKey: 'skillBoost',
+      computed: true
+    },
+    timeExtensionMin: {
+      type: Number,
+      default: filterDefault.timeExtensionMin,
+      computed: true
+    }
+  },
+  /** データの変更を受けて $route.query が変更されたときに呼ばれるフック。 */
+  queriesSended: function () {
+    this.$emit('input', this.filter);
+  },
   props: {
     'value': {
       type: Object,
@@ -323,8 +386,6 @@ export default {
   },
   data: function () {
     return {
-      /** フィルタリング設定が変更されたときに表示ページ指定をリセットするかどうか。 */
-      pageResetFlag: false,
       /** フィルタリング設定領域を表示するかどうか。 */
       isVisibleFilter: false,
       /** フィルタリング設定領域の表示／非表示を切り替えるトリガーの下部が開いた状態かどうか。 */
@@ -345,17 +406,67 @@ export default {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
 
+    name: {
+      get: function () { return this.filter.name; },
+      set: function (v) { this.filter.name = v; }
+    },
+    attr: {
+      get: function () { return this.filter.attr; },
+      set: function (v) { this.filter.attr = v; }
+    },
+    subAttr: {
+      get: function () { return this.filter.subAttr; },
+      set: function (v) { this.filter.subAttr = v; }
+    },
+    type: {
+      get: function () { return this.filter.type; },
+      set: function (v) { this.filter.type = v; }
+    },
+    awaken: {
+      get: function () { return this.filter.awaken; },
+      set: function (v) { this.filter.awaken = v; }
+    },
+    assist: {
+      get: function () { return this.filter.assist; },
+      set: function (v) { this.filter.assist = v; }
+    },
+    rarityMin: {
+      get: function () { return this.filter.rarityMin; },
+      set: function (v) { this.filter.rarityMin = v; }
+    },
+    rarityMax: {
+      get: function () { return this.filter.rarityMax; },
+      set: function (v) { this.filter.rarityMax = v; }
+    },
+    timeExtensionMin: {
+      get: function () { return this.filter.timeExtensionMin; },
+      set: function (v) { this.filter.timeExtensionMin = v; }
+    },
+
     /** その他絞り込み部分のフィルタリング設定をもとに作成したテキスト。 */
     filterSettingTextArray () {
       const array = filterSettingTextArray(this.filter);
       if (/^名前に/.test(array[0])) { array.shift(); }
       return array;
     },
+    /** レアリティの絞り込み設定の最小値と最大値を - でつないだもの。 */
+    rarityFilterStr: {
+      get: function () {
+        return this.filter.rarityMin + '-' + this.filter.rarityMax;
+      },
+      set: function (val) {
+        if (/(\d+)-(\d+)/.test(val)) {
+          this.filter.rarityMin = RegExp.$1 | 0;
+          this.filter.rarityMax = RegExp.$2 | 0;
+        } else {
+          this.filter.rarityMin = filterDefault.rarityMin;
+          this.filter.rarityMax = filterDefault.rarityMax;
+        }
+      }
+    },
     /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillTurnFilterStr: {
       get: function () {
-        if (this.filter.skillTurnMin === filterDefault.skillTurnMin &
-            this.filter.skillTurnMax === filterDefault.skillTurnMax) { return undefined; }
         return this.filter.skillTurnMin + '-' + this.filter.skillTurnMax;
       },
       set: function (val) {
@@ -371,8 +482,6 @@ export default {
     /** スキルブーストの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillBoostFilterStr: {
       get: function () {
-        if (this.filter.skillBoostMin === filterDefault.skillBoostMin &
-            this.filter.skillBoostMax === filterDefault.skillBoostMax) { return undefined; }
         return this.filter.skillBoostMin + '-' + this.filter.skillBoostMax;
       },
       set: function (val) {
@@ -385,48 +494,12 @@ export default {
         }
       }
     },
-    /** 現在のフィルター設定を元にした、route の query 情報のオブジェクト。 */
-    routeQuery: function () {
-      let timeExtensionMin = this.filter.timeExtensionMin;
-      if (timeExtensionMin === filterDefault.timeExtensionMin) { timeExtensionMin = undefined; }
-
-      const query = {
-        name: this.filter.name || undefined,
-        attr: this.array2text(this.filter.attr),
-        subAttr: this.array2text(this.filter.subAttr),
-        type: this.array2text(this.filter.type),
-        awaken: this.array2text(this.filter.awaken),
-        rarityMin: (filterDefault.rarityMin === this.filter.rarityMin) ? undefined : this.filter.rarityMin,
-        rarityMax: (filterDefault.rarityMax === this.filter.rarityMax) ? undefined : this.filter.rarityMax,
-        skillTurn: this.skillTurnFilterStr,
-        skillBoost: this.skillBoostFilterStr,
-        timeExtensionMin: timeExtensionMin,
-        assist: this.filter.assist
-      };
-
-      return query;
-    },
     /** 設定領域を全画面で表示しているかどうか。 */
     isFullOverSettingArea: function () {
       return this.isBrowserWidthSmall && this.isFullOpenFilterTrigger;
     }
   },
   watch: {
-    'routeQuery': function () {
-      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
-      if (this.multiSendBlocker.isSending) { return; }
-      this.multiSendBlocker.set();
-      
-      this.updateRouteQuery(this.routeQuery);
-      this.$emit('input', this.filter);
-    },
-    '$route.query': function () {
-      // 保持している値の更新と $route.query の更新で巡回して複数回イベント発生するのを防ぐ。
-      if (this.multiSendBlocker.isSending) { return; }
-      this.multiSendBlocker.set();
-      
-      this.setFilterFromQuery();
-    },
     'filter.rarityMin': function () {
       if (this.filter.rarityMax < this.filter.rarityMin) {
         this.filter.rarityMax = this.filter.rarityMin;
@@ -467,11 +540,6 @@ export default {
       this.setDisableScroll(newValue);
     }
   },
-  created: function () {
-    this.setFilterFromQuery();
-    // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
-    setTimeout(() => { this.pageResetFlag = true; }, 0);
-  },
   mounted: function () {
     window.addEventListener('resize', this.checkBrowserWidthSmall);
     this.checkBrowserWidthSmall();
@@ -483,10 +551,6 @@ export default {
     }
   },
   methods: {
-    /**  配列を、カンマで結合したテキストにする。 */
-    array2text: function (array) {
-      return array.length ? array.slice().sort((a, b) => a - b).join(',') : undefined;
-    },
     /**
      * ページ全体のスクロールを無効にするかどうかを設定する。
      * 引数に true を指定するとスクロールが無効になり、 false を指定するとスクロールが有効になる。
@@ -497,20 +561,6 @@ export default {
     /** 現在のウィンドウサイズが、設定領域を全画面表示するものかどうかを確認する。 */
     checkBrowserWidthSmall: function () {
       this.isBrowserWidthSmall = window.matchMedia('(max-width: 575px)').matches;
-    },
-    /** $route.query を元にフィルター設定を作成する。 */
-    setFilterFromQuery: function () {
-      this.queryToFilter('name');
-      this.queryToFilter('attr');
-      this.queryToFilter('subAttr');
-      this.queryToFilter('type');
-      this.queryToFilter('awaken');
-      this.queryToFilter('assist', Number);
-      this.queryToFilter('rarityMin', Number, filterDefault.rarityMin);
-      this.queryToFilter('rarityMax', Number, filterDefault.rarityMax);
-      this.skillTurnFilterStr = this.$route.query.skillTurn;
-      this.skillBoostFilterStr = this.$route.query.skillBoost;
-      this.queryToFilter('timeExtensionMin', Number, filterDefault.timeExtensionMin);
     },
     /** 指定要素の現在の高さを style に設定する。親要素がない場合は指定された ID の要素に一時的に登録して計測する。 */
     setStyleHeight: function (elm, dummyParentId) {
@@ -526,37 +576,6 @@ export default {
     /** style に設定されている高さを空にする。 */
     clearStyleHeight: function (elm) {
       elm.style.height = '';
-    },
-    /** ルートのクエリーを更新する。 */
-    updateRouteQuery: function (changeQuery) {
-      const margedQuery = Object.assign({}, this.$route.query, changeQuery);
-      if (this.pageResetFlag) { margedQuery.page = undefined; }
-      this.$router.replace({ path: this.$route.path, params: this.$route.params, query: margedQuery });
-    },
-    /** 指定した名前のルートクエリーを元に同名のオブジェクトデータを変更する。 */
-    queryToData: function (name) {
-      this[name] = this.$route.query[name];
-      return (this[name] !== undefined);
-    },
-    /** 特定のルートクエリーを使用して、フィルタリング設定を変更する。 */
-    queryToFilter: function (name, type, defualtValue) {
-      let value;
-      const query = this.$route.query[name];
-      const isArray = Array.isArray(this.filter[name]);
-      if (isArray) {
-        const now = this.array2text(this.filter[name]);
-        if (now !== query) {
-          value = query ? query.split(',') : [];
-        } else {
-          value = this.filter[name];
-        }
-      } else {
-        value = query;
-        if (type === Number && value) { value *= 1; }
-        if (value === undefined) { value = defualtValue; } 
-      }
-      this.filter[name] = value;
-      return isArray ? (value.length > 0) : value !== defualtValue;
     },
     /** フィルタリング設定を空にする。 */
     clearFilter: function () {
