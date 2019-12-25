@@ -327,6 +327,17 @@ export default {
       const hitData = Object.values(this.monsterTable).find(d => d.name === baseName);
       if (hitData) { return [hitData.no]; }
       return constData.rareStoneExchangeTable[this.no];
+    },
+    /** スキルによる変身後のモンスターの情報。変身しない場合は null 。 */
+    monsterDataAfterTransform: function () {
+      const skill = this.$store.state.skillTable[this.monsterData.skill];
+      if (!skill) { return null; }
+      if (/(?:[\n。】]|^)(.*)に変身する/.test(skill.description)) {
+        const targetName = RegExp.$1;
+        const monsterData = Object.values(this.monsterTable).find(d => d.name === targetName);
+        if (monsterData) { return monsterData; }
+      }
+      return null;
     }
   },
   watch: {
