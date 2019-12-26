@@ -63,6 +63,14 @@
       </div>
     </div>
 
+    <div v-if="monsterDataAfterTransform">
+      <h3 class="h4 decoHeader">変身後のモンスター</h3>
+      <router-link :to="{ name: 'monsterDetails', params: { no: monsterDataAfterTransform.no } }">
+        <monster-icon :no="monsterDataAfterTransform.no" width="3em" height="3em" />
+        {{ monsterDataAfterTransform.name }}
+      </router-link>
+    </div>
+
     <div v-if="evoInfo.evo">
       <h3 class="h4 decoHeader">進化系統</h3>
       <div v-if="monsterData.evolutionType !== 0" class="mt-1 p-1">
