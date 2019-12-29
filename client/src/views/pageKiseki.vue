@@ -49,7 +49,7 @@ export default {
   computed: {
     monsterTable: function () { return this.$store.state.monsterTable; },
     list: function () {
-      const monsterTableArray = Object.values(this.monsterTable);
+      const monsterTableArray = this.$store.getters.monsterDataArray;
       const regExpKiseki = /^(.+)の希石$/;
       return monsterTableArray.map((d) => {
         if (!regExpKiseki.test(d.name)) { return undefined; }

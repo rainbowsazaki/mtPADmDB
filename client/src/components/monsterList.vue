@@ -57,16 +57,9 @@ export default {
     
     pageCount () { return ((this.filteredMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
 
-    monsterTableArray: function () {
-      const array = [];
-      for (const key in this.monsterTable) {
-        array.push(this.monsterTable[key]);
-      }
-      return array;
-    },
     /** フィルタリングを行ったモンスターデータの配列。 */
     filteredMonsterTableArray: function () {
-      return filterMonsterDataArray(this.filterSetting, this.monsterTableArray);
+      return filterMonsterDataArray(this.filterSetting, this.$store.getters.monsterDataArray);
     },
     monsterTableInPage () {
       return this.filteredMonsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);

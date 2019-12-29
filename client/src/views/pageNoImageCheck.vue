@@ -27,7 +27,7 @@ export default {
     /** 空の情報を持つモンスターの番号及び空の情報のキーの配列。 */
     noImageMonsterTable () {
       const imageTable = this.imageTable;
-      return Object.values(this.monsterTable).filter(d => {
+      return this.$store.getters.monsterDataArray.filter(d => {
         return !(d.no in imageTable);
       });
     }

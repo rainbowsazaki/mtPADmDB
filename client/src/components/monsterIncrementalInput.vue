@@ -42,7 +42,7 @@ export default {
       // 文字が入力されていない場合は表示しない。
       if (this.filter.length < 1) { return {}; }
       const func = getFilterFunction({ name: this.filter });
-      return Object.values(this.monsterTable).filter(d => func(d));
+      return this.$store.getters.monsterDataArray.filter(d => func(d));
     }
   },
   watch: {

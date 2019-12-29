@@ -332,7 +332,7 @@ export default {
     rareStoneExchangeMonsters () {
       if (!this.monsterData.name.match(/^(.*)の希石/)) { return undefined; }
       const baseName = RegExp.$1;
-      const hitData = Object.values(this.monsterTable).find(d => d.name === baseName);
+      const hitData = this.$store.getters.monsterDataArray.find(d => d.name === baseName);
       if (hitData) { return [hitData.no]; }
       return constData.rareStoneExchangeTable[this.no];
     },
@@ -342,7 +342,7 @@ export default {
       if (!skill) { return null; }
       if (/(?:[\n。】]|^)(.*)に変身する/.test(skill.description)) {
         const targetName = RegExp.$1;
-        const monsterData = Object.values(this.monsterTable).find(d => d.name === targetName);
+        const monsterData = this.$store.getters.monsterDataArray.find(d => d.name === targetName);
         if (monsterData) { return monsterData; }
       }
       return null;

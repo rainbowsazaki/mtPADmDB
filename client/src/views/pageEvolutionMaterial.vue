@@ -102,7 +102,7 @@ export default {
         }
       }
       const monsterTable = this.monsterTable;
-      const monsterArray = Object.values(monsterTable);
+      const monsterArray = this.$store.getters.monsterDataArray;
 
       function func (monsterNo, evoObj, kiseki) {
         let monsterData = monsterTable[monsterNo];
