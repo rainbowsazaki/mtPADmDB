@@ -10,6 +10,10 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: commonData,
   getters: {
+    /** モンスター情報の配列。 */
+    monsterDataArray: state => {
+      return Object.values(state.monsterTable);
+    },
     /** スキル番号をキーとして、スキルを持っているモンスター番号の配列を格納したオブジェクトを取得する。 */
     skillToMonsterNosTable: state => {
       const obj = {};
