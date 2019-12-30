@@ -369,8 +369,8 @@ export default {
       computed: true
     }
   },
-  /** データの変更を受けて $route.query が変更されたときに呼ばれるフック。 */
-  queriesSended: function () {
+  /** $route.query の変更を受けてデータが変更されたときに呼ばれるフック。 */
+  queriesReceived: function () {
     this.$emit('input', this.filter);
   },
   props: {
