@@ -21,6 +21,9 @@
           </span>
         </template>
       </div>
+      <div v-if="monsterDataAfterTransform" class="transformIconArea">
+        <monster-icon :no="monsterDataAfterTransform.no" class="icon" width="3em" height="3em" />
+      </div>
       <div class="awakenArea">
         <span v-if="monsterData.awakens[0] === 0" />
         <div v-else-if="monsterData.awakens[0] === null" class="awakenDummy">？</div>
@@ -176,6 +179,17 @@ export default {
     /** リーダースキルの効果を装飾したHTMLを取得する。 */
     leaderSkillDescriptionHtml: function () {
       return leaderSkillDescriptionToDecoratedHtml(this.leaderSkillDetails.description);
+    },
+    /** スキルによる変身後のモンスターの情報。変身しない場合は null 。 */
+    monsterDataAfterTransform: function () {
+      const skill = this.skillDetails;
+      if (!skill) { return null; }
+      if (/(?:[\n。】]|^)(.*)に変身する/.test(skill.description)) {
+        const targetName = RegExp.$1;
+        const monsterData = this.$store.getters.monsterDataArray.find(d => d.name === targetName);
+        if (monsterData) { return monsterData; }
+      }
+      return null;
     }
   },
   mounted: function () {
@@ -279,6 +293,20 @@ div.monsterImage {
     width:1.3em;
     height: 1.35em;
     margin-right: 0.1em;
+  }
+}
+
+div.transformIconArea {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3.5em;
+  height: 3.5em;
+  background: black url('../assets/image/monsterBack.jpeg');
+  .icon {
+    position: absolute;
+    left: 0.4em;
+    top: 2.0em;
   }
 }
 
