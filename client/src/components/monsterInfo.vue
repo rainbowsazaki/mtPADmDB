@@ -14,15 +14,15 @@
         <img v-if="monsterData.no" :src="monsterImagePath" :key="`monsterImage${monsterData.no}`">
       </div>
 
+      <div v-if="monsterDataAfterTransform" class="transformIconArea">
+        <monster-icon :no="monsterDataAfterTransform.no" class="icon" width="2.8em" height="2.8em" />
+      </div>
       <div class="typeArea">
         <template v-for="(type, n) in monsterData.types">
           <span v-if="type !== 0" :key="`typeNo${n}`">
             <img v-if="type !== null" :src="`./image/type/${type}.png`" alt="">{{ typeTable[type].name }}
           </span>
         </template>
-      </div>
-      <div v-if="monsterDataAfterTransform" class="transformIconArea">
-        <monster-icon :no="monsterDataAfterTransform.no" class="icon" width="3em" height="3em" />
       </div>
       <div class="awakenArea">
         <span v-if="monsterData.awakens[0] === 0" />
