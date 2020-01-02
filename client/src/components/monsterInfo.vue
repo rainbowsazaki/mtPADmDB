@@ -15,6 +15,9 @@
       </div>
 
       <div v-if="monsterDataAfterTransform" class="transformIconArea">
+        <div class="label">
+          <div class="text">変身先</div>
+        </div>
         <monster-icon :no="monsterDataAfterTransform.no" class="icon" width="2.8em" height="2.8em" />
       </div>
       <div class="typeArea">
@@ -303,10 +306,39 @@ div.transformIconArea {
   width: 3.5em;
   height: 3.5em;
   background: black url('../assets/image/monsterBack.jpeg');
+  .label {
+    position: absolute;
+    left: 0.4em;
+    top: 2em;
+    width: 2.8em;
+    height: 1.2em;
+    
+    background: linear-gradient(#77771a, #445511);
+    border: 0.05em solid #ccdd44;
+    border-radius: 0.2em;
+    padding: 0.22em 0;
+  
+    .text {
+      color: #ffffbb;
+      font-size: 0.7em;
+      font-weight: bold;
+      line-height: 1em;
+      text-shadow: none;
+      text-align: center;
+
+      $shadowBlur: 0.08em;
+      $shadowColor: rgba(0,0,0,0.6);
+      filter:
+        drop-shadow(0px 0px $shadowBlur $shadowColor)
+        drop-shadow(0px 0px $shadowBlur $shadowColor)
+        drop-shadow(0px 0px $shadowBlur $shadowColor)
+        drop-shadow(0px 0px $shadowBlur $shadowColor);
+    }
+  }
   .icon {
     position: absolute;
     left: 0.4em;
-    top: 2.0em;
+    top: 3.25em;
   }
 }
 
