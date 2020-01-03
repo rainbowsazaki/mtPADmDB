@@ -285,11 +285,13 @@ export default {
         baseNo = rareStoneTable[0];
       }
       const monsterTable = this.monsterTable;
+      const duplicationCheckTable = {};
       while (1) {
+        duplicationCheckTable[baseNo] = true;
         const monsterData = monsterTable[baseNo];
         if (!monsterData) { break; }
         const baseNo_ = monsterData.evolution.baseNo;
-        if (!baseNo_) { break; }
+        if (!baseNo_ || duplicationCheckTable.hasOwnProperty(baseNo_)) { break; }
         baseNo = baseNo_;
       }
       // 再帰で進化後を巡っていってツリー構造を作成する。
