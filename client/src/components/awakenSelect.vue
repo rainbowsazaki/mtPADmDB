@@ -119,7 +119,6 @@ export default {
     },
     /** 値の変更を通知する。 */
     emitInput: function () {
-      if (this.checkboxStyle) { this.selectedArray.sort(); }
       this.$emit('input', this.selectedArray);
     }
   }
