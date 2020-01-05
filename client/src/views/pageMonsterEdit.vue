@@ -324,6 +324,12 @@ export default {
       this.$store.commit('fetchCommonData');
     },
     submit: function () {
+      // 他番号のモンスターを上書きしようとしている場合の確認処理。
+      if (this.no !== this.monsterData.no && this.monsterTable[this.monsterData.no]) {
+        const ret = confirm('指定された番号のモンスターはすでに登録されています。\n上書きしますか？');
+        if (!ret) { return; }
+      }
+      
       // 多重送信防止処理
       if (this.multiSendBlocker.isSending) { return; }
       this.multiSendBlocker.set();
