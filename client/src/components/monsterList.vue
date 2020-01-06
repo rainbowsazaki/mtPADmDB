@@ -46,6 +46,8 @@ export default {
   data: function () {
     return {
       inPageCount: 50,
+      /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
+      pageResetFlag: false,
       /** 表示するモンスターに対するフィルタ。 */
       filterSetting: getFilterDefault()
     };
@@ -75,11 +77,13 @@ export default {
     },
     filteredMonsterTableArray: function () {
       // ページリセット
-      this.page = 1;
+      if (this.pageResetFlag) { this.page = 1; }
     }
   },
   created: function () {
     this.$store.commit('fetchCommonData');
+    // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
+    this.$nextTick(() => { this.pageResetFlag = true; });
   }
 };
 </script>
