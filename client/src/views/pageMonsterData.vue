@@ -63,14 +63,6 @@
       </div>
     </div>
 
-    <div v-if="monsterDataAfterTransform">
-      <h3 class="h4 decoHeader">変身後のモンスター</h3>
-      <router-link :to="{ name: 'monsterDetails', params: { no: monsterDataAfterTransform.no } }">
-        <monster-icon :no="monsterDataAfterTransform.no" width="3em" height="3em" />
-        {{ monsterDataAfterTransform.name }}
-      </router-link>
-    </div>
-
     <div v-if="evoInfo.evo">
       <h3 class="h4 decoHeader">進化系統</h3>
       <div v-if="monsterData.evolutionType !== 0" class="mt-1 p-1">
@@ -337,17 +329,6 @@ export default {
       const hitData = this.$store.getters.monsterDataArray.find(d => d.name === baseName);
       if (hitData) { return [hitData.no]; }
       return constData.rareStoneExchangeTable[this.no];
-    },
-    /** スキルによる変身後のモンスターの情報。変身しない場合は null 。 */
-    monsterDataAfterTransform: function () {
-      const skill = this.$store.state.skillTable[this.monsterData.skill];
-      if (!skill) { return null; }
-      if (/(?:[\n。】]|^)(.*)に変身する/.test(skill.description)) {
-        const targetName = RegExp.$1;
-        const monsterData = this.$store.getters.monsterDataArray.find(d => d.name === targetName);
-        if (monsterData) { return monsterData; }
-      }
-      return null;
     }
   },
   watch: {
