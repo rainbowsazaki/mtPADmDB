@@ -19,7 +19,7 @@
         <div v-else style="color: rgba(0, 0, 0, 0.5)">（なし）</div>
       </div>
 
-      <h4 class="decoHeader mt-3">所持モンスター</h4>
+      <h4 class="decoHeader mt-3">所持モンスター ({{ monsterNosUsingThisSkillAll.length }})</h4>
       <ul v-if="existsMonsterUsingThisSkill" class="monsters list-inline">
         <li v-for="monsterNo in monsterNosUsingThisSkillDisp" class="list-inline-item" :key="`monster${monsterNo}`">
           <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
