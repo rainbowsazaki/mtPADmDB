@@ -21,9 +21,11 @@
 
       <h4 class="decoHeader mt-3">所持モンスター</h4>
       <ul v-if="existsMonsterUsingThisSkill" class="monsters list-inline">
-        <li v-for="monsterNo in monsterNosUsingThisSkill" class="list-inline-item" :key="`monster${monsterNo}`">
+        <li v-for="monsterNo in monsterNosUsingThisSkillDisp" class="list-inline-item" :key="`monster${monsterNo}`">
           <monster-icon v-if="imageTable" :no="monsterNo" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
         </li>
+        <span v-if="!isUsingDispAll"> ... </span>
+        <button v-if="!isUsingDispAll" class="btn btn-sm btn-outline-secondary" @click="isUsingDispAll = true;">すべてを表示する</button>
       </ul>
       <div v-else>なし</div>
 
@@ -128,7 +130,9 @@ export default {
       isLoadingHistory: false,
       /** 履歴情報 */
       histories: null,
-      skillDetailsHistory: null
+      skillDetailsHistory: null,
+      /** このスキルを持つモンスターのアイコンをすべて表示するかどうか。 */
+      isUsingDispAll: false
     };
   },
   computed: {
@@ -160,12 +164,20 @@ export default {
       return (this.isLeaderSkill) ? this.$store.getters.leaderSkillToMonsterNosTable : this.$store.getters.skillToMonsterNosTable;
     },
     /** このスキルを持つモンスターの番号の配列。 */
-    monsterNosUsingThisSkill: function () {
+    monsterNosUsingThisSkillAll: function () {
       return this.skillToMonsterNosTable[this.skillDetails.no] || [];
+    },
+    /** このスキルを持つモンスターの番号の表示する分の配列。 */
+    monsterNosUsingThisSkillDisp: function () {
+      let array = this.monsterNosUsingThisSkillAll;
+      if (array && !this.isUsingDispAll) {
+        array = array.slice(0, 10);
+      }
+      return array;
     },
     /** このスキルを持つモンスターが存在するかどうか。 */
     existsMonsterUsingThisSkill: function () {
-      return this.monsterNosUsingThisSkill.length > 0;
+      return this.monsterNosUsingThisSkillAll.length > 0;
     },
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
@@ -227,6 +239,7 @@ export default {
       this.histories = null;
       this.isLoadingHistory = false;
       this.multiSendBlocker.reset();
+      this.isUsingDispAll = this.monsterNosUsingThisSkillAll && this.monsterNosUsingThisSkillAll.length <= 10;
     },
 
     /** リーダースキル情報を元に、リーダースキルの効果をゲーム内の表記と同等の表示になるように装飾した HTML を作成する。 */
