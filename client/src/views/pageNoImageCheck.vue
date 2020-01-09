@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import MixinForPage from '../components/mixins/forPage.js';
 
 /**
  * 画像なしモンスターチェックコンポーネント
@@ -19,6 +20,7 @@
 export default {
   name: 'PagNoImageCheck',
   pageTitle: function () { return '画像なしモンスターチェック'; },
+  mixins: [MixinForPage],
   computed: {
     /** モンスター情報のテーブル。 */
     monsterTable () { return this.$store.state.monsterTable; },

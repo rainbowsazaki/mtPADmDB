@@ -50,6 +50,7 @@
 <script>
 import $ from 'jquery';
 import { mtpadmdb, MultiSendBlocker, gtagProductionOnly } from '../mtpadmdb.js';
+import MixinForPage from '../components/mixins/forPage.js';
 /**
  * 画像投稿ページコンポーネント
  */
@@ -73,6 +74,7 @@ export default {
       return undefined;
     }
   },
+  mixins: [MixinForPage],
 
   props: {
     no: {

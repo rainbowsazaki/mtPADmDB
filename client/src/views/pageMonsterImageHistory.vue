@@ -26,6 +26,7 @@
 
 <script>
 import { mtpadmdb } from '../mtpadmdb.js';
+import MixinForPage from '../components/mixins/forPage.js';
 /**
  * モンスター画像投稿履歴ページコンポーネント
  */
@@ -34,6 +35,7 @@ export default {
   pageTitle: function () {
     return '画像投稿履歴一覧';
   },
+  mixins: [MixinForPage],
   data: function () {
     return {
       /** 履歴情報 */

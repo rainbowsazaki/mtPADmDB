@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import MixinForPage from '../components/mixins/forPage.js';
 
 /**
  * モンスター一覧ページコンポーネント
@@ -28,6 +29,7 @@
 export default {
   name: 'PageNullCheck',
   pageTitle: function () { return this.title; },
+  mixins: [MixinForPage],
 
   data: function () {
     return {

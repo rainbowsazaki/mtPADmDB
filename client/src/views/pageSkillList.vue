@@ -60,6 +60,7 @@
 <script>
 import { escapeRegExp, toAimaiSearch, stretchElement } from '../mtpadmdb.js';
 import { getFilterDefault, getFilterFunction, filterSettingText } from '../components/monsterFilterSetting.vue';
+import MixinForPage from '../components/mixins/forPage.js';
 import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /**
@@ -226,6 +227,7 @@ export default {
     ]
   ],
   mixins: [
+    MixinForPage,
     RouteQueryWrapper
   ],
   /** $route.query ラッパー設定 */

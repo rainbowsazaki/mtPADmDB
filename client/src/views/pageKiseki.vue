@@ -40,12 +40,14 @@
 </template>
 
 <script>
+import MixinForPage from '../components/mixins/forPage.js';
 /**
  * 希石元モンスター存在確認ページコンポーネント
  */
 export default {
   name: 'PageKiseki',
   pageTitle: '希石チェック',
+  mixins: [MixinForPage],
   computed: {
     monsterTable: function () { return this.$store.state.monsterTable; },
     list: function () {

@@ -26,6 +26,7 @@
 
 <script>
 import evolutionMaterial from '../components/evolutionMaterial.vue';
+import MixinForPage from '../components/mixins/forPage.js';
 
 export default {
   name: 'PageEvolutionMaterial',
@@ -46,6 +47,7 @@ export default {
   components: {
     'evolutionMaterial': evolutionMaterial
   },
+  mixins: [MixinForPage],
   props: {
     /** 表示するモンスターの番号。 */
     no: {

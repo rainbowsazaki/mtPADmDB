@@ -161,6 +161,7 @@
 import Vue from 'vue';
 import $ from 'jquery';
 import { constData, leaderSkillDescriptionToDecoratedHtml } from '../mtpadmdb.js';
+import MixinForPage from '../components/mixins/forPage.js';
 /**
  * モンスター同士の比較を行うページのコンポーネント。
  */
@@ -218,6 +219,7 @@ export default {
       }
     }
   },
+  mixins: [MixinForPage],
   props: {
     nos: {
       type: String,

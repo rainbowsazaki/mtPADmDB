@@ -137,6 +137,7 @@
 <script>
 import { constData, checkCanMixMonster, stretchElement } from '../mtpadmdb.js';
 import { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
+import MixinForPage from '../components/mixins/forPage.js';
 import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /** 2体攻撃発動のフラグ。 */
@@ -170,6 +171,7 @@ export default {
     return this.rankingSetting.title + 'ランキング';
   },
   mixins: [
+    MixinForPage,
     RouteQueryWrapper
   ],
   /** $route.query ラッパー設定 */

@@ -145,6 +145,7 @@ import MonsterInfo from './../components/monsterInfo.vue';
 import TrParam from './../components/monsterDataTrParam.vue';
 import EvolutionMaterials from './../components/monsterDataEvolutionMaterials.vue';
 import EvolutionMaterial from '../components/evolutionMaterial.vue';
+import MixinForPage from '../components/mixins/forPage.js';
 
 /**
  * モンスター情報ページコンポーネント
@@ -168,6 +169,7 @@ export default {
     EvolutionMaterials,
     EvolutionMaterial
   },
+  mixins: [MixinForPage],
   props: {
     no: {
       type: [String, Number],

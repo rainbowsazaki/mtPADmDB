@@ -60,12 +60,15 @@
 </template>
 
 <script>
+import MixinForPage from '../components/mixins/forPage.js';
+
 /**
  * アバウトページコンポーネント
  */
 export default {
   name: 'PageAbout',
-  template: '#templateAbout',
-  pageTitle: 'これは何？'
+  pageTitle: 'これは何？',
+  mixins: [MixinForPage],
+  template: '#templateAbout'
 };
 </script>

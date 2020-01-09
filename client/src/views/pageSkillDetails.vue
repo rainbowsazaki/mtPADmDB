@@ -82,6 +82,7 @@
 <script>
 import { mtpadmdb, leaderSkillDescriptionToDecoratedHtml, MultiSendBlocker, gtagProductionOnly, stretchElement } from '../mtpadmdb.js';
 import EditSkill from './../components/editSkill.vue';
+import MixinForPage from '../components/mixins/forPage.js';
 /**
  * スキル詳細のコンポーネント。
  */
@@ -107,6 +108,7 @@ export default {
   components: {
     EditSkill
   },
+  mixins: [MixinForPage],
   props: {
     no: {
       type: [String, Number],

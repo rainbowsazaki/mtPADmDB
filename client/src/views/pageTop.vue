@@ -15,6 +15,7 @@
 <script>
 
 const MonsterList = () => import('../components/monsterList.vue');
+import MixinForPage from '../components/mixins/forPage.js';
 
 /**
  * トップページコンポーネント
@@ -25,6 +26,7 @@ export default {
   components: {
     'monster-list': MonsterList
   },
+  mixins: [MixinForPage],
   computed: {
     monsterTable () { return this.$store.state.monsterTable; },
     monsterCount () { return Object.keys(this.monsterTable).length; }

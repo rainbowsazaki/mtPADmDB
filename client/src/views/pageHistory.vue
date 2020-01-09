@@ -21,6 +21,7 @@
 
 <script>
 import { mtpadmdb } from '../mtpadmdb.js';
+import MixinForPage from '../components/mixins/forPage.js';
 /**
  * モンスター情報変更履歴ページコンポーネント
  */
@@ -29,6 +30,7 @@ export default {
   pageTitle: function () {
     return '履歴一覧';
   },
+  mixins: [MixinForPage],
   data: function () {
     return {
       /** 履歴情報 */

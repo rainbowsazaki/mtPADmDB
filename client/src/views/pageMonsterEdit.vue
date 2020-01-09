@@ -191,6 +191,7 @@ import $ from 'jquery';
 import { mtpadmdb, constData, gtagProductionOnly, MultiSendBlocker } from '../mtpadmdb.js';
 import TrParam from './../components/monsterEditTrParam.vue';
 import EditSkill from './../components/editSkill.vue';
+import MixinForPage from '../components/mixins/forPage.js';
 
 /**
  * モンスター情報編集ページコンポーネント
@@ -225,6 +226,7 @@ export default {
     TrParam,
     EditSkill
   },
+  mixins: [MixinForPage],
   props: {
     no: {
       type: [String, Number],

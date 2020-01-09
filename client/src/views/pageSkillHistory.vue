@@ -21,6 +21,7 @@
 
 <script>
 import { mtpadmdb } from '../mtpadmdb.js';
+import MixinForPage from '../components/mixins/forPage.js';
 /**
  * スキル編集履歴ページコンポーネント
  */
@@ -29,6 +30,7 @@ export default {
   pageTitle: function () {
     return this.title;
   },
+  mixins: [MixinForPage],
   data: function () {
     return {
       /** 履歴情報 */

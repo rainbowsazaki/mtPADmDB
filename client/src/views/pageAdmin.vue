@@ -31,6 +31,7 @@
 <script>
 
 import { signIn, signOut } from '../auth';
+import MixinForPage from '../components/mixins/forPage.js';
 
 /**
  * 管理者ページコンポーネント
@@ -38,7 +39,7 @@ import { signIn, signOut } from '../auth';
 export default {
   name: 'PageAdmin',
   pageTitle: '管理者ページ',
-
+  mixins: [MixinForPage],
   computed: {
     /** ログインしているアカウントの情報。 */
     accountData: function () {

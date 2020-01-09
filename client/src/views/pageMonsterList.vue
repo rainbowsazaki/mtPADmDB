@@ -15,6 +15,7 @@
 <script>
 
 const MonsterList = () => import('../components/monsterList.vue');
+import MixinForPage from '../components/mixins/forPage.js';
 
 /**
  * モンスター一覧ページコンポーネント
@@ -26,6 +27,7 @@ export default {
   components: {
     'monster-list': MonsterList
   },
+  mixins: [MixinForPage],
   data: function () {
     return {
       /** モンスターフィルタリング設定の内容を表したテキスト。 */

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import MixinForPage from '../components/mixins/forPage.js';
 /**
  * コメント履歴ページコンポーネント
  */
@@ -14,6 +15,7 @@ export default {
   pageTitle: function () {
     return 'コメント一覧';
   },
+  mixins: [MixinForPage],
   data: function () {
     return {
     };
