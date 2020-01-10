@@ -4,7 +4,7 @@
       <img :src="iconPath" :alt="monsterNoAndName" :key="`icon${no}`">
     </span>
   </div>
-  <div v-else class="monsterIcon monsterIconDummy" :style="iconSizeStyleObject">
+  <div v-else class="monsterIcon monsterIconDummy" :class="{ subAttr: hasAttr1 }" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img v-if="hasAttr0" class="attr attr1" :src="attrPath0">
       <img v-if="hasAttr1" class="attr attr2" :src="attrPath1">
@@ -82,6 +82,10 @@ export default {
   vertical-align: bottom;
   border-radius: 7.5%;
   overflow: hidden;
+
+  &.subAttr {
+    background-image: url('../assets/image/icon_null2.jpg');
+  }
 
   a { text-decoration: none; }
 
