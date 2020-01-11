@@ -102,8 +102,7 @@ export default {
     user-select: none;
   }
 
-  $attr_size: 23%;
-  $attr_margin: 2%;
+  $attr_size: 22.7%;
   
   img.attr {
     position: absolute;
@@ -111,12 +110,12 @@ export default {
     height: $attr_size;
   }
   img.attr1 {
-    left: $attr_margin;
-    top: $attr_margin;
+    left: 2.0%;
+    top: 1.3%;
   }
   img.attr2 {
-    right: $attr_margin;
-    bottom: $attr_margin;
+    right: 2%;
+    bottom: 4%;
   }
 
   .iconDummy {
