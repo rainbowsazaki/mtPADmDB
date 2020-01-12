@@ -23,7 +23,13 @@
             </template>
             <li v-for="n in (5 - (materials || []).length)" class="nullMaterial" :key="`materialNull${n}`" />
           </ul>
-          <span v-else>進化素材不明</span>
+          <ul v-else>
+            <template v-for="n in 5">
+              <li :key="`materialNo${n}`">
+                <monster-icon no-link :no="null" width="2.7em" height="2.7em" />
+              </li>
+            </template>
+          </ul>
         </div>
       </div>
     </router-link>
