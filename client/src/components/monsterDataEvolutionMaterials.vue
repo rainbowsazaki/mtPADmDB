@@ -15,9 +15,7 @@
           <ul v-if="type === 0 || materials === null || materials[0]">
             <template v-for="(material, n) in materials || []">
               <li v-if="material" :key="`materialNo${n}`">
-                <router-link :to="{ name:'monsterDetails', params: { no: material }}">
-                  <monster-icon :no="material" width="2.7em" height="2.7em" />
-                </router-link>
+                <monster-icon :no="material" width="2.7em" height="2.7em" />
               </li>
               <li v-else class="nullMaterial" :key="`materialNo${n}`" />
             </template>
