@@ -110,7 +110,13 @@ export default {
         let monsterData = monsterTable[monsterNo];
         if (!monsterData) {
           if (monsterNo !== null) { AddNeedMaterials(monsterNo); }
-          return null;
+          // 進化後の情報がある＝ベースモンスター
+          if (evoObj) {
+            return { no: monsterNo, evo: evoObj };
+          // 進化後の情報がない＝素材モンスター
+          } else {
+            return null;
+          }
         }
         const obj = { no: monsterNo };
         if (/^(.+)の希石$/.test(monsterData.name)) {
