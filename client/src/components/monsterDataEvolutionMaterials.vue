@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     monsterData: function () {
-      return this.$store.state.monsterTable[this.targetNo] || { no: this.targetNo, name: '不明', evolutionType: null, evolution: { materials: [] }};
+      return this.$store.state.monsterTable[this.targetNo] || { no: this.targetNo, name: '（不明）', evolutionType: null, evolution: { materials: [] }};
     },
     beforeNo: function () {
       return this.monsterData.evolution.baseNo;
