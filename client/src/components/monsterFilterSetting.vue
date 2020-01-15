@@ -119,6 +119,12 @@ const filterDefault = {
   skillTurnMax: 99,
   skillBoostMin: 0,
   skillBoostMax: 9,
+  resistDarknessMin: 0,
+  resistDarknessMax: 100,
+  resistJammerMin: 0,
+  resistJammerMax: 100,
+  resistPoisonMin: 0,
+  resistPoisonMax: 100,
   timeExtensionMin: 0,
   assist: undefined
 };
