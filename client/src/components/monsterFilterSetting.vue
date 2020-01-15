@@ -369,6 +369,24 @@ export default {
       queryKey: 'skillBoost',
       computed: true
     },
+    resistDarknessFilterStr: {
+      type: String,
+      default: filterDefault.resistDarknessMin + '-' + filterDefault.resistDarknessMax,
+      queryKey: 'resistDarkness',
+      computed: true
+    },
+    resistJammerFilterStr: {
+      type: String,
+      default: filterDefault.resistJammerMin + '-' + filterDefault.resistJammerMax,
+      queryKey: 'resistJammer',
+      computed: true
+    },
+    resistPoisonFilterStr: {
+      type: String,
+      default: filterDefault.resistPoisonMin + '-' + filterDefault.resistPoisonMax,
+      queryKey: 'resistPoison',
+      computed: true
+    },
     timeExtensionMin: {
       type: Number,
       default: filterDefault.timeExtensionMin,
@@ -501,6 +519,51 @@ export default {
         } else {
           this.filter.skillBoostMin = filterDefault.skillBoostMin;
           this.filter.skillBoostMax = filterDefault.skillBoostMax;
+        }
+      }
+    },
+    /** 暗闇耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
+    resistDarknessFilterStr: {
+      get: function () {
+        return this.filter.resistDarknessMin + '-' + this.filter.resistDarknessMax;
+      },
+      set: function (val) {
+        if (/(\d+)-(\d+)/.test(val)) {
+          this.filter.resistDarknessMin = RegExp.$1 | 0;
+          this.filter.resistDarknessMax = RegExp.$2 | 0;
+        } else {
+          this.filter.resistDarknessMin = filterDefault.resistDarknessMin;
+          this.filter.resistDarknessMax = filterDefault.resistDarknessMax;
+        }
+      }
+    },
+    /** お邪魔耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
+    resistJammerFilterStr: {
+      get: function () {
+        return this.filter.resistJammerMin + '-' + this.filter.resistJammerMax;
+      },
+      set: function (val) {
+        if (/(\d+)-(\d+)/.test(val)) {
+          this.filter.resistJammerMin = RegExp.$1 | 0;
+          this.filter.resistJammerMax = RegExp.$2 | 0;
+        } else {
+          this.filter.resistJammerMin = filterDefault.resistJammerMin;
+          this.filter.resistJammerMax = filterDefault.resistJammerMax;
+        }
+      }
+    },
+    /** 毒耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
+    resistPoisonFilterStr: {
+      get: function () {
+        return this.filter.resistPoisonMin + '-' + this.filter.resistPoisonMax;
+      },
+      set: function (val) {
+        if (/(\d+)-(\d+)/.test(val)) {
+          this.filter.resistPoisonMin = RegExp.$1 | 0;
+          this.filter.resistPoisonMax = RegExp.$2 | 0;
+        } else {
+          this.filter.resistPoisonMin = filterDefault.resistPoisonMin;
+          this.filter.resistPoisonMax = filterDefault.resistPoisonMax;
         }
       }
     },
