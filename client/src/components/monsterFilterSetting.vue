@@ -227,16 +227,17 @@ export function getFilterFunction (setting) {
     const awakenKeys = Object.keys(awakenFilter);
     functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
   }
-  const rarityMin = setting.rarityMin || filterDefault.rarityMin;
-  const rarityMax = setting.rarityMax || filterDefault.rarityMax;
+  function getSettingValue (name) { return setting.hasOwnProperty(name) ? setting[name] : filterDefault[name]; }
+  const rarityMin = getSettingValue('rarityMin');
+  const rarityMax = getSettingValue('rarityMax');
   if (rarityMin !== filterDefault.rarityMin ||
       rarityMax !== filterDefault.rarityMax) {
     functionArray.push(d => {
       return d.rare >= rarityMin && d.rare <= rarityMax;
     });
   }
-  const skillTurnMin = setting.skillTurnMin || filterDefault.skillTurnMin;
-  const skillTurnMax = setting.skillTurnMax || filterDefault.skillTurnMax;
+  const skillTurnMin = getSettingValue('skillTurnMin');
+  const skillTurnMax = getSettingValue('skillTurnMax');
   if (skillTurnMin !== filterDefault.skillTurnMin ||
       skillTurnMax !== filterDefault.skillTurnMax) {
     functionArray.push(d => {
@@ -247,8 +248,8 @@ export function getFilterFunction (setting) {
       return skill.minTurn >= skillTurnMin && skill.minTurn <= skillTurnMax;
     });
   }
-  const skillBoostMin = setting.hasOwnProperty('skillBoostMin') ? setting.skillBoostMin : filterDefault.skillBoostMin;
-  const skillBoostMax = setting.hasOwnProperty('skillBoostMax') ? setting.skillBoostMax : filterDefault.skillBoostMax;
+  const skillBoostMin = getSettingValue('skillBoostMin');
+  const skillBoostMax = getSettingValue('skillBoostMax');
   if (skillBoostMin !== filterDefault.skillBoostMin ||
       skillBoostMax !== filterDefault.skillBoostMax) {
     functionArray.push(d => {
@@ -256,7 +257,35 @@ export function getFilterFunction (setting) {
       return skillBoost >= skillBoostMin && skillBoost <= skillBoostMax;
     });
   }
-  const timeExtensionMin = setting.hasOwnProperty('timeExtensionMin') ? setting.timeExtensionMin : filterDefault.timeExtensionMin;
+  const resistDarknessMin = getSettingValue('resistDarknessMin');
+  const resistDarknessMax = getSettingValue('resistDarknessMax');
+  if (resistDarknessMin !== filterDefault.resistDarknessMin ||
+      resistDarknessMax !== filterDefault.resistDarknessMax) {
+    functionArray.push(d => {
+      const resistDarkness = (d.awakenCount[11] | 0) * 20 + (d.awakenCount[68] | 0) * 100;
+      return resistDarkness >= resistDarknessMin && resistDarkness <= resistDarknessMax;
+    });
+  }
+  const resistJammerMin = getSettingValue('resistJammerMin');
+  const resistJammerMax = getSettingValue('resistJammerMax');
+  if (resistJammerMin !== filterDefault.resistJammerMin ||
+      resistJammerMax !== filterDefault.resistJammerMax) {
+    functionArray.push(d => {
+      const resistJammer = (d.awakenCount[12] | 0) * 20 + (d.awakenCount[69] | 0) * 100;
+      return resistJammer >= resistJammerMin && resistJammer <= resistJammerMax;
+    });
+  }
+  const resistPoisonMin = getSettingValue('resistPoisonMin');
+  const resistPoisonMax = getSettingValue('resistPoisonMax');
+  if (resistPoisonMin !== filterDefault.resistPoisonMin ||
+      resistPoisonMax !== filterDefault.resistPoisonMax) {
+    functionArray.push(d => {
+      const resistPoison = (d.awakenCount[13] | 0) * 20 + (d.awakenCount[70] | 0) * 100;
+      return resistPoison >= resistPoisonMin && resistPoison <= resistPoisonMax;
+    });
+  }
+
+  const timeExtensionMin = getSettingValue('timeExtensionMin');
   if (timeExtensionMin !== filterDefault.timeExtensionMin) {
     functionArray.push(d => {
       const timeExtension = (d.awakenCount[19] | 0) * 0.5 + (d.awakenCount[53] | 0) * 1;
