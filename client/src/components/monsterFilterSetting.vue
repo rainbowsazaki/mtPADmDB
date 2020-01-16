@@ -344,28 +344,50 @@ export function filterSettingTextArray (setting) {
     if (max === defaultMax) { return `${min}${tanni}以上`; }
     return `${min}〜${max}${tanni}`;
   }
-  const rarityMin = setting.rarityMin || filterDefault.rarityMin;
-  const rarityMax = setting.rarityMax || filterDefault.rarityMax;
+  function getSettingValue (name) { return setting.hasOwnProperty(name) ? setting[name] : filterDefault[name]; }
+  const rarityMin = getSettingValue('rarityMin');
+  const rarityMax = getSettingValue('rarityMax');
   if (rarityMin !== filterDefault.rarityMin ||
       rarityMax !== filterDefault.rarityMax) {
     const valueText = createRangeText(rarityMin, rarityMax, filterDefault.rarityMin, filterDefault.rarityMax);
     textArray.push('レアリティ:' + valueText);
   }
-  const skillTurnMin = setting.skillTurnMin || filterDefault.skillTurnMin;
-  const skillTurnMax = setting.skillTurnMax || filterDefault.skillTurnMax;
+  const skillTurnMin = getSettingValue('skillTurnMin');
+  const skillTurnMax = getSettingValue('skillTurnMax');
   if (skillTurnMin !== filterDefault.skillTurnMin ||
       skillTurnMax !== filterDefault.skillTurnMax) {
     const valueText = createRangeText(skillTurnMin, skillTurnMax, filterDefault.skillTurnMin, filterDefault.skillTurnMax);
     textArray.push('Sターン:' + valueText);
   }
-  const skillBoostMin = setting.hasOwnProperty('skillBoostMin') ? setting.skillBoostMin : filterDefault.skillBoostMin;
-  const skillBoostMax = setting.hasOwnProperty('skillBoostMax') ? setting.skillBoostMax : filterDefault.skillBoostMax;
+  const skillBoostMin = getSettingValue('skillBoostMin');
+  const skillBoostMax = getSettingValue('skillBoostMax');
   if (skillBoostMin !== filterDefault.skillBoostMin ||
       skillBoostMax !== filterDefault.skillBoostMax) {
     const valueText = createRangeText(skillBoostMin, skillBoostMax, filterDefault.skillBoostMin, filterDefault.skillBoostMax);
     textArray.push('スキブ:' + valueText);
   }
-  const timeExtensionMin = setting.hasOwnProperty('timeExtensionMin') ? setting.timeExtensionMin : filterDefault.timeExtensionMin;
+  const resistDarknessMin = getSettingValue('resistDarknessMin');
+  const resistDarknessMax = getSettingValue('resistDarknessMax');
+  if (resistDarknessMin !== filterDefault.resistDarknessMin ||
+      resistDarknessMax !== filterDefault.resistDarknessMax) {
+    const valueText = createRangeText(resistDarknessMin, resistDarknessMax, filterDefault.resistDarknessMin, filterDefault.resistDarknessMax, '%');
+    textArray.push('暗闇耐性:' + valueText);
+  }
+  const resistJammerMin = getSettingValue('resistJammerMin');
+  const resistJammerMax = getSettingValue('resistJammerMax');
+  if (resistJammerMin !== filterDefault.resistJammerMin ||
+      resistJammerMax !== filterDefault.resistJammerMax) {
+    const valueText = createRangeText(resistJammerMin, resistJammerMax, filterDefault.resistJammerMin, filterDefault.resistJammerMax, '%');
+    textArray.push('お邪魔耐性:' + valueText);
+  }
+  const resistPoisonMin = getSettingValue('resistPoisonMin');
+  const resistPoisonMax = getSettingValue('resistPoisonMax');
+  if (resistPoisonMin !== filterDefault.resistPoisonMin ||
+      resistPoisonMax !== filterDefault.resistPoisonMax) {
+    const valueText = createRangeText(resistPoisonMin, resistPoisonMax, filterDefault.resistPoisonMin, filterDefault.resistPoisonMax, '%');
+    textArray.push('毒耐性:' + valueText);
+  }
+  const timeExtensionMin = getSettingValue('timeExtensionMin');
   if (timeExtensionMin !== filterDefault.timeExtensionMin) {
     textArray.push(`指延長:${timeExtensionMin}秒以上`);
   }
