@@ -74,6 +74,45 @@
             <input type="number" v-model.number.lazy="filter.skillBoostMax" required min="0" max="9">以下
           </div>
         </div>
+        <div class="row">
+          <label class="col-4 col-form-label">暗闇耐性</label>
+          <div class="col-8">
+            <select v-model.number="filter.resistDarknessMin">
+              <option value="0">0</option>
+              <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}</option>
+            </select>%以上
+            <select v-model.number="filter.resistDarknessMax">
+              <option value="0">0</option>
+              <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}</option>
+            </select>%以下
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 col-form-label">お邪魔耐性</label>
+          <div class="col-8">
+            <select v-model.number="filter.resistJammerMin">
+              <option value="0">0</option>
+              <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}</option>
+            </select>%以上
+            <select v-model.number="filter.resistJammerMax">
+              <option value="0">0</option>
+              <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}</option>
+            </select>%以下
+          </div>
+        </div>
+        <div class="row">
+          <label class="col-4 col-form-label">毒耐性</label>
+          <div class="col-8">
+            <select v-model.number="filter.resistPoisonMin">
+              <option value="0">0</option>
+              <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}</option>
+            </select>%以上
+            <select v-model.number="filter.resistPoisonMax">
+              <option value="0">0</option>
+              <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}</option>
+            </select>%以下
+          </div>
+        </div>
         <div class="row timeExtension">
           <label class="col-4 col-form-label">操作時間<span class="inlineBlock">延長</span></label>
           <div class="col-8">
