@@ -116,7 +116,7 @@
         <div class="row timeExtension">
           <label class="col-4 col-form-label">操作時間<span class="inlineBlock">延長</span></label>
           <div class="col-8">
-            <input type="number" v-model.number="filter.timeExtensionMin" required min="0" max="4" step="0.5">秒以上
+            <input type="number" v-model.number.lazy="filter.timeExtensionMin" required min="0" max="4" step="0.5">秒以上
           </div>
         </div>
         <div class="row">
