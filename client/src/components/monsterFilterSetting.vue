@@ -129,6 +129,13 @@
             </select>
           </div>
         </div>
+        <div class="row">
+          <label class="col-4 col-form-label">超覚醒を含める
+          </label>
+          <div class="col-8">
+            <input type="checkbox" v-model="filter.useSuperAwaken">
+          </div>
+        </div>
         <div class="innerButtons">
           <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
         </div>
