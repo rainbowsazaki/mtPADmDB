@@ -165,7 +165,8 @@ const filterDefault = {
   resistPoisonMin: 0,
   resistPoisonMax: 100,
   timeExtensionMin: 0,
-  assist: undefined
+  assist: undefined,
+  useSuperAwaken: false
 };
 
 /** 頻出する一部の漢字を、ひらがなでも検索できるようにする */
@@ -481,6 +482,11 @@ export default {
       type: Number,
       default: filterDefault.timeExtensionMin,
       computed: true
+    },
+    useSuperAwaken: {
+      type: Boolean,
+      default: filterDefault.useSuperAwaken,
+      computed: true
     }
   },
   /** データの変更を受けて $route.query が変更されたときに呼ばれるフック。 */
@@ -559,6 +565,10 @@ export default {
     timeExtensionMin: {
       get: function () { return this.filter.timeExtensionMin; },
       set: function (v) { this.filter.timeExtensionMin = v; }
+    },
+    useSuperAwaken: {
+      get: function () { return this.filter.useSuperAwaken; },
+      set: function (v) { this.filter.useSuperAwaken = v; }
     },
 
     /** その他絞り込み部分のフィルタリング設定をもとに作成したテキスト。 */
