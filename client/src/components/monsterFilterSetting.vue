@@ -236,70 +236,54 @@ export function getFilterFunction (setting) {
     functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
   }
   function getSettingValue (name) { return setting.hasOwnProperty(name) ? setting[name] : filterDefault[name]; }
-  const rarityMin = getSettingValue('rarityMin');
-  const rarityMax = getSettingValue('rarityMax');
-  if (rarityMin !== filterDefault.rarityMin ||
-      rarityMax !== filterDefault.rarityMax) {
-    functionArray.push(d => {
-      return d.rare >= rarityMin && d.rare <= rarityMax;
-    });
+
+  /**
+   * モンスター情報の何らかの値が指定範囲内に入っているかどうかのフィルタリングを登録する。
+   * @param name 対象の項目の名前。 後ろにMaxやMinをつけた文字列をパラメータのプロパティ名として使用する。
+   * @param createFilterFunc 範囲の最小値と最大値を受け取り、モンスター情報を受け取って表示対象かどうかを返す関数を作成して返す関数。
+   */
+  function resistRangeFilter (name, createFilterFunc) {
+    const nameMin = name + 'Min';
+    const nameMax = name + 'Max';
+    const borderMin = getSettingValue(nameMin);
+    const borderMax = getSettingValue(nameMax);
+    if (borderMin !== filterDefault[nameMin] ||
+        borderMax !== filterDefault[nameMax]) {
+      functionArray.push(createFilterFunc(borderMin, borderMax));
+    }
   }
-  const skillTurnMin = getSettingValue('skillTurnMin');
-  const skillTurnMax = getSettingValue('skillTurnMax');
-  if (skillTurnMin !== filterDefault.skillTurnMin ||
-      skillTurnMax !== filterDefault.skillTurnMax) {
-    functionArray.push(d => {
+  // ２種類の覚醒の数をもとにした値が指定範囲内に入っているかどうかのフィルタリングを登録する
+  function registAwakenPowerFilter (name, awakenNo0, rate0, awakenNo1, rate1) {
+    resistRangeFilter(name, (borderMin, borderMax) => {
+      return d => {
+        const power = (d.awakenCount[awakenNo0] | 0) * rate0 + (d.awakenCount[awakenNo1] | 0) * rate1;
+        return power >= borderMin && power <= borderMax;
+      };
+    });
+  };
+
+  resistRangeFilter('rarity', (borderMin, borderMax) => {
+    return d => d.rare >= borderMin && d.rare <= borderMax;
+  });
+  resistRangeFilter('skillTurn', (borderMin, borderMax) => {
+    return d => {
       const skill = commonData.skillTable[d.skill];
       if (!skill) { return false; }
       // 最短ターン情報がない場合は弾く。
       if (skill.minTurn === null) { return false; }
-      return skill.minTurn >= skillTurnMin && skill.minTurn <= skillTurnMax;
-    });
-  }
-  const skillBoostMin = getSettingValue('skillBoostMin');
-  const skillBoostMax = getSettingValue('skillBoostMax');
-  if (skillBoostMin !== filterDefault.skillBoostMin ||
-      skillBoostMax !== filterDefault.skillBoostMax) {
-    functionArray.push(d => {
-      const skillBoost = (d.awakenCount[21] | 0) + (d.awakenCount[56] | 0) * 2;
-      return skillBoost >= skillBoostMin && skillBoost <= skillBoostMax;
-    });
-  }
-  const resistDarknessMin = getSettingValue('resistDarknessMin');
-  const resistDarknessMax = getSettingValue('resistDarknessMax');
-  if (resistDarknessMin !== filterDefault.resistDarknessMin ||
-      resistDarknessMax !== filterDefault.resistDarknessMax) {
-    functionArray.push(d => {
-      const resistDarkness = (d.awakenCount[11] | 0) * 20 + (d.awakenCount[68] | 0) * 100;
-      return resistDarkness >= resistDarknessMin && resistDarkness <= resistDarknessMax;
-    });
-  }
-  const resistJammerMin = getSettingValue('resistJammerMin');
-  const resistJammerMax = getSettingValue('resistJammerMax');
-  if (resistJammerMin !== filterDefault.resistJammerMin ||
-      resistJammerMax !== filterDefault.resistJammerMax) {
-    functionArray.push(d => {
-      const resistJammer = (d.awakenCount[12] | 0) * 20 + (d.awakenCount[69] | 0) * 100;
-      return resistJammer >= resistJammerMin && resistJammer <= resistJammerMax;
-    });
-  }
-  const resistPoisonMin = getSettingValue('resistPoisonMin');
-  const resistPoisonMax = getSettingValue('resistPoisonMax');
-  if (resistPoisonMin !== filterDefault.resistPoisonMin ||
-      resistPoisonMax !== filterDefault.resistPoisonMax) {
-    functionArray.push(d => {
-      const resistPoison = (d.awakenCount[13] | 0) * 20 + (d.awakenCount[70] | 0) * 100;
-      return resistPoison >= resistPoisonMin && resistPoison <= resistPoisonMax;
-    });
-  }
-
-  const timeExtensionMin = getSettingValue('timeExtensionMin');
-  if (timeExtensionMin !== filterDefault.timeExtensionMin) {
-    functionArray.push(d => {
-      const timeExtension = (d.awakenCount[19] | 0) * 0.5 + (d.awakenCount[53] | 0) * 1;
-      return timeExtension >= timeExtensionMin;
-    });
-  }
+      return skill.minTurn >= borderMin && skill.minTurn <= borderMax;
+    };
+  });
+  registAwakenPowerFilter('skillBoost', 21, 1, 56, 2);
+  registAwakenPowerFilter('resistDarkness', 11, 20, 68, 100);
+  registAwakenPowerFilter('resistJammer', 12, 20, 69, 100);
+  registAwakenPowerFilter('resistPoison', 13, 20, 70, 100);
+  resistRangeFilter('timeExtension', (borderMin, borderMax) => {
+    return d => {
+      const power = (d.awakenCount[19] | 0) * 0.5 + (d.awakenCount[53] | 0) * 1;
+      return power >= borderMin;
+    };
+  });
   
   if (setting.assist !== undefined) {
     functionArray.push(d => d.assist === setting.assist);
