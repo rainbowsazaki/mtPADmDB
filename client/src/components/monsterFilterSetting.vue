@@ -387,6 +387,9 @@ export function filterSettingTextArray (setting) {
   if (setting.assist !== undefined) {
     textArray.push('アシスト:' + constData.booleanTable[setting.assist]);
   }
+  if (setting.useSuperAwaken) {
+    textArray.push('覚醒関連に超覚醒を含める');
+  }
 
   return textArray;
 }
