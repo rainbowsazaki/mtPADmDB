@@ -255,10 +255,24 @@ export function getFilterFunction (setting) {
   // ２種類の覚醒の数をもとにした値が指定範囲内に入っているかどうかのフィルタリングを登録する
   function registAwakenPowerFilter (name, awakenNo0, rate0, awakenNo1, rate1) {
     resistRangeFilter(name, (borderMin, borderMax) => {
-      return d => {
-        const power = (d.awakenCount[awakenNo0] | 0) * rate0 + (d.awakenCount[awakenNo1] | 0) * rate1;
-        return power >= borderMin && power <= borderMax;
-      };
+      if (setting.useSuperAwaken) {
+        return d => {
+          let power = (d.awakenCount[awakenNo0] | 0) * rate0 + (d.awakenCount[awakenNo1] | 0) * rate1;
+          if (d.superAwakens) {
+            if (d.superAwakens.includes(awakenNo0)) {
+              power += rate0;
+            } else if (d.superAwakens.includes(awakenNo1)) {
+              power += rate1;
+            }
+          }
+          return power >= borderMin && power <= borderMax;
+        };
+      } else {
+        return d => {
+          const power = (d.awakenCount[awakenNo0] | 0) * rate0 + (d.awakenCount[awakenNo1] | 0) * rate1;
+          return power >= borderMin && power <= borderMax;
+        };
+      }
     });
   };
 
@@ -279,10 +293,24 @@ export function getFilterFunction (setting) {
   registAwakenPowerFilter('resistJammer', 12, 20, 69, 100);
   registAwakenPowerFilter('resistPoison', 13, 20, 70, 100);
   resistRangeFilter('timeExtension', (borderMin, borderMax) => {
-    return d => {
-      const power = (d.awakenCount[19] | 0) * 0.5 + (d.awakenCount[53] | 0) * 1;
-      return power >= borderMin;
-    };
+    if (setting.useSuperAwaken) {
+      return d => {
+        let power = (d.awakenCount[19] | 0) * 0.5 + (d.awakenCount[53] | 0) * 1;
+        if (d.superAwakens) {
+          if (d.superAwakens.includes(19)) {
+            power += 0.5;
+          } else if (d.superAwakens.includes(53)) {
+            power += 1;
+          }
+        }
+        return power >= borderMin;
+      };
+    } else {
+      return d => {
+        const power = (d.awakenCount[19] | 0) * 0.5 + (d.awakenCount[53] | 0) * 1;
+        return power >= borderMin;
+      };
+    }
   });
   
   if (setting.assist !== undefined) {
