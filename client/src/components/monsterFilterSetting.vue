@@ -233,7 +233,21 @@ export function getFilterFunction (setting) {
       awakenFilter[awaken] = (awakenFilter[awaken] || 0) + 1;
     }
     const awakenKeys = Object.keys(awakenFilter);
-    functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
+    if (setting.useSuperAwaken) {
+      functionArray.push(d => {
+        let canUseSuperAwaken = !!d.superAwakens;
+        return awakenKeys.every(key => {
+          if (d.awakenCount[key] >= awakenFilter[key]) { return true; }
+          if (canUseSuperAwaken && (d.awakenCount[key] || 0) === awakenFilter[key] - 1 && d.superAwakens.includes(Number(key))) {
+            canUseSuperAwaken = false;
+            return true;
+          }
+          return false;
+        });
+      });
+    } else {
+      functionArray.push(d => awakenKeys.every(key => d.awakenCount[key] >= awakenFilter[key]));
+    }
   }
   function getSettingValue (name) { return setting.hasOwnProperty(name) ? setting[name] : filterDefault[name]; }
 
