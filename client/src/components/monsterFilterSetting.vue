@@ -75,6 +75,19 @@
           </div>
         </div>
         <div class="row">
+          <label class="col-4 col-form-label">バインド耐性</label>
+          <div class="col-8">
+            <select v-model.number="filter.resistBindMin">
+              <option value="0">0%</option>
+              <option v-for="n in 2" :value="n * 50" :key="`opt${n}`">{{ n * 50 }}%</option>
+            </select>〜
+            <select v-model.number="filter.resistBindMax">
+              <option value="0">0%</option>
+              <option v-for="n in 2" :value="n * 50" :key="`opt${n}`">{{ n * 50 }}%</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
           <label class="col-4 col-form-label">暗闇耐性</label>
           <div class="col-8">
             <select v-model.number="filter.resistDarknessMin">
