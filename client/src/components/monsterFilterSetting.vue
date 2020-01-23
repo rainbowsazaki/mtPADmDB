@@ -318,6 +318,7 @@ export function getFilterFunction (setting) {
     };
   });
   registAwakenPowerFilter('skillBoost', 21, 1, 56, 2);
+  registAwakenPowerFilter('resistBind', 10, 50, 52, 100);
   registAwakenPowerFilter('resistDarkness', 11, 20, 68, 100);
   registAwakenPowerFilter('resistJammer', 12, 20, 69, 100);
   registAwakenPowerFilter('resistPoison', 13, 20, 70, 100);
