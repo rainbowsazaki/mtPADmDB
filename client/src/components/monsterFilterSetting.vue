@@ -165,6 +165,8 @@ const filterDefault = {
   skillTurnMax: 99,
   skillBoostMin: 0,
   skillBoostMax: 9,
+  resistBindMin: 0,
+  resistBindMax: 100,
   resistDarknessMin: 0,
   resistDarknessMax: 100,
   resistJammerMin: 0,
@@ -393,6 +395,7 @@ export function filterSettingTextArray (setting) {
   addRangeText('rarity', 'レア度');
   addRangeText('skillTurn', 'Sターン');
   addRangeText('skillBoost', 'スキブ');
+  addRangeText('resistBind', 'バインド耐性', '%');
   addRangeText('resistDarkness', '暗闇耐性', '%');
   addRangeText('resistJammer', 'お邪魔耐性', '%');
   addRangeText('resistPoison', '毒耐性', '%');
@@ -466,6 +469,12 @@ export default {
       type: String,
       default: filterDefault.skillBoostMin + '-' + filterDefault.skillBoostMax,
       queryKey: 'skillBoost',
+      computed: true
+    },
+    resistBindFilterStr: {
+      type: String,
+      default: filterDefault.resistBindMin + '-' + filterDefault.resistBindMax,
+      queryKey: 'resistBind',
       computed: true
     },
     resistDarknessFilterStr: {
@@ -627,6 +636,21 @@ export default {
         } else {
           this.filter.skillBoostMin = filterDefault.skillBoostMin;
           this.filter.skillBoostMax = filterDefault.skillBoostMax;
+        }
+      }
+    },
+    /** バインド耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
+    resistBindFilterStr: {
+      get: function () {
+        return this.filter.resistBindMin + '-' + this.filter.resistBindMax;
+      },
+      set: function (val) {
+        if (/(\d+)-(\d+)/.test(val)) {
+          this.filter.resistBindMin = RegExp.$1 | 0;
+          this.filter.resistBindMax = RegExp.$2 | 0;
+        } else {
+          this.filter.resistBindMin = filterDefault.resistBindMin;
+          this.filter.resistBindMax = filterDefault.resistBindMax;
         }
       }
     },
