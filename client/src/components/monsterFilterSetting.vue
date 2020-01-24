@@ -719,36 +719,12 @@ export default {
     }
   },
   watch: {
-    'filter.rarityMin': function () {
-      if (this.filter.rarityMax < this.filter.rarityMin) {
-        this.filter.rarityMax = this.filter.rarityMin;
-      }
-    },
-    'filter.rarityMax': function () {
-      if (this.filter.rarityMax < this.filter.rarityMin) {
-        this.filter.rarityMin = this.filter.rarityMax;
-      }
-    },
-    'filter.skillTurnMin': function () {
-      if (this.filter.skillTurnMax < this.filter.skillTurnMin) {
-        this.filter.skillTurnMax = this.filter.skillTurnMin;
-      }
-    },
-    'filter.skillTurnMax': function () {
-      if (this.filter.skillTurnMax < this.filter.skillTurnMin) {
-        this.filter.skillTurnMin = this.filter.skillTurnMax;
-      }
-    },
-    'filter.skillBoostMin': function () {
-      if (this.filter.skillBoostMax < this.filter.skillBoostMin) {
-        this.filter.skillBoostMax = this.filter.skillBoostMin;
-      }
-    },
-    'filter.skillBoostMax': function () {
-      if (this.filter.skillBoostMax < this.filter.skillBoostMin) {
-        this.filter.skillBoostMin = this.filter.skillBoostMax;
-      }
-    },
+    'filter.rarityMin': function () { this.checkRangeCross('rarity', false); },
+    'filter.rarityMax': function () { this.checkRangeCross('rarity', true); },
+    'filter.skillTurnMin': function () { this.checkRangeCross('skillTurn', false); },
+    'filter.skillTurnMax': function () { this.checkRangeCross('skillTurn', true); },
+    'filter.skillBoostMin': function () { this.checkRangeCross('skillBoost', false); },
+    'filter.skillBoostMax': function () { this.checkRangeCross('skillBoost', true); },
     isFullOverSettingArea: function (newValue) {
       if (newValue) {
         this.tempScrollTop = document.scrollingElement.scrollTop;
@@ -770,6 +746,18 @@ export default {
     }
   },
   methods: {
+    /** 範囲指定の設定の大小関係が入れ替わっていないか確認し、入れ替わっている場合はいずれかの値に統一する。 */
+    checkRangeCross: function (name, isUseMax) {
+      const nameMax = name + 'Max';
+      const nameMin = name + 'Min';
+      if (this.filter[nameMax] < this.filter[nameMin]) {
+        if (isUseMax) {
+          this.filter[nameMin] = this.filter[nameMax];
+        } else {
+          this.filter[nameMax] = this.filter[nameMin];
+        }
+      }
+    },
     /**
      * ページ全体のスクロールを無効にするかどうかを設定する。
      * 引数に true を指定するとスクロールが無効になり、 false を指定するとスクロールが有効になる。
