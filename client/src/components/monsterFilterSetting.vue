@@ -725,6 +725,15 @@ export default {
     'filter.skillTurnMax': function () { this.checkRangeCross('skillTurn', true); },
     'filter.skillBoostMin': function () { this.checkRangeCross('skillBoost', false); },
     'filter.skillBoostMax': function () { this.checkRangeCross('skillBoost', true); },
+    'filter.resistBindMin': function () { this.checkRangeCross('resistBind', false); },
+    'filter.resistBindMax': function () { this.checkRangeCross('resistBind', true); },
+    'filter.resistDarknessMin': function () { this.checkRangeCross('resistDarkness', false); },
+    'filter.resistDarknessMax': function () { this.checkRangeCross('resistDarkness', true); },
+    'filter.resistJammerMin': function () { this.checkRangeCross('resistJammer', false); },
+    'filter.resistJammerMax': function () { this.checkRangeCross('resistJammer', true); },
+    'filter.resistPoisonMin': function () { this.checkRangeCross('resistPoison', false); },
+    'filter.resistPoisonMax': function () { this.checkRangeCross('resistPoison', true); },
+    
     isFullOverSettingArea: function (newValue) {
       if (newValue) {
         this.tempScrollTop = document.scrollingElement.scrollTop;
