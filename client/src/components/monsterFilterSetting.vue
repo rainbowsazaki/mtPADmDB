@@ -610,108 +610,38 @@ export default {
     },
     /** レアリティの絞り込み設定の最小値と最大値を - でつないだもの。 */
     rarityFilterStr: {
-      get: function () {
-        return this.filter.rarityMin + '-' + this.filter.rarityMax;
-      },
-      set: function (val) {
-        if (/(\d+)-(\d+)/.test(val)) {
-          this.filter.rarityMin = RegExp.$1 | 0;
-          this.filter.rarityMax = RegExp.$2 | 0;
-        } else {
-          this.filter.rarityMin = filterDefault.rarityMin;
-          this.filter.rarityMax = filterDefault.rarityMax;
-        }
-      }
+      get: function () { return this.getRangeFilterText('rarity'); },
+      set: function (val) { this.setRangeFilterText('rarity', val); }
     },
     /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillTurnFilterStr: {
-      get: function () {
-        return this.filter.skillTurnMin + '-' + this.filter.skillTurnMax;
-      },
-      set: function (val) {
-        if (/(\d+)-(\d+)/.test(val)) {
-          this.filter.skillTurnMin = RegExp.$1 | 0;
-          this.filter.skillTurnMax = RegExp.$2 | 0;
-        } else {
-          this.filter.skillTurnMin = filterDefault.skillTurnMin;
-          this.filter.skillTurnMax = filterDefault.skillTurnMax;
-        }
-      }
+      get: function () { return this.getRangeFilterText('skillTurn'); },
+      set: function (val) { this.setRangeFilterText('skillTurn', val); }
     },
     /** スキルブーストの絞り込み設定の最小値と最大値を - でつないだもの。 */
     skillBoostFilterStr: {
-      get: function () {
-        return this.filter.skillBoostMin + '-' + this.filter.skillBoostMax;
-      },
-      set: function (val) {
-        if (/(\d+)-(\d+)/.test(val)) {
-          this.filter.skillBoostMin = RegExp.$1 | 0;
-          this.filter.skillBoostMax = RegExp.$2 | 0;
-        } else {
-          this.filter.skillBoostMin = filterDefault.skillBoostMin;
-          this.filter.skillBoostMax = filterDefault.skillBoostMax;
-        }
-      }
+      get: function () { return this.getRangeFilterText('skillBoost'); },
+      set: function (val) { this.setRangeFilterText('skillBoost', val); }
     },
     /** バインド耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
     resistBindFilterStr: {
-      get: function () {
-        return this.filter.resistBindMin + '-' + this.filter.resistBindMax;
-      },
-      set: function (val) {
-        if (/(\d+)-(\d+)/.test(val)) {
-          this.filter.resistBindMin = RegExp.$1 | 0;
-          this.filter.resistBindMax = RegExp.$2 | 0;
-        } else {
-          this.filter.resistBindMin = filterDefault.resistBindMin;
-          this.filter.resistBindMax = filterDefault.resistBindMax;
-        }
-      }
+      get: function () { return this.getRangeFilterText('resistBind'); },
+      set: function (val) { this.setRangeFilterText('resistBind', val); }
     },
     /** 暗闇耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
     resistDarknessFilterStr: {
-      get: function () {
-        return this.filter.resistDarknessMin + '-' + this.filter.resistDarknessMax;
-      },
-      set: function (val) {
-        if (/(\d+)-(\d+)/.test(val)) {
-          this.filter.resistDarknessMin = RegExp.$1 | 0;
-          this.filter.resistDarknessMax = RegExp.$2 | 0;
-        } else {
-          this.filter.resistDarknessMin = filterDefault.resistDarknessMin;
-          this.filter.resistDarknessMax = filterDefault.resistDarknessMax;
-        }
-      }
+      get: function () { return this.getRangeFilterText('resistDarkness'); },
+      set: function (val) { this.setRangeFilterText('resistDarkness', val); }
     },
     /** お邪魔耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
     resistJammerFilterStr: {
-      get: function () {
-        return this.filter.resistJammerMin + '-' + this.filter.resistJammerMax;
-      },
-      set: function (val) {
-        if (/(\d+)-(\d+)/.test(val)) {
-          this.filter.resistJammerMin = RegExp.$1 | 0;
-          this.filter.resistJammerMax = RegExp.$2 | 0;
-        } else {
-          this.filter.resistJammerMin = filterDefault.resistJammerMin;
-          this.filter.resistJammerMax = filterDefault.resistJammerMax;
-        }
-      }
+      get: function () { return this.getRangeFilterText('resistJammer'); },
+      set: function (val) { this.setRangeFilterText('resistJammer', val); }
     },
     /** 毒耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
     resistPoisonFilterStr: {
-      get: function () {
-        return this.filter.resistPoisonMin + '-' + this.filter.resistPoisonMax;
-      },
-      set: function (val) {
-        if (/(\d+)-(\d+)/.test(val)) {
-          this.filter.resistPoisonMin = RegExp.$1 | 0;
-          this.filter.resistPoisonMax = RegExp.$2 | 0;
-        } else {
-          this.filter.resistPoisonMin = filterDefault.resistPoisonMin;
-          this.filter.resistPoisonMax = filterDefault.resistPoisonMax;
-        }
-      }
+      get: function () { return this.getRangeFilterText('resistPoison'); },
+      set: function (val) { this.setRangeFilterText('resistPoison', val); }
     },
     /** 設定領域を全画面で表示しているかどうか。 */
     isFullOverSettingArea: function () {
@@ -755,6 +685,24 @@ export default {
     }
   },
   methods: {
+    /** 値の範囲指定の設定をテキスト化したものを取得する。 */
+    getRangeFilterText: function (name) {
+      const min = this.filter[name + 'Min'];
+      const max = this.filter[name + 'Max'];
+      return min + '-' + max;
+    },
+    /** 値の範囲指定の設定を、テキスト化したものをもとに設定する。 */
+    setRangeFilterText: function (name, value) {
+      const nameMin = name + 'Min';
+      const nameMax = name + 'Max';
+      if (/(\d+)-(\d+)/.test(value)) {
+        this.filter[nameMin] = RegExp.$1 | 0;
+        this.filter[nameMax] = RegExp.$2 | 0;
+      } else {
+        this.filter[nameMin] = filterDefault[nameMin];
+        this.filter[nameMax] = filterDefault[nameMax];
+      }
+    },
     /** 範囲指定の設定の大小関係が入れ替わっていないか確認し、入れ替わっている場合はいずれかの値に統一する。 */
     checkRangeCross: function (name, isUseMax) {
       const nameMax = name + 'Max';
