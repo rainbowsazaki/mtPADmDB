@@ -689,13 +689,17 @@ export default {
     getRangeFilterText: function (name) {
       const min = this.filter[name + 'Min'];
       const max = this.filter[name + 'Max'];
+      if (min === max) { return min.toString(); }
       return min + '-' + max;
     },
     /** 値の範囲指定の設定を、テキスト化したものをもとに設定する。 */
     setRangeFilterText: function (name, value) {
       const nameMin = name + 'Min';
       const nameMax = name + 'Max';
-      if (/(\d+)-(\d+)/.test(value)) {
+      if (/^(\d+)$/.test(value)) {
+        this.filter[nameMin] = RegExp.$1 | 0;
+        this.filter[nameMax] = RegExp.$1 | 0;
+      } else if (/^(\d+)-(\d+)$/.test(value)) {
         this.filter[nameMin] = RegExp.$1 | 0;
         this.filter[nameMax] = RegExp.$2 | 0;
       } else {
