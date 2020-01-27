@@ -136,7 +136,7 @@
 
 <script>
 import { constData, checkCanMixMonster, stretchElement } from '../mtpadmdb.js';
-import { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
+import MonsterFilterSetting, { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
 import MixinForPage from '../components/mixins/forPage.js';
 import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
@@ -170,6 +170,7 @@ export default {
   breadcrumbsTitle: function () {
     return this.rankingSetting.title + 'ランキング';
   },
+  components: { MonsterFilterSetting },
   mixins: [
     MixinForPage,
     RouteQueryWrapper

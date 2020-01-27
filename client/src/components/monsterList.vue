@@ -26,12 +26,13 @@
 <script>
 
 import { constData } from '../mtpadmdb.js';
-import { getFilterDefault, filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
+import MonsterFilterSetting, { getFilterDefault, filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
 import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
 /** モンスター一覧表示のコンポーネント */
 export default {
   name: 'MonsterList',
+  components: { MonsterFilterSetting },
   mixins: [
     RouteQueryWrapper
   ],
