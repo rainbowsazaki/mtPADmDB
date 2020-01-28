@@ -45,6 +45,8 @@
       <h1 :class="{ h6: $route.path !== '/' }">{{ constData.title }}</h1>
       <router-view v-if="$store.state.monsterTable" />
       <div style="margin-top:2rem; display: flex; justify-content: space-around; flex-wrap: wrap;">
+        <div class="amazlet-box" style="margin-bottom:0px;"><div class="amazlet-image" style="float:left;margin:0px 12px 1px 0px;"><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B082TQG54Y/myfavoriteday-22/ref=nosim/" name="amazletlink" target="_blank"><img src="https://images-fe.ssl-images-amazon.com/images/I/61CJvpufJEL._SL280_.jpg" alt="モンスターメモリー パズドラ モンスターメモリーカード 影刻の時龍契士・ミル カード5枚セット" style="border: none;"></a></div><div class="amazlet-info" style="line-height:120%; margin-bottom: 10px"><div class="amazlet-name" style="margin-bottom:10px;line-height:120%"><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B082TQG54Y/myfavoriteday-22/ref=nosim/" name="amazletlink" target="_blank">モンスターメモリー パズドラ モンスターメモリーカード 影刻の時龍契士・ミル カード5枚セット</a><div class="amazlet-powered-date" style="font-size:80%;margin-top:5px;line-height:120%">posted with <a href="http://www.amazlet.com/" title="amazlet" target="_blank">amazlet</a></div></div><div class="amazlet-detail">ガンホー・オンライン・エンターテイメント株式会社</div><div class="amazlet-sub-info" style="float: left;"><div class="amazlet-link" style="margin-top: 5px"><a href="http://www.amazon.co.jp/exec/obidos/ASIN/B082TQG54Y/myfavoriteday-22/ref=nosim/" name="amazletlink" target="_blank">Amazon.co.jpで詳細を見る</a></div></div></div></div>
+
         <iframe src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=12&l=ur1&category=manga_anime&f=ifr&linkID=41a55731f8138e9b3d31a0f8071aa622&t=myfavoriteday-22&tracking_id=myfavoriteday-22" width="300" height="250" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0" />
         <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=myfavoriteday-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B01CDP1DMS&linkId=2fde5a6504e57a723c17da60307b4591" />
         <iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=myfavoriteday-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4047333301&linkId=969a4d654c0891806ec194ae22c2d35d" />
@@ -148,6 +150,16 @@ body {
   border-left-width: 0.05em;
   padding: 0.2em 0.2em;
   border-radius: 0 0.5em 0.5em 0;
+}
+
+.amazlet-box {
+  border: 1px solid #AEE;
+  padding: 8px;
+  width: 300px;
+  height: 350px;
+}
+.amazlet-detail {
+  font-size: 78%;
 }
 
 </style>
