@@ -47,7 +47,12 @@
     </div>
 
     <div class="status">
-      <monster-icon no-link class="monsterIcon" :no="monsterData.no" width="4.15em" height="4.15em" />
+      <div class="monsterIcon">
+        <monster-icon no-link class="monsterIconInner" :no="monsterData.no" width="4.15em" height="4.15em" />
+        <div v-if="monsterData.assist === 1" class="awakenCount">
+          <span>★</span>
+        </div>
+      </div>
       <dl class="paramater">
         <dt>HP:</dt>
         <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ nullToFumei(monsterData.maxParam.hp) | addComma }}</dd>
@@ -405,7 +410,43 @@ div.transformIconArea {
 
   .monsterIcon {
     float: left;
-    margin: 0.1em;
+    position: relative;
+    width: 4.15em;
+    height: 4.15em;
+    margin: 0.05em;
+    margin-right: 0.15em;
+
+    .awakenCount {
+      position: absolute;
+      $font-size: 0.9;
+      $r-size: 1.3em;
+      font-size: 100% * $font-size;
+      right: 0;
+      top: 0.1em / $font-size;
+      width: $r-size / $font-size;
+      height: $r-size / $font-size;
+      text-align: center;
+      line-height: $r-size / $font-size - 0.15em * 2;
+
+      border: 0.15em solid white;
+      border-radius: 50%;
+    
+      background: #dd0;
+      color: #fd0;
+
+      filter: drop-shadow(0 0.2em 0.1em rgba(0, 0, 0, 0.8));
+
+      span {
+        text-shadow: none;
+        $shadowBlur: 0.1em;
+        $shadowColor: rgba(0,0,0,0.4);
+        filter:
+          drop-shadow(0px 0px $shadowBlur $shadowColor)
+          drop-shadow(0px 0px $shadowBlur $shadowColor)
+          drop-shadow(0px 0px $shadowBlur $shadowColor)
+          drop-shadow(0px 0px $shadowBlur $shadowColor);
+        }        
+      }
   }
 
   dl.paramater {
