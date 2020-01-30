@@ -417,36 +417,44 @@ div.transformIconArea {
     margin-right: 0.15em;
 
     .awakenCount {
-      position: absolute;
-      $font-size: 0.9;
       $r-size: 1.3em;
-      font-size: 100% * $font-size;
-      right: 0;
-      top: 0.1em / $font-size;
-      width: $r-size / $font-size;
-      height: $r-size / $font-size;
+      $border-width: 0.12em;
+
+      position: absolute;
+      right: 0.05em;
+      top: 0.1em;
+      width: $r-size;
+      height: $r-size;
       text-align: center;
-      line-height: $r-size / $font-size - 0.15em * 2;
+      line-height: ($r-size - $border-width * 2);
 
-      border: 0.15em solid white;
+      border: $border-width solid #f8f4d7;
       border-radius: 50%;
-    
-      background: #dd0;
-      color: #fd0;
-
-      filter: drop-shadow(0 0.2em 0.1em rgba(0, 0, 0, 0.8));
+      background: #bb9e50;
+      box-shadow:
+        0 -0.1em 0.1em 0 rgba(107,96,50, 1) inset,
+        0 -0.4em 0.1em 0.03em rgba(240,220,155, 1) inset,
+        0 0.2em 0.1em 0.0em rgba(0,0,0, 0.7);
 
       span {
+        display: block;
+        font-size: 100%;
         text-shadow: none;
-        $shadowBlur: 0.1em;
+        color: #eddd86;
+        background: linear-gradient(#ffffee 40%, #edbd51 55%, #eddd86 60%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transform: scaleX(0.8);
+
+        $shadowBlur: 0.05em;
         $shadowColor: rgba(0,0,0,0.4);
         filter:
-          drop-shadow(0px 0px $shadowBlur $shadowColor)
-          drop-shadow(0px 0px $shadowBlur $shadowColor)
-          drop-shadow(0px 0px $shadowBlur $shadowColor)
-          drop-shadow(0px 0px $shadowBlur $shadowColor);
-        }        
+          drop-shadow(0 0.2em $shadowBlur $shadowColor)
+          drop-shadow(0 0em $shadowBlur $shadowColor)
+          drop-shadow(-0.05em 0em $shadowBlur $shadowColor)
+          drop-shadow(0.1em 0em $shadowBlur $shadowColor);
       }
+    }
   }
 
   dl.paramater {
