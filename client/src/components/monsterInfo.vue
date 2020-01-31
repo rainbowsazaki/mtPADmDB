@@ -417,6 +417,8 @@ div.transformIconArea {
     margin-right: 0.15em;
 
     .awakenCount {
+      animation: awakenCountBlink 4s ease 0s infinite normal none running;
+
       $r-size: 1.3em;
       $border-width: 0.12em;
 
@@ -609,6 +611,24 @@ div.transformIconArea {
   }
   .olAnim1 {
     animation: paramBlink 8s ease -4s infinite normal none running;
+  }
+
+  @keyframes awakenCountBlink {
+    0% {
+      opacity: 1;
+    }
+    20% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    70% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 
   @keyframes paramBlink {
