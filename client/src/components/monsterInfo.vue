@@ -49,8 +49,8 @@
     <div class="status">
       <div class="monsterIcon">
         <monster-icon no-link class="monsterIconInner" :no="monsterData.no" width="4.15em" height="4.15em" />
-        <div v-if="monsterData.assist === 1" class="awakenCount">
-          <span>★</span>
+        <div v-if="monsterData.awakens && monsterData.awakens[0]" :class="`awakenCount awakenCountType${monsterData.assist}`">
+          <span>{{ monsterData.assist === null ? '?' : '★' }}</span>
         </div>
       </div>
       <dl class="paramater">
@@ -428,10 +428,62 @@ div.transformIconArea {
       width: $r-size;
       height: $r-size;
       text-align: center;
-      line-height: ($r-size - $border-width * 2);
+      line-height: 1.05em;
 
       border: $border-width solid #f8f4d7;
       border-radius: 50%;
+
+      span {
+        display: block;
+        text-shadow: none;
+        transform: scaleX(0.8);
+      }
+    }
+
+    .awakenCountTypenull {
+      border-color: #eeeeee;
+      background: linear-gradient(#dddddd, #aaaaaa 50%);
+      box-shadow:
+        0 -0.1em 0.1em 0 rgba(32,32,32, 1) inset,
+        0 0.2em 0.1em 0.0em rgba(0,0,0, 0.7);
+
+      span {
+        color: #ffffff;
+        -webkit-text-stroke: 0.04em #000;
+        $shadowBlur: 0.06em;
+        $shadowColor: rgba(0,0,0,0.4);
+        filter:
+          drop-shadow(0 0 $shadowBlur $shadowColor)
+          drop-shadow(0 0 $shadowBlur $shadowColor)
+          drop-shadow(0 0 $shadowBlur $shadowColor)
+          drop-shadow(0 0 $shadowBlur $shadowColor);
+        transform: none;
+      }
+    }
+    .awakenCountType0 {
+      border-color: #f0fff0;
+      background: linear-gradient(#88ff88, #00671b 50%);
+      line-height: 1.2em;
+      box-shadow:
+        0 -0.1em 0.1em 0 rgba(0,32,0, 1) inset,
+        0 0.2em 0.1em 0.0em rgba(0,0,0, 0.7);
+
+      span {
+        font-size: 95%;
+        color: #ffff00;
+        -webkit-text-stroke: 0.04em #000;
+        $shadowBlur: 0.06em;
+        $shadowColor: rgba(0,0,0,0.4);
+        filter:
+          drop-shadow(0 0 $shadowBlur $shadowColor)
+          drop-shadow(0 0 $shadowBlur $shadowColor)
+          drop-shadow(0 0 $shadowBlur $shadowColor)
+          drop-shadow(0 0 $shadowBlur $shadowColor);
+      }
+    }
+
+    .awakenCountType1 {
+      border-color: #f8f4d7;
       background: #bb9e50;
       box-shadow:
         0 -0.1em 0.1em 0 rgba(107,96,50, 1) inset,
@@ -439,14 +491,10 @@ div.transformIconArea {
         0 0.2em 0.1em 0.0em rgba(0,0,0, 0.7);
 
       span {
-        display: block;
-        font-size: 100%;
-        text-shadow: none;
         color: #eddd86;
         background: linear-gradient(#ffffee 40%, #edbd51 55%, #eddd86 60%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        transform: scaleX(0.8);
 
         $shadowBlur: 0.05em;
         $shadowColor: rgba(0,0,0,0.4);
