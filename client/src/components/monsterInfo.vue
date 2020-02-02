@@ -417,7 +417,7 @@ div.transformIconArea {
     margin-right: 0.15em;
 
     .awakenCount {
-      animation: awakenCountBlink 4s ease 0s infinite normal none running;
+      animation: awakenCountBlink 3s ease 0s infinite normal none running;
 
       $r-size: 1.3em;
       $border-width: 0.12em;
@@ -654,24 +654,24 @@ div.transformIconArea {
   }
 
   .olAnim0 {
-    animation: paramBlink 8s ease 0s infinite normal none running;
+    animation: paramBlink 9s ease 0s infinite normal none running;
     height: 0;
   }
   .olAnim1 {
-    animation: paramBlink 8s ease -4s infinite normal none running;
+    animation: paramBlink 9s ease -4.5s infinite normal none running;
   }
 
   @keyframes awakenCountBlink {
     0% {
       opacity: 1;
     }
-    20% {
+    40% {
       opacity: 1;
     }
-    50% {
+    49% {
       opacity: 0;
     }
-    70% {
+    91% {
       opacity: 0;
     }
     100% {
@@ -683,19 +683,14 @@ div.transformIconArea {
     0% {
       opacity: 1;
     }
-    22% {
+    46% {
       opacity: 1;
     }
-
-    26% {
+    49% {
       opacity: 0;
     }
-    74% {
+    97% {
       opacity: 0;
-    }
-
-    78% {
-      opacity: 1;
     }
     100% {
       opacity: 1;
