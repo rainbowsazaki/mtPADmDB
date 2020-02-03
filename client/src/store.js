@@ -186,6 +186,13 @@ export default new Vuex.Store({
     addImageData: function (state, imageData) {
       Object.assign(state.imageTable, imageData);
     },
+    /** モンスターのお気に入り情報変更する。
+     * @param params.no 変更対象のモンスター番号。
+     * @param params.data 変更後のデータ。
+     */
+    setMonsterFavorite: function (state, params) {
+      Vue.set(state.monsterFavorites, params.no, params.data);
+    },
 
     setErrors: function (state, errors) {
       state.errors = errors;

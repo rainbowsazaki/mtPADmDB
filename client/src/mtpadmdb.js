@@ -86,6 +86,8 @@ export const commonData = {
   imageTable: {},
   evolutionTable: {},
 
+  /** モンスターをお気に入りに入れているかの情報 */
+  monsterFavorites: {},
   /** commonData のJSONを最後に読み込んだ時間 */
   lastLoadCommonDataTime: 0,
 
