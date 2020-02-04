@@ -15,6 +15,9 @@
               <div>{{ data.name }}</div>
             </div>
           </router-link>
+          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] }" @click.stop="flipMonsterFavorite(data.no)">
+            ★
+          </div>
         </div>
       </div>
     </div>
@@ -85,6 +88,14 @@ export default {
     this.$store.commit('fetchCommonData');
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     this.$nextTick(() => { this.pageResetFlag = true; });
+  },
+  methods: {
+    /** 指定したモンスターのお気に入りの状態を反転させる。 */
+    flipMonsterFavorite: function (no) {
+      const nowData = this.$store.state.monsterFavorites[no];
+      const newData = (nowData) ? undefined : true;
+      this.$store.commit('setMonsterFavorite', { no: no, data: newData });
+    }
   }
 };
 </script>
@@ -128,6 +139,26 @@ export default {
     .monsterNo {
       font-size: 80%;
       margin-bottom: 2px;
+    }
+  }
+
+  .favIcon {
+    position: absolute;
+    $font-size-rate: 1.2;
+    right: 1em / $font-size-rate;
+    bottom: 0;
+    width: 2.5em / $font-size-rate;
+    padding-left: 0.5em / $font-size-rate;
+    font-size: 100% * $font-size-rate;
+    text-align: center;
+    line-height: 2.5em / $font-size-rate;
+    cursor: pointer;
+    user-select: none;
+    
+    color: #999;
+
+    &.selected {
+      color: #FF0
     }
   }
 }
