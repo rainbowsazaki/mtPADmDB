@@ -191,7 +191,11 @@ export default new Vuex.Store({
      * @param params.data 変更後のデータ。
      */
     setMonsterFavorite: function (state, params) {
-      Vue.set(state.monsterFavorites, params.no, params.data);
+      if (params.data === undefined) {
+        Vue.delete(state.monsterFavorites, params.no);
+      } else {
+        Vue.set(state.monsterFavorites, params.no, params.data);
+      }
     },
 
     setErrors: function (state, errors) {
