@@ -455,6 +455,14 @@ export default {
     RouteQueryWrapper
   ],
   queries: {
+    favorite: {
+      type: Boolean,
+      default: filterDefault.favorite,
+      computed: {
+        get: function () { return this.filter.favorite; },
+        set: function (v) { this.filter.favorite = v; }
+      }
+    },
     name: {
       type: String,
       default: filterDefault.name,
