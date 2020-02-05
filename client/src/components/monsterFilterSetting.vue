@@ -30,6 +30,16 @@
           <button class="btn btn-primary btn-sm" type="button" @click="isVisibleFilter = false;">OK</button>
         </div>
         <div class="row">
+          <label class="col-4 col-form-label">お気に入り</label>
+          <div class="col-8">
+            <select class="custom-select" v-model="filter.favorite">
+              <option :value="undefined">すべて</option>
+              <option :value="true">お気に入りのみ</option>
+              <option :value="false">お気に入り以外のみ</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
           <label class="col-4 col-form-label">主属性</label>
           <div class="col-8">
             <attr-select use-unknown checkbox-style v-model="filter.attr" />
