@@ -376,6 +376,13 @@ export function filterMonsterDataArray (setting, target) {
 /** フィルタリング設定の内容を表現したテキストの配列を作成する。 */
 export function filterSettingTextArray (setting) {
   const textArray = [];
+  if (setting.favorite !== undefined) {
+    if (setting.favorite) {
+      textArray.push('お気に入りのみ');
+    } else {
+      textArray.push('お気に入り以外のみ');
+    }
+  }
   if (setting.name) {
     textArray.push(`名前に『${setting.name}』を含む`);
   }
