@@ -228,7 +228,7 @@ export default {
       type: Boolean,
       queryKey: 'useRelasedSenzaiAwaken',
       computed: true
-    }, 
+    },
     /** 与えるダメージを半減させる属性の配列。 */
     damageHalfAttributesWrapper: {
       type: Array,

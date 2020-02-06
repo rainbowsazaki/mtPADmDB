@@ -466,84 +466,122 @@ export default {
     name: {
       type: String,
       default: filterDefault.name,
-      computed: true
+      computed: {
+        get: function () { return this.filter.name; },
+        set: function (v) { this.filter.name = v; }
+      }
     },
     attr: {
       type: Array,
       default: filterDefault.attr,
-      computed: true
+      computed: {
+        get: function () { return this.filter.attr; },
+        set: function (v) { this.filter.attr = v; }
+      }
     },
     subAttr: {
       type: Array,
       default: filterDefault.subAttr,
-      computed: true
+      computed: {
+        get: function () { return this.filter.subAttr; },
+        set: function (v) { this.filter.subAttr = v; }
+      }
     },
     type: {
       type: Array,
       default: filterDefault.type,
-      computed: true
+      computed: {
+        get: function () { return this.filter.type; },
+        set: function (v) { this.filter.type = v; }
+      }
     },
     awaken: {
       type: Array,
       default: filterDefault.awaken,
-      computed: true
+      computed: {
+        get: function () { return this.filter.awaken; },
+        set: function (v) { this.filter.awaken = v; }
+      }
     },
     assist: {
       type: Number,
       default: filterDefault.assist,
-      computed: true
+      computed: {
+        get: function () { return this.filter.assist; },
+        set: function (v) { this.filter.assist = v; }
+      }
     },
-    rarityFilterStr: {
+    rarity: {
       type: String,
       default: filterDefault.rarityMin + '-' + filterDefault.rarityMax,
-      queryKey: 'rarity',
-      computed: true
+      computed: {
+        get: function () { return this.getRangeFilterText('rarity'); },
+        set: function (val) { this.setRangeFilterText('rarity', val); }
+      }
     },
-    skillTurnFilterStr: {
+    skillTurn: {
       type: String,
       default: filterDefault.skillTurnMin + '-' + filterDefault.skillTurnMax,
-      queryKey: 'skillTurn',
-      computed: true
+      computed: {
+        get: function () { return this.getRangeFilterText('skillTurn'); },
+        set: function (val) { this.setRangeFilterText('skillTurn', val); }
+      }
     },
-    skillBoostFilterStr: {
+    skillBoost: {
       type: String,
       default: filterDefault.skillBoostMin + '-' + filterDefault.skillBoostMax,
-      queryKey: 'skillBoost',
-      computed: true
+      computed: {
+        get: function () { return this.getRangeFilterText('skillBoost'); },
+        set: function (val) { this.setRangeFilterText('skillBoost', val); }
+      }
     },
-    resistBindFilterStr: {
+    resistBind: {
       type: String,
       default: filterDefault.resistBindMin + '-' + filterDefault.resistBindMax,
-      queryKey: 'resistBind',
-      computed: true
+      computed: {
+        get: function () { return this.getRangeFilterText('resistBind'); },
+        set: function (val) { this.setRangeFilterText('resistBind', val); }
+      }
     },
-    resistDarknessFilterStr: {
+    resistDarkness: {
       type: String,
       default: filterDefault.resistDarknessMin + '-' + filterDefault.resistDarknessMax,
-      queryKey: 'resistDarkness',
-      computed: true
+      computed: {
+        get: function () { return this.getRangeFilterText('resistDarkness'); },
+        set: function (val) { this.setRangeFilterText('resistDarkness', val); }
+      }
     },
-    resistJammerFilterStr: {
+    resistJammer: {
       type: String,
       default: filterDefault.resistJammerMin + '-' + filterDefault.resistJammerMax,
-      queryKey: 'resistJammer',
-      computed: true
+      computed: {
+        get: function () { return this.getRangeFilterText('resistJammer'); },
+        set: function (val) { this.setRangeFilterText('resistJammer', val); }
+      }
     },
-    resistPoisonFilterStr: {
+    resistPoison: {
       type: String,
       default: filterDefault.resistPoisonMin + '-' + filterDefault.resistPoisonMax,
-      queryKey: 'resistPoison',
-      computed: true
+      computed: {
+        get: function () { return this.getRangeFilterText('resistPoison'); },
+        set: function (val) { this.setRangeFilterText('resistPoison', val); }
+      }
     },
     timeExtensionMin: {
       type: Number,
       default: filterDefault.timeExtensionMin,
-      computed: true
+      computed: {
+        get: function () { return this.filter.timeExtensionMin; },
+        set: function (v) { this.filter.timeExtensionMin = v; }
+      }
     },
     useSuperAwaken: {
       type: Boolean,
       default: filterDefault.useSuperAwaken,
-      computed: true
+      computed: {
+        get: function () { return this.filter.useSuperAwaken; },
+        set: function (v) { this.filter.useSuperAwaken = v; }
+      }
     }
   },
   /** データの変更を受けて $route.query が変更されたときに呼ばれるフック。 */
@@ -587,87 +625,11 @@ export default {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
 
-    name: {
-      get: function () { return this.filter.name; },
-      set: function (v) { this.filter.name = v; }
-    },
-    attr: {
-      get: function () { return this.filter.attr; },
-      set: function (v) { this.filter.attr = v; }
-    },
-    subAttr: {
-      get: function () { return this.filter.subAttr; },
-      set: function (v) { this.filter.subAttr = v; }
-    },
-    type: {
-      get: function () { return this.filter.type; },
-      set: function (v) { this.filter.type = v; }
-    },
-    awaken: {
-      get: function () { return this.filter.awaken; },
-      set: function (v) { this.filter.awaken = v; }
-    },
-    assist: {
-      get: function () { return this.filter.assist; },
-      set: function (v) { this.filter.assist = v; }
-    },
-    rarityMin: {
-      get: function () { return this.filter.rarityMin; },
-      set: function (v) { this.filter.rarityMin = v; }
-    },
-    rarityMax: {
-      get: function () { return this.filter.rarityMax; },
-      set: function (v) { this.filter.rarityMax = v; }
-    },
-    timeExtensionMin: {
-      get: function () { return this.filter.timeExtensionMin; },
-      set: function (v) { this.filter.timeExtensionMin = v; }
-    },
-    useSuperAwaken: {
-      get: function () { return this.filter.useSuperAwaken; },
-      set: function (v) { this.filter.useSuperAwaken = v; }
-    },
-
     /** その他絞り込み部分のフィルタリング設定をもとに作成したテキスト。 */
     filterSettingTextArray () {
       const array = filterSettingTextArray(this.filter);
       if (/^名前に/.test(array[0])) { array.shift(); }
       return array;
-    },
-    /** レアリティの絞り込み設定の最小値と最大値を - でつないだもの。 */
-    rarityFilterStr: {
-      get: function () { return this.getRangeFilterText('rarity'); },
-      set: function (val) { this.setRangeFilterText('rarity', val); }
-    },
-    /** スキルターンの絞り込み設定の最小値と最大値を - でつないだもの。 */
-    skillTurnFilterStr: {
-      get: function () { return this.getRangeFilterText('skillTurn'); },
-      set: function (val) { this.setRangeFilterText('skillTurn', val); }
-    },
-    /** スキルブーストの絞り込み設定の最小値と最大値を - でつないだもの。 */
-    skillBoostFilterStr: {
-      get: function () { return this.getRangeFilterText('skillBoost'); },
-      set: function (val) { this.setRangeFilterText('skillBoost', val); }
-    },
-    /** バインド耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
-    resistBindFilterStr: {
-      get: function () { return this.getRangeFilterText('resistBind'); },
-      set: function (val) { this.setRangeFilterText('resistBind', val); }
-    },
-    /** 暗闇耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
-    resistDarknessFilterStr: {
-      get: function () { return this.getRangeFilterText('resistDarkness'); },
-      set: function (val) { this.setRangeFilterText('resistDarkness', val); }
-    },
-    /** お邪魔耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
-    resistJammerFilterStr: {
-      get: function () { return this.getRangeFilterText('resistJammer'); },
-      set: function (val) { this.setRangeFilterText('resistJammer', val); }
-    },
-    /** 毒耐性の絞り込み設定の最小値と最大値を - でつないだもの。 */
-    resistPoisonFilterStr: {
-      get: function () { return this.getRangeFilterText('resistPoison'); },
-      set: function (val) { this.setRangeFilterText('resistPoison', val); }
     },
     /** 設定領域を全画面で表示しているかどうか。 */
     isFullOverSettingArea: function () {
