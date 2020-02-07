@@ -231,6 +231,15 @@ export function getFilterDefault () {
  */
 export function getFilterFunction (setting) {
   const functionArray = [];
+  if (setting.favorite !== undefined) {
+    let func;
+    if (setting.favorite) {
+      func = d => { return commonData.monsterFavorites[d.no]; };
+    } else {
+      func = d => { return !commonData.monsterFavorites[d.no]; };
+    }
+    if (func) { functionArray.push(func); }
+  }
   if (setting.name) {
     const searchWords = setting.name.split(/\s+/g);
     const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch);
