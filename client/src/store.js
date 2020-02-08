@@ -196,6 +196,23 @@ export default new Vuex.Store({
       } else {
         Vue.set(state.monsterFavorites, params.no, params.data);
       }
+      this.commit('saveFavorite');
+    },
+
+    saveFavorite: function (state) {
+      const favMonsters = Object.keys(state.monsterFavorites);
+      localStorage.setItem('favorites', JSON.stringify({ version: 1, data: favMonsters }));
+    },
+    loadFavorite: function (state) {
+      const favMonstersJson = localStorage.getItem('favorites');
+      if (favMonstersJson) {
+        const favMonsters = JSON.parse(favMonstersJson);
+        if (favMonsters.version === 1) {
+          const obj = {};
+          favMonsters.data.forEach(d => { obj[d] = true; });
+          state.monsterFavorites = obj;
+        }
+      }
     },
 
     setErrors: function (state, errors) {

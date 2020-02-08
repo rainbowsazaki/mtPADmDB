@@ -84,6 +84,7 @@ export default {
   },
   created: function () {
     this.$store.commit('fetchCommonData');
+    this.$store.commit('loadFavorite');
   },
   mounted: function () {
     this.sendGa();
