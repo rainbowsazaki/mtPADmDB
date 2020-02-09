@@ -9,6 +9,10 @@
         <div class="monsterName stretch">{{ monsterData.name }}</div>
       </div>
     </div>
+    <div v-if="useFavorite" class="favorite" :class="{ selected: $store.state.monsterFavorites[monsterData.no] }" @click="flipMonsterFavorite(monsterData.no)">
+      <div class="favIcon">★</div>
+      {{ $store.state.monsterFavorites[monsterData.no] ? 'ON' : 'OFF' }}
+    </div>
     <div class="monsterImageArea">
       <div class="monsterImage">
         <img v-if="monsterData.no" :src="monsterImagePath" :key="`monsterImage${monsterData.no}`">
@@ -136,6 +140,11 @@ export default {
     monsterData: {
       type: Object,
       required: true
+    },
+    /** お気に入りトグルボタンを表示するかどうか。 */
+    useFavorite: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -225,6 +234,12 @@ export default {
     /** 指定された値が null の場合は '不明' を、そうでない場合はそのままの値を返す。 */
     nullToFumei: function (value) {
       return (value === null) ? '不明' : value;
+    },
+    /** 指定したモンスターのお気に入りの状態を反転させる。 */
+    flipMonsterFavorite: function (no) {
+      const nowData = this.$store.state.monsterFavorites[no];
+      const newData = (nowData) ? undefined : true;
+      this.$store.commit('setMonsterFavorite', { no: no, data: newData });
     }
   }
 };
@@ -235,6 +250,7 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=M+PLUS+1p:700,900');
 
 div.monsterInfo {
+  position: relative;
   color: #FFF;
   line-height: 1.3em;
   font-family: 'M PLUS 1p', sans-serif;
@@ -267,6 +283,37 @@ span.monsterNo {
 .rare {
   color: #EE0;
   -webkit-text-stroke: 0.05em #660;
+}
+
+.favorite {
+  position: absolute;
+  right: 0.7em;
+  top: 1em;
+  width: 3.05em;
+  height: 2.5em;
+  border: 0.1em #ca7 solid;
+  border-radius: 0.5em;
+  text-align: center;
+  color: #b90;
+  background: #640;
+  line-height: 1em;
+
+  cursor: pointer;
+  user-select: none;
+
+  .favIcon {
+    color: #999;
+    font-size: 110%;
+    line-height: 1.1em;
+  }
+  &.selected {
+    color: #fe0;
+    background: #960;
+    border-color: #ec9;
+    .favIcon {
+      color: #ff0;
+    }
+  }
 }
 
 div.monsterImageArea {

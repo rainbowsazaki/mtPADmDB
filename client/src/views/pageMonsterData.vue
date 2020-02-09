@@ -24,7 +24,7 @@
 
     <div class="row">
       <div class="col-md-6">
-        <monster-info :monster-data="monsterData" />
+        <monster-info use-favorite :monster-data="monsterData" />
       </div>
       <div class="col-md-6">
         <table class="table table-bordered table-sm">
