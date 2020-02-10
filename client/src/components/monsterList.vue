@@ -15,7 +15,7 @@
               <div>{{ data.name }}</div>
             </div>
           </router-link>
-          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] }" @click.stop="flipMonsterFavorite(data.no)">
+          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no], toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
             ★
           </div>
         </div>
@@ -49,6 +49,8 @@ export default {
   },
   data: function () {
     return {
+      /** 現在のページを表示してからお気に入りの切り替えが行われたかどうか。 */
+      favoriteToggled: {},
       inPageCount: 50,
       /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
       pageResetFlag: false,
@@ -82,6 +84,9 @@ export default {
     filteredMonsterTableArray: function () {
       // ページリセット
       if (this.pageResetFlag) { this.page = 1; }
+    },
+    page: function () {
+      this.favoriteToggled = {};
     }
   },
   created: function () {
@@ -95,6 +100,7 @@ export default {
       const nowData = this.$store.state.monsterFavorites[no];
       const newData = (nowData) ? undefined : true;
       this.$store.commit('setMonsterFavorite', { no: no, data: newData });
+      this.favoriteToggled[no] = true;
     }
   }
 };
@@ -156,10 +162,40 @@ export default {
     user-select: none;
     
     color: #999;
-
-    &.selected {
-      color: #FF0
+    &.toggled {
+      animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
     }
+    
+    &.selected {
+      color: #FF0;
+      &.toggled {
+        animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
+      }
+    }
+
+    @keyframes favoriteSelectAnimaton {
+      0% {
+        font-size: 100% * $font-size-rate;
+      }
+      49% {
+        font-size: 80% * $font-size-rate;
+      }
+      100% {
+        font-size: 100% * $font-size-rate;
+      }
+    }
+    @keyframes favoriteClearAnimation {
+      0% {
+        font-size: 100% * $font-size-rate;
+      }
+      49% {
+        font-size: 80% * $font-size-rate;
+      }
+      100% {
+        font-size: 100% * $font-size-rate;
+      }
+    }
+
   }
 }
 
