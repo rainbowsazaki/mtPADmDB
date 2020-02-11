@@ -9,7 +9,11 @@
         <div class="monsterName stretch">{{ monsterData.name }}</div>
       </div>
     </div>
-    <div v-if="useFavorite" class="favorite" :class="{ selected: $store.state.monsterFavorites[monsterData.no] }" @click="flipMonsterFavorite(monsterData.no)">
+    <div
+      v-if="useFavorite" class="favorite"
+      :class="{ selected: $store.state.monsterFavorites[monsterData.no], toggled: favoriteToggled }"
+      @click="flipMonsterFavorite(monsterData.no)"
+    >
       <div class="favIcon">★</div>
       {{ $store.state.monsterFavorites[monsterData.no] ? 'ON' : 'OFF' }}
     </div>
@@ -154,7 +158,8 @@ export default {
       attributeTable: constData.attributeTable,
       evolutionTypeTable: constData.evolutionTypeTable,
       awakenTable: constData.awakenTable,
-
+      /** お気に入りの切り替えを行ったかどうか。 */
+      favoriteToggled: false,
       /** モンスター情報表示部分のフォントサイズ。 */
       infoFontSize: 8
     };
@@ -209,6 +214,11 @@ export default {
       return null;
     }
   },
+  watch: {
+    monsterData: function () {
+      this.favoriteToggled = false;
+    }
+  },
   mounted: function () {
     this.updateInfoFontSize();
     window.addEventListener('resize', this.updateInfoFontSize);
@@ -240,6 +250,7 @@ export default {
       const nowData = this.$store.state.monsterFavorites[no];
       const newData = (nowData) ? undefined : true;
       this.$store.commit('setMonsterFavorite', { no: no, data: newData });
+      this.favoriteToggled = true;
     }
   }
 };
@@ -306,12 +317,44 @@ span.monsterNo {
     font-size: 110%;
     line-height: 1.1em;
   }
+
+  &.toggled {
+    animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
+  }
+
   &.selected {
     color: #fe0;
     background: #960;
     border-color: #ec9;
     .favIcon {
       color: #ff0;
+    }
+
+    &.toggled {
+      animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
+    }
+  }
+
+  @keyframes favoriteSelectAnimaton {
+    0% {
+      transform: scale(1);
+    }
+    49% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes favoriteClearAnimation {
+    0% {
+      transform: scale(1);
+    }
+    49% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
     }
   }
 }
