@@ -160,39 +160,53 @@ export default {
     line-height: 2.5em / $font-size-rate;
     cursor: pointer;
     user-select: none;
+
+    $dark_color: #999;
+    $light_color: #FF0;
     
-    color: #999;
+    color: $dark_color;
     &.toggled {
       animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
     }
     
     &.selected {
-      color: #FF0;
+      color: $light_color;
       &.toggled {
         animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
       }
     }
 
     @keyframes favoriteSelectAnimaton {
+      $light_shadow_color: #ff9;
       0% {
-        font-size: 100% * $font-size-rate;
+        color: $dark_color;
       }
-      49% {
-        font-size: 80% * $font-size-rate;
+      10% {
+        color: $light_color;
+        transform: scale(0.8);
+        filter: drop-shadow(0 0 0em $light_shadow_color);
+      }
+      90% {
+        filter: drop-shadow(0 0 1em $light_shadow_color);
+      }
+      99% {
+        filter: drop-shadow(0 0 2em rgba($light_shadow_color, 0));
       }
       100% {
-        font-size: 100% * $font-size-rate;
+        transform: none;
+        filter: none;
       }
     }
     @keyframes favoriteClearAnimation {
       0% {
-        font-size: 100% * $font-size-rate;
+        color: $light_color;
       }
-      49% {
-        font-size: 80% * $font-size-rate;
+      10% {
+        color: $dark_color;
+        transform: scale(0.8);
       }
       100% {
-        font-size: 100% * $font-size-rate;
+        transform: scale(1);
       }
     }
 
