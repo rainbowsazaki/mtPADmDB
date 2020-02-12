@@ -163,13 +163,13 @@ export default {
     
     color: #999;
     &.toggled {
-      animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
+      animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
     }
     
     &.selected {
       color: #FF0;
       &.toggled {
-        animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
+        animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
       }
     }
 
