@@ -312,14 +312,21 @@ span.monsterNo {
   cursor: pointer;
   user-select: none;
 
+  $dark_color: #999;
+  $light_color: #ff0;
+
   .favIcon {
-    color: #999;
+    color: $dark_color;
     font-size: 110%;
     line-height: 1.1em;
   }
 
   &.toggled {
+    transition: all 0.06s 0s ease;
     animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
+    .favIcon {
+      animation: favoriteClearIconAnimaton 0.3s ease 0s 1 normal none running;
+    }
   }
 
   &.selected {
@@ -327,19 +334,47 @@ span.monsterNo {
     background: #960;
     border-color: #ec9;
     .favIcon {
-      color: #ff0;
+      color: $light_color;
     }
 
     &.toggled {
+      transition: all 0.06s 0s ease;
       animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
+      .favIcon {
+        animation: favoriteSelectIconAnimaton 0.3s ease 0s 1 normal none running;
+      }
     }
   }
 
+  @keyframes favoriteSelectIconAnimaton {
+    $light_shadow_color: #ff9;
+    0% {
+      color: $dark_color;
+    }
+    20% {
+      color: $light_color;
+      filter: drop-shadow(0 0 0em $light_shadow_color);
+    }
+    90% {
+      filter: drop-shadow(0 0 1em $light_shadow_color);
+    }
+    99% {
+      filter: drop-shadow(0 0 2em rgba($light_shadow_color, 0));
+    }
+  }
+  @keyframes favoriteClearIconAnimaton {
+    0% {
+      color: $light_color;
+    }
+    20% {
+      color: $dark_color;
+    }
+  }
   @keyframes favoriteSelectAnimaton {
     0% {
       transform: scale(1);
     }
-    49% {
+    20% {
       transform: scale(0.9);
     }
     100% {
@@ -350,7 +385,7 @@ span.monsterNo {
     0% {
       transform: scale(1);
     }
-    49% {
+    20% {
       transform: scale(0.9);
     }
     100% {
