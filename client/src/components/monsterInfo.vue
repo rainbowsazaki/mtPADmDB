@@ -15,7 +15,7 @@
       @click="flipMonsterFavorite(monsterData.no)"
     >
       <div class="favIcon">★</div>
-      {{ $store.state.monsterFavorites[monsterData.no] ? 'ON' : 'OFF' }}
+      <div class="text">{{ $store.state.monsterFavorites[monsterData.no] ? 'ON' : 'OFF' }}</div>
     </div>
     <div class="monsterImageArea">
       <div class="monsterImage">
@@ -305,7 +305,6 @@ span.monsterNo {
   border: 0.1em #b68e6b solid;
   border-radius: 0.5em;
   text-align: center;
-  color: #b90;
   background: #2d1312;
   line-height: 1em;
 
@@ -316,25 +315,55 @@ span.monsterNo {
   $light_color: #ff0;
 
   .favIcon {
-    color: $dark_color;
     font-size: 110%;
     line-height: 1.1em;
+
+    text-shadow: none;
+    filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5));
+
+    color: $dark_color;
+    background: linear-gradient(#888, #555);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text {
+    text-shadow: none;
+    -webkit-text-stroke: 0.02em #000;
+    $shadowBlur: 0.02em;
+    $shadowColor: rgba(0,0,0,1);
+    filter:
+      drop-shadow(0 0 $shadowBlur $shadowColor)
+      drop-shadow(0 0 $shadowBlur $shadowColor)
+      drop-shadow(0 0 $shadowBlur $shadowColor)
+      drop-shadow(0 0.08em $shadowBlur $shadowColor);
+
+    color: #c17d18;
+    background: linear-gradient(#c6a44a, #c17d18);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   &.toggled {
     transition: all 0.06s 0s ease;
     animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
-    .favIcon {
-      animation: favoriteClearIconAnimaton 0.3s ease 0s 1 normal none running;
-    }
   }
 
   &.selected {
-    color: #fe0;
     background: #994433;
     border-color: #ffd699;
     .favIcon {
       color: $light_color;
+      background: linear-gradient(#ff0, #f90);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .text {
+      color: #fac960;
+      background: linear-gradient(#eecc77, #fac960);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     &.toggled {
@@ -348,26 +377,14 @@ span.monsterNo {
 
   @keyframes favoriteSelectIconAnimaton {
     $light_shadow_color: #ff9;
-    0% {
-      color: $dark_color;
-    }
     20% {
-      color: $light_color;
-      filter: drop-shadow(0 0 0em $light_shadow_color);
+      filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5)) drop-shadow(0 0 0em $light_shadow_color);
     }
     90% {
-      filter: drop-shadow(0 0 1em $light_shadow_color);
+      filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5)) drop-shadow(0 0 1em $light_shadow_color);
     }
     99% {
-      filter: drop-shadow(0 0 2em rgba($light_shadow_color, 0));
-    }
-  }
-  @keyframes favoriteClearIconAnimaton {
-    0% {
-      color: $light_color;
-    }
-    20% {
-      color: $dark_color;
+      filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5)) drop-shadow(0 0 2em rgba($light_shadow_color, 0));
     }
   }
   @keyframes favoriteSelectAnimaton {
