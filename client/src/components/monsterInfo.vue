@@ -302,11 +302,11 @@ span.monsterNo {
   top: 1em;
   width: 3.05em;
   height: 2.5em;
-  border: 0.1em #ca7 solid;
+  border: 0.1em #b68e6b solid;
   border-radius: 0.5em;
   text-align: center;
   color: #b90;
-  background: #640;
+  background: #2d1312;
   line-height: 1em;
 
   cursor: pointer;
@@ -331,8 +331,8 @@ span.monsterNo {
 
   &.selected {
     color: #fe0;
-    background: #960;
-    border-color: #ec9;
+    background: #994433;
+    border-color: #ffd699;
     .favIcon {
       color: $light_color;
     }
