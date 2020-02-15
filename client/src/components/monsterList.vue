@@ -161,16 +161,23 @@ export default {
     cursor: pointer;
     user-select: none;
 
-    $dark_color: #999;
-    $light_color: #FF0;
-    
-    color: $dark_color;
+    text-shadow: none;
+    filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5));
+    color: #999;
+    background: linear-gradient(#aaa 30%, #888 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
     &.toggled {
       animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
     }
     
     &.selected {
-      color: $light_color;
+      color: #ff0;
+      background: linear-gradient(#ff0 30%, #fb0 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
       &.toggled {
         animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
       }
@@ -178,11 +185,7 @@ export default {
 
     @keyframes favoriteSelectAnimaton {
       $light_shadow_color: #ff9;
-      0% {
-        color: $dark_color;
-      }
       10% {
-        color: $light_color;
         transform: scale(0.8);
         filter: drop-shadow(0 0 0em $light_shadow_color);
       }
@@ -198,11 +201,7 @@ export default {
       }
     }
     @keyframes favoriteClearAnimation {
-      0% {
-        color: $light_color;
-      }
       10% {
-        color: $dark_color;
         transform: scale(0.8);
       }
       100% {
