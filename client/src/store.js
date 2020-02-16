@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
 import $ from 'jquery';
+import * as firebase from 'firebase/app';
+import 'firebase/storage';
 
 import { mtpadmdb, constData, commonData } from './mtpadmdb.js';
 
@@ -201,7 +203,16 @@ export default new Vuex.Store({
 
     saveFavorite: function (state) {
       const favMonsters = Object.keys(state.monsterFavorites);
-      localStorage.setItem('favorites', JSON.stringify({ version: 1, data: favMonsters }));
+      const jsonText = JSON.stringify({ version: 1, data: favMonsters });
+      if (!state.accountData) {
+        localStorage.setItem('favorites', jsonText);
+      } else {
+        const storage = firebase.storage();
+        const ref = storage.ref(`users/${state.accountData.uid}/favorite.json`);
+        ref.putString(jsonText).then(function (snapshot) {
+          console.log('Uploaded a raw string!');
+        });
+      }
     },
     loadFavorite: function (state) {
       const favMonstersJson = localStorage.getItem('favorites');
