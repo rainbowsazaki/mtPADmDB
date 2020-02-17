@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://padmdb.rainbowsite.net", "http://localhost:8080"],
+      "header": ["*"],
+      "method": ["*"],
+      "maxAgeSeconds": 3600
+    }
+]
