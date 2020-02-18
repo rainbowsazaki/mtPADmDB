@@ -215,14 +215,55 @@ export default new Vuex.Store({
       }
     },
     loadFavorite: function (state) {
-      const favMonstersJson = localStorage.getItem('favorites');
-      if (favMonstersJson) {
-        const favMonsters = JSON.parse(favMonstersJson);
+      function setFavMonsters (favMonsters) {
         if (favMonsters.version === 1) {
           const obj = {};
           favMonsters.data.forEach(d => { obj[d] = true; });
           state.monsterFavorites = obj;
         }
+      }
+
+      function loadFromLocalStrage () {
+        const favMonstersJson = localStorage.getItem('favorites');
+        if (favMonstersJson) {
+          const favMonsters = JSON.parse(favMonstersJson);
+          setFavMonsters(favMonsters);
+        }
+      }
+
+      if (!state.accountData) {
+        loadFromLocalStrage();
+      } else {
+        const storage = firebase.storage();
+        const ref = storage.ref(`users/${state.accountData.uid}/favorite.json`);
+        ref.getDownloadURL().then(function (url) {
+          const axiosObj = axios.get(url);
+          axiosObj.then(response => {
+            setFavMonsters(response.data);
+          }).catch(response => {
+            console.log('favorite download error.');
+          });
+        }).catch(function (error) {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+          case 'storage/object-not-found':
+            // File doesn't exist
+            break;
+          case 'storage/unauthorized':
+            // User doesn't have permission to access the object
+            break;
+          case 'storage/canceled':
+            // User canceled the upload
+            break;
+          case 'storage/unknown':
+            // Unknown error occurred, inspect the server response
+            break;
+          }
+          // ローカルストレージからの読み込みを試みる。
+          loadFromLocalStrage();
+        });
+        return;
       }
     },
 

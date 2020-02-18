@@ -58,4 +58,5 @@ firebase.auth().onAuthStateChanged(user => {
   // ログイン状態ならuserが取得できる
   // console.log(user);
   store.commit('updateUserAccount', user || {});
+  store.commit('loadFavorite');
 });
