@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import $ from 'jquery';
@@ -13,16 +12,6 @@ import store from './store';
 import './auth';
 
 Vue.config.productionTip = false;
-
-axios.interceptors.request.use(function (config) {
-  config.headers['X-Requested-With'] = 'XMLHttpRequest';
-  config.headers['Cache-Control'] = 'no-cache';
-  config.headers['Expires'] = '-1';
-
-  return config;
-}, function (err) {
-  return Promise.reject(err);
-});
 
 jQuery.fn.scrollParentShowThis = function () {
   if (this.length === 0) { return this; }

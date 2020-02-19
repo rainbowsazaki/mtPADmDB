@@ -103,8 +103,15 @@ export default new Vuex.Store({
       const nowMs = (new Date()).getTime();
       if (state.lastLoadCommonDataTime + 5 * 60 * 1000 > nowMs) { return; }
 
+      const option = {
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Expires': '-1'
+        }
+      };
+
       // モンスター情報と画像情報はモンスター一覧ページをいち早く表示するために他と分けて読み込み処理を行う。
-      axios.get('./listJson/monster_list_full.json')
+      axios.get('./listJson/monster_list_full.json', option)
         .then(responce => {
           for (const monsterNo in responce.data) {
             const data = responce.data[monsterNo];
@@ -116,15 +123,15 @@ export default new Vuex.Store({
           }
           state.monsterTable = responce.data;
         });
-      axios.get('./listJson/image_list.json')
+      axios.get('./listJson/image_list.json', option)
         .then(responce => {
           state.imageTable = responce.data;
         });
 
       axios.all([
-        axios.get('./listJson/skill_list.json'),
-        axios.get('./listJson/leader_skill_list.json'),
-        axios.get('./listJson/evolution_list.json')
+        axios.get('./listJson/skill_list.json', option),
+        axios.get('./listJson/leader_skill_list.json', option),
+        axios.get('./listJson/evolution_list.json', option)
       ]).then(axios.spread((
         skillListResponse,
         leaderSkillListResponse,
