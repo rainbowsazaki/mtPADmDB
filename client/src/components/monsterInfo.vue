@@ -192,7 +192,7 @@ export default {
     monsterDataAfterTransform: function () {
       const skill = this.skillDetails;
       if (!skill) { return null; }
-      if (/(?:[\n。】]|^)(.*)に変身/.test(skill.description)) {
+      if (/([^\n。】]*?)に変身/.test(skill.description)) {
         const targetName = RegExp.$1;
         const monsterData = this.$store.getters.monsterDataArray.find(d => d.name === targetName);
         if (monsterData) { return monsterData; }
