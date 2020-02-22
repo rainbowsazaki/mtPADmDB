@@ -574,13 +574,20 @@ export default {
       if (this.useSuperAwaken) { enables.push('超覚醒'); }
 
       if (this.useEnemyState) {
-        if (this.enemyAttributes.length) {
-          enemyInfo += ' 属性:' + this.enemyAttributes.map(d => this.attributeTable[d]).join('/');
-        }
-        if (this.enemyTypes.length) {
-          enemyInfo += ' タイプ:' + this.enemyTypes.map(d => this.typeTable[d].name).join('/');
-          if (this.useSenzaiKiller) { enables.push('潜在キラー'); }
-          if (this.useRelasedSenzaiAwaken) { enables.push('潜在覚醒枠解放'); }
+        if (this.enemyNo) {
+          const monsterData = this.monsterTable[this.enemyNo];
+          if (monsterData) {
+            enemyInfo += ':' + monsterData.name;
+          }
+        } else {
+          if (this.enemyAttributes.length) {
+            enemyInfo += ' 属性:' + this.enemyAttributes.map(d => this.attributeTable[d]).join('/');
+          }
+          if (this.enemyTypes.length) {
+            enemyInfo += ' タイプ:' + this.enemyTypes.map(d => this.typeTable[d].name).join('/');
+            if (this.useSenzaiKiller) { enables.push('潜在キラー'); }
+            if (this.useRelasedSenzaiAwaken) { enables.push('潜在覚醒枠解放'); }
+          }
         }
 
         if (this.damageHalfAttributes.length) {
@@ -595,7 +602,7 @@ export default {
         title += ' ' + enables.join('/') + '使用';
       }
       if (enemyInfo) {
-        title += ' 敵モンスター ' + enemyInfo;
+        title += ' 敵モンスター' + enemyInfo;
       }
       const fst = filterSettingText(this.filterSetting);
       if (fst) {
