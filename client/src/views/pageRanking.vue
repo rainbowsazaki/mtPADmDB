@@ -590,11 +590,15 @@ export default {
           }
         }
 
+        let herfDamages = [];
         if (this.damageHalfAttributes.length) {
-          enemyInfo += ' ダメージ半減属性:' + this.damageHalfAttributes.map(d => this.attributeTable[d]).join('/');
+          herfDamages = herfDamages.concat(this.damageHalfAttributes.map(d => this.attributeTable[d]));
         }
         if (this.damageHalfTypes.length) {
-          enemyInfo += ' ダメージ半減タイプ:' + this.damageHalfTypes.map(d => this.typeTable[d].name).join('/');
+          herfDamages = herfDamages.concat(this.damageHalfTypes.map(d => this.typeTable[d].name));
+        }
+        if (herfDamages) {
+          enemyInfo += ' ' + herfDamages.join('/') + 'からの攻撃を半減';
         }
       }
 
