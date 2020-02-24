@@ -658,7 +658,7 @@ div.transformIconArea {
     height: 0;
   }
   .olAnim1 {
-    animation: paramBlink 9s ease -4.5s infinite normal none running;
+    animation: paramBlink2 9s ease 0s infinite normal none running;
   }
 
   @keyframes awakenCountBlink {
@@ -683,17 +683,38 @@ div.transformIconArea {
     0% {
       opacity: 1;
     }
-    46% {
+    47% {
       opacity: 1;
     }
-    49% {
+    50% {
       opacity: 0;
     }
-    97% {
+    99% {
       opacity: 0;
     }
     100% {
       opacity: 1;
+    }
+  }
+
+  @keyframes paramBlink2 {
+    0% {
+      opacity: 0;
+    }
+    49% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    97% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
     }
   }
 }
