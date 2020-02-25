@@ -141,7 +141,7 @@ export default {
       reader.onload = () => {
         // Canvas上に表示する
         const uploadImgSrc = reader.result;
-        const iconSrcScale = [12 / 640, (1136 - 795.8) / 640, 98.5 / 640];
+        const iconSrcScale = [12 / 640, (1136 - 793.8) / 640, 98.5 / 640];
         const imageSrcScale = [50 / 640, (1136 - 795 + 480) / 640, 540 / 640, 405 / 640];
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -157,7 +157,7 @@ export default {
             function isRange (value, target, margin) {
               return value - margin <= target && value + margin >= target;
             }
-            const colorMargin = 68;
+            const colorMargin = 72;
             return isRange(array[startIndex + 0], targetColor[0], colorMargin) &&
                     isRange(array[startIndex + 1], targetColor[1], colorMargin) &&
                     isRange(array[startIndex + 2], targetColor[2], colorMargin);
