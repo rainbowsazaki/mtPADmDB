@@ -211,7 +211,7 @@ export default new Vuex.Store({
     saveFavorite: function (state) {
       const favMonsters = Object.keys(state.monsterFavorites);
       const jsonText = JSON.stringify({ version: 1, data: favMonsters });
-      if (!state.accountData) {
+      if (!state.accountData || !state.accountData.uid) {
         localStorage.setItem('favorites', jsonText);
       } else {
         const storage = firebase.storage();
@@ -238,7 +238,7 @@ export default new Vuex.Store({
         }
       }
 
-      if (!state.accountData) {
+      if (!state.accountData || !state.accountData.uid) {
         loadFromLocalStrage();
       } else {
         const storage = firebase.storage();
