@@ -209,7 +209,7 @@ export default new Vuex.Store({
     },
 
     saveFavorite: function (state) {
-      const favMonsters = Object.keys(state.monsterFavorites);
+      const favMonsters = Object.keys(state.monsterFavorites).filter(d => state.monsterFavorites[d] === 1);
       const jsonText = JSON.stringify({ version: 1, data: favMonsters });
       if (!state.accountData || !state.accountData.uid) {
         localStorage.setItem('favorites', jsonText);
@@ -225,7 +225,7 @@ export default new Vuex.Store({
       function setFavMonsters (favMonsters) {
         if (favMonsters.version === 1) {
           const obj = {};
-          favMonsters.data.forEach(d => { obj[d] = true; });
+          favMonsters.data.forEach(d => { obj[d] = 1; });
           state.monsterFavorites = obj;
         }
       }

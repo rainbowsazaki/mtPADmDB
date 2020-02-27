@@ -15,7 +15,7 @@
               <div>{{ data.name }}</div>
             </div>
           </router-link>
-          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no], toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
+          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] === 1, toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
             ★
           </div>
         </div>
@@ -98,7 +98,7 @@ export default {
     /** 指定したモンスターのお気に入りの状態を反転させる。 */
     flipMonsterFavorite: function (no) {
       const nowData = this.$store.state.monsterFavorites[no];
-      const newData = (nowData) ? undefined : true;
+      const newData = (nowData === 1) ? undefined : 1;
       this.$store.commit('setMonsterFavorite', { no: no, data: newData });
       this.favoriteToggled[no] = true;
     }

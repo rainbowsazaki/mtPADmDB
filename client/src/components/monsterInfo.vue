@@ -11,11 +11,11 @@
     </div>
     <div
       v-if="useFavorite" class="favorite"
-      :class="{ selected: $store.state.monsterFavorites[monsterData.no], toggled: favoriteToggled }"
+      :class="{ selected: $store.state.monsterFavorites[monsterData.no] === 1 ? toggled: favoriteToggled }"
       @click="flipMonsterFavorite(monsterData.no)"
     >
       <div class="favIcon">★</div>
-      <div class="text">{{ $store.state.monsterFavorites[monsterData.no] ? 'ON' : 'OFF' }}</div>
+      <div class="text">{{ $store.state.monsterFavorites[monsterData.no] === 1 ? 'ON' : 'OFF' }}</div>
     </div>
     <div class="monsterImageArea">
       <div class="monsterImage">
@@ -248,7 +248,7 @@ export default {
     /** 指定したモンスターのお気に入りの状態を反転させる。 */
     flipMonsterFavorite: function (no) {
       const nowData = this.$store.state.monsterFavorites[no];
-      const newData = (nowData) ? undefined : true;
+      const newData = (nowData === 1) ? undefined : 1;
       this.$store.commit('setMonsterFavorite', { no: no, data: newData });
       this.favoriteToggled = true;
     }
