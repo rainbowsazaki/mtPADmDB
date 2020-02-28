@@ -7,6 +7,35 @@ import 'firebase/storage';
 
 import { mtpadmdb, constData, commonData } from './mtpadmdb.js';
 
+/** 指定した番号のモンスターの進化系統モンスターの番号の配列を取得する。 */
+function getEvolutionSeriesNos (targetNo) {
+  if (!commonData.monsterTable) { return []; }
+  const evos = [];
+  let baseNo = targetNo;
+  const checkedFlag = {};
+  while (1) {
+    checkedFlag[baseNo] = true;
+    const monsterData = commonData.monsterTable[baseNo];
+    if (!monsterData || !monsterData.evolution) { break; }
+    const oneBackNo = monsterData.evolution.baseNo;
+    if (!oneBackNo || checkedFlag[oneBackNo]) { break; }
+    baseNo = oneBackNo;
+  }
+
+  const checkedFlag2 = {};
+  function f (no) {
+    if (checkedFlag2[no]) { return; }
+    checkedFlag2[no] = true;
+    evos.push(no);
+    const evoNos = commonData.evolutionTable[no];
+    if (evoNos) {
+      evoNos.forEach(d => f(d.no));
+    }
+  }
+  f(baseNo);
+  return evos;
+}
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -225,7 +254,13 @@ export default new Vuex.Store({
       function setFavMonsters (favMonsters) {
         if (favMonsters.version === 1) {
           const obj = {};
-          favMonsters.data.forEach(d => { obj[d] = 1; });
+          favMonsters.data.forEach(favNo => {
+            // 対象がフラグ無しの場合は進化系統フラグもなく、進化系統の他のものがお気に入りに入っていない状態なので、進化系統全てにフラグを立てる。
+            if (!obj[favNo]) {
+              getEvolutionSeriesNos(favNo).forEach(evoNo => { obj[evoNo] = 2; });
+            }
+            obj[favNo] = 1;
+          });
           state.monsterFavorites = obj;
         }
       }
