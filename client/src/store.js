@@ -230,8 +230,17 @@ export default new Vuex.Store({
      */
     setMonsterFavorite: function (state, params) {
       if (params.data === undefined) {
-        Vue.delete(state.monsterFavorites, params.no);
+        // 進化系統フラグに変更した上で、進化系統の中にお気に入りに入っているものがなければそれらの進化系統フラグを削除する。
+        Vue.set(state.monsterFavorites, params.no, 2);
+        const evolutionSeriesNos = getEvolutionSeriesNos(params.no);
+        if (evolutionSeriesNos.every(evoNo => state.monsterFavorites[evoNo] !== 1)) {
+          evolutionSeriesNos.forEach(evoNo => Vue.delete(state.monsterFavorites, evoNo));
+        }
       } else {
+        // フラグなしの状態ならば進化系統フラグも無いので、すべての進化系統に対してフラグを立てる。
+        if (!state.monsterFavorites[params.no]) {
+          getEvolutionSeriesNos(params.no).forEach(d => Vue.set(state.monsterFavorites, d, 2));
+        }
         Vue.set(state.monsterFavorites, params.no, params.data);
       }
       this.commit('saveFavorite');
