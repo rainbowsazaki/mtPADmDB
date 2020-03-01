@@ -15,7 +15,7 @@
               <div>{{ data.name }}</div>
             </div>
           </router-link>
-          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] === 1, toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
+          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] === 1, evolution: $store.state.monsterFavorites[data.no] === 2, toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
             ★
           </div>
         </div>
@@ -181,6 +181,10 @@ export default {
       &.toggled {
         animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
       }
+    }
+
+    &.evolution {
+      background-image: linear-gradient(#aaa 30%, #999 55%, #fd0 70%, #fb0 80%);
     }
 
     @keyframes favoriteSelectAnimaton {
