@@ -34,8 +34,9 @@
           <div class="col-8">
             <select class="custom-select" v-model="filter.favorite">
               <option :value="undefined">すべて</option>
-              <option :value="true">お気に入りのみ</option>
-              <option :value="false">お気に入り以外のみ</option>
+              <option :value="1">お気に入りのみ</option>
+              <option :value="2">お気に入りとその進化系統</option>
+              <option :value="0">お気に入り以外のみ</option>
             </select>
           </div>
         </div>
@@ -233,10 +234,16 @@ export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.favorite !== undefined) {
     let func;
-    if (setting.favorite) {
-      func = d => { return commonData.monsterFavorites[d.no]; };
-    } else {
+    switch (setting.favorite) {
+    case 1:
+      func = d => { return commonData.monsterFavorites[d.no] === 1; };
+      break;
+    case 2:
+      func = d => { const state = commonData.monsterFavorites[d.no]; return state === 1 || state === 2; };
+      break;
+    default:
       func = d => { return !commonData.monsterFavorites[d.no]; };
+      break;
     }
     if (func) { functionArray.push(func); }
   }
@@ -386,11 +393,13 @@ export function filterMonsterDataArray (setting, target) {
 export function filterSettingTextArray (setting) {
   const textArray = [];
   if (setting.favorite !== undefined) {
-    if (setting.favorite) {
-      textArray.push('お気に入りのみ');
-    } else {
-      textArray.push('お気に入り以外のみ');
-    }
+    const favoSettingTexts = {
+      0: 'お気に入り以外のみ',
+      1: 'お気に入りのみ',
+      2: 'お気に入りとその進化系統'
+    };
+    const favoSettingText = favoSettingTexts[setting.favorite];
+    if (favoSettingText) { textArray.push(favoSettingText); }
   }
   if (setting.name) {
     textArray.push(`名前に『${setting.name}』を含む`);
@@ -465,7 +474,7 @@ export default {
   ],
   queries: {
     favorite: {
-      type: Boolean,
+      type: Number,
       default: filterDefault.favorite,
       computed: {
         get: function () { return this.filter.favorite; },
