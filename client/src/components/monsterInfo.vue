@@ -11,7 +11,7 @@
     </div>
     <div
       v-if="useFavorite" class="favorite"
-      :class="{ selected: $store.state.monsterFavorites[monsterData.no] === 1 ? toggled: favoriteToggled }"
+      :class="{ selected: $store.state.monsterFavorites[monsterData.no] === 1, toggled: favoriteToggled }"
       @click="flipMonsterFavorite(monsterData.no)"
     >
       <div class="favIcon">★</div>
