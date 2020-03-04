@@ -11,7 +11,11 @@
     </div>
     <div
       v-if="useFavorite" class="favorite"
-      :class="{ selected: $store.state.monsterFavorites[monsterData.no] === 1, toggled: favoriteToggled }"
+      :class="{
+        selected: $store.state.monsterFavorites[monsterData.no] === 1,
+        evolution: $store.state.monsterFavorites[monsterData.no] === 2,
+        toggled: favoriteToggled
+      }"
       @click="flipMonsterFavorite(monsterData.no)"
     >
       <div class="favIcon">★</div>
@@ -374,6 +378,12 @@ span.monsterNo {
       }
     }
   }
+  
+    &.evolution {
+      .favIcon {
+        background-image: linear-gradient(#888 0%, #666 55%, #ea0 75%, #d80 100%);
+      }
+    }
 
   @keyframes favoriteSelectIconAnimaton {
     $light_shadow_color: #ff9;
