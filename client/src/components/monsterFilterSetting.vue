@@ -200,7 +200,9 @@ const filterDefault = {
   resistPoisonMax: 100,
   timeExtensionMin: 0,
   assist: undefined,
-  useSuperAwaken: false
+  useSuperAwaken: false,
+
+  tempFavoriteTable: undefined
 };
 
 /** 頻出する一部の漢字を、ひらがなでも検索できるようにする */
@@ -233,16 +235,17 @@ export function getFilterDefault () {
 export function getFilterFunction (setting) {
   const functionArray = [];
   if (setting.favorite !== undefined) {
+    const favoriteTable = setting.tempFavoriteTable || commonData.monsterFavorites;
     let func;
     switch (setting.favorite) {
     case 1:
-      func = d => { return commonData.monsterFavorites[d.no] === 1; };
+      func = d => { return favoriteTable[d.no] === 1; };
       break;
     case 2:
-      func = d => { const state = commonData.monsterFavorites[d.no]; return state === 1 || state === 2; };
+      func = d => { const state = favoriteTable[d.no]; return state === 1 || state === 2; };
       break;
     default:
-      func = d => { return !commonData.monsterFavorites[d.no]; };
+      func = d => { return !favoriteTable[d.no]; };
       break;
     }
     if (func) { functionArray.push(func); }
@@ -670,6 +673,14 @@ export default {
     'filter.resistPoisonMin': function () { this.checkRangeCross('resistPoison', false); },
     'filter.resistPoisonMax': function () { this.checkRangeCross('resistPoison', true); },
     
+    'filter.favorite': function () {
+      if (this.filter.favorite === undefined) {
+        this.filter.tempFavoriteTable = null;
+      } else {
+        this.filter.tempFavoriteTable = Object.assign({}, this.$store.state.monsterFavorites);
+      }
+    },
+
     isFullOverSettingArea: function (newValue) {
       if (newValue) {
         this.tempScrollTop = document.scrollingElement.scrollTop;
