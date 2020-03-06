@@ -1,10 +1,10 @@
 <template>
-  <div v-if="hasImage" class="monsterIcon" :style="iconSizeStyleObject">
+  <div v-if="hasImage" class="monsterIcon" :class="{ favoriteFlag: favoriteFlagType === 1 }" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img :src="iconPath" :alt="monsterNoAndName" :key="`icon${no}`">
     </span>
   </div>
-  <div v-else class="monsterIcon monsterIconDummy" :class="{ subAttr: hasAttr1 }" :style="iconSizeStyleObject">
+  <div v-else class="monsterIcon monsterIconDummy" :class="{ favoriteFlag: favoriteFlagType === 1, subAttr: hasAttr1 }" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img v-if="hasAttr0" class="attr attr1" :src="attrPath0">
       <img v-if="hasAttr1" class="attr attr2" :src="attrPath1">
@@ -32,6 +32,11 @@ export default {
     },
     /** モンスター詳細ページへのリンクを貼らないための指定。 */
     'noLink': {
+      type: Boolean,
+      default: false
+    },
+    /** お気に入りに入っているときにそれを示すフラグを表示するかどうか。 */
+    'useFavoriteFlag': {
       type: Boolean,
       default: false
     }
@@ -67,6 +72,11 @@ export default {
     /** アイコンサイズの指定のために style 属性に指定するオブジェクト。 */
     iconSizeStyleObject: function () {
       return { width: this.width, height: this.height };
+    },
+    /** 表示するお気に入りマークの種類。 */
+    favoriteFlagType: function () {
+      if (!this.useFavoriteFlag) { return 0; }
+      return this.$store.state.monsterFavorites[this.no];
     }
   }
 };
@@ -75,13 +85,15 @@ export default {
 <style lang="scss" scoped>
 
 .monsterIcon {
+  $border-radius-size: 7.5%;
+
   display: inline-block;
   background-color: #444;
   background-image: url('../assets/image/icon_null.jpg');
   background-size: contain;
   vertical-align: bottom;
-  border-radius: 7.5%;
-  overflow: hidden;
+  border-radius: $border-radius-size;
+  position: relative;
 
   &.subAttr {
     background-image: url('../assets/image/icon_null2.jpg');
@@ -90,14 +102,26 @@ export default {
   a { text-decoration: none; }
 
   img {
+    border-radius: $border-radius-size;
     width: 100%;
     height: 100%;
+  }
+
+  &.favoriteFlag:after {
+    $flag_width: 10%;
+    content: '';
+    background-image: linear-gradient(#e6e, #33e, #6ee, #3e3, #ee6, #e33);
+    border: 0.03em solid #0008;
+    border-left: none;
+    width: $flag_width;
+    height: 30%;
+    position: absolute;
+    right: -$flag_width;
+    top: 6%;
   }
 }
 
 .monsterIconDummy {
-  position: relative;
-
   * {
     user-select: none;
   }
