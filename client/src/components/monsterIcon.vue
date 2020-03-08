@@ -1,10 +1,10 @@
 <template>
-  <div v-if="hasImage" class="monsterIcon" :class="{ favoriteFlag: favoriteFlagType === 1 }" :style="iconSizeStyleObject">
+  <div v-if="hasImage" class="monsterIcon" :class="{ favoriteFlag: favoriteFlagType === 1, favoriteEvolutionFlag: favoriteFlagType === 2 }" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img :src="iconPath" :alt="monsterNoAndName" :key="`icon${no}`">
     </span>
   </div>
-  <div v-else class="monsterIcon monsterIconDummy" :class="{ favoriteFlag: favoriteFlagType === 1, subAttr: hasAttr1 }" :style="iconSizeStyleObject">
+  <div v-else class="monsterIcon monsterIconDummy" :class="{ favoriteFlag: favoriteFlagType === 1, favoriteEvolutionFlag: favoriteFlagType === 2 , subAttr: hasAttr1 }" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img v-if="hasAttr0" class="attr attr1" :src="attrPath0">
       <img v-if="hasAttr1" class="attr attr2" :src="attrPath1">
@@ -115,6 +115,18 @@ export default {
     border-left: none;
     width: $flag_width;
     height: 30%;
+    position: absolute;
+    right: -$flag_width;
+    top: 6%;
+  }
+
+  &.favoriteEvolutionFlag:after {
+    $flag_width: 8%;
+    content: '';
+    background-image: linear-gradient(#c8cf, #44cc, #6cc8, #4c46, #cc83, #c440);
+    border-top: 0.03em solid #0008;
+    width: $flag_width;
+    height: 20%;
     position: absolute;
     right: -$flag_width;
     top: 6%;
