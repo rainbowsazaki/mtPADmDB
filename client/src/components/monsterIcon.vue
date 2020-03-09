@@ -114,10 +114,13 @@ export default {
     border: 0.03em solid #0008;
     border-left: none;
     width: $flag_width;
-    height: 30%;
+    height: 20%;
     position: absolute;
     right: -$flag_width;
     top: 6%;
+    box-shadow:
+      0 0.05em 0.1em 0.0em #000c,
+      0 0.05em 0.1em 0.0em #fffc inset;
   }
 
   &.favoriteEvolutionFlag:after {
@@ -130,6 +133,8 @@ export default {
     position: absolute;
     right: -$flag_width;
     top: 6%;
+    box-shadow:
+      0 0.05em 0.1em 0.0em #fff8 inset;
   }
 }
 
