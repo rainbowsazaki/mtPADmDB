@@ -110,7 +110,7 @@ export default {
   &.favoriteFlag:after {
     $flag_width: 10%;
     content: '';
-    background-image: linear-gradient(#e6e, #33e, #6ee, #3e3, #ee6, #e33);
+    background-image: linear-gradient(#f9f, #99f, #9ff, #5f5, #ff6, #f55);
     border: 0.03em solid #0008;
     border-left: none;
     width: $flag_width;
@@ -123,7 +123,7 @@ export default {
   &.favoriteEvolutionFlag:after {
     $flag_width: 8%;
     content: '';
-    background-image: linear-gradient(#c8cf, #44cc, #6cc8, #4c46, #cc83, #c440);
+    background-image: linear-gradient(#c9cf, #99cc, #9cc8, #5c56, #cc93, #c550);
     border-top: 0.03em solid #0008;
     width: $flag_width;
     height: 20%;
