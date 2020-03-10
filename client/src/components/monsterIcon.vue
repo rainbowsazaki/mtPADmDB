@@ -121,6 +121,8 @@ export default {
     box-shadow:
       0 0.05em 0.1em 0.0em #000c,
       0 0.05em 0.1em 0.0em #fffc inset;
+
+    animation: favoriteFlagBlink 1.5s ease 0s infinite normal none running;
   }
 
   &.favoriteEvolutionFlag:after {
@@ -135,6 +137,23 @@ export default {
     top: 6%;
     box-shadow:
       0 0.05em 0.1em 0.0em #fff8 inset;
+    
+    animation: favoriteFlagBlink 1.5s ease 0s infinite normal none running;
+  }
+
+  @keyframes favoriteFlagBlink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 
