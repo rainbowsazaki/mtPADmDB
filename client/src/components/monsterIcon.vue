@@ -126,7 +126,7 @@ export default {
   &.favoriteEvolutionFlag:after {
     $flag_width: 8%;
     content: '';
-    background-image: linear-gradient(#c9cf, #99cc, #9cc8, #5c56, #cc93, #c550);
+    background-image: linear-gradient(#c9cf, #99cf, #9ccb, #5c57, #cc93, #c550);
     border-top: 0.03em solid #0008;
     width: $flag_width;
     height: 20%;
