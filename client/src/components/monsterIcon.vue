@@ -1,10 +1,10 @@
 <template>
-  <div v-if="hasImage" class="monsterIcon" :class="{ favoriteFlag: favoriteFlagType === 1, favoriteEvolutionFlag: favoriteFlagType === 2 }" :style="iconSizeStyleObject">
+  <div v-if="hasImage" class="monsterIcon" :class="classObject" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img :src="iconPath" :alt="monsterNoAndName" :key="`icon${no}`">
     </span>
   </div>
-  <div v-else class="monsterIcon monsterIconDummy" :class="{ favoriteFlag: favoriteFlagType === 1, favoriteEvolutionFlag: favoriteFlagType === 2 , subAttr: hasAttr1 }" :style="iconSizeStyleObject">
+  <div v-else class="monsterIcon monsterIconDummy" :class="classObject" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img v-if="hasAttr0" class="attr attr1" :src="attrPath0">
       <img v-if="hasAttr1" class="attr attr2" :src="attrPath1">
@@ -39,6 +39,11 @@ export default {
     'useFavoriteFlag': {
       type: Boolean,
       default: false
+    },
+    /** お気に入りの進化系統の場合にそれを示すフラグを表示するかどうか。 */
+    'useFavoriteEvolutionFlag': {
+      type: Boolean,
+      dafault: false
     }
   },
   computed: {
@@ -73,10 +78,14 @@ export default {
     iconSizeStyleObject: function () {
       return { width: this.width, height: this.height };
     },
-    /** 表示するお気に入りマークの種類。 */
-    favoriteFlagType: function () {
-      if (!this.useFavoriteFlag) { return 0; }
-      return this.$store.state.monsterFavorites[this.no];
+    /** メインの要素のクラス指定を行うオブジェクト。 */
+    classObject: function () {
+      const favState = this.$store.state.monsterFavorites[this.no];
+      return {
+        favoriteFlag: this.useFavoriteFlag && favState === 1,
+        favoriteEvolutionFlag: this.useFavoriteEvolutionFlag && favState === 2,
+        subAttr: this.hasAttr1
+      };
     }
   }
 };
