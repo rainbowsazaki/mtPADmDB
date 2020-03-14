@@ -19,6 +19,7 @@ const PageKiseki = () => import('./views/pageKiseki.vue');
 const PageNullCheck = () => import('./views/pageNullCheck.vue');
 const PageNoImageCheck = () => import('./views/pageNoImageCheck.vue');
 const PageAdmin = () => import('./views/pageAdmin.vue');
+const PageLogin = () => import('./views/pageLogin.vue');
 
 /** router-view 要素のみのコンポーネント。 ネストされたルートの親要素で何も表示しない時用。 */
 const RouterViewComponent = {
@@ -155,6 +156,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: PageAbout
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: PageLogin
     },
     {
       path: '/compare/:nos?',
