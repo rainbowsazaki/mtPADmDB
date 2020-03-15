@@ -113,6 +113,12 @@ export default new Vuex.Store({
       }
       return obj;
     },
+    /** ログインしているかどうか。 */
+    isLogined: state => {
+      const accountData = state.accountData;
+      if (!accountData) { return false; }
+      return !!accountData.uid;
+    },
     /** 管理者権限のアカウントでログインしているかどうか。 */
     isAdmin: state => {
       const accountData = state.accountData;
