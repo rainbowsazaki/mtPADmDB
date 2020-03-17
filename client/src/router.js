@@ -163,6 +163,11 @@ export default new Router({
       component: PageLogin
     },
     {
+      path: '/logout',
+      name: 'logout',
+      component: PageLogin
+    },
+    {
       path: '/compare/:nos?',
       name: 'compare',
       component: PageCompare,
