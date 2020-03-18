@@ -11,7 +11,8 @@
             <router-link class="nav-link" :class="{ active: $route.path === navi.to }" :to="navi.to">{{ navi.text }}</router-link>
           </li>
           <li class="nav-item" @click="hideNavi">
-            <router-link class="nav-link" :to="{ name: 'login' }">{{ this.$store.getters.isLogined ? 'ログアウト' : 'ログイン'　}}</router-link>
+            <router-link v-if="this.$store.getters.isLogined" class="nav-link" :to="{ name: 'logout' }">ログアウト</router-link>
+            <router-link v-else class="nav-link" :to="{ name: 'login' }">ログイン</router-link>
           </li>
           <li v-if="this.$store.getters.isAdmin" class="nav-item" @click="hideNavi">
             <router-link class="nav-link" :to="{ name: 'admin' }">admin</router-link>
