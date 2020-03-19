@@ -6,6 +6,10 @@
     <template v-else-if="isLoginStart">
       <h2>ログアウト</h2>
       <div v-if="isLogined" class="loginButton">
+        <div class="accountInfo">
+          <img class="icon" :src="accountData.photoURL">
+          {{ accountData.displayName }} さん でログインしています。
+        </div>
         <button class="btn btn-primary" @click="signOut">ログアウトする</button>
       </div>
       <div v-else class="loginButton">ログアウトしました。</div>
@@ -16,7 +20,10 @@
         <button class="btn btn-primary" @click="signIn">Twitter アカウントでログイン</button>
       </div>
       <div v-else class="loginButton">
-        ログインしました。
+        <div class="accountInfo">
+          <img class="icon" :src="accountData.photoURL">
+          {{ accountData.displayName }} さん でログインしました。
+        </div>
       </div>
       <h3 class="decoHeader">ログインすることでできること</h3>
       <h4>お気に入りモンスターをサーバーに記録</h4>
@@ -93,5 +100,15 @@ export default {
 <style lang="scss" scoped>
 .loginButton {
   margin: 1em 0;
+}
+
+.accountInfo {
+  margin: 1em 0;
+  img.icon {
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    box-shadow: 0 0 0.2em 0 #0003;
+  }
 }
 </style>
