@@ -42,9 +42,7 @@ export default {
         } else {
           document.title = constData.title;
           // パンくずリスト
-          this.$root.breadcrumbs = [
-            { text: 'ホーム' }
-          ];
+          this.$root.breadcrumbs = null;
         }
       }
     }
