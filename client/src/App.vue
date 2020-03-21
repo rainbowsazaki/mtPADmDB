@@ -36,6 +36,9 @@
       
       <nav v-if="$root.breadcrumbs" aria-label="パンくずリスト">
         <ol class="breadcrumb">
+          <li aria-current="page" class="breadcrumb-item active">
+            <router-link to="/"><i class="fas fa-home" /></router-link>
+          </li>
           <li v-for="breadcrumb in $root.breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }" :key="breadcrumb.text">
             <router-link v-if="breadcrumb.link" :to="breadcrumb.link">{{ breadcrumb.text }}</router-link>
             <template v-else>{{ breadcrumb.text }}</template>
