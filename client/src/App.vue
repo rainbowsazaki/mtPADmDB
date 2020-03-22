@@ -36,7 +36,7 @@
       
       <nav v-if="$root.breadcrumbs" aria-label="パンくずリスト">
         <ol class="breadcrumb">
-          <li aria-current="page" class="breadcrumb-item active">
+          <li aria-current="page" class="breadcrumb-item home active">
             <router-link to="/"><i class="fas fa-home" /></router-link>
           </li>
           <li v-for="breadcrumb in $root.breadcrumbs" :aria-current="breadcrumb.link ? '' : 'page '" class="breadcrumb-item" :class="{ active: !breadcrumb.link }" :key="breadcrumb.text">
@@ -111,7 +111,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 body {
   color: rgba(0, 0, 0, 0.8);
 }
@@ -119,13 +119,34 @@ body {
 [v-cloak] {
   display: none;
 }
-.breadcrumb-item+.breadcrumb-item::before {
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: '\f105';
-  padding: 0 0.2em 0 0.0em;
-  color: silver;
+
+.breadcrumb {
+  overflow-x: scroll;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
+  .breadcrumb-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    &.home {
+      min-width: 1.15em;
+    }
+
+    +.breadcrumb-item {
+      min-width: 5em;
+
+      &::before {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        content: '\f105';
+        padding: 0 0.2em 0 0.0em;
+        color: silver;
+      }
+    }
+  }
 }
+
 .slash-join +.slash-join::before {
   display: inline-block;
   padding: 0 0.4rem;
