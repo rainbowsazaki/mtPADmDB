@@ -120,7 +120,11 @@ body {
   display: none;
 }
 .breadcrumb-item+.breadcrumb-item::before {
-  content: ">";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: '\f105';
+  padding: 0 0.2em 0 0.0em;
+  color: silver;
 }
 .slash-join +.slash-join::before {
   display: inline-block;
