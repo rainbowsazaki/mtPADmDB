@@ -26,9 +26,7 @@ export default {
         // パンくずリストタイトルの指定がない場合はページタイトルを使用する。
         if (!breadcrumbsTitle) { breadcrumbsTitle = pageTitle; }
         if (breadcrumbsTitle) {
-          let breadcrumbs = [
-            { text: 'ホーム', link: '/' }
-          ];
+          let breadcrumbs = [];
           let middleOfBreadcrumbs = this.$options.middleOfBreadcrumbs;
           if (typeof middleOfBreadcrumbs === 'function') {
             middleOfBreadcrumbs = middleOfBreadcrumbs.call(this);
