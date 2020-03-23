@@ -1,13 +1,5 @@
 <template>
-  <div v-if="!monsterData">
-    <div v-if="!isHistory" class="prevNext">
-      <router-link v-if="no > 1" class="prev" :to="createMoveMonsterNoByObject(-1)">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
-      <router-link v-if="no < 9999" fclass="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
-      <template v-else>&nbsp;</template>
-    </div>
-    指定されたモンスターのデータは存在しません。
-  </div>
-  <div v-else>
+  <div>
     <div v-if="isHistory" class="alert alert-primary" role="alert">
       {{ monsterData.datetime }} 時点のデータです
     </div>
@@ -16,125 +8,130 @@
       <router-link v-if="no < 9999" fclass="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
       <template v-else>&nbsp;</template>
     </div>
-
-    <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
-    <div v-if="!isHistory" class="lastUpdate">
-      最終更新:{{ monsterData.datetime }}
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <monster-info :monster-data="monsterData" />
-      </div>
-      <div class="col-md-6">
-        <table class="table table-bordered table-sm">
-          <tr class="thead-light">
-            <th colspan="2">アシスト</th>
-            <td colspan="2">{{ booleanTable[monsterData.assist] }}</td>
-          </tr>
-          
-          <tr class="thead-light"><th colspan="4">振れる潜在キラー</th></tr>
-          <tr>
-            <td colspan="4">
-              <span v-if="monsterData.types[0] === null">不明</span>
-              <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
-                <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" :key="`killer${senzaiKillerType}`">
-                  <img :src="`./image/senzaiKiller/${senzaiKillerType}.png`" :alt="`${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 24px;">
-                </li>
-              </ul>
-              <span v-else>振れる潜在キラーはありません。</span>
-            </td>
-          </tr>
-          <template v-if="hasMaxParam">
-            <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
-            <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.maxParam[paramType]" :key="paramType" />
-            <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) | addComma }}</td></tr>
-          </template>
-          <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>
-          <template v-if="monsterData.overLimit === 1">
-            <template v-if="hasOverLimitParam">
-              <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
-              <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.overLimitParam[paramType]" :key="`overlimit_${paramType}`" />
-              <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) | addComma }}</td></tr>
-            </template>
-            <tr v-else class="thead-light"><th colspan="4">限界突破時パラメータ不明</th></tr>
-          </template>
-        </table>
-      </div>
-    </div>
-
-    <div v-if="evoInfo.evo">
-      <h3 class="h4 decoHeader">進化系統</h3>
-      <div v-if="monsterData.evolutionType !== 0" class="mt-1 p-1">
-        <router-link :to="{ name: 'evolutionMaterial', params: { no: monsterData.no } }">
-          {{ monsterData.name }}の作成に必要な全モンスター一覧へ
-        </router-link>
-      </div>
-      <evolution-material :evo-info="evoInfo" />
-    </div>
-    <div v-else-if="rareStoneExchangeMonsters">
-      <h3 class="h4 decoHeader">交換元モンスター</h3>
-      <monster-icon v-for="monster in rareStoneExchangeMonsters" :no="monster" width="3em" height="3em" :key="`monster${monster}`" />
-    </div>
     
-    <div v-if="materialUseMonstersDisp">
-      <h3 class="h4 decoHeader">このモンスターを素材にして進化するモンスター ({{ materialUseMonstersAll.length }})</h3>
-      <monster-icon v-for="useMonster in materialUseMonstersDisp" :no="useMonster" width="3em" height="3em" :key="`useMonster${useMonster}`" />
-      <span v-if="!isMaterialsDispAll"> ... </span>
-      <button v-if="!isMaterialsDispAll" class="btn btn-sm btn-outline-secondary" @click="isMaterialsDispAll = true;">すべてを表示する</button>
+    <div v-if="!monsterData">
+      指定されたモンスターのデータは存在しません。
     </div>
-    
-    <div v-if="!isHistory">
-      <h3 class="h4 decoHeader">コメント</h3>
-      <comment-list />
-    </div>
-    <div v-if="isShowEvaluationLinks" class="evaluationLink">
-      <h3 class="h4 decoHeader">外部サイトのモンスター評価ページへのリンク</h3>
-      <div v-if="!evaluationOfMonsterLinks">読み込み中...</div>
-      <div v-else-if="evaluationOfMonsterLinks.length === 0">なし</div>
-      <ul v-else class="list-unstyled">
-        <li v-for="link in evaluationOfMonsterLinks" :key="link.link">
-          <a target="_blank" :href="link.link">{{ link.title }}
-            <ul class="list-unstyled ml-3">
-              <li>{{ link.formattedUrl }}</li>
-            </ul>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div v-if="monsterData.comment">
-      <h3 class="h4 decoHeader">編集コメント</h3>
-      <div>{{ monsterData.comment }}</div>
-    </div>
-    <div>
-      <h3 class="h4 decoHeader">JSON</h3>
+    <template v-else>
+      <div v-if="!isHistory"><tweet-button v-if="monsterData.no" /></div>
+      <div v-if="!isHistory" class="lastUpdate">
+        最終更新:{{ monsterData.datetime }}
+      </div>
+
       <div class="row">
-        <div class="col-12">
-          <textarea readonly v-model="monsterDataJson" class="json" />
+        <div class="col-md-6">
+          <monster-info :monster-data="monsterData" />
+        </div>
+        <div class="col-md-6">
+          <table class="table table-bordered table-sm">
+            <tr class="thead-light">
+              <th colspan="2">アシスト</th>
+              <td colspan="2">{{ booleanTable[monsterData.assist] }}</td>
+            </tr>
+            
+            <tr class="thead-light"><th colspan="4">振れる潜在キラー</th></tr>
+            <tr>
+              <td colspan="4">
+                <span v-if="monsterData.types[0] === null">不明</span>
+                <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
+                  <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" :key="`killer${senzaiKillerType}`">
+                    <img :src="`./image/senzaiKiller/${senzaiKillerType}.png`" :alt="`${typeTable[senzaiKillerType].name}キラー`" style="width: auto; height: 24px;">
+                  </li>
+                </ul>
+                <span v-else>振れる潜在キラーはありません。</span>
+              </td>
+            </tr>
+            <template v-if="hasMaxParam">
+              <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
+              <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.maxParam[paramType]" :key="paramType" />
+              <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) | addComma }}</td></tr>
+            </template>
+            <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>
+            <template v-if="monsterData.overLimit === 1">
+              <template v-if="hasOverLimitParam">
+                <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
+                <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.overLimitParam[paramType]" :key="`overlimit_${paramType}`" />
+                <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) | addComma }}</td></tr>
+              </template>
+              <tr v-else class="thead-light"><th colspan="4">限界突破時パラメータ不明</th></tr>
+            </template>
+          </table>
         </div>
       </div>
-    </div>
-    <div style="margin-top: 1rem;">
-      <h3 class="h4 decoHeader">編集履歴</h3>
-      <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
-        {{ isLoadingHistory ? '読み込み中…' : '編集履歴を確認する' }}
-      </button>
-      <ul v-if="histories">
-        <li v-for="history in histories" :key="`history${history.id}`">
-          <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="{ name:'monsterHistory', params: { id: history.id }}">
-            {{ history.datetime }} -
-            <span v-if="history.comment">{{ history.comment }}</span>
-            <span v-else style="opacity: 0.6;">（コメントなし）</span>
-          </component>
-          <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>
-        </li>
-      </ul>
-    </div>
-    <div class="editButtons">
-      <router-link v-if="isHistory" :to="{ name:'monsterHistoryEdit', params: { id: $route.params.id }}" class="btn btn-sm btn-secondary">履歴をもとに編集する</router-link>
-      <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-sm btn-secondary">編集する</router-link>
-      <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-sm btn-secondary">モンスター画像投稿</router-link>
-    </div>
+
+      <div v-if="evoInfo.evo">
+        <h3 class="h4 decoHeader">進化系統</h3>
+        <div v-if="monsterData.evolutionType !== 0" class="mt-1 p-1">
+          <router-link :to="{ name: 'evolutionMaterial', params: { no: monsterData.no } }">
+            {{ monsterData.name }}の作成に必要な全モンスター一覧へ
+          </router-link>
+        </div>
+        <evolution-material :evo-info="evoInfo" />
+      </div>
+      <div v-else-if="rareStoneExchangeMonsters">
+        <h3 class="h4 decoHeader">交換元モンスター</h3>
+        <monster-icon v-for="monster in rareStoneExchangeMonsters" :no="monster" width="3em" height="3em" :key="`monster${monster}`" />
+      </div>
+      
+      <div v-if="materialUseMonstersDisp">
+        <h3 class="h4 decoHeader">このモンスターを素材にして進化するモンスター ({{ materialUseMonstersAll.length }})</h3>
+        <monster-icon v-for="useMonster in materialUseMonstersDisp" :no="useMonster" width="3em" height="3em" :key="`useMonster${useMonster}`" />
+        <span v-if="!isMaterialsDispAll"> ... </span>
+        <button v-if="!isMaterialsDispAll" class="btn btn-sm btn-outline-secondary" @click="isMaterialsDispAll = true;">すべてを表示する</button>
+      </div>
+      
+      <div v-if="!isHistory">
+        <h3 class="h4 decoHeader">コメント</h3>
+        <comment-list />
+      </div>
+      <div v-if="isShowEvaluationLinks" class="evaluationLink">
+        <h3 class="h4 decoHeader">外部サイトのモンスター評価ページへのリンク</h3>
+        <div v-if="!evaluationOfMonsterLinks">読み込み中...</div>
+        <div v-else-if="evaluationOfMonsterLinks.length === 0">なし</div>
+        <ul v-else class="list-unstyled">
+          <li v-for="link in evaluationOfMonsterLinks" :key="link.link">
+            <a target="_blank" :href="link.link">{{ link.title }}
+              <ul class="list-unstyled ml-3">
+                <li>{{ link.formattedUrl }}</li>
+              </ul>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div v-if="monsterData.comment">
+        <h3 class="h4 decoHeader">編集コメント</h3>
+        <div>{{ monsterData.comment }}</div>
+      </div>
+      <div>
+        <h3 class="h4 decoHeader">JSON</h3>
+        <div class="row">
+          <div class="col-12">
+            <textarea readonly v-model="monsterDataJson" class="json" />
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 1rem;">
+        <h3 class="h4 decoHeader">編集履歴</h3>
+        <button v-if="!histories" class="btn btn-primary" @click="loadHistories" :disabled="isLoadingHistory">
+          {{ isLoadingHistory ? '読み込み中…' : '編集履歴を確認する' }}
+        </button>
+        <ul v-if="histories">
+          <li v-for="history in histories" :key="`history${history.id}`">
+            <component :is="isShowHistory(history) ? 'span' : 'router-link'" :to="{ name:'monsterHistory', params: { id: history.id }}">
+              {{ history.datetime }} -
+              <span v-if="history.comment">{{ history.comment }}</span>
+              <span v-else style="opacity: 0.6;">（コメントなし）</span>
+            </component>
+            <span v-if="isShowHistory(history)">（表示中）</span><span v-if="isActiveHistory(history)">（現在のデータ）</span>
+          </li>
+        </ul>
+      </div>
+      <div class="editButtons">
+        <router-link v-if="isHistory" :to="{ name:'monsterHistoryEdit', params: { id: $route.params.id }}" class="btn btn-sm btn-secondary">履歴をもとに編集する</router-link>
+        <router-link v-else :to="{ name:'monsterEditUpdate', params: { no: monsterData.no }}" class="btn btn-sm btn-secondary">編集する</router-link>
+        <router-link :to="{ name:'monsterPictureUpdate', params: { no: monsterData.no }}" class="btn btn-sm btn-secondary">モンスター画像投稿</router-link>
+      </div>
+    </template>
   </div>
 </template>
 
