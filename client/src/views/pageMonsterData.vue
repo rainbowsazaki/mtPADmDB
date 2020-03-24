@@ -3,12 +3,22 @@
     <div v-if="isHistory" class="alert alert-primary" role="alert">
       {{ monsterData.datetime }} 時点のデータです
     </div>
+
     <div v-if="!isHistory" class="prevNext">
-      <router-link v-if="no > 1" class="prev" :to="createMoveMonsterNoByObject(-1)">＜ No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</router-link>
-      <router-link v-if="no < 9999" fclass="next" :to="createMoveMonsterNoByObject(1)">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }} ＞</router-link>
-      <template v-else>&nbsp;</template>
+      <div class="wrap">
+        <router-link v-if="no > 1" class="prev" :to="createMoveMonsterNoByObject(-1)">
+          <div>＜&nbsp;</div>
+          <div class="name">No.{{ Number(no) - 1 }} {{ getMonsterName(Number(no) - 1 ) }}</div>
+        </router-link>
+      </div>
+      <div class="wrap">
+        <router-link v-if="no < 9999" class="next" :to="createMoveMonsterNoByObject(1)">
+          <div class="name">No.{{ Number(no) + 1 }} {{ getMonsterName(Number(no) + 1 ) }}</div>
+          <div>&nbsp;＞</div>
+        </router-link>
+      </div>
     </div>
-    
+
     <div v-if="!monsterData">
       指定されたモンスターのデータは存在しません。
     </div>
@@ -451,14 +461,24 @@ export default {
 <style lang="scss" scoped>
 
 .prevNext {
-  text-align: right;
+  display: flex;
+  justify-content: space-between;
 
-  .prev {
-    float: left;
+  .wrap {
+    width: calc(50% - 0.5em);
   }
 
-  * {
+  .prev, .next {
+    display: flex;
+  }
+  .next {
+    justify-content: flex-end;
+  }
+
+  .name {
+    overflow: hidden;
     white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 
