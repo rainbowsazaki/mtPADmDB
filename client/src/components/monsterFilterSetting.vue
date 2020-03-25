@@ -146,7 +146,7 @@
           <label class="col-4 col-form-label">超覚醒を含める
           </label>
           <div class="col-8">
-            <input type="checkbox" v-model="filter.useSuperAwaken">
+            <input type="checkbox" v-model="filter.includeSuperAwaken">
           </div>
         </div>
         <div class="innerButtons">
@@ -188,7 +188,7 @@ const filterDefault = {
   resistPoisonMax: 100,
   timeExtensionMin: 0,
   assist: undefined,
-  useSuperAwaken: false
+  includeSuperAwaken: false
 };
 
 /** 頻出する一部の漢字を、ひらがなでも検索できるようにする */
@@ -248,7 +248,7 @@ export function getFilterFunction (setting) {
       awakenFilter[awaken] = (awakenFilter[awaken] || 0) + 1;
     }
     const awakenKeys = Object.keys(awakenFilter);
-    if (setting.useSuperAwaken) {
+    if (setting.includeSuperAwaken) {
       functionArray.push(d => {
         let canUseSuperAwaken = !!d.superAwakens;
         return awakenKeys.every(key => {
@@ -284,7 +284,7 @@ export function getFilterFunction (setting) {
   // ２種類の覚醒の数をもとにした値が指定範囲内に入っているかどうかのフィルタリングを登録する
   function registAwakenPowerFilter (name, awakenNo0, rate0, awakenNo1, rate1) {
     resistRangeFilter(name, (borderMin, borderMax) => {
-      if (setting.useSuperAwaken) {
+      if (setting.includeSuperAwaken) {
         return d => {
           let power = (d.awakenCount[awakenNo0] | 0) * rate0 + (d.awakenCount[awakenNo1] | 0) * rate1;
           if (d.superAwakens) {
@@ -323,7 +323,7 @@ export function getFilterFunction (setting) {
   registAwakenPowerFilter('resistJammer', 12, 20, 69, 100);
   registAwakenPowerFilter('resistPoison', 13, 20, 70, 100);
   resistRangeFilter('timeExtension', (borderMin, borderMax) => {
-    if (setting.useSuperAwaken) {
+    if (setting.includeSuperAwaken) {
       return d => {
         let power = (d.awakenCount[19] | 0) * 0.5 + (d.awakenCount[53] | 0) * 1;
         if (d.superAwakens) {
@@ -418,7 +418,7 @@ export function filterSettingTextArray (setting) {
   if (setting.assist !== undefined) {
     textArray.push('アシスト:' + constData.booleanTable[setting.assist]);
   }
-  if (setting.useSuperAwaken) {
+  if (setting.includeSuperAwaken) {
     textArray.push('覚醒関連に超覚醒を含める');
   }
 
@@ -514,9 +514,9 @@ export default {
       default: filterDefault.timeExtensionMin,
       computed: true
     },
-    useSuperAwaken: {
+    includeSuperAwaken: {
       type: Boolean,
-      default: filterDefault.useSuperAwaken,
+      default: filterDefault.includeSuperAwaken,
       computed: true
     }
   },
@@ -597,9 +597,9 @@ export default {
       get: function () { return this.filter.timeExtensionMin; },
       set: function (v) { this.filter.timeExtensionMin = v; }
     },
-    useSuperAwaken: {
-      get: function () { return this.filter.useSuperAwaken; },
-      set: function (v) { this.filter.useSuperAwaken = v; }
+    includeSuperAwaken: {
+      get: function () { return this.filter.includeSuperAwaken; },
+      set: function (v) { this.filter.includeSuperAwaken = v; }
     },
 
     /** その他絞り込み部分のフィルタリング設定をもとに作成したテキスト。 */
