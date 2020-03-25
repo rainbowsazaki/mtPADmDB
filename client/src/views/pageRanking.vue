@@ -597,7 +597,7 @@ export default {
         if (this.damageHalfTypes.length) {
           herfDamages = herfDamages.concat(this.damageHalfTypes.map(d => this.typeTable[d].name));
         }
-        if (herfDamages) {
+        if (herfDamages.length) {
           enemyInfo += ' ' + herfDamages.join('/') + 'からの攻撃を半減';
         }
       }
