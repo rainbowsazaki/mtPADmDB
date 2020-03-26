@@ -132,6 +132,15 @@
             <input type="number" v-model.number.lazy="filter.timeExtensionMin" required min="0" max="4" step="0.5">秒以上
           </div>
         </div>
+        <div class="row evolutionType">
+          <label class="col-4 col-form-label">進化形式</label>
+          <div class="col-8">
+            <label v-for="(typeName, no) in evolutionTypeTable" :key="no">
+              <input type="checkbox" v-model.number="filter.evolutionType" :value="no">
+              {{ typeName }}
+            </label>
+          </div>
+        </div>
         <div class="row">
           <label class="col-4 col-form-label">アシスト</label>
           <div class="col-8">
@@ -187,6 +196,7 @@ const filterDefault = {
   resistPoisonMin: 0,
   resistPoisonMax: 100,
   timeExtensionMin: 0,
+  evolutionType: [],
   assist: undefined,
   includeSuperAwaken: false
 };
@@ -342,6 +352,12 @@ export function getFilterFunction (setting) {
       };
     }
   });
+
+  if (setting.evolutionType && setting.evolutionType.length) {
+    const filterObj = {};
+    for (const attr of setting.evolutionType) { filterObj[attr] = true; }
+    functionArray.push(d => filterObj[d.evolutionType]);
+  }
   
   if (setting.assist !== undefined) {
     functionArray.push(d => d.assist === setting.assist);
@@ -415,6 +431,9 @@ export function filterSettingTextArray (setting) {
   addRangeText('resistPoison', '毒耐性', '%');
   addRangeText('timeExtension', '指延長', '秒');
 
+  if (setting.evolutionType && setting.evolutionType.length > 0) {
+    textArray.push('進化形式:' + setting.evolutionType.map(a => { const info = constData.evolutionTypeTable[a]; return info || ''; }).join('/'));
+  }
   if (setting.assist !== undefined) {
     textArray.push('アシスト:' + constData.booleanTable[setting.assist]);
   }
@@ -514,6 +533,11 @@ export default {
       default: filterDefault.timeExtensionMin,
       computed: true
     },
+    evolutionType: {
+      type: Array,
+      defualt: filterDefault.evolutionType,
+      computed: true
+    },
     includeSuperAwaken: {
       type: Boolean,
       default: filterDefault.includeSuperAwaken,
@@ -560,6 +584,7 @@ export default {
   computed: {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
+    evolutionTypeTable () { return constData.evolutionTypeTable; },
 
     name: {
       get: function () { return this.filter.name; },
@@ -596,6 +621,10 @@ export default {
     timeExtensionMin: {
       get: function () { return this.filter.timeExtensionMin; },
       set: function (v) { this.filter.timeExtensionMin = v; }
+    },
+    evolutionType: {
+      get: function () { return this.filter.evolutionType; },
+      set: function (v) { this.filter.evolutionType = v; }
     },
     includeSuperAwaken: {
       get: function () { return this.filter.includeSuperAwaken; },
@@ -818,6 +847,12 @@ export default {
 
   .timeExtension input[type="number"] {
     width: 3em;
+  }
+
+  .evolutionType {
+    .col-8 label {
+      margin-right: 0.5em;
+    }
   }
 
   .filter-enter-active {
