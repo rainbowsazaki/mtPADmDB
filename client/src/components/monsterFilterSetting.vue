@@ -137,7 +137,7 @@
           <div class="col-8">
             <label v-for="(typeName, no) in evolutionTypeTable" :key="no">
               <input type="checkbox" v-model.number="filter.evolutionType" :value="no">
-              {{ typeName }}
+              <span>{{ typeName }}</span>
             </label>
           </div>
         </div>
@@ -850,8 +850,24 @@ export default {
   }
 
   .evolutionType {
-    .col-8 label {
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    input[type="checkbox"] + span {
       margin-right: 0.5em;
+      padding: 0.4em 0.2em;
+      border: 1px solid #0005;
+      border-radius: 0.6em;
+      cursor: pointer;
+      user-select: none;
+      line-height: 2em;
+      
+      filter: opacity(40%) brightness(80%);
+    }
+
+    input[type="checkbox"]:checked + span {
+      filter: none;
     }
   }
 
