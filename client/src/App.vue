@@ -180,6 +180,56 @@ body {
   border-radius: 0 0.5em 0.5em 0;
 }
 
+input[type="checkbox"].decoCheckbox {
+  position: relative;
+  visibility: hidden;
+
+  &::before, &::after {
+    visibility: visible;
+
+    display: inline-block;
+    border-radius: 0.3em;
+    height: 1.5em;
+  }
+
+  &::before {
+    content: 'OFF';
+    text-shadow: 0.05em 0.05em 0 #0008;
+    line-height: 1.4em;
+    color: #aaa;
+    background: #44311d;
+    width: 4em;
+    border: 0.05em solid;
+    border-color: #664927 #3e2c08 #332011;
+    box-shadow: 0 0.1em 0.1em 0 #0008 inset;
+    text-align: center;
+    transition: all 500ms 0s ease;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: calc(4em - 1.0em);
+    border: 0.1em solid #7e5330;
+    background: #855f3d;
+    border-top-color: #c59a77;
+    border-bottom-color: #2e1a0f;
+    width: 1.0em;
+    transition: all 300ms 0s ease;
+  }
+
+  &:checked {
+    &::before {
+      content: 'ON';
+      color: #fff;
+    }
+    &::after {
+      left: 0;
+    }
+  }
+}
+
 .amazlet-box {
   border: 1px solid #AEE;
   padding: 8px;
