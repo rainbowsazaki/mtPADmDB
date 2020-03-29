@@ -194,7 +194,7 @@ input[type="checkbox"].decoCheckbox {
 
   &::before {
     content: 'OFF';
-    text-shadow: 0.05em 0.05em 0 #0008;
+    text-shadow: 0.1em 0.1em 0 #000c;
     line-height: 1.4em;
     color: #aaa;
     background: #44311d;
@@ -211,10 +211,9 @@ input[type="checkbox"].decoCheckbox {
     position: absolute;
     top: 0px;
     left: calc(4em - 1.0em);
-    border: 0.1em solid #7e5330;
-    background: #855f3d;
-    border-top-color: #c59a77;
-    border-bottom-color: #2e1a0f;
+    border: 0.1em solid #795633;
+    border-color: #c28e5f #795633 #2e1f07;
+    background: #845e3c;
     width: 1.0em;
     transition: all 300ms 0s ease;
   }
