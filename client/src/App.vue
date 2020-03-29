@@ -229,6 +229,27 @@ input[type="checkbox"].decoCheckbox {
   }
 }
 
+
+input.decoToggle {
+  display: none;
+  + * {
+    color: #9f9f9f;
+    text-shadow: 0.1em 0.1em 0 #000c;
+    background: #422f1e;
+    border: 0.1em solid;
+    border-color: #61472f #3c2b19 #171004;
+    border-radius: 0.3em;
+    padding: 0.2em 0.2em;
+    user-select: none;
+  }
+
+  &:checked + * {
+    color: #fff;
+    background: #845e3c;
+    border-color: #c28e5f #795633 #2e1f07;
+  }
+}
+
 .amazlet-box {
   border: 1px solid #AEE;
   padding: 8px;
