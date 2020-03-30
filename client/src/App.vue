@@ -233,20 +233,29 @@ input[type="checkbox"].decoCheckbox {
 input.decoToggle {
   display: none;
   + * {
-    color: #9f9f9f;
+    color: #fff;
     text-shadow: 0.1em 0.1em 0 #000c;
-    background: #422f1e;
+    background: #845e3c;
     border: 0.1em solid;
-    border-color: #61472f #3c2b19 #171004;
+    border-color: #c28e5f #795633 #2e1f07;
     border-radius: 0.3em;
     padding: 0.2em 0.2em;
     user-select: none;
+    filter: opacity(40%) brightness(80%);
+  }
+
+  &.dark + * {
+    color: #9f9f9f;
+    background: #422f1e;
+    border-color: #61472f #3c2b19 #171004;
+    filter: none;
   }
 
   &:checked + * {
     color: #fff;
     background: #845e3c;
     border-color: #c28e5f #795633 #2e1f07;
+    filter: none;
   }
 }
 
