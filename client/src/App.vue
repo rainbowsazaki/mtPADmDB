@@ -233,13 +233,15 @@ input[type="checkbox"].decoCheckbox {
 input.decoToggle {
   display: none;
   + * {
+    display: inline-block;
     color: #fff;
+    text-align: center;
     text-shadow: 0.1em 0.1em 0 #000c;
     background: #845e3c;
     border: 0.1em solid;
     border-color: #c28e5f #795633 #2e1f07;
     border-radius: 0.3em;
-    padding: 0.2em 0.2em;
+    padding: 0em 0.2em;
     user-select: none;
     filter: opacity(40%) brightness(80%);
   }
