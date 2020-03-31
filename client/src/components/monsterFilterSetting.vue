@@ -141,14 +141,21 @@
             </label>
           </div>
         </div>
-        <div class="row">
+        <div class="row assist">
           <label class="col-4 col-form-label">アシスト</label>
           <div class="col-8">
-            <select class="custom-select" v-model.number="filter.assist">
-              <option :value="undefined">すべて</option>
-              <option value="1">○</option>
-              <option value="0">×</option>
-            </select>
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.assist" :value="undefined">
+              <span>すべて</span>
+            </label>
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.assist" :value="1">
+              <span>○</span>
+            </label>
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.assist" :value="0">
+              <span>×</span>
+            </label>
           </div>
         </div>
         <div class="row">
@@ -851,6 +858,13 @@ export default {
 
   .evolutionType input[type="checkbox"] + span {
     margin-right: 0.4em;
+  }
+
+  .assist input[type="radio"] + span {
+    margin-right: 0.4em;
+    min-width: 3em;
+    text-align: center;
+    display: inline-block;
   }
 
   .filter-enter-active {
