@@ -31,32 +31,32 @@
         </div>
         <div class="row">
           <label class="col-4 col-form-label">主属性</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <attr-select use-unknown checkbox-style v-model="filter.attr" />
           </div>
         </div>
         <div class="row">
           <label class="col-4 col-form-label">複属性</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <attr-select use-none checkbox-style v-model="filter.subAttr" />
           </div>
         </div>
         <div class="row">
           <label class="col-4 col-form-label">タイプ</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <attr-select use-unknown checkbox-style mode="type" v-model="filter.type" />
           </div>
         </div>
         <div class="from-group row">
           <label class="col-4 col-form-label">レアリティ</label>
-          <label class="col-8">
+          <label class="col-8 col-form-label">
             <input type="number" v-model.number.lazy="filter.rarityMin" required min="1" max="10">〜
             <input type="number" v-model.number.lazy="filter.rarityMax" required min="1" max="10">
           </label>
         </div>
         <div class="row">
           <label class="col-4 col-form-label">スキル<span class="inlineBlock">ターン</span></label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <input type="number" v-model.number.lazy="filter.skillTurnMin" required min="1" max="99">〜
             <input type="number" v-model.number.lazy="filter.skillTurnMax" required min="1" max="99">
           </div>
@@ -69,14 +69,14 @@
         </div>
         <div class="row">
           <label class="col-4 col-form-label">スキル<span class="inlineBlock">ブースト</span></label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <input type="number" v-model.number.lazy="filter.skillBoostMin" required min="0" max="9">〜
             <input type="number" v-model.number.lazy="filter.skillBoostMax" required min="0" max="9">
           </div>
         </div>
         <div class="row">
           <label class="col-4 col-form-label">バインド耐性</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <select v-model.number="filter.resistBindMin">
               <option value="0">0%</option>
               <option v-for="n in 2" :value="n * 50" :key="`opt${n}`">{{ n * 50 }}%</option>
@@ -89,7 +89,7 @@
         </div>
         <div class="row">
           <label class="col-4 col-form-label">暗闇耐性</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <select v-model.number="filter.resistDarknessMin">
               <option value="0">0%</option>
               <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}%</option>
@@ -102,7 +102,7 @@
         </div>
         <div class="row">
           <label class="col-4 col-form-label">お邪魔耐性</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <select v-model.number="filter.resistJammerMin">
               <option value="0">0%</option>
               <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}%</option>
@@ -115,7 +115,7 @@
         </div>
         <div class="row">
           <label class="col-4 col-form-label">毒耐性</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <select v-model.number="filter.resistPoisonMin">
               <option value="0">0%</option>
               <option v-for="n in 5" :value="n * 20" :key="`opt${n}`">{{ n * 20 }}%</option>
@@ -128,13 +128,13 @@
         </div>
         <div class="row timeExtension">
           <label class="col-4 col-form-label">操作時間<span class="inlineBlock">延長</span></label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <input type="number" v-model.number.lazy="filter.timeExtensionMin" required min="0" max="4" step="0.5">秒以上
           </div>
         </div>
         <div class="row evolutionType">
           <label class="col-4 col-form-label">進化形式</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <label v-for="(typeName, no) in evolutionTypeTable" :key="no">
               <input class="decoToggle" type="checkbox" v-model.number="filter.evolutionType" :value="no">
               <span>{{ typeName }}</span>
@@ -143,7 +143,7 @@
         </div>
         <div class="row assist">
           <label class="col-4 col-form-label">アシスト</label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <label>
               <input type="radio" class="decoToggle" v-model.number="filter.assist" :value="undefined">
               <span>すべて</span>
@@ -161,7 +161,7 @@
         <div class="row">
           <label class="col-4 col-form-label">超覚醒を含める
           </label>
-          <div class="col-8">
+          <div class="col-8 col-form-label">
             <input type="checkbox" class="decoCheckbox" v-model="filter.includeSuperAwaken">
           </div>
         </div>
