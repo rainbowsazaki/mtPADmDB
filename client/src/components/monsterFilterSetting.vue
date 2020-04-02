@@ -137,7 +137,7 @@
           <div class="col-8 col-form-label">
             <label v-for="(typeName, no) in evolutionTypeTable" :key="no">
               <input class="decoToggle" type="checkbox" v-model.number="filter.evolutionType" :value="no">
-              <span>{{ typeName }}</span>
+              <span><span :class="`scale${typeName.length}char`">{{ typeName }}</span></span>
             </label>
           </div>
         </div>
@@ -858,6 +858,20 @@ export default {
 
   .evolutionType input[type="checkbox"] + span {
     margin-right: 0.4em;
+    width: 5em;
+    overflow: hidden;
+    white-space: nowrap;
+
+    .scale5char {
+      display: inline-block;
+      transform: scaleX(0.86);
+      transform-origin: left center;
+    }
+    .scale6char {
+      display: inline-block;
+      transform: scaleX(0.72);
+      transform-origin: left center;
+    }
   }
 
   .assist input[type="radio"] + span {
