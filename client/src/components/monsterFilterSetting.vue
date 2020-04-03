@@ -162,7 +162,7 @@
           <label class="col-4 col-form-label">超覚醒を含める
           </label>
           <div class="col-8 col-form-label">
-            <input type="checkbox" class="decoCheckbox" v-model="filter.includeSuperAwaken">
+            <input type="checkbox" class="decoSwitch" v-model="filter.includeSuperAwaken">
           </div>
         </div>
         <div class="innerButtons">

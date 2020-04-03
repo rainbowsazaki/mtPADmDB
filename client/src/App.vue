@@ -180,7 +180,7 @@ body {
   border-radius: 0 0.5em 0.5em 0;
 }
 
-input[type="checkbox"].decoCheckbox {
+input[type="checkbox"].decoSwitch {
   position: relative;
   visibility: hidden;
 
