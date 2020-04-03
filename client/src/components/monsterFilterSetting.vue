@@ -876,7 +876,7 @@ export default {
 
   .assist input[type="radio"] + span {
     margin-right: 0.4em;
-    min-width: 3em;
+    min-width: 3.2em;
   }
 
   .filter-enter-active {
