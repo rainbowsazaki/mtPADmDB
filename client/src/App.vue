@@ -180,6 +180,72 @@ body {
   border-radius: 0 0.5em 0.5em 0;
 }
 
+input[type="checkbox"].decoCheckbox {
+  $size: 0.9em;
+  $transitionTime: 300ms;
+
+  position: relative;
+  visibility: hidden;
+  line-height: $size;
+
+  &::before {
+    visibility: visible;
+    content: '';
+    display: inline-block;
+    width: $size;
+    height: $size;
+    background: #845e3c;
+    border: 1px solid;
+    border-color: #2e1f07 #795633 #c28e5f;
+    border-radius: $size * 0.3;
+    transition: background-color $transitionTime, border-color $transitionTime;
+  }
+
+  &.dark::before {
+    background: #44311d;
+    border-color: #332011 #3e2c08 #664927;
+  }
+
+  &::after {
+    visibility: visible;
+    font-family: "Font Awesome 5 Free";
+    content: '\f00c';
+    font-weight: 900;
+    font-size: $size * 1;
+    color: #fff;
+    text-shadow: 0em 0em 0.05em #000, 0em 0em 0.05em #000, 0em 0em 0.05em #000;
+    -webkit-text-stroke: 0.04em #000;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    padding-left: $size * 0.05;
+    width: 0%;
+    height: $size;
+    opacity: 0;
+    transition: opacity $transitionTime, width $transitionTime;
+  }
+
+  &:checked {
+    &::before {
+      background: #845e3c;
+      border-color: #2e1f07 #795633 #c28e5f;
+      filter: none;
+    }
+
+    &::after {
+      width: $size * 1.2;
+      opacity: 1;
+    }
+  }
+}
+
+input[type="checkbox"][disabled].decoCheckbox {
+  &::before, &::after {
+    filter: opacity(40%) brightness(80%);
+  }
+}
+
 input[type="checkbox"].decoSwitch {
   position: relative;
   visibility: hidden;
