@@ -12,22 +12,26 @@
     </div>
     <ul class="list-unstyled">
       <li>
-        <input type="checkbox" id="useOverLimit" v-model="useOverLimit" value="1">
-        <label for="useOverLimit">限界突破時のパラメータを使用する</label>
-      </li>
-      <li>
-        <input type="checkbox" id="useMultiBoost" v-model="useMultiBoost" value="1">
-        <label for="useMultiBoost">マルチブースト適用時のパラメータを使用する</label>
+        <label>
+          <input type="checkbox" class="decoCheckbox" v-model="useOverLimit" value="1">
+          限界突破時のパラメータを使用する
+        </label>
       </li>
       <li>
         <label>
-          <input type="checkbox" v-model="useSuperAwaken" value="1">
+          <input type="checkbox" class="decoCheckbox" v-model="useMultiBoost" value="1">
+          マルチブースト適用時のパラメータを使用する
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="checkbox" class="decoCheckbox" v-model="useSuperAwaken" value="1">
           超覚醒を使用する
         </label>
       </li>
       <li>
         <label :disabled="!isDamageRanking">
-          <input type="checkbox" v-model="useEnemyState" value="1" :disabled="!isDamageRanking">
+          <input type="checkbox" class="decoCheckbox" v-model="useEnemyState" value="1" :disabled="!isDamageRanking">
           敵の属性による補正やキラーを反映する
         </label>
       </li>
@@ -50,13 +54,13 @@
           <ul class="list-unstyled">
             <li>
               <label>
-                <input type="checkbox" v-model="useSenzaiKiller" value="1">
+                <input type="checkbox" class="decoCheckbox" v-model="useSenzaiKiller" value="1">
                 潜在キラーを使用する
               </label>
             </li>
             <li>
               <label :disabled="!useSenzaiKiller">
-                <input type="checkbox" :disabled="!useSenzaiKiller" v-model="useRelasedSenzaiAwaken" value="1">
+                <input type="checkbox" class="decoCheckbox" :disabled="!useSenzaiKiller" v-model="useRelasedSenzaiAwaken" value="1">
                 潜在覚醒枠の解放分を使用する
               </label>
             </li>
