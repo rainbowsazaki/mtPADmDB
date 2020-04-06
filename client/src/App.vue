@@ -250,6 +250,10 @@ input[type="checkbox"].decoSwitch {
   position: relative;
   visibility: hidden;
 
+  &[disabled] {
+    filter: opacity(40%) brightness(60%) contrast(80%);
+  }
+
   &::before, &::after {
     visibility: visible;
 
@@ -324,6 +328,18 @@ input.decoToggle {
     background: #845e3c;
     border-color: #c28e5f #795633 #2e1f07;
     filter: none;
+  }
+
+  &[disabled] {
+    + * {
+      filter: opacity(30%) brightness(60%) contrast(80%);
+    }
+    &.dark + * {
+      filter: opacity(30%) contrast(80%);
+    }
+    &:checked + * {
+      filter: opacity(30%) brightness(90%) contrast(80%);
+    }
   }
 }
 
