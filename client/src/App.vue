@@ -251,7 +251,7 @@ input[type="checkbox"].decoSwitch {
   visibility: hidden;
 
   &[disabled] {
-    filter: opacity(40%) brightness(60%) contrast(80%);
+    filter: opacity(30%) brightness(80%) grayscale(50%);
   }
 
   &::before, &::after {
@@ -313,7 +313,7 @@ input.decoToggle {
     border-radius: 0.3em;
     padding: 0em 0.2em;
     user-select: none;
-    filter: opacity(40%) brightness(80%);
+    filter: opacity(50%) brightness(80%);
   }
 
   &.dark + * {
@@ -332,13 +332,13 @@ input.decoToggle {
 
   &[disabled] {
     + * {
-      filter: opacity(30%) brightness(60%) contrast(80%);
+      filter: opacity(30%) brightness(50%) grayscale(50%);
     }
     &.dark + * {
-      filter: opacity(30%) contrast(80%);
+      filter: opacity(30%) grayscale(50%);
     }
     &:checked + * {
-      filter: opacity(30%) brightness(90%) contrast(80%);
+      filter: opacity(30%) brightness(90%) grayscale(50%);
     }
   }
 }
