@@ -862,15 +862,18 @@ export default {
     overflow: hidden;
     white-space: nowrap;
 
-    .scale5char {
+    @mixin scaleXchar ($length: 1) {
       display: inline-block;
-      transform: scaleX(0.86);
-      transform-origin: left center;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%) scaleX(4.5 / $length);
+    }
+
+    .scale5char {
+      @include scaleXchar(5);
     }
     .scale6char {
-      display: inline-block;
-      transform: scaleX(0.72);
-      transform-origin: left center;
+      @include scaleXchar(6);
     }
   }
 
