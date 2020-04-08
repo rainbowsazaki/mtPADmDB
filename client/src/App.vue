@@ -238,10 +238,8 @@ input[type="checkbox"].decoCheckbox {
       opacity: 1;
     }
   }
-}
 
-input[type="checkbox"][disabled].decoCheckbox {
-  &::before, &::after {
+  &[disabled] {
     filter: opacity(40%) brightness(80%);
   }
 }
