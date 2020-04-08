@@ -260,6 +260,8 @@ input[type="checkbox"].decoSwitch {
     height: 1.5em;
   }
 
+  $animationTime: 200ms;
+
   &::before {
     content: 'OFF';
     text-shadow: 0.1em 0.1em 0 #000c;
@@ -271,7 +273,7 @@ input[type="checkbox"].decoSwitch {
     border-color: #664927 #3e2c08 #332011;
     box-shadow: 0 0.1em 0.1em 0 #0008 inset;
     text-align: center;
-    transition: all 500ms 0s ease;
+    transition: all $animationTime;
   }
 
   &::after {
@@ -283,7 +285,7 @@ input[type="checkbox"].decoSwitch {
     border-color: #c28e5f #795633 #2e1f07;
     background: #845e3c;
     width: 1.0em;
-    transition: all 300ms 0s ease;
+    transition: all $animationTime;
   }
 
   &:checked {
