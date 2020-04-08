@@ -278,7 +278,7 @@ input[type="checkbox"].decoSwitch {
     content: '';
     position: absolute;
     top: 0px;
-    left: calc(4em - 1.0em);
+    left: 0;
     border: 0.1em solid #795633;
     border-color: #c28e5f #795633 #2e1f07;
     background: #845e3c;
@@ -292,7 +292,7 @@ input[type="checkbox"].decoSwitch {
       color: #fff;
     }
     &::after {
-      left: 0;
+      left: calc(4em - 1.0em);
     }
   }
 }
