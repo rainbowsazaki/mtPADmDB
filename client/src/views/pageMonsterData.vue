@@ -482,6 +482,21 @@ export default {
   }
 }
 
+@media (max-width: 767px) {
+  .prevNext {
+    display: block;
+    .wrap {
+      width: 100%;
+    }
+    .prev {
+      margin-right: 2em;
+    }
+    .next {
+      margin-left: 2em;
+    }
+  }
+}
+
 .lastUpdate {
   color: rgba(0, 0, 0, 0.5);
   font-size: 75%;
