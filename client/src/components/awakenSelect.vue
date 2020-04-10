@@ -131,17 +131,17 @@ export default {
 .selectedList {
   position: relative;
   display: inline-block;
-  margin-bottom: 8px;
-  padding: 4px;
-  border-radius: 6px;
-  border: solid #CCC 1px;
+  margin-bottom: 0.5em;
+  padding: 0.25em;
+  border-radius: 0.375em;;
+  border: solid #CCC 0.0625em;
   overflow: hidden;
   img {
-    width: 24px;
-    height: 24px;
+    width: 1.5em;
+    height: 1.5em;
     background: #CCC;
-    border-radius: 4px;
-    margin: 3px 5px;
+    border-radius: 0.25em;
+    margin: 0.1875em 0.3125em;
   }
   img.hasItem {
     cursor: pointer;
@@ -150,28 +150,28 @@ export default {
 
 .unknownMessage {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.3);
-  padding-top: 4px;
+  padding-top: 0.25em;
   color: white;
-  text-shadow: 0px -1px 1px black;
+  text-shadow: 0 -0.0625em 0.0625em black;
   text-align: center;
 }
 
 .selectArea {
   table, td, th {
     border: none;
-    padding: 0px;
+    padding: 0;
   }
   td {
-    padding: 5.4px;
+    padding: 0.3375em;
   }
   .item img {
-    width: 24px;
-    height: 24px;
+    width: 1.5em;
+    height: 1.5em;
     cursor: pointer;
   }
   input[type="checkbox"] {
