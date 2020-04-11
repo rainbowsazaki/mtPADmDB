@@ -1,30 +1,46 @@
 <template>
   <div>
-    <div class="selectedList">
+    <div v-if="popupStyle" class="selectedList popupTrigger" @click="isShowPopup = true;">
       <span v-for="i in 9" :key="`selectedAwaken_${i}`">
-        <img :class="{ hasItem: selectedArray[i - 1] }" :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
+        <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" :key="selectedArray[i - 1] ? i : '0'">
       </span>
       <div v-if="isUnknown" class="unknownMessage">不明</div>
     </div>
-    <div class="selectArea">
-      <table>
-        <tr v-if="useUnknown">
-          <td colspan="2">
-            <button type="button" class="btn btn-secondary btn-sm btn-block" @click="setUnknown">不明</button>
-          </td>
-          <td colspan="2">
-            <button type="button" class="btn btn-secondary btn-sm btn-block" @click="clear">なし</button>
-          </td>
-        </tr>
-        <tr v-for="(n, i) in awakenSortList" :key="`alTr_${i}`">
-          <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
-            <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" :id="`awaken_${m}`" @change="emitInput();">
-            <label :for="`awaken_${m}`">
-              <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m, $event);">
-            </label>
-          </td>
-        </tr>
-      </table>
+
+    <div :class="{ 'popupStyle' : popupStyle }" v-if="!popupStyle || isShowPopup">
+      <div class="dialog">
+        <div class="body">
+          <div class="selectedList">
+            <span v-for="i in 9" :key="`selectedAwaken_${i}`">
+              <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
+            </span>
+            <div v-if="isUnknown" class="unknownMessage">不明</div>
+          </div>
+          <div class="selectArea">
+            <table>
+              <tr v-if="useUnknown">
+                <td colspan="2">
+                  <button type="button" class="btn btn-secondary btn-sm btn-block" @click="setUnknown">不明</button>
+                </td>
+                <td colspan="2">
+                  <button type="button" class="btn btn-secondary btn-sm btn-block" @click="clear">なし</button>
+                </td>
+              </tr>
+              <tr v-for="(n, i) in awakenSortList" :key="`alTr_${i}`">
+                <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
+                  <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" :id="`awaken_${m}`" @change="emitInput();">
+                  <label :for="`awaken_${m}`">
+                    <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m, $event);">
+                  </label>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div v-if="popupStyle" class="footer">
+          <button type="button" class="btn btn-primary" @click="isShowPopup = false;">閉じる</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -46,11 +62,18 @@ export default {
     'checkboxStyle': {
       type: Boolean,
       default: false
+    },
+    /** 入力部分をポップアップ表示にするかどうか。 */
+    'popupStyle': {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
     return {
-      selectedArray: []
+      selectedArray: [],
+      /** 入力部分をポップアップ表示しているかどうか。 */
+      isShowPopup: false
     };
   },
   computed: {
@@ -73,7 +96,15 @@ export default {
     }
   },
   watch: {
-    'value': 'updateFromValue'
+    'value': 'updateFromValue',
+    'isShowPopup': function (isShowPopup) {
+      const className = 'noScroll_awakenSelect';
+      if (isShowPopup) {
+        document.body.classList.add(className);
+      } else {
+        document.body.classList.remove(className);
+      }
+    }
   },
   created: function () {
     this.updateFromValue();
@@ -126,6 +157,13 @@ export default {
 
 </script>
 
+<style lang="scss">
+// 設定フォームを全画面表示している際に裏をスクロールさせないための設定。
+body.noScroll_awakenSelect {
+  overflow: hidden;
+}
+</style>
+
 <style lang="scss" scoped>
 
 .selectedList {
@@ -146,6 +184,10 @@ export default {
   img.hasItem {
     cursor: pointer;
   }
+}
+
+.popupTrigger {
+  cursor: pointer;
 }
 
 .unknownMessage {
@@ -186,6 +228,51 @@ export default {
     filter: none;
   }
   label { margin: 0; }
+}
+
+.popupStyle {
+  $radiusSize: 0.5em;
+  $paddingSize: 0.5em;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  background: #0009;
+  width: 100%;
+  height: 100%;
+  
+  .dialog {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    box-shadow: 0 0 2em #0009;
+    max-height: calc(100% - 1em * 2);
+    border: 0.0625em solid #0009;
+    border-radius: $radiusSize;
+    padding: $paddingSize;
+
+    $footerHeight: 3.3em;
+
+    .body {
+      margin-bottom: $footerHeight;
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: $footerHeight;
+      border-radius: $radiusSize;
+      padding: $paddingSize;
+      background: #fff;
+      
+      text-align: right;
+    }
+  }
 }
 
 @media (max-width: 575px) {
