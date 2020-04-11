@@ -64,7 +64,7 @@
         <div class="row">
           <label class="col-sm-4 col-form-label">覚醒</label>
           <div class="col-sm-8">
-            <awaken-select v-model="filter.awaken" />
+            <awaken-select popup-style v-model="filter.awaken" />
           </div>
         </div>
         <div class="row">
