@@ -760,7 +760,12 @@ export default {
      * 引数に true を指定するとスクロールが無効になり、 false を指定するとスクロールが有効になる。
      */
     setDisableScroll: function (b) {
-      document.body.className = b ? 'noScroll' : '';
+      const className = 'noScroll_monsterFilterSetting';
+      if (b) {
+        document.body.classList.add(className);
+      } else {
+        document.body.classList.remove(className);
+      }
     },
     /** 現在のウィンドウサイズが、設定領域を全画面表示するものかどうかを確認する。 */
     checkBrowserWidthSmall: function () {
@@ -803,8 +808,8 @@ export default {
 <style lang="scss">
 @media (max-width: 575px) {
   // 設定フォームを全画面表示している際に裏をスクロールさせないための設定。
-  body.noScroll {
-    position: fixed;
+  body.noScroll_monsterFilterSetting {
+    overflow: hidden;
   }
 }
 </style>
