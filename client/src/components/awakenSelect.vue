@@ -181,7 +181,7 @@ body.noScroll_awakenSelect {
     border-radius: 0.25em;
     margin: 0.1875em 0.3125em;
   }
-  img.hasItem {
+  img[src] {
     cursor: pointer;
   }
 }
