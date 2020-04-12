@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="popupStyle" class="selectedList popupTrigger" @click="isShowPopup = true;">
-      <span v-for="i in 9" :key="`selectedAwaken_${i}`">
+      <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
         <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" :key="selectedArray[i - 1] ? i : '0'">
       </span>
       <div v-if="isUnknown" class="unknownMessage">不明</div>
@@ -11,7 +11,7 @@
       <div class="dialog">
         <div class="body">
           <div class="selectedList">
-            <span v-for="i in 9" :key="`selectedAwaken_${i}`">
+            <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
               <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
             </span>
             <div v-if="isUnknown" class="unknownMessage">不明</div>
@@ -67,6 +67,11 @@ export default {
     'popupStyle': {
       type: Boolean,
       default: false
+    },
+    /** 選択可能な覚醒の個数。 */
+    'selectLength': {
+      type: Number,
+      default: 9
     }
   },
   data: function () {
@@ -104,6 +109,13 @@ export default {
       } else {
         document.body.classList.remove(className);
       }
+    },
+    'selectLength': function (newValue) {
+      // 指定個数を超えてる分を取り除く。。
+      if (this.selectedArray.length > newValue) {
+        this.selectedArray.length = newValue;
+        this.emitInput();
+      }
     }
   },
   created: function () {
@@ -113,11 +125,13 @@ export default {
     /** value プロパティの値で現在の値を更新する。 */
     updateFromValue: function () {
       // 末尾の 0（なし）と null は除いて処理する。
-      let length = this.value.length;
+      let length = Math.min(this.value.length, this.selectLength);
       while (length > 1 && (this.value[length - 1] === 0 || this.value[length - 1] === null)) { length--; }
       // 残ったのが 0（なし）の場合は全て無い状態にする。
       if (length === 1 && this.value[length - 1] === 0) { length = 0; }
       this.selectedArray = this.value.slice(0, length);
+      // 覚醒指定が多い場合は超過分をカットした結果を value 側に反映させる。
+      if (this.value.length > this.selectLength) { this.emitInput(); }
     },
     /** 選択中の覚醒を追加する。 */
     addAwaken: function (no, event) {
@@ -126,7 +140,7 @@ export default {
       // ただし、不明にする場合は除く。
       if (this.checkboxStyle && no !== null) { return; }
       if (event) { event.preventDefault(); }
-      if (this.selectedArray.length >= 9) { return; }
+      if (this.selectedArray.length >= this.selectLength) { return; }
       this.selectedArray.push(no);
       this.emitInput();
     },
