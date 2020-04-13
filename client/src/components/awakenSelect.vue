@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="popupStyle" class="selectedList popupTrigger" @click="isShowPopup = true;">
+    <div v-if="popupStyle" class="selectedList popupTrigger" :class="`length${selectLength}`" @click="isShowPopup = true;">
       <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
         <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" :key="selectedArray[i - 1] ? i : '0'">
       </span>
@@ -10,7 +10,7 @@
     <div :class="{ 'popupStyle' : popupStyle }" v-if="!popupStyle || isShowPopup">
       <div class="dialog">
         <div class="body">
-          <div class="selectedList">
+          <div class="selectedList" :class="`length${selectLength}`">
             <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
               <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
             </span>
@@ -198,6 +198,10 @@ body.noScroll_awakenSelect {
   img[src] {
     cursor: pointer;
   }
+
+  &.length10 img {
+    margin: 0.1875em 0.1875em;
+  }
 }
 
 .popupTrigger {
@@ -296,6 +300,13 @@ body.noScroll_awakenSelect {
   height: 8vw;
   border-radius: 1.5vw;
   margin: 0.6vw;
+}
+
+.selectedList.length10 img {
+  width: 7.8vw;
+  height: 7.8vw;
+  border-radius: 1.3vw;
+  margin: 0.3vw;
 }
 
 .selectArea {
