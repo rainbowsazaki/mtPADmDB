@@ -182,25 +182,23 @@ body.noScroll_awakenSelect {
 
 .selectedList {
   position: relative;
-  display: inline-block;
+  display: flex;
+  justify-content: space-around;
+  width: 20em;
   margin-bottom: 0.5em;
   padding: 0.25em;
   border-radius: 0.375em;;
   border: solid #CCC 0.0625em;
   overflow: hidden;
+
   img {
     width: 1.5em;
     height: 1.5em;
     background: #CCC;
     border-radius: 0.25em;
-    margin: 0.1875em 0.3125em;
   }
   img[src] {
     cursor: pointer;
-  }
-
-  &.length10 img {
-    margin: 0.1875em 0.1875em;
   }
 }
 
@@ -276,6 +274,21 @@ body.noScroll_awakenSelect {
 
     .body {
       margin-bottom: $footerHeight;
+
+      .selectedList {
+        margin: 0 0 0.5em 0;
+        padding: 0;
+        border: none;
+      }
+
+      .selectArea {
+        padding-top: 0.5em;
+        border-top: 0.0625em solid #0006;
+
+        table {
+          margin: auto;
+        }
+      }
     }
 
     .footer {
@@ -295,28 +308,36 @@ body.noScroll_awakenSelect {
 
 @media (max-width: 575px) {
 
-.selectedList img {
-  width: 8vw;
-  height: 8vw;
-  border-radius: 1.5vw;
-  margin: 0.6vw;
-}
+$iconSize: 7.4vw;
 
-.selectedList.length10 img {
-  width: 7.8vw;
-  height: 7.8vw;
-  border-radius: 1.3vw;
-  margin: 0.3vw;
+.selectedList {
+  width: 100%;
+
+  img {
+    width: 8vw;
+    height: 8vw;
+    border-radius: 1.5vw;
+    margin: 0.6vw;
+  }
+
+  .length10 {
+    img {
+      width: $iconSize;
+      height: $iconSize;
+      border-radius: 1.3vw;
+      margin: 0.7vw 0.1vw;
+    }
+  }
 }
 
 .selectArea {
 
   td {
-    padding: 1.0vw;
+    padding: 1.3vw;
   }
   .item img {
-    width: 7.6vw;
-    height: 7.6vw;
+    width: $iconSize;
+    height: $iconSize;
   }
 }
 
