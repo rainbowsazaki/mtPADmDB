@@ -10,6 +10,7 @@
     <div :class="{ 'popupStyle' : popupStyle }" v-if="!popupStyle || isShowPopup">
       <div class="dialog">
         <div class="body">
+          <div v-if="popupStyle">覚醒（タップ・クリックで削除）</div>
           <div class="selectedList" :class="`length${selectLength}`">
             <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
               <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
