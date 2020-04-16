@@ -15,6 +15,7 @@
             <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
               <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
             </span>
+            <button v-if="!useUnknown" type="button" class="btn btn-sm btn-primary clearButton" @click="clear">クリア</button>
             <div v-if="isUnknown" class="unknownMessage">不明</div>
           </div>
           <div class="selectArea">
@@ -201,6 +202,13 @@ body.noScroll_awakenSelect {
   img[src] {
     cursor: pointer;
   }
+
+  .clearButton {
+    margin: 0.1vw;
+    width: calc(1.5em * 2.8);
+    height: 1.7em;
+    padding: 0;
+  }
 }
 
 .popupTrigger {
@@ -328,6 +336,11 @@ $iconSize: 7.4vw;
       border-radius: 1.3vw;
       margin: 0.7vw 0.1vw;
     }
+  }
+  
+  .clearButton {
+    width: calc(7.4vw * 2.5);
+    height: $iconSize;
   }
 }
 
