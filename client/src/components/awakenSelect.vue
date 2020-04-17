@@ -181,6 +181,7 @@ body.noScroll_awakenSelect {
 </style>
 
 <style lang="scss" scoped>
+$iconSize: 1.5em;
 
 .selectedList {
   position: relative;
@@ -194,8 +195,8 @@ body.noScroll_awakenSelect {
   overflow: hidden;
 
   img {
-    width: 1.5em;
-    height: 1.5em;
+    width: $iconSize;
+    height: $iconSize;
     background: #CCC;
     border-radius: 0.25em;
   }
@@ -205,8 +206,8 @@ body.noScroll_awakenSelect {
 
   .clearButton {
     margin: 0.1vw;
-    width: calc(1.5em * 2.8);
-    height: 1.7em;
+    width: $iconSize * 2.8;
+    height: $iconSize + 0.2em;
     padding: 0;
   }
 }
@@ -237,8 +238,8 @@ body.noScroll_awakenSelect {
     padding: 0.3375em;
   }
   .item img {
-    width: 1.5em;
-    height: 1.5em;
+    width: $iconSize;
+    height: $iconSize;
     cursor: pointer;
   }
   input[type="checkbox"] {
@@ -317,27 +318,19 @@ body.noScroll_awakenSelect {
 
 @media (max-width: 575px) {
 
-$iconSize: 7.4vw;
+$iconSize: 7.3vw;
 
 .selectedList {
   width: 100%;
 
   img {
-    width: 8vw;
-    height: 8vw;
+    width: $iconSize;
+    height: $iconSize;
     border-radius: 1.5vw;
-  }
-
-  .length10 {
-    img {
-      width: $iconSize;
-      height: $iconSize;
-      border-radius: 1.3vw;
-    }
   }
   
   .clearButton {
-    width: calc(7.4vw * 2.5);
+    width: $iconSize * 2.5;
     height: $iconSize;
   }
 }
