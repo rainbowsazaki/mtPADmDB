@@ -326,7 +326,6 @@ $iconSize: 7.4vw;
     width: 8vw;
     height: 8vw;
     border-radius: 1.5vw;
-    margin: 0.6vw;
   }
 
   .length10 {
@@ -334,7 +333,6 @@ $iconSize: 7.4vw;
       width: $iconSize;
       height: $iconSize;
       border-radius: 1.3vw;
-      margin: 0.7vw 0.1vw;
     }
   }
   
