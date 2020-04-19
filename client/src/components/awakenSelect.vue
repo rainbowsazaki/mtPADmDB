@@ -4,7 +4,7 @@
       <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
         <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" :key="selectedArray[i - 1] ? i : '0'">
       </span>
-      <div v-if="isUnknown" class="unknownMessage">不明</div>
+      <div v-if="isUnknown" class="unknownMessage"><span>不明</span></div>
       <div v-if="selectedArray[0] === undefined" class="placeholder"><span>覚醒（タップ・クリックで追加）</span></div>
     </div>
 
@@ -17,7 +17,7 @@
               <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
             </span>
             <button v-if="!useUnknown" type="button" class="btn btn-sm btn-primary clearButton" @click="clear">クリア</button>
-            <div v-if="isUnknown" class="unknownMessage">不明</div>
+            <div v-if="isUnknown" class="unknownMessage"><span>不明</span></div>
           </div>
           <div class="selectArea">
             <table>
@@ -227,7 +227,14 @@ $iconSize: 1.5em;
   padding-top: 0.25em;
   color: white;
   text-shadow: 0 -0.0625em 0.0625em black;
-  text-align: center;
+
+  * {
+    position: absolute;
+    white-space: nowrap;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .placeholder {
