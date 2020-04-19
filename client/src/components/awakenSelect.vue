@@ -217,16 +217,13 @@ $iconSize: 1.5em;
   cursor: pointer;
 }
 
-.unknownMessage {
+.unknownMessage, .placeholder {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  padding-top: 0.25em;
-  color: white;
-  text-shadow: 0 -0.0625em 0.0625em black;
+  text-shadow: 0 -0.0625em 0.0625em #0008;
 
   * {
     position: absolute;
@@ -237,25 +234,14 @@ $iconSize: 1.5em;
   }
 }
 
+.unknownMessage {
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
 .placeholder {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background: rgba(0, 0, 0, 0.4);
-  padding-top: 0.25em;
   color: #FF0;
-  text-shadow: 0 -0.0625em 0.0625em #0008;
-
-  * {
-    position: absolute;
-    white-space: nowrap;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-
-  }
 }
 
 .selectArea {
