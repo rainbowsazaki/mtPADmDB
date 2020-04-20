@@ -183,6 +183,7 @@ body.noScroll_awakenSelect {
 
 <style lang="scss" scoped>
 $iconSize: 1.5em;
+$messsageSizeRate: 0.6;
 
 .selectedList {
   position: relative;
@@ -223,6 +224,7 @@ $iconSize: 1.5em;
   left: 0;
   width: 100%;
   height: 100%;
+  font-size: $iconSize * $messsageSizeRate;
   text-shadow: 0 -0.0625em 0.0625em #0008;
 
   * {
@@ -361,5 +363,10 @@ $iconSize: 7.3vw;
   }
 }
 
+.unknownMessage, .placeholder {
+  font-size: $iconSize * $messsageSizeRate;
 }
+
+}
+
 </style>
