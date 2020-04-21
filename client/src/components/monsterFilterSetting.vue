@@ -62,6 +62,14 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-8">
+            <label>
+              <input type="checkbox" class="decoCheckbox" v-model="filter.includeSuperAwaken">
+              覚醒関連に超覚醒を含める
+            </label>
+          </div>
+        </div>
+        <div class="row">
           <label class="col-sm-4 col-form-label">覚醒</label>
           <div class="col-sm-8">
             <awaken-select popup-style :select-length="filter.includeSuperAwaken ? 10 : 9" v-model="filter.awaken" />
@@ -156,13 +164,6 @@
               <input type="radio" class="decoToggle" v-model.number="filter.assist" :value="0">
               <span>×</span>
             </label>
-          </div>
-        </div>
-        <div class="row">
-          <label class="col-4 col-form-label">超覚醒を含める
-          </label>
-          <div class="col-8 col-form-label">
-            <input type="checkbox" class="decoSwitch" v-model="filter.includeSuperAwaken">
           </div>
         </div>
         <div class="innerButtons">
@@ -407,9 +408,6 @@ export function filterSettingTextArray (setting) {
   if (setting.type && setting.type.length > 0) {
     textArray.push('タイプ:' + setting.type.map(a => { const info = constData.typeTable[a]; return info && info.name || ''; }).join('/'));
   }
-  if (setting.awaken && setting.awaken.length > 0) {
-    textArray.push('覚醒:' + setting.awaken.map(a => { const info = constData.awakenTable[a]; return info && info.name || ''; }).join('/') + 'を含む');
-  }
   function createRangeText (min, max, defaultMin, defaultMax, tanni) {
     if (tanni === undefined) { tanni = ''; }
     if (min === max) { return min + tanni; }
@@ -431,6 +429,12 @@ export function filterSettingTextArray (setting) {
   }
   addRangeText('rarity', 'レア度');
   addRangeText('skillTurn', 'Sターン');
+  if (setting.includeSuperAwaken) {
+    textArray.push('覚醒関連に超覚醒を含める');
+  }
+  if (setting.awaken && setting.awaken.length > 0) {
+    textArray.push('覚醒:' + setting.awaken.map(a => { const info = constData.awakenTable[a]; return info && info.name || ''; }).join('/') + 'を含む');
+  }
   addRangeText('skillBoost', 'スキブ');
   addRangeText('resistBind', 'バインド耐性', '%');
   addRangeText('resistDarkness', '暗闇耐性', '%');
@@ -443,9 +447,6 @@ export function filterSettingTextArray (setting) {
   }
   if (setting.assist !== undefined) {
     textArray.push('アシスト:' + constData.booleanTable[setting.assist]);
-  }
-  if (setting.includeSuperAwaken) {
-    textArray.push('覚醒関連に超覚醒を含める');
   }
 
   return textArray;
