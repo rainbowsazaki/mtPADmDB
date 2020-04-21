@@ -1093,13 +1093,6 @@ export default {
   },
   watch: {
     pageTitle: '$_mixinForPage_updateTitle',
-    useMultiBoost: function () {
-      // マルチブーストと超覚醒を排他的にする。
-      if (this.useMultiBoost) { this.useSuperAwaken = false; }
-    },
-    useSuperAwaken: function () {
-      if (this.useSuperAwaken) { this.useMultiBoost = false; }
-    },
     filteredRankInfos: function () {
       if (this.pageResetFlag) {
         this.page = 1;
