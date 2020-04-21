@@ -848,6 +848,7 @@ export default {
     margin-top: -2px;
     padding: 8px 4px 4px 4px;
     overflow: hidden;
+    max-width: 40em;
 
     .formMenu, .formBottomMenu {
       display: none;
