@@ -95,7 +95,7 @@ export default {
     materials: function () {
       return this.monsterData.evolution.materials;
     },
-    /** 進化形式を示す番号。 */
+    /** 進化形態を示す番号。 */
     type: function () {
       return this.monsterData.evolutionType;
     },
@@ -437,7 +437,7 @@ $bgColorLigntnPercent: 30%;
   }
 }
 
-// 進化形式不明
+// 進化形態不明
 .typenull {
   $bgColor: #ccccdd;
 

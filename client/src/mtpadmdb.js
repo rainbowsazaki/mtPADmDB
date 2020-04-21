@@ -215,7 +215,7 @@ export const constData = {
     5: 'アシスト進化',
     6: '超転生進化',
 
-    null: '進化形式不明'
+    null: '進化形態不明'
   },
 
   awakenTable: {

@@ -94,7 +94,7 @@ export default {
           'overLimit': '限界突破可不可',
           'overLimitParam': '限界突破時最大パラメータ',
           'superAwakens': '超覚醒',
-          'evolutionType': '進化形式',
+          'evolutionType': '進化形態',
           'evolution': '進化情報',
 
           'baseTurn': 'レベル１時ターン',

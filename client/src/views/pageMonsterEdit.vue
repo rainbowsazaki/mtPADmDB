@@ -141,7 +141,7 @@
           </tr>
         </template>
         <tr class="thead-light">
-          <th colspan="12">このモンスターへの進化形式</th>
+          <th colspan="12">このモンスターへの進化形態</th>
         </tr>
         <tr>
           <td colspan="12">

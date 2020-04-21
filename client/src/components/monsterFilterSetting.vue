@@ -141,7 +141,7 @@
           </div>
         </div>
         <div class="row evolutionType">
-          <label class="col-4 col-form-label">進化形式</label>
+          <label class="col-4 col-form-label">進化形態</label>
           <div class="col-8 col-form-label">
             <label v-for="(typeName, no) in evolutionTypeTable" :key="no">
               <input class="decoToggle" type="checkbox" v-model.number="filter.evolutionType" :value="no">
@@ -443,7 +443,7 @@ export function filterSettingTextArray (setting) {
   addRangeText('timeExtension', '指延長', '秒');
 
   if (setting.evolutionType && setting.evolutionType.length > 0) {
-    textArray.push('進化形式:' + setting.evolutionType.map(a => { const info = constData.evolutionTypeTable[a]; return info || ''; }).join('/'));
+    textArray.push('進化形態:' + setting.evolutionType.map(a => { const info = constData.evolutionTypeTable[a]; return info || ''; }).join('/'));
   }
   if (setting.assist !== undefined) {
     textArray.push('アシスト:' + constData.booleanTable[setting.assist]);
