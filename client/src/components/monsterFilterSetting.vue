@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="row">
-          <label class="col-sm-4 col-form-label">覚醒</label>
+          <label class="col-sm-4 col-form-label d-none d-sm-block">覚醒</label>
           <div class="col-sm-8">
             <awaken-select popup-style :select-length="filter.includeSuperAwaken ? 10 : 9" v-model="filter.awaken" />
           </div>
