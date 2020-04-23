@@ -290,8 +290,8 @@ export const constData = {
     68: { name: '暗闇耐性+', description: '暗闇攻撃を無効化する', probability: 1 },
     69: { name: 'お邪魔耐性+', description: 'お邪魔攻撃や爆弾攻撃を\n無効化する', probability: 1 },
     70: { name: '毒耐性+', description: '毒攻撃を無効化する', probability: 1 },
-    71: { name: 'お邪魔ドロップの加護', description: 'お邪魔ドロップが落ちてくるようになり、\nお邪魔ドロップを消すと攻撃力がアップする' },
-    72: { name: '毒ドロップの加護', description: '毒ドロップが落ちてくるようになり、\n毒か猛毒ドロップを消すと攻撃力がアップする' },
+    71: { name: 'お邪魔ドロップの加護', description: 'お邪魔ドロップが落ちてくるようになり、\nお邪魔ドロップを消すと攻撃力がアップする', rate: 2, },
+    72: { name: '毒ドロップの加護', description: '毒ドロップが落ちてくるようになり、\n毒か猛毒ドロップを消すと攻撃力がアップする', rate: 2 },
 
     null: { name: '不明', description: '' }
   },
