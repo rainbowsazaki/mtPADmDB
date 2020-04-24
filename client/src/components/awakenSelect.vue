@@ -14,7 +14,10 @@
           <div v-if="popupStyle">覚醒（タップ・クリックで削除）</div>
           <div class="selectedList" :class="`length${selectLength}`">
             <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
-              <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined" @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'">
+              <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined"
+                    :class="{ lastAdd: i - 1 === lastAddIndex }"
+                    @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'"
+              >
             </span>
             <button v-if="!useUnknown" type="button" class="btn btn-sm btn-primary clearButton" @click="clear">クリア</button>
             <div v-if="isUnknown" class="unknownMessage"><span>不明</span></div>
@@ -81,7 +84,9 @@ export default {
     return {
       selectedArray: [],
       /** 入力部分をポップアップ表示しているかどうか。 */
-      isShowPopup: false
+      isShowPopup: false,
+      /** 最後に追加した覚醒のインデックス。 */
+      lastAddIndex: undefined,
     };
   },
   computed: {
@@ -112,6 +117,7 @@ export default {
       } else {
         document.body.classList.remove(className);
       }
+      this.lastAddIndex = undefined;
     },
     'selectLength': function (newValue) {
       // 指定個数を超えてる分を取り除く。。
@@ -144,6 +150,7 @@ export default {
       if (this.checkboxStyle && no !== null) { return; }
       if (event) { event.preventDefault(); }
       if (this.selectedArray.length >= this.selectLength) { return; }
+      this.lastAddIndex = this.selectedArray.length;
       this.selectedArray.push(no);
       this.emitInput();
     },
@@ -152,6 +159,7 @@ export default {
       if (event) { event.preventDefault(); }
       this.selectedArray.splice(index, 1);
       this.emitInput();
+      this.lastAddIndex = undefined;
     },
     /** 覚醒内容が不明であることを示す値を設定する。 */
     setUnknown: function (event) {
@@ -164,6 +172,7 @@ export default {
       if (event) { event.preventDefault(); }
       this.selectedArray = [];
       this.emitInput();
+      this.lastAddIndex = undefined;
     },
     /** 値の変更を通知する。 */
     emitInput: function () {
@@ -194,7 +203,6 @@ $messsageSizeRate: 0.6;
   padding: 0.25em;
   border-radius: 0.375em;;
   border: solid #CCC 0.0625em;
-  overflow: hidden;
 
   img {
     width: $iconSize;
@@ -204,6 +212,19 @@ $messsageSizeRate: 0.6;
   }
   img[src] {
     cursor: pointer;
+  }
+
+  img.lastAdd {
+    animation: popup 0.2s ease 0s 1 alternate none running;
+  }
+
+  @keyframes popup {
+    0% {
+      transform: scale(1.4);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   .clearButton {
