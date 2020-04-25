@@ -15,7 +15,7 @@
           <div class="selectedList" :class="`length${selectLength}`">
             <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
               <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined"
-                    :class="{ lastAdd: i - 1 === lastAddIndex }"
+                    :class="{ shiftLeft: i - 1 >= lastRemoveIndex && selectedArray[i - 1], lastAdd: i - 1 === lastAddIndex }"
                     @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'"
               >
             </span>
@@ -87,6 +87,8 @@ export default {
       isShowPopup: false,
       /** 最後に追加した覚醒のインデックス。 */
       lastAddIndex: undefined,
+      /** 最後に削除した覚醒のインデックス。 */
+      lastRemoveIndex: undefined
     };
   },
   computed: {
@@ -118,6 +120,7 @@ export default {
         document.body.classList.remove(className);
       }
       this.lastAddIndex = undefined;
+      this.lastRemoveIndex = undefined;
     },
     'selectLength': function (newValue) {
       // 指定個数を超えてる分を取り除く。。
@@ -151,6 +154,7 @@ export default {
       if (event) { event.preventDefault(); }
       if (this.selectedArray.length >= this.selectLength) { return; }
       this.lastAddIndex = this.selectedArray.length;
+      this.lastRemoveIndex = undefined;
       this.selectedArray.push(no);
       this.emitInput();
     },
@@ -159,6 +163,9 @@ export default {
       if (event) { event.preventDefault(); }
       this.selectedArray.splice(index, 1);
       this.emitInput();
+      this.lastRemoveIndex = index;
+      // 左移動アニメーションが終わったらアニメーション基準位置を初期化する。
+      setTimeout(() => { this.lastRemoveIndex = undefined; }, 200);
       this.lastAddIndex = undefined;
     },
     /** 覚醒内容が不明であることを示す値を設定する。 */
@@ -173,6 +180,7 @@ export default {
       this.selectedArray = [];
       this.emitInput();
       this.lastAddIndex = undefined;
+      this.lastRemoveIndex = undefined;
     },
     /** 値の変更を通知する。 */
     emitInput: function () {
@@ -218,12 +226,25 @@ $messsageSizeRate: 0.6;
     animation: popup 0.2s ease 0s 1 alternate none running;
   }
 
+  img.shiftLeft {
+    animation: shiftLeft 0.2s ease 0s 1 alternate none running;
+  }
+
   @keyframes popup {
     0% {
       transform: scale(1.4);
     }
     100% {
       transform: scale(1);
+    }
+  }
+
+  @keyframes shiftLeft {
+    0% {
+      transform: translateX($iconSize);
+    }
+    100% {
+      transform: translateX(0);
     }
   }
 
@@ -370,6 +391,19 @@ $iconSize: 7.3vw;
   .clearButton {
     width: $iconSize * 2.5;
     height: $iconSize;
+  }
+
+  img.shiftLeft {
+    animation: shiftLeft 0.2s ease 0s 1 alternate none running;
+  }
+
+  @keyframes shiftLeft {
+    0% {
+      transform: translateX($iconSize);
+    }
+    100% {
+      transform: translateX(0);
+    }
   }
 }
 
