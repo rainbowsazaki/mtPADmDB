@@ -14,6 +14,7 @@
           <div v-if="popupStyle">覚醒（タップ・クリックで削除）</div>
           <div class="selectedList" :class="`length${selectLength}`">
             <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
+              <img v-if="i - 1 == lastRemoveIndex" class="removeEffect" :src="`./image/awaken/${lastRemoveItem}.png`">
               <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined"
                     :class="{ shiftLeft: i - 1 >= lastRemoveIndex && selectedArray[i - 1], lastAdd: i - 1 === lastAddIndex }"
                     @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'"
@@ -88,7 +89,9 @@ export default {
       /** 最後に追加した覚醒のインデックス。 */
       lastAddIndex: undefined,
       /** 最後に削除した覚醒のインデックス。 */
-      lastRemoveIndex: undefined
+      lastRemoveIndex: undefined,
+      /** 最後に削除した覚醒の種類。 */
+      lastRemoveItem: 0
     };
   },
   computed: {
@@ -161,6 +164,7 @@ export default {
     /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
     removeAwaken: function (index, event) {
       if (event) { event.preventDefault(); }
+      this.lastRemoveItem = this.selectedArray[index];
       this.selectedArray.splice(index, 1);
       this.emitInput();
       this.lastRemoveIndex = index;
@@ -217,6 +221,11 @@ $messsageSizeRate: 0.6;
     height: $iconSize;
     background: #CCC;
     border-radius: 0.25em;
+
+    &.removeEffect {
+      position: absolute;
+      animation: popdown 0.2s ease 0s 1 alternate none running;
+    }
   }
   img[src] {
     cursor: pointer;
@@ -236,6 +245,15 @@ $messsageSizeRate: 0.6;
     }
     100% {
       transform: scale(1);
+    }
+  }
+
+  @keyframes popdown {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
     }
   }
 
