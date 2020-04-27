@@ -168,6 +168,7 @@ export default {
     removeAwaken: function (index, event) {
       if (event) { event.preventDefault(); }
       this.lastRemoveItem = this.selectedArray[index];
+      if (this.lastRemoveItem === undefined) { return; }
       this.selectedArray.splice(index, 1);
       this.emitInput();
       this.lastRemoveIndex = index;
