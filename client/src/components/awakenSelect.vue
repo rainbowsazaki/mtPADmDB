@@ -156,8 +156,11 @@ export default {
       if (this.checkboxStyle && no !== null) { return; }
       if (event) { event.preventDefault(); }
       if (this.selectedArray.length >= this.selectLength) { return; }
-      this.lastAddIndex = this.selectedArray.length;
+      this.lastAddIndex = undefined;
       this.lastRemoveIndex = undefined;
+      if (no !== null) {
+        this.lastAddIndex = this.selectedArray.length;
+      }
       this.selectedArray.push(no);
       this.emitInput();
     },
