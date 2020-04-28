@@ -207,6 +207,8 @@ body.noScroll_awakenSelect {
 <style lang="scss" scoped>
 $iconSize: 1.5em;
 $messsageSizeRate: 0.6;
+$addAnimationTime: 0.2s;
+$removeAnimationTime: 0.2s;
 
 .selectedList {
   position: relative;
@@ -227,7 +229,7 @@ $messsageSizeRate: 0.6;
     &.removeEffect {
       position: absolute;
       transform: scale(0);
-      animation: popdown 0.2s ease 0s 1 alternate none running;
+      animation: popdown $removeAnimationTime ease 0s 1 alternate none running;
     }
   }
   img[src] {
@@ -235,11 +237,11 @@ $messsageSizeRate: 0.6;
   }
 
   img.lastAdd {
-    animation: popup 0.2s ease 0s 1 alternate none running;
+    animation: popup $addAnimationTime ease 0s 1 alternate none running;
   }
 
   img.shiftLeft {
-    animation: shiftLeft 0.2s ease 0s 1 alternate none running;
+    animation: shiftLeft $removeAnimationTime ease 0s 1 alternate none running;
   }
 
   @keyframes popup {
@@ -415,7 +417,7 @@ $iconSize: 7.3vw;
   }
 
   img.shiftLeft {
-    animation: shiftLeft 0.2s ease 0s 1 alternate none running;
+    animation: shiftLeft $removeAnimationTime ease 0s 1 alternate none running;
   }
 
   @keyframes shiftLeft {
