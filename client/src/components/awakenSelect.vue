@@ -8,47 +8,49 @@
       <div v-if="selectedArray[0] === undefined" class="placeholder"><span>覚醒（タップ・クリックで追加）</span></div>
     </div>
 
-    <div :class="{ 'popupStyle' : popupStyle }" v-if="!popupStyle || isShowPopup">
-      <div class="dialog">
-        <div class="body">
-          <div v-if="popupStyle">覚醒（タップ・クリックで削除）</div>
-          <div class="selectedList" :class="`length${selectLength}`">
-            <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
-              <img v-if="i - 1 == lastRemoveIndex" class="removeEffect" :src="`./image/awaken/${lastRemoveItem}.png`" @animationend="lastRemoveIndex = undefined;">
-              <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined"
-                    :class="{ shiftLeft: i - 1 >= lastRemoveIndex && selectedArray[i - 1], lastAdd: i - 1 === lastAddIndex }"
-                    @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'"
-              >
-            </span>
-            <button v-if="!useUnknown" type="button" class="btn btn-sm btn-primary clearButton" @click="clear">クリア</button>
-            <div v-if="isUnknown" class="unknownMessage"><span>不明</span></div>
+    <transition name="fade">
+      <div :class="{ 'popupStyle' : popupStyle }" v-if="!popupStyle || isShowPopup">
+        <div class="dialog">
+          <div class="body">
+            <div v-if="popupStyle">覚醒（タップ・クリックで削除）</div>
+            <div class="selectedList" :class="`length${selectLength}`">
+              <span v-for="i in selectLength" :key="`selectedAwaken_${i}`">
+                <img v-if="i - 1 == lastRemoveIndex" class="removeEffect" :src="`./image/awaken/${lastRemoveItem}.png`" @animationend="lastRemoveIndex = undefined;">
+                <img :src="selectedArray[i - 1] ? `./image/awaken/${selectedArray[i - 1]}.png` : undefined"
+                      :class="{ shiftLeft: i - 1 >= lastRemoveIndex && selectedArray[i - 1], lastAdd: i - 1 === lastAddIndex }"
+                      @click="removeAwaken(i - 1, $event);" :key="selectedArray[i - 1] ? i : '0'"
+                >
+              </span>
+              <button v-if="!useUnknown" type="button" class="btn btn-sm btn-primary clearButton" @click="clear">クリア</button>
+              <div v-if="isUnknown" class="unknownMessage"><span>不明</span></div>
+            </div>
+            <div class="selectArea">
+              <table>
+                <tr v-if="useUnknown">
+                  <td colspan="2">
+                    <button type="button" class="btn btn-secondary btn-sm btn-block" @click="setUnknown">不明</button>
+                  </td>
+                  <td colspan="2">
+                    <button type="button" class="btn btn-secondary btn-sm btn-block" @click="clear">なし</button>
+                  </td>
+                </tr>
+                <tr v-for="(n, i) in awakenSortList" :key="`alTr_${i}`">
+                  <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
+                    <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" :id="`awaken_${m}`" @change="emitInput();">
+                    <label :for="`awaken_${m}`">
+                      <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m, $event);">
+                    </label>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
-          <div class="selectArea">
-            <table>
-              <tr v-if="useUnknown">
-                <td colspan="2">
-                  <button type="button" class="btn btn-secondary btn-sm btn-block" @click="setUnknown">不明</button>
-                </td>
-                <td colspan="2">
-                  <button type="button" class="btn btn-secondary btn-sm btn-block" @click="clear">なし</button>
-                </td>
-              </tr>
-              <tr v-for="(n, i) in awakenSortList" :key="`alTr_${i}`">
-                <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
-                  <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" :id="`awaken_${m}`" @change="emitInput();">
-                  <label :for="`awaken_${m}`">
-                    <img :src="`./image/awaken/${m}.png`" @click="addAwaken(m, $event);">
-                  </label>
-                </td>
-              </tr>
-            </table>
+          <div v-if="popupStyle" class="footer">
+            <button type="button" class="btn btn-primary" @click="isShowPopup = false;">OK</button>
           </div>
-        </div>
-        <div v-if="popupStyle" class="footer">
-          <button type="button" class="btn btn-primary" @click="isShowPopup = false;">OK</button>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -209,6 +211,13 @@ $iconSize: 1.5em;
 $messsageSizeRate: 0.6;
 $addAnimationTime: 0.2s;
 $removeAnimationTime: 0.2s;
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 
 .selectedList {
   position: relative;
