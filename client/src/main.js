@@ -58,6 +58,7 @@ const SkillIncrementalInput = () => import('./components/skillIncrementalInput.v
 const AwakenSelect = () => import('./components/awakenSelect.vue');
 const AttrSelect = () => import('./components/attrSelect.vue');
 const CommentList = () => import('./components/commentList.vue');
+const SlideUpToggle = () => import('./components/slideUpToggle.vue');
 
 Vue.component('monster-icon', MonsterIcon);
 Vue.component('monster-incremental-search', MonsterIncrementalSearch);
@@ -67,6 +68,7 @@ Vue.component('tweet-button', TweetButton);
 Vue.component('awaken-select', AwakenSelect);
 Vue.component('attr-select', AttrSelect);
 Vue.component('comment-list', CommentList);
+Vue.component('slide-up-toggle', SlideUpToggle);
 
 // ルーターのインスタンスをrootとなるVueインスタンスに渡します
 new Vue({
