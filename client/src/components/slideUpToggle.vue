@@ -1,7 +1,7 @@
 <template>
   <div>
     <span class="filterTrigger" :class="{ open: isOpenTriggerBottom }" @click="isVisibleMain = !isVisibleMain">
-      <slot name="trigger">表示・非表示</slot>
+      <slot name="trigger" :isOpened="isVisibleMain">表示・非表示</slot>
     </span>
     <transition name="filter"
                 @before-enter="setStyleHeight($event, 'filter'); isOpenTriggerBottom = true;"
