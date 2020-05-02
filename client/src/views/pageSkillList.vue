@@ -6,19 +6,24 @@
       <div class="input-group mb-3">
         <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="searchWord">
       </div>
-      <div class="form-group row">
-        <label for="Password" class="col-sm-2 col-form-label">効果指定</label>
-        <div class="col-sm-10">
-          <select class="form-control" v-model="skillType">
-            <option value="（なし）">（なし）</option>
-            <template v-for="(group, n) in skillTypeSearchArray">
-              <optgroup :label="group.label" :key="`group${n}`">
-                <option v-for="(setting, m) in group.settings" :value="setting[0]" :key="`setting${m}`">{{ setting[0] }}</option>
-              </optgroup>
-            </template>
-          </select>
-        </div>
-      </div>
+      <slide-up-toggle style="margin-bottom: 1em;">
+        <template slot="trigger" slot-scope="slotProps">
+          効果種類指定：{{ skillType }}
+          <svg viewBox="0 0 100 100" width="1em" height="1em">
+            <path v-if="slotProps.isOpened" d="M50 0 L10 75 L90 75 Z" />
+            <path v-else d="M50 75 L10 0 L90 0 Z" />
+          </svg>
+        </template>
+        <template v-slot:head slot="head">効果種類指定：{{ skillType }}</template>
+
+        <label><input type="radio" class="decoToggle" v-model="skillType" value="（なし）"><span>（なし）</span></label>
+        <template v-for="(group, n) in skillTypeSearchArray">
+          <h3 class="h5" :key="`header${n}`">{{ group.label }}</h3>
+          <label v-for="(setting, m) in group.settings" :key="`setting${n}_${m}`">
+            <input type="radio" class="decoToggle" v-model="skillType" :value="setting[0]"><span>{{ setting[0] }}</span>
+          </label>
+        </template>
+      </slide-up-toggle>
     </form>
 
     <monster-filter-setting hide-name v-model="monsterFilterSetting" />
@@ -440,6 +445,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.decoToggle + span {
+  min-width: 6em;
+  margin-right: 0.5em;
+}
+
 .skillList {
   margin-bottom: 1rem;
 
