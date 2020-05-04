@@ -6,7 +6,7 @@
       <div class="input-group mb-3">
         <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="searchWord">
       </div>
-      <slide-up-toggle style="margin-bottom: 1em;">
+      <slide-up-toggle class="skillTypeSelect">
         <template slot="trigger" slot-scope="slotProps">
           効果種類指定：{{ skillType }}
           <svg viewBox="0 0 100 100" width="1em" height="1em">
@@ -445,6 +445,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.skillTypeSelect {
+  margin-bottom: 1em;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5em;
+
+    &:before, &:after {
+      content: "";
+      display: block;
+      height: 0.05em;
+      background: #0008;
+      flex-grow: 1;
+    }
+
+    $text-margin: 0.8em;
+    $side-margin: 0.4em;
+    &:before {
+      margin-left: $side-margin;
+      margin-right: $text-margin;
+    }
+    &:after {
+      margin-left: $text-margin;
+      margin-right: $side-margin;
+    }
+  }
+}
 
 .decoToggle + span {
   min-width: 6em;
