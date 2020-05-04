@@ -210,7 +210,7 @@ export default {
       display: block;
       position: sticky;
       left: 0;
-      top: 100%;
+      bottom: 0;
       width: 100%;
       height: 3em;
       margin: 0;
