@@ -28,7 +28,7 @@
       </slide-up-toggle>
     </form>
 
-    <monster-filter-setting hide-name v-model="monsterFilterSetting" />
+    <monster-filter-setting hide-name toggle-text="モンスター絞り込み" v-model="monsterFilterSetting" />
 
     <div><tweet-button /></div>
     <pagination item-count="11" :page="page" :page-count="pageCount" />
