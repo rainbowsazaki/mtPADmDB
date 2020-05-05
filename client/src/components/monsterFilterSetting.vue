@@ -8,7 +8,7 @@
     </div>
 
     <span id="filterTrigger" :class="{ open: isOpenFilterTrigger }" @click="isVisibleFilter = !isVisibleFilter">
-      その他絞り込み
+      {{ toggleText }}
       <svg viewBox="0 0 100 100" width="1em" height="1em">
         <path v-if="isVisibleFilter" d="M50 0 L10 75 L90 75 Z" />
         <path v-else d="M50 75 L10 0 L90 0 Z" />
@@ -569,6 +569,11 @@ export default {
     'hideName': {
       type: Boolean,
       default: false
+    },
+    /** 表示・非表示切替部分に表示するテキスト。 */
+    'toggleText': {
+      type: String,
+      default: 'その他絞り込み'
     }
   },
   data: function () {
