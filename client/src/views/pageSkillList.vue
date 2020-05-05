@@ -16,7 +16,7 @@
         </template>
         <template v-slot:head slot="head">効果種類指定：{{ skillType }}</template>
 
-        <label><input type="radio" class="decoToggle" v-model="skillType" value="（なし）"><span>（なし）</span></label>
+        <label><input type="radio" class="decoToggle" v-model="skillType" value="指定なし"><span>指定なし</span></label>
         <template v-for="(group, n) in skillTypeSearchArray">
           <h3 class="h5" :key="`header${n}`">{{ group.label }}</h3>
           <label v-for="(setting, m) in group.settings" :key="`setting${n}_${m}`">
@@ -245,7 +245,7 @@ export default {
     /** 使用するスキルタイプ名。 */
     skillType: {
       type: String,
-      default: '（なし）'
+      default: '指定なし'
     },
     /** 表示するページ。 */
     page: {
