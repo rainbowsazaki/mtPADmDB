@@ -333,10 +333,10 @@ sub mode_update_skill {
 
   sub check_range {
     my ($name, $value, $min, $max, $is_not_null) = @_;
-    if ($is_not_null == undef) { $is_not_null = 1; }
+    if (!defined $is_not_null) { $is_not_null = 1; }
 
-    if ($value == undef) {
-      if ($is_not_null) { return 1; }
+    if (!defined $value) {
+      if (!$is_not_null) { return 1; }
       $response_data->add_error("${name} の値が入力されていません。");
       return 0;
     }
@@ -522,10 +522,10 @@ sub mode_update_monster_data {
   
   sub check_range {
     my ($name, $value, $min, $max, $is_not_null) = @_;
-    if ($is_not_null == undef) { $is_not_null = 1; }
+    if (!defined $is_not_null) { $is_not_null = 1; }
 
-    if ($value == undef) {
-      if ($is_not_null) { return 1; }
+    if (!defined $value) {
+      if (!$is_not_null) { return 1; }
       $response_data->add_error("${name} の値が入力されていません。");
       return 0;
     }
