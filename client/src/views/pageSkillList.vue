@@ -6,7 +6,7 @@
       <div class="input-group mb-3">
         <input type="text" class="form-control" :placeholder="targetName + '検索'" v-model="searchWord">
       </div>
-      <slide-up-toggle class="skillTypeSelect">
+      <slide-up-toggle class="skillTypeSelect" v-model="isOpenSkillType">
         <template slot="trigger" slot-scope="slotProps">
           効果種類指定：{{ skillType }}
           <svg viewBox="0 0 100 100" width="1em" height="1em">
@@ -16,12 +16,12 @@
         </template>
         <template v-slot:head slot="head">効果種類指定：{{ skillType }}</template>
 
-        <label><input type="radio" class="decoToggle" v-model="skillType" value="指定なし"><span>指定なし</span></label>
+        <label><input type="radio" class="decoToggle" v-model="skillType" value="指定なし" @click="closeSkillTypeSelect"><span>指定なし</span></label>
         <template v-for="(group, n) in skillTypeSearchArray">
           <h3 class="h5" :key="`header${n}`">{{ group.label }}</h3>
           <template v-for="(setting, m) in group.settings">
             <label v-if="setting[2] !== false" :key="`setting${n}_${m}`">
-              <input type="radio" class="decoToggle" v-model="skillType" :value="setting[0]"><span>{{ setting[0] }}</span>
+              <input type="radio" class="decoToggle" v-model="skillType" :value="setting[0]" @click="closeSkillTypeSelect"><span>{{ setting[0] }}</span>
             </label>
           </template>
         </template>
@@ -267,6 +267,8 @@ export default {
       inPageCount: 50,
       /** 一覧上の一つのスキルに表示する、スキルを持っているモンスターの表示数上限。 */
       monsterIconCountMax: 10,
+      /** 効果種類指定の選択領域を表示しているかどうか。 */
+      isOpenSkillType: false,
 
       /** 特定条件を満たすモンスターが持つスキルのみを表示するためのモンスター条件のフィルタ。 */
       monsterFilterSetting: getFilterDefault()
@@ -437,6 +439,10 @@ export default {
     /** 先頭ページへ移動する。表示条件が変更されたときに呼び出す。 */
     resetPage: function () {
       if (this.pageResetFlag) { this.page = 1; }
+    },
+    /** 効果種類選択領域の表示を閉じる。 */
+    closeSkillTypeSelect: function () {
+      this.isOpenSkillType = false;
     },
     /** このスキルを持つモンスターの番号の配列を取得する。 */
     monsterNosUsingThisSkill: function (no) {
