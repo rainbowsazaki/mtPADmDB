@@ -53,7 +53,7 @@
             </div>
           </td>
           <td colspan="4">
-            <input type="number" class="form-control" id="inputCost" v-model.number="monsterData.cost" min="1" max="999">
+            <input type="number" class="form-control" id="inputCost" v-model.number="monsterData.cost" min="0" max="999">
           </td>
           <td colspan="4">
             <select class="custom-select" id="selectAssist" v-model.number="monsterData.assist">

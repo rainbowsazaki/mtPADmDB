@@ -589,7 +589,7 @@ sub mode_update_monster_data {
   &check_string_length('名前', $data->{name}, 1, 50);
   &check_range('属性', $data->{attributes}[0], 0, 99, 0);
   &check_range('複属性', $data->{attributes}[1], 0, 99, 0);
-  &check_range('コスト', $data->{cost}, 1, 999, 0);
+  &check_range('コスト', $data->{cost}, 0, 999, 0);
   &check_range('レアリティ', $data->{rare}, 1, 99, 0);
   foreach my $i (0..3) {
     &check_range('タイプ${i}', $data->{types}[$i], 0, 99, 0);
