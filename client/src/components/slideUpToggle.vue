@@ -32,6 +32,13 @@
 /** 任意の内容を、ブラウザ横幅が広い場合はトグル表示、狭い場合はスライドアップ表示するコンポーネント。 */
 export default {
   name: 'SlideupToggle',
+  props: {
+    /** メイン領域を表示するかどうか。 */
+    value: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: function () {
     return {
       /** メイン領域を表示するかどうか。 */
@@ -53,6 +60,10 @@ export default {
     }
   },
   watch: {
+    value: function (newValue) {
+      this.isVisibleMain = newValue;
+    },
+    isVisibleMain: function (newValue) { this.$emit('input', newValue); },
     isFullOverSettingArea: function (newValue) {
       if (newValue) {
         this.tempScrollTop = document.scrollingElement.scrollTop;
