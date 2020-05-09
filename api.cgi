@@ -592,10 +592,10 @@ sub mode_update_monster_data {
   &check_range('コスト', $data->{cost}, 0, 999, 0);
   &check_range('レアリティ', $data->{rare}, 1, 99, 0);
   foreach my $i (0..3) {
-    &check_range('タイプ${i}', $data->{types}[$i], 0, 99, 0);
+    &check_range("タイプ${i}", $data->{types}[$i], 0, 99, 0);
   }
   foreach my $i (0..9) {
-    &check_range('覚醒${i}', $data->{awakens}[$i], 0, 99, 0);
+    &check_range("覚醒${i}", $data->{awakens}[$i], 0, 99, 0);
   }
   &check_range('最大レベルに必要な経験値', $data->{maxExp}, 0, 999999999, 0);
   &check_range('最大レベル', $data->{maxLevel}, 0, 99, 0);
@@ -645,7 +645,7 @@ sub mode_update_monster_data {
   if ($data->{evolutionType} > 0 && $data->{evolutionType} < 99) {
     &check_range('進化前', $data->{evolution}{baseNo}, 1, 9999, 0);
     foreach my $i (0..4) {
-      &check_range('進化素材${i}', $data->{evolution}{materials}[$i], 1, 9999, 0);
+      &check_range("進化素材${i}", $data->{evolution}{materials}[$i], 1, 9999, 0);
     }
   }
   &check_string_length('コメント', $data->{comment}, 0, 1000);
