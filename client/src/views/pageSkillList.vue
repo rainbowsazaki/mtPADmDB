@@ -17,6 +17,7 @@
         <template v-slot:head slot="head">効果種類指定：{{ skillType }}</template>
 
         <template slot="default" slot-scope="slotProps">
+          <h3 class="h5">指定なし</h3>
           <label><input type="radio" class="decoToggle" v-model="skillType" value="指定なし" @click="if (slotProps.isFullOverlay) { closeSkillTypeSelect(); }"><span>指定なし</span></label>
           <template v-for="(group, n) in skillTypeSearchArray">
             <h3 class="h5" :key="`header${n}`">{{ group.label }}</h3>
