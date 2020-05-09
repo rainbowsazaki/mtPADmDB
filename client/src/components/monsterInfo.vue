@@ -70,7 +70,7 @@
       </dl>
       <div>
         <div class="cost">
-          コスト:<span class="costValue">{{ monsterData.cost || '不明' }}</span>
+          コスト:<span class="costValue">{{ monsterData.cost === null ? '不明' : monsterData.cost }}</span>
         </div>
         <div class="levelInfo">
           <div :class="{ 'olAnim0 canOverLimit': (monsterData.overLimit === 1) }">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
