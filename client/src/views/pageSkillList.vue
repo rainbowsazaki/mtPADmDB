@@ -471,7 +471,7 @@ export default {
       content: "";
       display: block;
       height: 0.05em;
-      background: #0008;
+      background: #0004;
       flex-grow: 1;
     }
 
