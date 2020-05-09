@@ -61,6 +61,10 @@ export default {
     /** 全画面で表示しているかどうか。 */
     isFullOverMainArea: function () {
       return this.isBrowserWidthSmall && this.isFullOpened;
+    },
+    /** 設定領域を全画面で表示しているかどうか。 */
+    isFullOverSettingArea: function () {
+      return this.isBrowserWidthSmall && this.isFullOpened;
     }
   },
   watch: {
