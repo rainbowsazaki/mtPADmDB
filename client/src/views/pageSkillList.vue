@@ -16,13 +16,15 @@
         </template>
         <template v-slot:head slot="head">効果種類指定：{{ skillType }}</template>
 
-        <label><input type="radio" class="decoToggle" v-model="skillType" value="指定なし" @click="closeSkillTypeSelect"><span>指定なし</span></label>
-        <template v-for="(group, n) in skillTypeSearchArray">
-          <h3 class="h5" :key="`header${n}`">{{ group.label }}</h3>
-          <template v-for="(setting, m) in group.settings">
-            <label v-if="setting[2] !== false" :key="`setting${n}_${m}`">
-              <input type="radio" class="decoToggle" v-model="skillType" :value="setting[0]" @click="closeSkillTypeSelect"><span>{{ setting[0] }}</span>
-            </label>
+        <template slot="default" slot-scope="slotProps">
+          <label><input type="radio" class="decoToggle" v-model="skillType" value="指定なし" @click="if (slotProps.isFullOverlay) { closeSkillTypeSelect(); }"><span>指定なし</span></label>
+          <template v-for="(group, n) in skillTypeSearchArray">
+            <h3 class="h5" :key="`header${n}`">{{ group.label }}</h3>
+            <template v-for="(setting, m) in group.settings">
+              <label v-if="setting[2] !== false" :key="`setting${n}_${m}`">
+                <input type="radio" class="decoToggle" v-model="skillType" :value="setting[0]" @click="if (slotProps.isFullOverlay) { closeSkillTypeSelect(); }"><span>{{ setting[0] }}</span>
+              </label>
+            </template>
           </template>
         </template>
       </slide-up-toggle>
