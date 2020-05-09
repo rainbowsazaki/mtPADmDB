@@ -206,6 +206,8 @@ export default {
       left: 0;
       top: 0;
       width: 100%;
+      height: 2.5em;
+      line-height: 2.5em;
       margin: 0;
       border-bottom: 0.0625em solid #c9cccf;
       z-index: 1;
@@ -214,8 +216,6 @@ export default {
 
       .headerTitle {
         text-align: center;
-        height: 2.5em;
-        line-height: 2.5em;
       }
 
       .closeButton {
@@ -223,6 +223,10 @@ export default {
         top: 0;
         right: 0;
       }
+    }
+
+    .body {
+      min-height: calc(100% - 2.5em - 3em);
     }
 
     .footer {
