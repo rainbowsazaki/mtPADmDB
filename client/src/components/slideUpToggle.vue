@@ -1,7 +1,9 @@
 <template>
   <div>
     <span class="filterTrigger" :class="{ open: isOpenTriggerBottom }" @click="isVisibleMain = !isVisibleMain">
-      <slot name="trigger" :isOpened="isVisibleMain">{{ isVisibleMain ? '閉じる' :'開く' }}</slot>
+      <slot name="trigger" :isOpened="isVisibleMain" :isFullOverlay="isBrowserWidthSmall">
+        {{ isVisibleMain ? '閉じる' :'開く' }}
+      </slot>
     </span>
     <transition name="filter"
                 @before-enter="setStyleHeight($event, 'filter'); isOpenTriggerBottom = true;"
@@ -11,14 +13,16 @@
     >
       <form class="main" v-if="isVisibleMain">
         <div class="header">
-          <div class="headerTitle"><slot name="head" /></div>
+          <div class="headerTitle">
+            <slot name="head" :isOpened="isVisibleMain" :isFullOverlay="isBrowserWidthSmall" />
+          </div>
           <a class="btn closeButton" @click="isVisibleMain = false;">×</a>
         </div>
         <div class="body">
-          <slot />
+          <slot :isOpened="isVisibleMain" :isFullOverlay="isBrowserWidthSmall" />
         </div>
         <div class="footer">
-          <slot name="foot">
+          <slot name="foot" :isOpened="isVisibleMain" :isFullOverlay="isBrowserWidthSmall">
             <button class="btn btn-primary btn-sm" type="button" @click="isVisibleMain = false;">OK</button>
           </slot>
         </div>
