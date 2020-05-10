@@ -82,8 +82,10 @@ INSERT INTO bbs_entry
   my @params = ();
   my $sql_str = "SELECT ${columns} FROM bbs_entry";
   if ($pageUrl) {
-    $sql_str .= ' WHERE pageUrl = ?';
-    push @params, $pageUrl;
+    # URL の末尾に / が有るのと無いのの両方を取得する。
+    if ($pageUrl =~ /^(.*)\/$/) { $pageUrl = $1; }
+    $sql_str .= ' WHERE (pageUrl = ? OR pageUrl = ?)';
+    push @params, $pageUrl, $pageUrl . '/';
   }
   $sql_str .= ' ORDER BY timestamp DESC LIMIT ?';
   push @params, $limit;
