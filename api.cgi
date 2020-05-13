@@ -251,9 +251,13 @@ sub mode_image {
 # モンスター情報編集履歴取得モード
 # パラメータ
 #   no - 取得対象のモンスターの番号。
+#   limit - 一度に取得可能な最大件数。省略時は50。
+#   page - 取得する情報のページ番号。0オリジン。省略時は0。
 sub mode_monster_history {
   my ($q, $response_data) = @_;
   my $monster_no = $q->param('no');
+  my $limit = $q->param('limit') || 50;
+  my $page = $q->param('page') || 0;
   
   my @columns = (
     'id', 'comment', [ 'datetime', 'createdDatetime' ], 'state'
@@ -266,7 +270,7 @@ sub mode_monster_history {
     push @columns, 'no';
   }
 
-  my $data_ref = &table_to_array($dbh, "monster_data", \@columns, \%where, { order => 'createdDatetime DESC', limit => 50 });
+  my $data_ref = &table_to_array($dbh, "monster_data", \@columns, \%where, { order => 'createdDatetime DESC', limit => $limit, offset => $page * $limit});
 
   $response_data->set_data($data_ref);
   $dbh->disconnect;
@@ -298,9 +302,13 @@ sub mode_monster_history_details {
 # モンスター画像履歴取得モード
 # パラメータ
 #   no - 取得対象のモンスターの番号。省略時はすべてのモンスター。
+#   limit - 一度に取得可能な最大件数。省略時は50。
+#   page - 取得する情報のページ番号。0オリジン。省略時は0。
 sub mode_monster_image_history {
   my ($q, $response_data) = @_;
   my $monster_no = $q->param('no');
+  my $limit = $q->param('limit') || 50;
+  my $page = $q->param('page') || 0;
   
   my @columns = (
     'id', [ 'datetime', 'createdDatetime' ], 'state'
@@ -313,7 +321,7 @@ sub mode_monster_image_history {
     push @columns, 'no';
   }
 
-  my $data_ref = &table_to_array($dbh, "monster_image", \@columns, \%where, { order => 'createdDatetime DESC', limit => 50 });
+  my $data_ref = &table_to_array($dbh, "monster_image", \@columns, \%where, { order => 'createdDatetime DESC', limit => $limit, offset => $page * $limit });
 
   $response_data->set_data($data_ref);
   $dbh->disconnect;
@@ -478,11 +486,15 @@ sub set_skill_data {
 # パラメータ
 #   no - 取得対象のスキルの番号。
 #   id - 取得対象のスキル履歴のID。
+#   limit - 一度に取得可能な最大件数。省略時は50。
+#   page - 取得する情報のページ番号。0オリジン。省略時は0。
 #   isLeaderSkill - 取得対象がリーダースキルかどうか。
 sub mode_skill_history {
   my ($q, $response_data) = @_;
   my $skill_id = $q->param('id');
   my $skill_no = $q->param('no');
+  my $limit = $q->param('limit') || 50;
+  my $page = $q->param('page') || 0;
   my $is_leader_skill = $q->param('isLeaderSkill');
   my $table_name = ($is_leader_skill) ? 'leader_skill' : 'skill';
   
@@ -500,7 +512,7 @@ sub mode_skill_history {
   }
 
   my $dbh = &create_monster_db_dbh();
-  my $data_ref = &table_to_array($dbh, $table_name, \@columns, \%where, { order => 'createdDatetime DESC', limit => 50 });
+  my $data_ref = &table_to_array($dbh, $table_name, \@columns, \%where, { order => 'createdDatetime DESC', limit => $limit, offset => $page * $limit});
   $dbh->disconnect;
   $response_data->set_data($data_ref);
 }

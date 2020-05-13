@@ -1,5 +1,6 @@
 <template>
   <div>
+    <pagination item-count="11" :page="page" :page-count="200" />
     <table class="table table-sm">
       <tr v-for="history in histories" :key="`history${history.id}`">
         <td>
@@ -16,12 +17,14 @@
         <td><span v-if="isActiveHistory(history)">（現在のデータ）</span></td>
       </tr>
     </table>
+    <pagination item-count="11" :page="page" :page-count="200" />
   </div>
 </template>
 
 <script>
 import { mtpadmdb } from '../mtpadmdb.js';
 import MixinForPage from '../components/mixins/forPage.js';
+import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 /**
  * モンスター情報変更履歴ページコンポーネント
  */
@@ -30,7 +33,15 @@ export default {
   pageTitle: function () {
     return '履歴一覧';
   },
-  mixins: [MixinForPage],
+  mixins: [MixinForPage, RouteQueryWrapper],
+  /** $route.query ラッパー設定 */
+  queries: {
+    // 表示するページ
+    page: {
+      type: Number,
+      default: 1
+    }
+  },
   data: function () {
     return {
       /** 履歴情報 */
@@ -46,14 +57,18 @@ export default {
       return (this.$route.name === 'monsterHistory');
     }
   },
+  watch: {
+    page: 'loadHistories'
+  },
   created: function () {
     this.loadHistories();
   },
   methods: {
     /** 履歴リストを取得する。 */
     loadHistories: function () {
+      this.histories = null;
       this.isLoadingHistory = true;
-      mtpadmdb.api('monsterHistory', {},
+      mtpadmdb.api('monsterHistory', { page: this.page - 1 },
         (response) => {
           this.histories = response.data;
         });

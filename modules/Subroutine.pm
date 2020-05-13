@@ -315,6 +315,9 @@ sub table_to_array {
   if ($option->{limit}) {
     $sql_str .= " LIMIT $option->{limit}";
   }
+  if ($option->{offset}) {
+    $sql_str .= " OFFSET $option->{offset}";
+  }
 
   my $sth = $dbh->prepare($sql_str);
   if (!$sth) { die "$sql_str :\n " . $dbh->errstr; }
