@@ -337,7 +337,7 @@ export default {
       const baseName = RegExp.$1;
       const hitData = this.$store.getters.monsterDataArray.find(d => d.name === baseName);
       if (hitData) { return [hitData.no]; }
-      return constData.rareStoneExchangeTable[this.no];
+      return constData.rareStoneExchangeTable[this.monsterData.no];
     }
   },
   watch: {
