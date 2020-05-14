@@ -243,7 +243,13 @@ export function getFilterFunction (setting) {
     const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
     const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
-    functionArray.push(d => { return regexp.test(d.name); });
+    // 数字のみの指定の場合はその番号のモンスターも表示する。
+    if (/^\d+$/.test(setting.name)) {
+      const targetNo = Number(setting.name);
+      functionArray.push(d => { return d.no === targetNo || regexp.test(d.name); });
+    } else {
+      functionArray.push(d => { return regexp.test(d.name); });
+    }
   }
   if (setting.attr && setting.attr.length > 0) {
     const filterObj = {};
