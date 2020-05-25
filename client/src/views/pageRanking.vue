@@ -431,7 +431,7 @@ export default {
             { name: '攻撃力', func: data => data.hasAawaken(48) ? (data.attackWithToTarget * data.a3x3AttackRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0,
-          awakenFlag: F_DAMAGE_RANKING | F_A_COMBO_UP | F_A_SP_COMBO_UP
+          awakenFlag: F_DAMAGE_RANKING | F_A_A3X3 | F_A_COMBO_UP | F_A_SP_COMBO_UP
         }
       ]
     },
