@@ -790,6 +790,8 @@ export default {
         get bestSuperAwaken () {
           if (!manageObj.useSuperAwaken) { return null; }
           if (!this.baseData.superAwakens) { return null; }
+          // 無効貫通時で、通常覚醒に無効貫通を持っていないが超覚醒に無効貫通も持っている場合は、無効貫通を選択する。
+          if ((manageObj.rankingSetting.awakenFlag & F_A_A3X3) && !this.awakenCount[48] && this.baseData.superAwakens && this.baseData.superAwakens.includes(48)) { return 48; }
           // 保持している覚醒をキーとして true を格納するオブジェクトを作成する。
           const superAwakensTable = {};
           const superAwakenLength = this.baseData.superAwakens.length;
