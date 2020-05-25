@@ -408,7 +408,7 @@ export default {
           title: '無効貫通時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.attackWithToTarget * data.a3x3AttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.hasAawaken(48) ? (data.attackWithToTarget * data.a3x3AttackRate) | 0 : null }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_A3X3
@@ -418,7 +418,7 @@ export default {
           title: '無効貫通７コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通７コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.attackWithToTarget * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.hasAawaken(48) ? (data.attackWithToTarget * data.a3x3AttackRate * data.comboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_A3X3 | F_A_COMBO_UP
@@ -428,7 +428,7 @@ export default {
           title: '無効貫通10コンボ時攻撃力',
           description: 'モンスターのレベル最大・+297・全覚醒時の無効貫通10コンボ時の攻撃力ランキングです。',
           columns: [
-            { name: '攻撃力', func: data => data.awakenCount[48] ? (data.attackWithToTarget * data.a3x3AttackRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 : null }
+            { name: '攻撃力', func: data => data.hasAawaken(48) ? (data.attackWithToTarget * data.a3x3AttackRate * data.comboUpAttackRate * data.spComboUpAttackRate) | 0 : null }
           ],
           sortColumn: 0,
           awakenFlag: F_DAMAGE_RANKING | F_A_COMBO_UP | F_A_SP_COMBO_UP
@@ -686,6 +686,10 @@ export default {
       const awakenTable = this.awakenTable;
       const manageObj = this;
       const getterBase = {
+        /** 指定された覚醒を持っているかどうかを取得する。超覚醒を使う場合は含めて確認する。 */
+        hasAawaken: function (awakenNo) {
+          return this.awakenCount[awakenNo] || (manageObj.useSuperAwaken && this.superAwakens && this.superAwakens.includes(awakenNo));
+        },
         /** 指定された覚醒発動時のレートを算出する。 */
         culcAwakenRate: function (awakenNo) {
           return Math.pow(awakenTable[awakenNo].rate, this.awakenCount[awakenNo] | 0);
