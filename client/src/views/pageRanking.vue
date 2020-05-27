@@ -114,7 +114,7 @@
         </div>
         <div class="cell">
           <span class="monsterIconWrapper">
-            <monster-icon style="line-height: 1em;" :no="data.data.no" :monster-table="monsterTable" :image-table="imageTable" width="3em" height="3em" />
+            <monster-icon style="line-height: 1em;" use-favorite-flag use-favorite-evolution-flag :no="data.data.no" width="3em" height="3em" />
             {{ (_senzaiKillerNo = data.data.enableSenzaiKiller) && null }}
             <img v-if="_senzaiKillerNo" class="senzaiIcon" :src="`image/senzaiKiller/${_senzaiKillerNo}.png`">
             {{ (_superAwakenNo = data.data.bestSuperAwaken) && null }}
@@ -232,7 +232,7 @@ export default {
       type: Boolean,
       queryKey: 'useRelasedSenzaiAwaken',
       computed: true
-    }, 
+    },
     /** 与えるダメージを半減させる属性の配列。 */
     damageHalfAttributesWrapper: {
       type: Array,

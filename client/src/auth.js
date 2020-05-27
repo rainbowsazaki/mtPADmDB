@@ -4,12 +4,14 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
 const fbConfig = {
-  apiKey: 'AIzaSyDOmbmIkYNacNlKQY9y8G41ylIwSKkHU8s',
-  authDomain: 'mtpadmdb.firebaseapp.com',
-  databaseURL: 'https://mtpadmdb.firebaseio.com',
-  projectId: 'mtpadmdb',
-  storageBucket: 'mtpadmdb.appspot.com',
-  messagingSenderId: '572602740826'
+  apiKey: 'AIzaSyDsuE62yeIvn9Usn2-yPIXFYSLUm2LKV2I',
+  authDomain: 'mtpadmdb-65e48.firebaseapp.com',
+  databaseURL: 'https://mtpadmdb-65e48.firebaseio.com',
+  projectId: 'mtpadmdb-65e48',
+  storageBucket: 'mtpadmdb-65e48.appspot.com',
+  messagingSenderId: '700582981211',
+  appId: '1:700582981211:web:5da7d35c745b4b3152d97e',
+  measurementId: 'G-N5NHV1BECG'
 };
 
 /** ログイン処理を行う。 */
@@ -58,4 +60,5 @@ firebase.auth().onAuthStateChanged(user => {
   // ログイン状態ならuserが取得できる
   // console.log(user);
   store.commit('updateUserAccount', user || {});
+  store.commit('loadFavorite');
 });

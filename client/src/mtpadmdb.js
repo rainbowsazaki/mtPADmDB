@@ -8,28 +8,41 @@ export const mtpadmdb = {
     if (typeof (option) === 'function') {
       onError = onSuccess;
       onSuccess = option;
+      option = undefined;
     }
+    // 後で option.header に追加を行うので、そこの処理を単純化するため指定のない場合に空オブジェクトを入れておく。
+    if (!option) { option = {}; }
+    if (!option.headers) { option.headers = {}; }
 
     let axiosObj;
     switch (mode) {
     case 'monsterDetails':
       // APIではなくJSONファイルをリクエストする。
-      axiosObj = axios.get(`./monsterJson/${params.no}.json`);
+      Object.assign(option.headers, {
+        'Cache-Control': 'no-cache',
+        'Expires': '-1'
+      });
+      axiosObj = axios.get(`./monsterJson/${params.no}.json`, option);
       break;
     case 'monsterHistory':
     case 'monsterHistoryDetails':
     case 'monsterImageHistory':
     case 'skillHistory':
-      axiosObj = axios.get(`./api.cgi/${mode}`, {
-        params: params
+      Object.assign(option.headers, {
+        'Cache-Control': 'no-cache',
+        'Expires': '-1',
+        'X-Requested-With': 'XMLHttpRequest'
       });
+      option.params = Object.assign(option.params || {}, params);
+      axiosObj = axios.get(`./api.cgi/${mode}`, option);
       break;
     case 'updateMonster':
     case 'image':
     case 'updateSkill':
-      axiosObj = axios.post(
-        `./api.cgi/${mode}`, params, option
-      );
+      Object.assign(option.headers, {
+        'X-Requested-With': 'XMLHttpRequest'
+      });
+      axiosObj = axios.post(`./api.cgi/${mode}`, params, option);
       break;
     default:
       console.log(`mode"${mode}" is not found. by mtpadmdb.api()\n`);
@@ -86,6 +99,8 @@ export const commonData = {
   imageTable: {},
   evolutionTable: {},
 
+  /** モンスターをお気に入りに入れているかの情報 */
+  monsterFavorites: {},
   /** commonData のJSONを最後に読み込んだ時間 */
   lastLoadCommonDataTime: 0,
 

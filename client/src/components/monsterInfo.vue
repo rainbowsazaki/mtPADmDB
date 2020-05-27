@@ -9,6 +9,18 @@
         <div class="monsterName stretch">{{ monsterData.name }}</div>
       </div>
     </div>
+    <div
+      v-if="useFavorite" class="favorite"
+      :class="{
+        selected: $store.state.monsterFavorites[monsterData.no] === 1,
+        evolution: $store.state.monsterFavorites[monsterData.no] === 2,
+        toggled: favoriteToggled
+      }"
+      @click="flipMonsterFavorite(monsterData.no)"
+    >
+      <div class="favIcon">★</div>
+      <div class="text">{{ $store.state.monsterFavorites[monsterData.no] === 1 ? 'ON' : 'OFF' }}</div>
+    </div>
     <div class="monsterImageArea">
       <div class="monsterImage">
         <img v-if="monsterData.no" :src="monsterImagePath" :key="`monsterImage${monsterData.no}`">
@@ -136,6 +148,11 @@ export default {
     monsterData: {
       type: Object,
       required: true
+    },
+    /** お気に入りトグルボタンを表示するかどうか。 */
+    useFavorite: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -145,7 +162,8 @@ export default {
       attributeTable: constData.attributeTable,
       evolutionTypeTable: constData.evolutionTypeTable,
       awakenTable: constData.awakenTable,
-
+      /** お気に入りの切り替えを行ったかどうか。 */
+      favoriteToggled: false,
       /** モンスター情報表示部分のフォントサイズ。 */
       infoFontSize: 8
     };
@@ -200,6 +218,11 @@ export default {
       return null;
     }
   },
+  watch: {
+    monsterData: function () {
+      this.favoriteToggled = false;
+    }
+  },
   mounted: function () {
     this.updateInfoFontSize();
     window.addEventListener('resize', this.updateInfoFontSize);
@@ -225,6 +248,13 @@ export default {
     /** 指定された値が null の場合は '不明' を、そうでない場合はそのままの値を返す。 */
     nullToFumei: function (value) {
       return (value === null) ? '不明' : value;
+    },
+    /** 指定したモンスターのお気に入りの状態を反転させる。 */
+    flipMonsterFavorite: function (no) {
+      const nowData = this.$store.state.monsterFavorites[no];
+      const newData = (nowData === 1) ? undefined : 1;
+      this.$store.commit('setMonsterFavorite', { no: no, data: newData });
+      this.favoriteToggled = true;
     }
   }
 };
@@ -235,6 +265,7 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=M+PLUS+1p:700,900');
 
 div.monsterInfo {
+  position: relative;
   color: #FFF;
   line-height: 1.3em;
   font-family: 'M PLUS 1p', sans-serif;
@@ -267,6 +298,127 @@ span.monsterNo {
 .rare {
   color: #EE0;
   -webkit-text-stroke: 0.05em #660;
+}
+
+.favorite {
+  position: absolute;
+  right: 0.7em;
+  top: 1em;
+  width: 3.05em;
+  height: 2.5em;
+  border: 0.1em #b68e6b solid;
+  border-radius: 0.5em;
+  text-align: center;
+  background: #2d1312;
+  line-height: 1em;
+
+  cursor: pointer;
+  user-select: none;
+
+  $dark_color: #999;
+  $light_color: #ff0;
+
+  .favIcon {
+    font-size: 110%;
+    line-height: 1.1em;
+
+    text-shadow: none;
+    filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5));
+
+    color: $dark_color;
+    background: linear-gradient(#888, #555);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text {
+    text-shadow: none;
+    -webkit-text-stroke: 0.02em #000;
+    $shadowBlur: 0.02em;
+    $shadowColor: rgba(0,0,0,1);
+    filter:
+      drop-shadow(0 0 $shadowBlur $shadowColor)
+      drop-shadow(0 0 $shadowBlur $shadowColor)
+      drop-shadow(0 0 $shadowBlur $shadowColor)
+      drop-shadow(0 0.08em $shadowBlur $shadowColor);
+
+    color: #c17d18;
+    background: linear-gradient(#c6a44a, #c17d18);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &.toggled {
+    transition: all 0.06s 0s ease;
+    animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
+  }
+
+  &.selected {
+    background: #994433;
+    border-color: #ffd699;
+    .favIcon {
+      color: $light_color;
+      background: linear-gradient(#ff0, #f90);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .text {
+      color: #fac960;
+      background: linear-gradient(#eecc77, #fac960);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    &.toggled {
+      transition: all 0.06s 0s ease;
+      animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
+      .favIcon {
+        animation: favoriteSelectIconAnimaton 0.3s ease 0s 1 normal none running;
+      }
+    }
+  }
+  
+    &.evolution {
+      .favIcon {
+        background-image: linear-gradient(#888 0%, #666 55%, #ea0 75%, #d80 100%);
+      }
+    }
+
+  @keyframes favoriteSelectIconAnimaton {
+    $light_shadow_color: #ff9;
+    20% {
+      filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5)) drop-shadow(0 0 0em $light_shadow_color);
+    }
+    90% {
+      filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5)) drop-shadow(0 0 1em $light_shadow_color);
+    }
+    99% {
+      filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5)) drop-shadow(0 0 2em rgba($light_shadow_color, 0));
+    }
+  }
+  @keyframes favoriteSelectAnimaton {
+    0% {
+      transform: scale(1);
+    }
+    20% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes favoriteClearAnimation {
+    0% {
+      transform: scale(1);
+    }
+    20% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 }
 
 div.monsterImageArea {

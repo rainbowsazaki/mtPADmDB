@@ -5,7 +5,7 @@
         <div class="baseIcon">
           <div class="typeName" style="-webkit-background-clip: text;">{{ evolutionTypeName }}</div>
           <div>
-            <monster-icon :no="dispMonsterData.no" width="3.6em" height="3.6em" />
+            <monster-icon use-favorite-flag :no="dispMonsterData.no" width="3.6em" height="3.6em" />
           </div>
         </div>
         <div class="materials">

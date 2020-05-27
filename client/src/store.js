@@ -2,8 +2,39 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
 import $ from 'jquery';
+import * as firebase from 'firebase/app';
+import 'firebase/storage';
 
 import { mtpadmdb, constData, commonData } from './mtpadmdb.js';
+
+/** 指定した番号のモンスターの進化系統モンスターの番号の配列を取得する。 */
+function getEvolutionSeriesNos (targetNo) {
+  if (!commonData.monsterTable) { return []; }
+  const evos = [];
+  let baseNo = targetNo;
+  const checkedFlag = {};
+  while (1) {
+    checkedFlag[baseNo] = true;
+    const monsterData = commonData.monsterTable[baseNo];
+    if (!monsterData || !monsterData.evolution) { break; }
+    const oneBackNo = monsterData.evolution.baseNo;
+    if (!oneBackNo || checkedFlag[oneBackNo]) { break; }
+    baseNo = oneBackNo;
+  }
+
+  const checkedFlag2 = {};
+  function f (no) {
+    if (checkedFlag2[no]) { return; }
+    checkedFlag2[no] = true;
+    evos.push(no);
+    const evoNos = commonData.evolutionTable[no];
+    if (evoNos) {
+      evoNos.forEach(d => f(d.no));
+    }
+  }
+  f(baseNo);
+  return evos;
+}
 
 Vue.use(Vuex);
 
@@ -82,6 +113,12 @@ export default new Vuex.Store({
       }
       return obj;
     },
+    /** ログインしているかどうか。 */
+    isLogined: state => {
+      const accountData = state.accountData;
+      if (!accountData) { return false; }
+      return !!accountData.uid;
+    },
     /** 管理者権限のアカウントでログインしているかどうか。 */
     isAdmin: state => {
       const accountData = state.accountData;
@@ -101,8 +138,15 @@ export default new Vuex.Store({
       const nowMs = (new Date()).getTime();
       if (state.lastLoadCommonDataTime + 5 * 60 * 1000 > nowMs) { return; }
 
+      const option = {
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Expires': '-1'
+        }
+      };
+
       // モンスター情報と画像情報はモンスター一覧ページをいち早く表示するために他と分けて読み込み処理を行う。
-      axios.get('./listJson/monster_list_full.json')
+      axios.get('./listJson/monster_list_full.json', option)
         .then(responce => {
           for (const monsterNo in responce.data) {
             const data = responce.data[monsterNo];
@@ -114,15 +158,15 @@ export default new Vuex.Store({
           }
           state.monsterTable = responce.data;
         });
-      axios.get('./listJson/image_list.json')
+      axios.get('./listJson/image_list.json', option)
         .then(responce => {
           state.imageTable = responce.data;
         });
 
       axios.all([
-        axios.get('./listJson/skill_list.json'),
-        axios.get('./listJson/leader_skill_list.json'),
-        axios.get('./listJson/evolution_list.json')
+        axios.get('./listJson/skill_list.json', option),
+        axios.get('./listJson/leader_skill_list.json', option),
+        axios.get('./listJson/evolution_list.json', option)
       ]).then(axios.spread((
         skillListResponse,
         leaderSkillListResponse,
@@ -185,6 +229,99 @@ export default new Vuex.Store({
     },
     addImageData: function (state, imageData) {
       Object.assign(state.imageTable, imageData);
+    },
+    /** モンスターのお気に入り情報変更する。
+     * @param params.no 変更対象のモンスター番号。
+     * @param params.data 変更後のデータ。
+     */
+    setMonsterFavorite: function (state, params) {
+      if (params.data === undefined) {
+        // 進化系統フラグに変更した上で、進化系統の中にお気に入りに入っているものがなければそれらの進化系統フラグを削除する。
+        Vue.set(state.monsterFavorites, params.no, 2);
+        const evolutionSeriesNos = getEvolutionSeriesNos(params.no);
+        if (evolutionSeriesNos.every(evoNo => state.monsterFavorites[evoNo] !== 1)) {
+          evolutionSeriesNos.forEach(evoNo => Vue.delete(state.monsterFavorites, evoNo));
+        }
+      } else {
+        // フラグなしの状態ならば進化系統フラグも無いので、すべての進化系統に対してフラグを立てる。
+        if (!state.monsterFavorites[params.no]) {
+          getEvolutionSeriesNos(params.no).forEach(d => Vue.set(state.monsterFavorites, d, 2));
+        }
+        Vue.set(state.monsterFavorites, params.no, params.data);
+      }
+      this.commit('saveFavorite');
+    },
+
+    saveFavorite: function (state) {
+      const favMonsters = Object.keys(state.monsterFavorites).filter(d => state.monsterFavorites[d] === 1);
+      const jsonText = JSON.stringify({ version: 1, data: favMonsters });
+      if (!state.accountData || !state.accountData.uid) {
+        localStorage.setItem('favorites', jsonText);
+      } else {
+        const storage = firebase.storage();
+        const ref = storage.ref(`users/${state.accountData.uid}/favorite.json`);
+        ref.putString(jsonText).then(function (snapshot) {
+          console.log('Uploaded a raw string!');
+        });
+      }
+    },
+    loadFavorite: function (state) {
+      function setFavMonsters (favMonsters) {
+        if (favMonsters.version === 1) {
+          const obj = {};
+          favMonsters.data.forEach(favNo => {
+            // 対象がフラグ無しの場合は進化系統フラグもなく、進化系統の他のものがお気に入りに入っていない状態なので、進化系統全てにフラグを立てる。
+            if (!obj[favNo]) {
+              getEvolutionSeriesNos(favNo).forEach(evoNo => { obj[evoNo] = 2; });
+            }
+            obj[favNo] = 1;
+          });
+          state.monsterFavorites = obj;
+        }
+      }
+
+      function loadFromLocalStrage () {
+        const favMonstersJson = localStorage.getItem('favorites');
+        if (favMonstersJson) {
+          const favMonsters = JSON.parse(favMonstersJson);
+          setFavMonsters(favMonsters);
+        }
+      }
+
+      if (!state.accountData || !state.accountData.uid) {
+        loadFromLocalStrage();
+      } else {
+        const storage = firebase.storage();
+        const ref = storage.ref(`users/${state.accountData.uid}/favorite.json`);
+        ref.getDownloadURL().then(function (url) {
+          const axiosObj = axios.get(url);
+          axiosObj.then(response => {
+            setFavMonsters(response.data);
+          }).catch(response => {
+            console.log('favorite download error.');
+          });
+        }).catch(function (error) {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+          case 'storage/object-not-found':
+            // File doesn't exist
+            break;
+          case 'storage/unauthorized':
+            // User doesn't have permission to access the object
+            break;
+          case 'storage/canceled':
+            // User canceled the upload
+            break;
+          case 'storage/unknown':
+            // Unknown error occurred, inspect the server response
+            break;
+          }
+          // ローカルストレージからの読み込みを試みる。
+          loadFromLocalStrage();
+        });
+        return;
+      }
     },
 
     setErrors: function (state, errors) {

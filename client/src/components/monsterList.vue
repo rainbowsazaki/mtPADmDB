@@ -15,6 +15,9 @@
               <div>{{ data.name }}</div>
             </div>
           </router-link>
+          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] === 1, evolution: $store.state.monsterFavorites[data.no] === 2, toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
+            ★
+          </div>
         </div>
       </div>
     </div>
@@ -46,6 +49,8 @@ export default {
   },
   data: function () {
     return {
+      /** 現在のページを表示してからお気に入りの切り替えが行われたかどうか。 */
+      favoriteToggled: {},
       inPageCount: 50,
       /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
       pageResetFlag: false,
@@ -79,12 +84,24 @@ export default {
     filteredMonsterTableArray: function () {
       // ページリセット
       if (this.pageResetFlag) { this.page = 1; }
+    },
+    page: function () {
+      this.favoriteToggled = {};
     }
   },
   created: function () {
     this.$store.commit('fetchCommonData');
     // created が終わって、その時点で予約？されている処理が終わったら、それ以降の絞り込み条件変更時にページリセットを行う。
     this.$nextTick(() => { this.pageResetFlag = true; });
+  },
+  methods: {
+    /** 指定したモンスターのお気に入りの状態を反転させる。 */
+    flipMonsterFavorite: function (no) {
+      const nowData = this.$store.state.monsterFavorites[no];
+      const newData = (nowData === 1) ? undefined : 1;
+      this.$store.commit('setMonsterFavorite', { no: no, data: newData });
+      this.favoriteToggled[no] = true;
+    }
   }
 };
 </script>
@@ -129,6 +146,73 @@ export default {
       font-size: 80%;
       margin-bottom: 2px;
     }
+  }
+
+  .favIcon {
+    position: absolute;
+    $font-size-rate: 1.2;
+    right: 1em / $font-size-rate;
+    bottom: 0;
+    width: 2.5em / $font-size-rate;
+    padding-left: 0.5em / $font-size-rate;
+    font-size: 100% * $font-size-rate;
+    text-align: center;
+    line-height: 2.5em / $font-size-rate;
+    cursor: pointer;
+    user-select: none;
+
+    text-shadow: none;
+    filter: drop-shadow(0.1em 0.1em 0 rgba(0,0,0, 0.5));
+    color: #999;
+    background: linear-gradient(#aaa 30%, #888 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    &.toggled {
+      animation: favoriteClearAnimation 0.3s ease 0s 1 normal none running;
+    }
+    
+    &.selected {
+      color: #ff0;
+      background: linear-gradient(#ff0 30%, #fb0 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      &.toggled {
+        animation: favoriteSelectAnimaton 0.3s ease 0s 1 normal none running;
+      }
+    }
+
+    &.evolution {
+      background-image: linear-gradient(#aaa 30%, #999 55%, #fd0 70%, #fb0 80%);
+    }
+
+    @keyframes favoriteSelectAnimaton {
+      $light_shadow_color: #ff9;
+      10% {
+        transform: scale(0.8);
+        filter: drop-shadow(0 0 0em $light_shadow_color);
+      }
+      90% {
+        filter: drop-shadow(0 0 1em $light_shadow_color);
+      }
+      99% {
+        filter: drop-shadow(0 0 2em rgba($light_shadow_color, 0));
+      }
+      100% {
+        transform: none;
+        filter: none;
+      }
+    }
+    @keyframes favoriteClearAnimation {
+      10% {
+        transform: scale(0.8);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
   }
 }
 

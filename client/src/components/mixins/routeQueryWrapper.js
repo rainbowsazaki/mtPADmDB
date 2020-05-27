@@ -65,6 +65,11 @@ export default {
       info.push(value);
       if (!value.computed) {
         dataObj[key] = value.default;
+      } else {
+        if (typeof value.computed.get === 'function' &&
+            typeof value.computed.set === 'function') {
+          this.$options.computed[key] = value.computed;
+        }
       }
     }
       

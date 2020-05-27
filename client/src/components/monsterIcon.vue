@@ -1,10 +1,10 @@
 <template>
-  <div v-if="hasImage" class="monsterIcon" :style="iconSizeStyleObject">
+  <div v-if="hasImage" class="monsterIcon" :class="classObject" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img :src="iconPath" :alt="monsterNoAndName" :key="`icon${no}`">
     </span>
   </div>
-  <div v-else class="monsterIcon monsterIconDummy" :class="{ subAttr: hasAttr1 }" :style="iconSizeStyleObject">
+  <div v-else class="monsterIcon monsterIconDummy" :class="classObject" :style="iconSizeStyleObject">
     <span :is="linkTag" :to="routerLinkObject">
       <img v-if="hasAttr0" class="attr attr1" :src="attrPath0">
       <img v-if="hasAttr1" class="attr attr2" :src="attrPath1">
@@ -34,6 +34,16 @@ export default {
     'noLink': {
       type: Boolean,
       default: false
+    },
+    /** お気に入りに入っているときにそれを示すフラグを表示するかどうか。 */
+    'useFavoriteFlag': {
+      type: Boolean,
+      default: false
+    },
+    /** お気に入りの進化系統の場合にそれを示すフラグを表示するかどうか。 */
+    'useFavoriteEvolutionFlag': {
+      type: Boolean,
+      dafault: false
     }
   },
   computed: {
@@ -67,6 +77,15 @@ export default {
     /** アイコンサイズの指定のために style 属性に指定するオブジェクト。 */
     iconSizeStyleObject: function () {
       return { width: this.width, height: this.height };
+    },
+    /** メインの要素のクラス指定を行うオブジェクト。 */
+    classObject: function () {
+      const favState = this.$store.state.monsterFavorites[this.no];
+      return {
+        favoriteFlag: this.useFavoriteFlag && favState === 1,
+        favoriteEvolutionFlag: this.useFavoriteEvolutionFlag && favState === 2,
+        subAttr: this.hasAttr1
+      };
     }
   }
 };
@@ -75,13 +94,15 @@ export default {
 <style lang="scss" scoped>
 
 .monsterIcon {
+  $border-radius-size: 7.5%;
+
   display: inline-block;
   background-color: #444;
   background-image: url('../assets/image/icon_null.jpg');
   background-size: contain;
   vertical-align: bottom;
-  border-radius: 7.5%;
-  overflow: hidden;
+  border-radius: $border-radius-size;
+  position: relative;
 
   &.subAttr {
     background-image: url('../assets/image/icon_null2.jpg');
@@ -90,14 +111,62 @@ export default {
   a { text-decoration: none; }
 
   img {
+    border-radius: $border-radius-size;
     width: 100%;
     height: 100%;
+  }
+
+  &.favoriteFlag:after {
+    $flag_width: 10%;
+    content: '';
+    background-image: linear-gradient(#f9f, #99f, #9ff, #5f5, #ff6, #f55);
+    border: 0.03em solid #0008;
+    border-left: none;
+    width: $flag_width;
+    height: 20%;
+    position: absolute;
+    right: -$flag_width;
+    top: 6%;
+    box-shadow:
+      0 0.05em 0.1em 0.0em #000c,
+      0 0.05em 0.1em 0.0em #fffc inset;
+
+    animation: favoriteFlagBlink 1.5s ease 0s infinite normal none running;
+  }
+
+  &.favoriteEvolutionFlag:after {
+    $flag_width: 8%;
+    content: '';
+    background-image: linear-gradient(#c9cf, #99cf, #9ccb, #5c57, #cc93, #c550);
+    border-top: 0.03em solid #0008;
+    width: $flag_width;
+    height: 20%;
+    position: absolute;
+    right: -$flag_width;
+    top: 6%;
+    box-shadow:
+      0 0.05em 0.1em 0.0em #fff8 inset;
+    
+    animation: favoriteFlagBlink 1.5s ease 0s infinite normal none running;
+  }
+
+  @keyframes favoriteFlagBlink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 
 .monsterIconDummy {
-  position: relative;
-
   * {
     user-select: none;
   }
