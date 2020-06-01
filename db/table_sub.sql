@@ -15,5 +15,5 @@ CREATE TABLE bbs_entry (
   timestamp TIMESTAMP DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')),
   ipAddress TEXT,
   accountName TEXT,
-  state INTEGER
+  state INTEGER -- 0 - 削除済み  1 - 有効
 );

@@ -80,11 +80,11 @@ INSERT INTO bbs_entry
   my $columns = join ', ', @get_columns;
 
   my @params = ();
-  my $sql_str = "SELECT ${columns} FROM bbs_entry";
+  my $sql_str = "SELECT ${columns} FROM bbs_entry WHERE state = 1";
   if ($pageUrl) {
     # URL の末尾に / が有るのと無いのの両方を取得する。
     if ($pageUrl =~ /^(.*)\/$/) { $pageUrl = $1; }
-    $sql_str .= ' WHERE (pageUrl = ? OR pageUrl = ?)';
+    $sql_str .= ' AND (pageUrl = ? OR pageUrl = ?)';
     push @params, $pageUrl, $pageUrl . '/';
   }
   $sql_str .= ' ORDER BY timestamp DESC LIMIT ?';
