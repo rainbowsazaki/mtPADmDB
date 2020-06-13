@@ -61,15 +61,15 @@
         <div class="from-group row">
           <label class="col-4 col-form-label">レアリティ</label>
           <label class="col-8 col-form-label">
-            <input type="number" v-model.number.lazy="filter.rarityMin" required min="1" max="10">〜
-            <input type="number" v-model.number.lazy="filter.rarityMax" required min="1" max="10">
+            <number-select v-model.number.lazy="filter.rarityMin" required min="1" max="10" />〜
+            <number-select v-model.number.lazy="filter.rarityMax" required min="1" max="10" />
           </label>
         </div>
         <div class="row">
           <label class="col-4 col-form-label">スキル<span class="inlineBlock">ターン</span></label>
           <div class="col-8 col-form-label">
-            <input type="number" v-model.number.lazy="filter.skillTurnMin" required min="1" max="99">〜
-            <input type="number" v-model.number.lazy="filter.skillTurnMax" required min="1" max="99">
+            <number-select v-model.number.lazy="filter.skillTurnMin" required min="1" max="99" />〜
+            <number-select v-model.number.lazy="filter.skillTurnMax" required min="1" max="99" />
           </div>
         </div>
         <div class="row">
@@ -89,8 +89,8 @@
         <div class="row">
           <label class="col-4 col-form-label">スキル<span class="inlineBlock">ブースト</span></label>
           <div class="col-8 col-form-label">
-            <input type="number" v-model.number.lazy="filter.skillBoostMin" required min="0" max="9">〜
-            <input type="number" v-model.number.lazy="filter.skillBoostMax" required min="0" max="9">
+            <number-select v-model.number.lazy="filter.skillBoostMin" required min="0" max="9" />〜
+            <number-select v-model.number.lazy="filter.skillBoostMax" required min="0" max="9" />
           </div>
         </div>
         <div class="row">
@@ -148,7 +148,7 @@
         <div class="row timeExtension">
           <label class="col-4 col-form-label">操作時間<span class="inlineBlock">延長</span></label>
           <div class="col-8 col-form-label">
-            <input type="number" v-model.number.lazy="filter.timeExtensionMin" required min="0" max="4" step="0.5">秒以上
+            <number-select v-model.number.lazy="filter.timeExtensionMin" required min="0" max="4" step="0.5" />秒以上
           </div>
         </div>
         <div class="row evolutionType">
@@ -505,6 +505,52 @@ export function filterSettingText (setting) {
 /** モンスター絞り込みの設定を行うコンポーネント。 */
 export default {
   name: 'MonsterFilterSetting',
+  components: {
+    /** <input type="number"> と同じような指定で、ドロップダウンメニューによる数値指定を行うコンポーネント。 */
+    numberSelect: {
+      props: {
+        value: {
+          type: Number,
+          require: true
+        },
+        /** 最小値。 */
+        min: {
+          type: [Number, String],
+          defualt: 0
+        },
+        /** 最大値。 */
+        max: {
+          type: [Number, String],
+          default: 99
+        },
+        /** 数値の間隔。 */
+        step: {
+          type: [Number, String],
+          default: 1
+        }
+      },
+      render: function (createElement) {
+        const elms = [];
+        const min = Number(this.min);
+        let max = Number(this.max);
+        let step = Number(this.step);
+        const value = Number(this.value);
+        if (min > max) { max = min; }
+        if (step <= 0) { step = 1; }
+        for (let i = min; i <= max; i += step) {
+          elms.push(createElement('option', { attrs: { value: i, selected: i === value }}, i));
+        }
+        return createElement('select', {
+          attrs: { value: this.value },
+          on: {
+            change: (event) => {
+              this.$emit('input', event.target.value);
+            }
+          }
+        }, elms);
+      }
+    }
+  },
   mixins: [
     RouteQueryWrapper
   ],
