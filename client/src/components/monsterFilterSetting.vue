@@ -68,8 +68,8 @@
         <div class="row">
           <label class="col-4 col-form-label">スキル<span class="inlineBlock">ターン</span></label>
           <div class="col-8 col-form-label">
-            <number-select v-model.number.lazy="filter.skillTurnMin" required min="1" max="99" />〜
-            <number-select v-model.number.lazy="filter.skillTurnMax" required min="1" max="99" />
+            <number-select v-model.number.lazy="filter.skillTurnMin" required min="1" max="55" />〜
+            <number-select v-model.number.lazy="filter.skillTurnMax" required min="1" max="55" />
           </div>
         </div>
         <div class="row">
@@ -204,7 +204,7 @@ const filterDefault = {
   rarityMin: 1,
   rarityMax: 10,
   skillTurnMin: 1,
-  skillTurnMax: 99,
+  skillTurnMax: 55,
   skillBoostMin: 0,
   skillBoostMax: 9,
   resistBindMin: 0,
