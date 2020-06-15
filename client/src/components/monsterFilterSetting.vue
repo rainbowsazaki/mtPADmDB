@@ -678,7 +678,10 @@ export default {
     evolutionType: {
       type: Array,
       defualt: filterDefault.evolutionType,
-      computed: true
+      computed: {
+        get: function () { return this.filter.evolutionType; },
+        set: function (v) { this.filter.evolutionType = v; }
+      }
     },
     includeSuperAwaken: {
       type: Boolean,
