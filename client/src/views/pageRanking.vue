@@ -766,24 +766,13 @@ export default {
         },
         /** 潜在覚醒枠の解放を行えるモンスターかどうか。 */
         get isEnableAppendSenzai () {
-          let monsterData = this.baseData;
-          while (monsterData) {
-            const evoType = monsterData.evolutionType;
-            switch (evoType) {
-            // 転生・超転生
-            case 3:
-            case 6:
-              return true;
-            // 究極進化
-            case 2:
-              // 進化前の進化種類を確認する。
-              monsterData = manageObj.monsterTable[monsterData.evolution.baseNo];
-              break;
-            default:
-              monsterData = null;
-              break;
-            }
-          }
+          const monsterData = this.baseData;
+          // 転生・超転生の進化形態番号がtrue になっているテーブル。
+          const reincarnationTable = { 3: true, 6: true };
+          if (reincarnationTable[monsterData.evolutionType]) { return true; }
+          const baseMonseterData = manageObj.monsterTable[monsterData.evolution.baseNo];
+          if (baseMonseterData && (reincarnationTable[baseMonseterData.evolutionType])) { return true; }
+          
           return false;
         },
         /** 現在の覚醒発動条件で、最も攻撃力を挙げられる超覚醒を取得する。 */
