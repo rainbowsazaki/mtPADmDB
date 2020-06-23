@@ -158,6 +158,11 @@
               <input class="decoToggle" type="checkbox" v-model.number="filter.evolutionType" :value="no">
               <span><span :class="`scale${typeName.length}char`">{{ typeName }}</span></span>
             </label>
+
+            <label>
+              <input class="decoToggle" type="checkbox" v-model.number="filter.evolutionType" :value="reincarnationsTypeNo">
+              <span class="long"><span class="scale12char">転生・超転生とその進化後</span></span>
+            </label>
           </div>
         </div>
         <div class="row assist">
@@ -222,6 +227,9 @@ const filterDefault = {
 
   tempFavoriteTable: undefined
 };
+
+/** 転生・超転生とその進化後 で絞り込む際の進化形態の識別子。 */
+const reincarnationsTypeNo = 99;
 
 /** 頻出する一部の漢字を、ひらがなでも検索できるようにする */
 function replaceKanjiWordToRegExp (str) {
@@ -399,8 +407,35 @@ export function getFilterFunction (setting) {
 
   if (setting.evolutionType && setting.evolutionType.length) {
     const filterObj = {};
-    for (const attr of setting.evolutionType) { filterObj[attr] = true; }
-    functionArray.push(d => filterObj[d.evolutionType]);
+    let isDefault = false;
+    let isRreincarnations = false;
+    for (const evo of setting.evolutionType) {
+      if (evo === reincarnationsTypeNo) {
+        isRreincarnations = true;
+      } else {
+        filterObj[evo] = true;
+        isDefault = true;
+      }
+    }
+    let func = d => filterObj[d.evolutionType];
+    if (isRreincarnations) {
+      const baseFunc = func;
+      // 転生・超転生の進化形態番号がtrue になっているテーブル。
+      const reincarnationTable = { 3: true, 6: true };
+      // 転生・超転生とその進化後の場合に true を返す関数。
+      const checkReincarnations = d => {
+        if (reincarnationTable[d.evolutionType]) { return true; }
+        const baseMonseterData = commonData.monsterTable[d.evolution.baseNo];
+        if (baseMonseterData && (reincarnationTable[baseMonseterData.evolutionType])) { return true; }
+        return false;
+      };
+      if (isDefault) {
+        func = d => baseFunc(d) || checkReincarnations(d);
+      } else {
+        func = checkReincarnations;
+      }
+    }
+    functionArray.push(func);
   }
   
   if (setting.assist !== undefined) {
@@ -488,7 +523,10 @@ export function filterSettingTextArray (setting) {
   addRangeText('timeExtension', '指延長', '秒');
 
   if (setting.evolutionType && setting.evolutionType.length > 0) {
-    textArray.push('進化形態:' + setting.evolutionType.map(a => { const info = constData.evolutionTypeTable[a]; return info || ''; }).join('/'));
+    textArray.push('進化形態:' + setting.evolutionType.map(n => {
+      if (n === reincarnationsTypeNo) { return '転生・超転生とその進化後'; }
+      return constData.evolutionTypeTable[n] || '';
+    }).join('/'));
   }
   if (setting.assist !== undefined) {
     textArray.push('アシスト:' + constData.booleanTable[setting.assist]);
@@ -738,6 +776,8 @@ export default {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
     evolutionTypeTable () { return constData.evolutionTypeTable; },
+    /** 転生・超転生とその進化後 で絞り込む際の進化形態番号。 */
+    reincarnationsTypeNo () { return reincarnationsTypeNo; },
 
     /** その他絞り込み部分のフィルタリング設定をもとに作成したテキスト。 */
     filterSettingTextArray () {
@@ -954,6 +994,13 @@ export default {
     }
     .scale6char {
       @include scaleXchar(6);
+    }
+    .scale12char {
+      @include scaleXchar(5.5);
+    }
+
+    &.long {
+      width: 10.4em;
     }
   }
 
