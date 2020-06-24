@@ -140,7 +140,7 @@
 
 <script>
 import { constData, checkCanMixMonster, stretchElement } from '../mtpadmdb.js';
-import MonsterFilterSetting, { filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
+import MonsterFilterSetting, { filterMonsterDataArray, filterSettingText, getFilterDefault } from '../components/monsterFilterSetting.vue';
 import MixinForPage from '../components/mixins/forPage.js';
 import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
 
@@ -497,18 +497,7 @@ export default {
       /** 1ページ内に表示するモンスターの件数。 */
       inPageCount: 20,
       /** 表示するモンスターに対するフィルタ。 */
-      filterSetting: {
-        /** 主属性。 */
-        attr: [],
-        /** 複属性。 */
-        subAttr: [],
-        /** タイプ */
-        type: [],
-        /** スキルターンの最小値。 */
-        skillTurnMin: 1,
-        /** スキルターンの最大値。 */
-        skillTurnMax: 99
-      },
+      filterSetting: getFilterDefault(),
       /** 想定する敵の番号。 */
       enemyNo: null,
       /** 想定する敵のタイプ。 */
