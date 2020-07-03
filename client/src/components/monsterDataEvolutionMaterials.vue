@@ -322,7 +322,7 @@ $bgColorLigntnPercent: 30%;
 
 // 究極進化
 .type2 {
-  $bgColor: #d6b67e;
+  $bgColor: #ded844;
   
   .materials {
     background: $bgColor;
