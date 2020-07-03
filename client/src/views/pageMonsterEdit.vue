@@ -146,7 +146,7 @@
         <tr>
           <td colspan="12">
             <select class="custom-select" id="evolutionType" v-model.number="monsterData.evolutionType">
-              <option v-for="(type, key) in evolutionTypeTable" :value="key" :key="`evolutionType${key}`" v-once>{{ type }}</option>
+              <option v-for="key in evolutionTypeSortTable" :value="String(key)" :key="`evolutionType${key}`" v-once>{{ evolutionTypeTable[key] }}</option>
             </select>
           </td>
         </tr>
@@ -243,6 +243,7 @@ export default {
       typeTable: constData.typeTable,
       attributeTable: constData.attributeTable,
       evolutionTypeTable: constData.evolutionTypeTable,
+      evolutionTypeSortTable: constData.evolutionTypeSortTable,
       awakenTable: constData.awakenTable,
 
       monsterData: {},

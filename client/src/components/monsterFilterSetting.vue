@@ -154,9 +154,9 @@
         <div class="row evolutionType">
           <label class="col-4 col-form-label">進化形態</label>
           <div class="col-8 col-form-label">
-            <label v-for="(typeName, no) in evolutionTypeTable" :key="no">
+            <label v-for="no in evolutionTypeSortTable" :key="no">
               <input class="decoToggle" type="checkbox" v-model.number="filter.evolutionType" :value="no">
-              <span><span :class="`scale${typeName.length}char`">{{ typeName }}</span></span>
+              <span><span :class="`scale${evolutionTypeTable[no].length}char`">{{ evolutionTypeTable[no] }}</span></span>
             </label>
 
             <label>
@@ -776,6 +776,7 @@ export default {
     attributeTable () { return constData.attributeTable; },
     typeTable () { return constData.typeTable; },
     evolutionTypeTable () { return constData.evolutionTypeTable; },
+    evolutionTypeSortTable () { return constData.evolutionTypeSortTable; },
     /** 転生・超転生とその進化後 で絞り込む際の進化形態番号。 */
     reincarnationsTypeNo () { return reincarnationsTypeNo; },
 

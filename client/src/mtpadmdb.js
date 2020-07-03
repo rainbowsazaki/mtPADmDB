@@ -234,6 +234,9 @@ export const constData = {
     null: '進化形態不明'
   },
 
+  /** 進化形態の並べる際の並び順を evolutionTypeTable の key で記したもの。 */
+  evolutionTypeSortTable: [0, 1, 2, 7, 3, 6, 4, 5, null],
+
   awakenTable: {
     0: { name: 'なし', description: '' },
     1: { name: 'HP強化', description: 'HPが500アップする', value: 500 },
