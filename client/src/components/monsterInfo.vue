@@ -73,10 +73,10 @@
         <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ nullToFumei(monsterData.maxParam.attack) | addComma }}</dd>
         <dd v-if="monsterData.overLimit" class="olAnim1">{{ nullToFumei(monsterData.overLimitParam.attack) | addComma }}</dd>
         <dt>回復:</dt>
-        <dd :class="{ olAnim0: (monsterData.overLimit === 1), statusAlert: monsterData.maxParam.recovery < 0, negative9999: monsterData.maxParam.recovery <= -9999 }">
+        <dd :class="{ olAnim0: (monsterData.overLimit === 1), statusAlert: monsterData.maxParam.recovery < 0, negative9999: monsterData.maxParam.recovery <= -9999, negative10000: monsterData.maxParam.recovery <= -10000 }">
           {{ nullToFumei(monsterData.maxParam.recovery) | addComma }}
         </dd>
-        <dd v-if="monsterData.overLimit" class="olAnim1" :class="{ statusAlert: monsterData.overLimitParam.recovery < 0, negative9999: monsterData.overLimitParam.recovery <= -9999 }">
+        <dd v-if="monsterData.overLimit" class="olAnim1" :class="{ statusAlert: monsterData.overLimitParam.recovery < 0, negative9999: monsterData.overLimitParam.recovery <= -9999, negative10000: monsterData.overLimitParam.recovery <= -10000 }">
           {{ nullToFumei(monsterData.overLimitParam.recovery) | addComma }}
         </dd>
       </dl>
@@ -679,6 +679,10 @@ div.transformIconArea {
     dd.negative9999 {
       width: 6em;
       transform: scaleX(0.85);
+    }
+    dd.negative10000 {
+      width: 6.6em;
+      transform: scaleX(0.7);
     }
   }
 
