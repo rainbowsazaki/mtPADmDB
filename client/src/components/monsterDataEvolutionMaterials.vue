@@ -419,6 +419,27 @@ $bgColorLigntnPercent: 30%;
   }
 }
 
+// 超究極進化
+.type7 {
+  $bgColor: #c2d612;
+  
+  .materials {
+    background: linear-gradient(#c2d612, #bc6017);
+  }
+
+  .relatedLinks {
+    background: lighten($bgColor, $bgColorLigntnPercent);
+    border-color: darken($bgColor, $bgColorLigntnPercent);
+  }
+
+  .typeName {
+    background: linear-gradient(#5d3b00 5%, #f3c71e 35%, #f9ffd4 50%, #f2e600 65%, #761210 85%);
+    margin-right: -1em;
+    transform: scaleX(1 / 5 * 4);
+    transform-origin: left top;
+  }
+}
+
 // 交換
 .typeExchange {
   $bgColor: #cc7673;
