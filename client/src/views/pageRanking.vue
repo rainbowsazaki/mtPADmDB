@@ -756,8 +756,8 @@ export default {
         /** 潜在覚醒枠の解放を行えるモンスターかどうか。 */
         get isEnableAppendSenzai () {
           const monsterData = this.baseData;
-          // 転生・超転生の進化形態番号がtrue になっているテーブル。
-          const reincarnationTable = { 3: true, 6: true };
+          // 転生・超転生・超究極の進化形態番号がtrue になっているテーブル。
+          const reincarnationTable = { 3: true, 6: true, 7: true };
           if (reincarnationTable[monsterData.evolutionType]) { return true; }
           const baseMonseterData = manageObj.monsterTable[monsterData.evolution.baseNo];
           if (baseMonseterData && (reincarnationTable[baseMonseterData.evolutionType])) { return true; }
