@@ -338,8 +338,9 @@ export default {
       /** 検索ワードが正規表現扱いか確認して適切に処理する。 */
       const checkSearchWord = (word) => {
         // スラッシュで囲まれている場合は中身をそのまま正規表現として扱う。
-        if (word.match(/^\/(.*)\/$/)) {
-          const useWord = RegExp.$1;
+        const isWrapSlash = word.match(/^\/(.*)\/$/);
+        if (isWrapSlash) {
+          const useWord = isWrapSlash[1];
           // 直前がバックスラッシュでなく、直後が ?: でない括弧があるかどうかの確認。
           isSortRegExpSearch |= /(^|[^\\])\([^(\?\:)]/.test(useWord);
           return useWord;
@@ -358,8 +359,10 @@ export default {
         };
         // 正規表現の後方参照の結果を hit プロパティに入れた状態のオブジェクトの配列を、 hit プロパティでソートして返す。
         const array = this.skillArray.map((skill) => {
-          if (!(skill.name + '\n' + skill.description).match(regexp)) { return undefined; }
-          return Object.assign({ hit: RegExp.$1 }, skill);
+          const found = (skill.name + '\n' + skill.description).match(regexp);
+          if (!found) { return undefined; }
+          if (found.length === 1) { return skill; }
+          return Object.assign({ hit: found[1] || found[2]|| found[3] || found[4] || found[5] }, skill);
         }).filter(o => o).sort((a, b) => parseFloat(a.hit) - parseFloat(b.hit) || strcmp(a.hit, b.hit));
         // グループ名が切り替わった先頭のオブジェクトに印をつけておく。
         let lastGroupName = '';
