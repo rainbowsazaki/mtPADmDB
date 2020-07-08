@@ -18,6 +18,7 @@ const PageEvolutionMaterial = () => import('./views/pageEvolutionMaterial.vue');
 const PageKiseki = () => import('./views/pageKiseki.vue');
 const PageNullCheck = () => import('./views/pageNullCheck.vue');
 const PageNoImageCheck = () => import('./views/pageNoImageCheck.vue');
+const PageSuperEvoCheck = () => import('./views/pageSuperEvoCheck.vue');
 const PageAdmin = () => import('./views/pageAdmin.vue');
 const PageLogin = () => import('./views/pageLogin.vue');
 
@@ -258,6 +259,11 @@ export default new Router({
       path: '/noImageCheck',
       name: 'noImageCheck',
       component: PageNoImageCheck
+    },
+    {
+      path: '/superEvoCheck',
+      name: 'superEvoCheck',
+      component: PageSuperEvoCheck
     },
     {
       path: '/admin',
