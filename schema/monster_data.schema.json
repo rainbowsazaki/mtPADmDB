@@ -228,14 +228,14 @@
           }
         },
         "evolutionType": {
-          "title": "進化種類",
+          "title": "進化形態",
           "type": [
             "integer",
             "null"
           ],
           "default": null,
           "minimum": 0,
-          "maximum": 5
+          "maximum": 7
         },
         "evolution": {
           "title": "進化情報",
