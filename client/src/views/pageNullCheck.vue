@@ -65,6 +65,7 @@ export default {
 
       const array = [];
       Object.values(this.targetTable).forEach(d => {
+        if (d.name === '???') { return; }
         // 内容が空の項目のキーの配列。
         const nullKeys = Object.keys(d).filter(key => {
           // 進化種類が無しや不明の場合は進化情報はない。
