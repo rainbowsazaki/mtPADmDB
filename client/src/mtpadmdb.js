@@ -288,7 +288,7 @@ export const constData = {
     47: { name: 'チーム回復強化', description: 'チームの回復力が10％アップする', rate: 0.1 },
     48: { name: 'ダメージ無効貫通', description: '自分と同じ属性のドロップを3×3の正方形で消すと\n攻撃力がアップし、ダメージ無効を貫通する', rate: 2.5 },
     49: { name: '覚醒アシスト', description: '他のモンスターにアシストすると\n自分の覚醒スキルが付与される' },
-    50: { name: '超追加攻撃', description: '回復ドロップを3×3の正方形で消すと\n攻撃力がアップし、99ダメージの追い打ち', value: 99, rate: 2 },
+    50: { name: '超追加攻撃', description: '回復ドロップを3×3の正方形で消すと\n攻撃力がアップし、99999ダメージの追い打ち', value: 99999, rate: 2 },
     51: { name: 'スキルチャージ', description: '5属性同時攻撃すると\n自分のスキルが1ターン貯まる', value: 1 },
     52: { name: 'バインド耐性+', description: '自分自身へのバインド攻撃を\n無効化する', probability: 1 },
     53: { name: '操作時間延長+', description: 'ドロップ操作時間が延びる', value: 1 },
