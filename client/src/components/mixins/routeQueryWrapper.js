@@ -93,7 +93,11 @@ export default {
             value = value ? null : 'false';
             break;
           case Array:
-            value = JSON.stringify(value).replace(/^\[|\]$/g, '');
+            if (Array.isArray(value)) {
+              value = JSON.stringify(value).replace(/^\[|\]$/g, '');
+            } else {
+              value = undefined;
+            }
             break;
           case Object:
             value = JSON.stringify(value);
