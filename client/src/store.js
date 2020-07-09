@@ -266,6 +266,7 @@ export default new Vuex.Store({
       }
     },
     loadFavorite: function (state) {
+      const store = this;
       function setFavMonsters (favMonsters) {
         if (favMonsters.version === 1) {
           const obj = {};
@@ -285,6 +286,7 @@ export default new Vuex.Store({
         if (favMonstersJson) {
           const favMonsters = JSON.parse(favMonstersJson);
           setFavMonsters(favMonsters);
+          store.commit('setMessages', ['ローカルのお気に入りデータを読み込みました。']);
         }
       }
 
@@ -297,6 +299,7 @@ export default new Vuex.Store({
           const axiosObj = axios.get(url);
           axiosObj.then(response => {
             setFavMonsters(response.data);
+            store.commit('setMessages', ['サーバー上のお気に入りデータを読み込みました。']);
           }).catch(response => {
             console.log('favorite download error.');
           });

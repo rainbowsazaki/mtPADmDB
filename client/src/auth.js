@@ -59,6 +59,9 @@ firebase.auth().getRedirectResult().then(function (result) {
 firebase.auth().onAuthStateChanged(user => {
   // ログイン状態ならuserが取得できる
   // console.log(user);
+  if (user) {
+    store.commit('setMessages', ['ログインしました。']);
+  } 
   store.commit('updateUserAccount', user || {});
   store.commit('loadFavorite');
 });
