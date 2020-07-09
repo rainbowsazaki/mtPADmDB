@@ -29,15 +29,25 @@
           <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
           <button class="btn btn-primary btn-sm" type="button" @click="isVisibleFilter = false;">OK</button>
         </div>
-        <div class="row">
+        <div class="row favoriteType">
           <label class="col-4 col-form-label">お気に入り</label>
-          <div class="col-8">
-            <select class="custom-select" v-model="filter.favorite">
-              <option :value="undefined">すべて</option>
-              <option :value="1">お気に入りのみ</option>
-              <option :value="2">お気に入りとその進化系統</option>
-              <option :value="0">お気に入り以外のみ</option>
-            </select>
+          <div class="col-8 col-form-label">
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.favorite" :value="undefined">
+              <span>すべて</span>
+            </label>
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.favorite" :value="1">
+              <span>お気に入りのみ</span>
+            </label>
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.favorite" :value="2">
+              <span>お気に入りとその進化系統</span>
+            </label>
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.favorite" :value="0">
+              <span>お気に入り以外のみ</span>
+            </label>
           </div>
         </div>
         <div class="row">
@@ -971,6 +981,10 @@ export default {
 
   .settingText {
     margin-top: 0.5em;
+  }
+
+  .favoriteType input[type="radio"] + span {
+    margin-right: 0.4em;
   }
 
   .timeExtension input[type="number"] {
