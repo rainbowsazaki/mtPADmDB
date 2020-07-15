@@ -40,6 +40,7 @@ Vue.filter('addComma', function (val) {
 });
 
 import TweetButton from './components/tweetButton.vue';
+import AwakenIcon from './components/awakenIcon.vue';
 import MonsterIcon from './components/monsterIcon.vue';
 const MonsterIncrementalSearch = () => import('./components/monsterIncrementalSearch.vue');
 const Pagination = () => import('./components/pagination.vue');
@@ -49,6 +50,7 @@ const AttrSelect = () => import('./components/attrSelect.vue');
 const CommentList = () => import('./components/commentList.vue');
 const SlideUpToggle = () => import('./components/slideUpToggle.vue');
 
+Vue.component('awaken-icon', AwakenIcon);
 Vue.component('monster-icon', MonsterIcon);
 Vue.component('monster-incremental-search', MonsterIncrementalSearch);
 Vue.component('pagination', Pagination);
