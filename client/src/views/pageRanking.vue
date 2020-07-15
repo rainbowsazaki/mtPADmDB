@@ -118,7 +118,7 @@
             {{ (_senzaiKillerNo = data.data.enableSenzaiKiller) && null }}
             <img v-if="_senzaiKillerNo" class="senzaiIcon" :src="`image/senzaiKiller/${_senzaiKillerNo}.png`">
             {{ (_superAwakenNo = data.data.bestSuperAwaken) && null }}
-            <img v-if="_superAwakenNo" class="superAwakenIcon" :src="`image/awaken/${_superAwakenNo}.png`">
+            <awaken-icon v-if="_superAwakenNo" class="superAwakenIcon" :no="_superAwakenNo" />
           </span>
         </div>
         <div class="subRow">

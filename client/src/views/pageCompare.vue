@@ -56,7 +56,7 @@
               <ul v-else style="list-style: none; margin: 0px; padding: 0px;">
                 <template v-for="(count, awaken) in data.awakenCount">
                   <li v-if="awaken !== '0'" class="text-nowrap" :key="`awaken${awaken}`">
-                    <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
+                    <awaken-icon v-if="awaken !== 0" :no="awaken" />
                     × {{ count }}
                   </li>
                 </template>
@@ -67,7 +67,7 @@
             <th>超覚醒</th>
             <td v-for="(data, n) in monsterDatas" :key="`monsterNo${n}`">
               <span v-for="superAwaken in data.superAwakens" :key="`superAwaken${superAwaken}`">
-                <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" style="width: 1.5em; height: 1.5em;" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
+                <awaken-icon v-if="superAwaken !== null" :no="superAwaken" style="width: 1.5em; height: 1.5em;" />
               </span>
             </td>
           </tr>
@@ -408,3 +408,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.awakenIcon {
+  width: 1.5em;
+  height: 1.5em;
+}
+</style>

@@ -44,7 +44,7 @@
         <div v-else-if="monsterData.awakens[0] === null" class="awakenDummy">？</div>
         <ul v-else>
           <li v-for="(awaken, n) in monsterData.awakens" :key="`awakenNo${n}`">
-            <img v-if="awaken !== 0" :src="'./image/awaken/' + awaken + '.png'" :title="awakenTable[awaken].name + '\n\n' + awakenTable[awaken].description">
+            <awaken-icon v-if="awaken !== 0" :no="awaken" />
           </li>
         </ul>
       </div>
@@ -52,7 +52,7 @@
         <div v-if="monsterData.superAwakens[0] === null" class="awakenDummy">？</div>
         <ul v-else>
           <li v-for="superAwaken in monsterData.superAwakens" :key="`superAwaken${superAwaken}`">
-            <img v-if="superAwaken !== null" :src="'./image/awaken/' + superAwaken + '.png'" :title="awakenTable[superAwaken].name + '\n\n' + awakenTable[superAwaken].description">
+            <awaken-icon v-if="superAwaken !== null" :no="superAwaken" />
           </li>
         </ul>
       </div>
