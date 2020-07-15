@@ -733,7 +733,7 @@ export default {
     },
     includeSuperAwaken: {
       type: Boolean,
-      default: filterDefault.includesSuperAwaken,
+      default: filterDefault.includeSuperAwaken,
       computed: {
         get: function () { return this.filter.includeSuperAwaken; },
         set: function (v) { this.filter.includeSuperAwaken = v; }
