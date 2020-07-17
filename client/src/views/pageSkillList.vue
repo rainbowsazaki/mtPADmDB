@@ -349,7 +349,7 @@ export default {
         return toAimaiSearch(escapeRegExp(word));
       };
       // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
-      const regexp = new RegExp('^(?=.*' + searchWords.map(checkSearchWord).join(')(?=.*') + ').*$', 's');
+      const regexp = new RegExp('^(?=.*' + searchWords.map(checkSearchWord).join(')(?=.*') + ').*$', 'is');
       if (isSortRegExpSearch) {
         /** 文字列の昇順比較関数。 */
         const strcmp = (a, b) => {

@@ -290,7 +290,7 @@ export function getFilterFunction (setting) {
     const searchWords = setting.name.split(/\s+/g);
     const searchWordsRegText = searchWords.map(escapeRegExp).map(replaceKanjiWordToRegExp).map(toAimaiSearch);
     // (?=.*hogehoge) が連続していて ^ と .*$ で挟まれた正規表現で、肯定先読みを利用した AND 検索になるとのこと。
-    const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 's');
+    const regexp = new RegExp('^(?=.*' + searchWordsRegText.join(')(?=.*') + ').*$', 'is');
     // 数字のみの指定の場合はその番号のモンスターも表示する。
     if (/^\d+$/.test(setting.name)) {
       const targetNo = Number(setting.name);
