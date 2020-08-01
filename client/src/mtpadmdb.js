@@ -492,7 +492,7 @@ function toBaVaAimaiRegExp (str) {
         return `(?:ゔ${aimai}ぉ|ぼ)`;
       }
     }
-  }).replace();
+  });
 }
 
 /** 検索用に、全角と半角を統一する。
