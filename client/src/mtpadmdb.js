@@ -495,6 +495,29 @@ function toBaVaAimaiRegExp (str) {
   }).replace();
 }
 
+/** 検索用に、全角と半角を統一する。
+ *  一部の記号は全角に、英数字は半角にする。
+ */
+function unificationFullWidthHalfWidth (str) {
+  const convertTable = {
+    '(': '（',
+    ')': '）',
+    '+': '＋',
+    '\\(': '（',
+    '\\)': '）',
+    '\\+': '＋',
+    '%': '％',
+    '&': '&',
+    '=': '＝'
+  };
+  const replaceRegExp = /(?:\\\(|\\\)|\\\+|[\(\)\+&=])/;
+  return str.replace(replaceRegExp, function (s) {
+    return convertTable[s];
+  }).replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
+    return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+  });
+}
+
 /** 指定された文字列を、検索ワードの文字と文字の間が2文字まで空いていてもヒットする検索形式の正規表現に変換する。 */
 function toAimaiSpaceSearch (str) {
   // 文字と文字の間に .{0,2} を入れる。
@@ -507,9 +530,10 @@ function toAimaiSpaceSearch (str) {
  * ２文字以上の間が空いていてもヒットする、『バ』と『ヴァ』の相互ヒット、ひらがか・カタカナの相互ヒットの３種類を適用する。
  */
 export function toAimaiSearch (word) {
-  const temp1 = toAimaiSpaceSearch(word);
-  const temp2 = toBaVaAimaiRegExp(temp1);
-  return toHiraKanaSearchRegExp(temp2);
+  const temp1 = unificationFullWidthHalfWidth(word);
+  const temp2 = toAimaiSpaceSearch(temp1);
+  const temp3 = toBaVaAimaiRegExp(temp2);
+  return toHiraKanaSearchRegExp(temp3);
 }
 
 /** リーダースキルの効果をゲーム内の表記と同様の表示になるよう装飾した HTML を作成する。 */
