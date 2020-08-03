@@ -2,6 +2,32 @@
   <div>
     <monster-filter-setting v-model="filterSetting" />
 
+    <slide-up-toggle class="sortTypeSelect" v-model="isOpenSortType">
+      <template slot="trigger" slot-scope="slotProps">
+        並び替え：{{ sortInfoTable[sortType][0] }}
+        <svg viewBox="0 0 100 100" width="1em" height="1em">
+          <path v-if="slotProps.isOpened" d="M50 0 L10 75 L90 75 Z" />
+          <path v-else d="M50 75 L10 0 L90 0 Z" />
+        </svg>
+      </template>
+      <template v-slot:head slot="head">並び替え：{{ sortInfoTable[sortType][0] }}</template>
+
+      <template slot="default" slot-scope="slotProps">
+        <div class="items sortType">
+          <label v-for="(info, key) in sortInfoTable" :key="key">
+            <input type="radio" class="decoToggle sortTypeRadio" v-model="sortType" :value="key" @click="if (slotProps.isFullOverlay) { closeSortTypeSelect(); }">
+            <div class="item">
+              <span :class="`scale${info[0].length}char`">{{ info[0] }}</span>
+            </div>
+          </label>
+        </div>
+      </template>
+
+      <template v-slot:tail slot="foot">
+        <button class="btn btn-primary btn-sm" type="button" @click="closeSortTypeSelect();">閉じる</button>
+      </template>
+    </slide-up-toggle>
+
     <pagination item-count="11" :page="page" :page-count="pageCount" />
 
     <div class="row">
@@ -13,6 +39,9 @@
             /><div class="monsterName">
               <div class="monsterNo">No.{{ data.no }}</div>
               <div>{{ data.name }}</div>
+            </div>
+            <div v-if="sortInfo[2]" class="sortValue">
+              {{ sortInfo[2] }}:{{ sortValueTable[data.no] }}
             </div>
           </router-link>
           <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] === 1, evolution: $store.state.monsterFavorites[data.no] === 2, toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
@@ -28,9 +57,35 @@
 
 <script>
 
-import { constData } from '../mtpadmdb.js';
+import { constData, commonData } from '../mtpadmdb.js';
 import MonsterFilterSetting, { getFilterDefault, filterMonsterDataArray, filterSettingText } from '../components/monsterFilterSetting.vue';
 import RouteQueryWrapper from '../components/mixins/routeQueryWrapper.js';
+
+const skillTable = commonData.skillTable;
+/** モンスターデータを元に、そのモンスターの最短スキルターン数を返す。 */
+function GetSkillMinTurn (monsterData) {
+  const skillData = skillTable[monsterData.skill];
+  if (!skillData) { return null; }
+  return skillData.minTurn;
+}
+
+/** モンスターデータを元に、そのモンスターのパラメータをプラス血換算した値を返す。 */
+function GetParamPlus (monsterData) {
+  const param = monsterData.maxParam;
+  return (param.hp / 10 + param.attack / 5 + param.recovery / 3).toFixed(1);
+}
+
+/** モンスターのソートの情報。 {ソートID: [ソート種類名, ソート値作成関数, ソート値表示時項目名]} */
+const sortInfoTable = {
+  no: ['モンスター番号', null],
+  cost: ['コスト', d => d.cost, 'コスト'],
+  rare: ['レアリティ', d => d.rare, 'レアリティ'],
+  hp: ['HP', d => d.maxParam.hp, 'HP'],
+  attack: ['攻撃', d => d.maxParam.attack, '攻撃'],
+  recovery: ['回復', d => d.maxParam.recovery, '回復'],
+  plus: ['＋換算', GetParamPlus, '＋換算'],
+  skillTurn: ['スキルターン', GetSkillMinTurn, 'スキルターン']
+};
 
 /** モンスター一覧表示のコンポーネント */
 export default {
@@ -45,6 +100,11 @@ export default {
     page: {
       type: Number,
       default: 1
+    },
+    /** ソートの種類。 */
+    sortType: {
+      type: String,
+      default: 'no'
     }
   },
   data: function () {
@@ -55,7 +115,13 @@ export default {
       /** 検索設定が変更されたときに表示ページ指定をリセットするかどうか。 */
       pageResetFlag: false,
       /** 表示するモンスターに対するフィルタ。 */
-      filterSetting: getFilterDefault()
+      filterSetting: getFilterDefault(),
+      /** ソート指定選択領域を表示しているかどうか。 */
+      isOpenSortType: false,
+      /** ソート情報の入ったテーブル。 */
+      sortInfoTable: sortInfoTable,
+      /** モンスターのソートの種類ID。 */
+      sortType: 'no'
     };
   },
   computed: {
@@ -63,14 +129,35 @@ export default {
     imageTable () { return this.$store.state.imageTable; },
     attrColors () { return constData.attrColors; },
     
-    pageCount () { return ((this.filteredMonsterTableArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+    pageCount () { return ((this.sortedMonsterTableDataArray.length + this.inPageCount - 1) / this.inPageCount) | 0; },
+
+    /** ソートするための情報。 */
+    sortInfo () { return this.sortInfoTable[this.sortType] || []; },
+    /** モンスター番号をキーとした、ソート対象の値のテーブル。 */
+    sortValueTable: function () {
+      if (!this.sortInfo[1]) { return null; }
+      const sortValueFunc = this.sortInfo[1];
+      const obj = {};
+      const monsterTable = this.monsterTable;
+      for (const key in monsterTable) {
+        obj[key] = sortValueFunc(monsterTable[key]);
+      }
+      return obj;
+    },
 
     /** フィルタリングを行ったモンスターデータの配列。 */
     filteredMonsterTableArray: function () {
       return filterMonsterDataArray(this.filterSetting, this.$store.getters.monsterDataArray);
     },
+    /** ソートを行ったモンスターデータの配列。 */
+    sortedMonsterTableDataArray: function () {
+      const sortValueTable = this.sortValueTable;
+      if (!sortValueTable) { return this.filteredMonsterTableArray; }
+      const sortFunc = (b, a) => sortValueTable[a.no] - sortValueTable[b.no];
+      return this.filteredMonsterTableArray.slice().sort(sortFunc);
+    },
     monsterTableInPage () {
-      return this.filteredMonsterTableArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
+      return this.sortedMonsterTableDataArray.slice((this.page - 1) * this.inPageCount, this.page * this.inPageCount);
     },
     /** フィルタリング設定の内容を表したテキスト。 */
     filterSettingText () {
@@ -81,7 +168,7 @@ export default {
     filterSettingText: function () {
       this.$emit('changeFilterSettingText', this.filterSettingText);
     },
-    filteredMonsterTableArray: function () {
+    sortedMonsterTableDataArray: function () {
       // ページリセット
       if (this.pageResetFlag) { this.page = 1; }
     },
@@ -101,12 +188,58 @@ export default {
       const newData = (nowData === 1) ? undefined : 1;
       this.$store.commit('setMonsterFavorite', { no: no, data: newData });
       this.favoriteToggled[no] = true;
+    },
+
+    /** ソート選択領域の表示を閉じる。 */
+    closeSortTypeSelect: function () {
+      this.isOpenSortType = false;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+
+.sortTypeSelect {
+  margin-bottom: 1em;
+  $item-width: 5em;
+  $item-margin: 0.5em;
+  $item-total-width: $item-width + $item-margin * 2;
+
+  .items {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+
+    &.sortType {
+      width: $item-total-width * 3;
+    }
+
+    .item {
+      width: $item-width;
+      margin: 0 $item-margin;
+
+      @mixin scaleXchar ($length: 1) {
+        display: inline-block;
+        position: relative;
+        white-space: nowrap;
+        left: 50%;
+        transform: translateX(-50%) scaleX(4.5 / $length);
+      }
+      .scale5char {
+        @include scaleXchar(5);
+      }
+      .scale6char {
+        @include scaleXchar(6);
+      }
+      .scale7char {
+        @include scaleXchar(7);
+      }
+    }
+  }
+}
+
 .listItem {
   padding-bottom: 2px;
   margin-top: 2px;
@@ -146,6 +279,15 @@ export default {
       font-size: 80%;
       margin-bottom: 2px;
     }
+  }
+
+  .sortValue {
+    position: absolute;
+    $font-size-rate: 0.8;
+    right: 1.3em / $font-size-rate;
+    top: 0;
+    font-size: 100% * $font-size-rate;
+    line-height: 1.8em / $font-size-rate;
   }
 
   .favIcon {
