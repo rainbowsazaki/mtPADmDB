@@ -510,7 +510,7 @@ function unificationFullWidthHalfWidth (str) {
     '&': '&',
     '=': '＝'
   };
-  const replaceRegExp = /(?:\\\(|\\\)|\\\+|[\(\)\+&=])/;
+  const replaceRegExp = /(?:\\\(|\\\)|\\\+|[\(\)\+%&=])/;
   return str.replace(replaceRegExp, function (s) {
     return convertTable[s];
   }).replace(/[Ａ-Ｚａ-ｚ０-９]/g, function (s) {
