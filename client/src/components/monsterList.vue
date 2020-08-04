@@ -13,6 +13,21 @@
       <template v-slot:head slot="head">並び替え：{{ sortInfoTable[sortType][0] }}</template>
 
       <template slot="default" slot-scope="slotProps">
+        <div class="items sortOrder">
+          <label>
+            <input type="radio" class="decoToggle sortTypeRadio" v-model="sortOrder" value="asc" @click="if (slotProps.isFullOverlay) { closeSortTypeSelect(); }">
+            <div class="item">
+              <span>昇順 ▲</span>
+            </div>
+          </label>
+          <label>
+            <input type="radio" class="decoToggle sortTypeRadio" v-model="sortOrder" value="desc" @click="if (slotProps.isFullOverlay) { closeSortTypeSelect(); }">
+            <div class="item">
+              <span>降順 ▼</span>
+            </div>
+          </label>
+        </div>
+        <hr>
         <div class="items sortType">
           <label v-for="(info, key) in sortInfoTable" :key="key">
             <input type="radio" class="decoToggle sortTypeRadio" v-model="sortType" :value="key" @click="if (slotProps.isFullOverlay) { closeSortTypeSelect(); }">
@@ -101,10 +116,22 @@ export default {
       type: Number,
       default: 1
     },
-    /** ソートの種類。 */
+    /** ソートの種類とソートの向きを _ でつないだもの。 */
     sortType: {
       type: String,
-      default: 'no'
+      computed: {
+        get: function () {
+          return this.sortType + '_' + this.sortOrder;
+        },
+        set: function (value) {
+          const ret = value.match(/^(.*)_(asc|desc)$/);
+          if (!ret) { this.sortType = value; }
+          this.sortType = ret[1];
+          this.sortOrder = ret[2];
+        }
+      },
+      propName: 'sortType_',
+      default: 'no_asc'
     }
   },
   data: function () {
@@ -121,7 +148,9 @@ export default {
       /** ソート情報の入ったテーブル。 */
       sortInfoTable: sortInfoTable,
       /** モンスターのソートの種類ID。 */
-      sortType: 'no'
+      sortType: 'no',
+      /** ソートの向き。 'asc': 昇順 'dec' - 降順 */
+      sortOrder: 'asc'
     };
   },
   computed: {
@@ -153,7 +182,12 @@ export default {
     sortedMonsterTableDataArray: function () {
       const sortValueTable = this.sortValueTable;
       if (!sortValueTable) { return this.filteredMonsterTableArray; }
-      const sortFunc = (b, a) => sortValueTable[a.no] - sortValueTable[b.no];
+      let sortFunc;
+      if (this.sortOrder === 'asc') {
+        sortFunc = (a, b) => sortValueTable[a.no] - sortValueTable[b.no];
+      } else {
+        sortFunc = (b, a) => sortValueTable[a.no] - sortValueTable[b.no];
+      }
       return this.filteredMonsterTableArray.slice().sort(sortFunc);
     },
     monsterTableInPage () {
@@ -212,6 +246,9 @@ export default {
     left: 50%;
     transform: translateX(-50%);
 
+    &.sortOrder {
+      width: $item-total-width * 2;
+    }
     &.sortType {
       width: $item-total-width * 3;
     }
