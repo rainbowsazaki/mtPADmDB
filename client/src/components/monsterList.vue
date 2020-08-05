@@ -180,6 +180,12 @@ export default {
     },
     /** ソートを行ったモンスターデータの配列。 */
     sortedMonsterTableDataArray: function () {
+      if (this.sortType === 'no') {
+        if (this.sortOrder === 'asc') {
+          return this.filteredMonsterTableArray;
+        }
+        return this.filteredMonsterTableArray.slice().reverse();
+      }
       const sortValueTable = this.sortValueTable;
       if (!sortValueTable) { return this.filteredMonsterTableArray; }
       let sortFunc;
