@@ -192,9 +192,17 @@ export default {
       if (!sortValueTable) { return this.filteredMonsterTableArray; }
       let sortFunc;
       if (this.sortOrder === 'asc') {
-        sortFunc = (a, b) => sortValueTable[a.no] - sortValueTable[b.no];
+        sortFunc = (a, b) => {
+          if (sortValueTable[b.no] === null || sortValueTable[b.no] === undefined) { return -1; }
+          if (sortValueTable[a.no] === null || sortValueTable[a.no] === undefined) { return 1; }
+          return sortValueTable[a.no] - sortValueTable[b.no];
+        };
       } else {
-        sortFunc = (b, a) => sortValueTable[a.no] - sortValueTable[b.no];
+        sortFunc = (a, b) => {
+          if (sortValueTable[b.no] === null || sortValueTable[b.no] === undefined) { return -1; }
+          if (sortValueTable[a.no] === null || sortValueTable[a.no] === undefined) { return 1; }
+          return sortValueTable[b.no] - sortValueTable[a.no];
+        };
       }
       return this.filteredMonsterTableArray.slice().sort(sortFunc);
     },
