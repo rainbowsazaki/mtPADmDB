@@ -87,6 +87,7 @@ function GetSkillMinTurn (monsterData) {
 /** モンスターデータを元に、そのモンスターのパラメータをプラス血換算した値を返す。 */
 function GetParamPlus (monsterData) {
   const param = monsterData.maxParam;
+  if (param.hp === null || param.attack === null || param.recovery === null) { return null; }
   return (param.hp / 10 + param.attack / 5 + param.recovery / 3).toFixed(1);
 }
 
