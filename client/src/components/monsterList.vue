@@ -81,6 +81,7 @@ const skillTable = commonData.skillTable;
 function GetSkillMinTurn (monsterData) {
   const skillData = skillTable[monsterData.skill];
   if (!skillData) { return null; }
+  if (skillData.no === 1) { return undefined; }
   return skillData.minTurn;
 }
 
