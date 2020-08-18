@@ -256,16 +256,25 @@ export default {
   $item-margin: 0.5em;
   $item-total-width: $item-width + $item-margin * 2;
 
+  hr {
+    margin: 0;
+  }
   .items {
     display: inline-block;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    
+    @media (max-width: 575px) {
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
 
     &.sortOrder {
+      margin-top: 0.5em;
       width: $item-total-width * 2;
     }
+
     &.sortType {
+      margin-top: 0.5em;
       width: $item-total-width * 3;
     }
 
