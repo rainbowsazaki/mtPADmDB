@@ -315,7 +315,7 @@ export default {
   padding: 1px;
   background: linear-gradient(#c49632, #e7bb5c 20%, #e7bb5c 40%, #a07b44 40%, #885727);
   
-  text-shadow: 1px 1px 0 rgba(0,0,0, 0.5);
+  text-shadow: 1px 1px 0 rgba(0,0,0, 0.7);
 
   box-shadow:
     0 0 0px 1px rgba(0, 0, 0, 0.5),
