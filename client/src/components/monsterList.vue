@@ -55,7 +55,7 @@
               <div class="monsterNo">No.{{ data.no }}</div>
               <div>{{ data.name }}</div>
             </div>
-            <div v-if="sortInfo[2]" class="sortValue">
+            <div v-if="sortInfo[2] && sortValueTable[data.no] !== undefined" class="sortValue">
               {{ sortInfo[2] }}:{{ sortValueTable[data.no] === null ? '不明' : sortValueTable[data.no] }}
             </div>
           </router-link>
