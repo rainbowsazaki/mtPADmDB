@@ -169,6 +169,17 @@
           </tr>
         </template>
         <tr class="thead-light">
+          <th colspan="12">潜在覚醒スキル枠解放</th>
+        </tr>
+        <tr>
+          <td colspan="12">
+            <select class="custom-select" v-model.number="monsterData.canUnlockExtraSlot" :disabled="isCanUnlockExtraSlotEvolutionType">
+              <option :value="0">×</option>
+              <option :value="1">○</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="thead-light">
           <th colspan="12">編集コメント（任意）</th>
         </tr>
         <tr>
@@ -280,11 +291,21 @@ export default {
     /** 超覚醒が 不明 かどうか */
     isUnknownSuperAwaken: function () {
       return this.monsterData.superAwakens.indexOf(null) !== -1;
+    },
+    /** 指定されている進化形態が潜在覚醒枠の解放に対応しているものかどうか。 */
+    isCanUnlockExtraSlotEvolutionType: function () {
+      const canUnlockTypeTable = { 3: true, 6: true, 7: true };
+      return canUnlockTypeTable[this.monsterData.evolutionType];
     }
   },
   watch: {
     '$route.params.no': function () {
       this.fetchData();
+    },
+    'isCanUnlockExtraSlotEvolutionType': function (value) {
+      // 枠解放可能な進化形態に変わった場合は無条件に解放可能に設定し、合わせてHTMLテンプレート側で操作不可にする。
+      // 逆の場合は設定解除し、操作可能になる。
+      this.monsterData.canUnlockExtraSlot = (value) ? 1 : 0;
     }
   },
   created: function () {
