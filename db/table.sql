@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS monster_base_data (
   leaderSkill INTEGER,
   assist INTEGER,
   overLimit INTEGER,
-  evolutionType INTEGER
+  evolutionType INTEGER,
+  canUnlockExtraSlot INTEGER
 );
 
 
