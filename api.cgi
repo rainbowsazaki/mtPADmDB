@@ -54,6 +54,7 @@ my %monster_data_db_info = (
     'assist',
     'overLimit',
     'evolutionType',
+    'canUnlockExtraSlot'
   ], 
   'over_limit' => [
     [ 'overLimitParam_hp', 'param_hp' ],
@@ -100,7 +101,8 @@ my %json_sort_ranks = (
   superAwakens => 150,
   evolutionType => 160,
   evolution => 170,
-  comment => 180,
+  canUnlockExtraSlot => 180,
+  comment => 190,
 
   hp => 0,
   attack => 10,
