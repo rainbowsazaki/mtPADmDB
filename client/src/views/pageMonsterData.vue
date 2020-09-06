@@ -216,7 +216,7 @@ export default {
       const keys = [
         'no', 'name', 'attributes', 'cost', 'rare', 'types', 'awakens',
         'maxExp', 'maxLevel', 'maxParam', 'skill', 'leaderSkill', 'assist', 'overLimit',
-        'overLimitParam', 'superAwakens', 'evolutionType', 'evolution',
+        'overLimitParam', 'superAwakens', 'evolutionType', 'evolution', 'canUnlockExtraSlot',
         'hp', 'attack', 'recovery',
         'baseNo', 'materials'
       ];
