@@ -39,6 +39,10 @@
               <td colspan="2">{{ booleanTable[monsterData.assist] }}</td>
             </tr>
             
+            <tr class="thead-light">
+              <th colspan="2">潜在覚醒枠の拡張</th>
+              <td colspan="2">{{ (monsterData.canUnlockExtraSlot === 1) ? '○' : '×' }}</td>
+            </tr>
             <tr class="thead-light"><th colspan="4">振れる潜在キラー</th></tr>
             <tr>
               <td colspan="4">
