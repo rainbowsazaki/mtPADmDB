@@ -175,6 +175,24 @@
             </label>
           </div>
         </div>
+
+        <div class="row assist">
+          <label class="col-4 col-form-label">潜在覚醒枠の解放</label>
+          <div class="col-8 col-form-label">
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.canUnlockExtraSlot" :value="undefined">
+              <span>すべて</span>
+            </label>
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.canUnlockExtraSlot" :value="1">
+              <span>○</span>
+            </label>
+            <label>
+              <input type="radio" class="decoToggle" v-model.number="filter.canUnlockExtraSlot" :value="0">
+              <span>×</span>
+            </label>
+          </div>
+        </div>
         <div class="row assist">
           <label class="col-4 col-form-label">アシスト</label>
           <div class="col-8 col-form-label">
@@ -232,6 +250,7 @@ const filterDefault = {
   resistPoisonMax: 100,
   timeExtensionMin: 0,
   evolutionType: [],
+  canUnlockExtraSlot: undefined,
   assist: undefined,
   includeSuperAwaken: false,
 
@@ -447,7 +466,9 @@ export function getFilterFunction (setting) {
     }
     functionArray.push(func);
   }
-  
+  if (setting.canUnlockExtraSlot !== undefined) {
+    functionArray.push(d => d.canUnlockExtraSlot === setting.canUnlockExtraSlot);
+  }
   if (setting.assist !== undefined) {
     functionArray.push(d => d.assist === setting.assist);
   }
@@ -537,6 +558,9 @@ export function filterSettingTextArray (setting) {
       if (n === reincarnationsTypeNo) { return '転生・超転生とその進化後'; }
       return constData.evolutionTypeTable[n] || '';
     }).join('/'));
+  }
+  if (setting.canUnlockExtraSlot !== undefined) {
+    textArray.push('潜在覚醒枠の解放:' + (setting.canUnlockExtraSlot === 1 ? '○' : '×'));
   }
   if (setting.assist !== undefined) {
     textArray.push('アシスト:' + constData.booleanTable[setting.assist]);
@@ -729,6 +753,14 @@ export default {
       computed: {
         get: function () { return this.filter.evolutionType; },
         set: function (v) { this.filter.evolutionType = v; }
+      }
+    },
+    canUnlockExtraSlot: {
+      type: Number,
+      defualt: filterDefault.canUnlockExtraSlot,
+      computed: {
+        get: function () { return this.filter.canUnlockExtraSlot; },
+        set: function (v) { this.filter.canUnlockExtraSlot = v; }
       }
     },
     includeSuperAwaken: {
