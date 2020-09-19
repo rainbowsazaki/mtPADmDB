@@ -169,7 +169,7 @@
           </tr>
         </template>
         <tr class="thead-light">
-          <th colspan="12">潜在覚醒スキル枠解放</th>
+          <th colspan="12">潜在覚醒枠の解放</th>
         </tr>
         <tr>
           <td colspan="12">
