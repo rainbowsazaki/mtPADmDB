@@ -97,6 +97,7 @@ export default {
           'superAwakens': '超覚醒',
           'evolutionType': '進化形態',
           'evolution': '進化情報',
+          'canUnlockExtraSlot': '潜在覚醒枠解放可不可',
 
           'baseTurn': 'レベル１時ターン',
           'minTurn': '最短ターン'
