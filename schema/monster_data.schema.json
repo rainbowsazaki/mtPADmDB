@@ -258,6 +258,15 @@
               }
             }
           }
+        },
+        "canUnlockExtraSlot": {
+          "title": "潜在覚醒枠の解放",
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "default": 0
         }
       }
     }
