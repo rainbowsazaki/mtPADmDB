@@ -172,6 +172,7 @@ export const constData = {
         null, null, null, null, null
       ]
     },
+    canUnlockExtraSlot: 0,
     comment: ''
   },
 
