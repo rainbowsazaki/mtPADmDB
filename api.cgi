@@ -586,10 +586,7 @@ sub mode_update_monster_data {
   while (scalar(@{$data->{awakens}}) < 9) {
     push @{$data->{awakens}}, 0;
   }
-  # 属性、タイプの先頭が『なし』になることはないので、そういうデータの場合は不明を示す値にする。
-  if ($data->{attributes}[0] == 0) {
-    $data->{attributes} = [ undef, 0 ];
-  }
+  # タイプの先頭が『なし』になることはないので、そういうデータの場合は不明を示す値にする。（属性は主属性なしが存在する）
   if ($data->{types}[0] == 0) {
     $data->{types} = [ undef, 0, 0 ];
   }
