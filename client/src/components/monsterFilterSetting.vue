@@ -53,7 +53,7 @@
         <div class="row">
           <label class="col-4 col-form-label">主属性</label>
           <div class="col-8 col-form-label">
-            <attr-select use-unknown checkbox-style v-model="filter.attr" />
+            <attr-select use-unknown use-none checkbox-style v-model="filter.attr" />
           </div>
         </div>
         <div class="row">
