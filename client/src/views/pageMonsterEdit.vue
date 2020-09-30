@@ -35,7 +35,7 @@
         </tr>
         <tr>
           <td colspan="12">
-            <attr-select use-unknown use-clear v-model="monsterData.attributes" />
+            <attr-select use-unknown use-none use-clear v-model="monsterData.attributes" />
           </td>
         </tr>
         <tr class="thead-light">
