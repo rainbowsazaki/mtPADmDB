@@ -136,7 +136,7 @@
           </tr>
           <tr>
             <td colspan="12">
-              <awaken-select use-unknown checkbox-style v-model="monsterData.superAwakens" />
+              <awaken-select use-unknown checkbox-style :select-length="10" v-model="monsterData.superAwakens" />
             </td>
           </tr>
         </template>
