@@ -887,9 +887,9 @@ export default {
             }
             if (manageObj.useMultiBoost && this.awakenCount[30]) {
               const rate = awakenTable[30].rate ** this.awakenCount[30];
-              param.hp = param.hp * rate | 0;
-              param.attack = param.attack * rate | 0;
-              param.recovery = param.recovery * rate | 0;
+              param.hp = (param.hp * rate + 0.5) | 0;
+              param.attack = (param.attack * rate + 0.5) | 0;
+              param.recovery = (param.recovery * rate + 0.5) | 0;
             }
             cache[propName] = param;
           }
@@ -905,9 +905,9 @@ export default {
             const param = this.culcFullAwakenParam(this._targetParam);
             if (manageObj.useMultiBoost && this.awakenCount[30]) {
               const rate = awakenTable[30].rate ** this.awakenCount[30];
-              param.hp = param.hp * rate | 0;
-              param.attack = param.attack * rate | 0;
-              param.recovery = param.recovery * rate | 0;
+              param.hp = (param.hp * rate + 0.5) | 0;
+              param.attack = (param.attack * rate + 0.5) | 0;
+              param.recovery = (param.recovery * rate + 0.5) | 0;
             }
             // 覚醒『スキルボイス』による補正
             const VOICE_AWAKEN_NO = 63;
