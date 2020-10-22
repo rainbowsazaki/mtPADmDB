@@ -883,6 +883,14 @@ export default {
               param.attack = param.attack * rate | 0;
               param.recovery = param.recovery * rate | 0;
             }
+            // 覚醒『スキルボイス』による補正
+            const VOICE_AWAKEN_NO = 63;
+            if (this.awakenCount[VOICE_AWAKEN_NO]) {
+              const rate = awakenTable[VOICE_AWAKEN_NO].rate ** this.awakenCount[VOICE_AWAKEN_NO];
+              param.hp = param.hp * rate | 0;
+              param.attack = param.attack * rate | 0;
+              param.recovery = param.recovery * rate | 0;
+            }
             cache[propName] = param;
           }
           return cache[propName];
@@ -897,6 +905,14 @@ export default {
             const param = this.culcFullAwakenParam(this._targetParam);
             if (manageObj.useMultiBoost && this.awakenCount[30]) {
               const rate = awakenTable[30].rate ** this.awakenCount[30];
+              param.hp = param.hp * rate | 0;
+              param.attack = param.attack * rate | 0;
+              param.recovery = param.recovery * rate | 0;
+            }
+            // 覚醒『スキルボイス』による補正
+            const VOICE_AWAKEN_NO = 63;
+            if (this.awakenCount[VOICE_AWAKEN_NO]) {
+              const rate = awakenTable[VOICE_AWAKEN_NO].rate ** this.awakenCount[VOICE_AWAKEN_NO];
               param.hp = param.hp * rate | 0;
               param.attack = param.attack * rate | 0;
               param.recovery = param.recovery * rate | 0;
