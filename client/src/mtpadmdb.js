@@ -304,7 +304,7 @@ export const constData = {
     62: { name: 'コンボドロップ', description: '自分と同じ属性のドロップを\n10〜12個つなげて消すと\nコンボドロップが1個落ちてくる(最大4個まで)\nさらに１コンボ加算(最大２コンボまで)' },
     63: { name: 'スキルボイス', description: 'スキル使用時に声が出る' },
     64: { name: 'ダンジョンボーナス', description: '1人プレイのときにランク経験値、モンスター経験値、入手コイン、卵ドロップ率がほんの少し上昇' },
-    65: { name: 'HP弱化', description: 'HPが5000ダウンする(最小1まで)', value: -5000 },
+    65: { name: 'HP弱化', description: 'HPが2500ダウンする(最小1まで)', value: -2500 },
     66: { name: '攻撃弱化', description: '攻撃力が1000ダウンする(最小1まで)', value: -1000 },
     67: { name: '回復弱化', description: '回復力が2000ダウンする', value: -2000 },
     68: { name: '暗闇耐性+', description: '暗闇攻撃を無効化する', probability: 1 },
