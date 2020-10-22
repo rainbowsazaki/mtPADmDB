@@ -48,7 +48,7 @@
           </li>
         </ul>
       </div>
-      <div v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length" class="superAwakenArea">
+      <div v-if="monsterData.overLimit === 1 && monsterData.superAwakens.length" class="superAwakenArea" :class="`length${monsterData.superAwakens.length}`">
         <div v-if="monsterData.superAwakens[0] === null" class="awakenDummy">？</div>
         <ul v-else>
           <li v-for="superAwaken in monsterData.superAwakens" :key="`superAwaken${superAwaken}`">
@@ -536,6 +536,15 @@ div.transformIconArea {
       img {
         width: 1.25em;
         height: 1.25em;
+      }
+    }
+  }
+
+  &.length10 {
+    ul {
+      margin-top: 0.1em;
+      li {
+        line-height: 1.6em;
       }
     }
   }
