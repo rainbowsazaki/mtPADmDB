@@ -1,11 +1,14 @@
 <template>
   <tr>
-    <th colspan="4" class="subHead">{{ info.name }}</th>
-    <td colspan="4">
+    <th :colspan="hasSkillVoice ? 3 : 4" class="subHead">{{ info.name }}</th>
+    <td :colspan="hasSkillVoice ? 3 : 4">
       <input type="number" class="form-control" v-model.number="nowValue" :min="info.min" :max="info.max">
     </td>
-    <td colspan="4">
+    <td :colspan="hasSkillVoice ? 3 : 4">
       <input type="number" class="form-control" v-model.number="plus99Value" :min="info.min" :max="info.max + info.plusValue * 99">
+    </td>
+    <td v-if="hasSkillVoice" colspan="3">
+      <input type="number" class="form-control" v-model.number.lazy="skillVoicePlus99Value" :min="info.min" :max="info.max * 1.1 + 1 + info.plusValue * 99">
     </td>
   </tr>
 </template>
@@ -23,6 +26,11 @@ export default {
     value: {
       type: [String, Number],
       default: null
+    },
+    /** 覚醒『スキルボイス』を持っているかどうか。 */
+    hasSkillVoice: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -58,7 +66,12 @@ export default {
     /** 現在の設定値にプラスを99振ったときの値。 */
     plus99Value: {
       get: function () { return (typeof (this.nowValue) === 'number') ? this.nowValue + this.info.plusValue * 99 : null; },
-      set: function (value) { this.nowValue = value - this.info.plusValue * 99; }
+      set: function (value) { if (typeof (value) === 'number') { this.nowValue = value - this.info.plusValue * 99; } }
+    },
+    /** 現在の設定値にスキルボイスの効果をかけてプラスを99振ったときの値。 */
+    skillVoicePlus99Value: {
+      get: function () { return (typeof (this.nowValue) === 'number') ? ((this.nowValue * 1.1 + 0.5) | 0) + this.info.plusValue * 99 : null; },
+      set: function (value) { this.nowValue = ((value - this.info.plusValue * 99) / 1.1 + 0.5) | 0; }
     }
   },
   watch: {

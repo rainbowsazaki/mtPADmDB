@@ -83,12 +83,13 @@
           </td>
         </tr>
         <tr class="thead-light">
-          <th colspan="8">レベル最大時パラメータ</th>
-          <th colspan="4">+297時</th>
+          <th :colspan="hasSkillVoice ? 6 : 8">Lv.最大時パラメータ</th>
+          <th :colspan="hasSkillVoice ? 3 : 4">+297時</th>
+          <th v-if="hasSkillVoice" colspan="3"><img class="awakenIcon" alt="スキルボイス" src="image/awaken/63.png">+297時</th>
         </tr>
-        <tr-param type="hp" v-model.number="monsterData.maxParam.hp" />
-        <tr-param type="attack" v-model.number="monsterData.maxParam.attack" />
-        <tr-param type="recovery" v-model.number="monsterData.maxParam.recovery" />
+        <tr-param type="hp" v-model.number="monsterData.maxParam.hp" :has-skill-voice="hasSkillVoice" />
+        <tr-param type="attack" v-model.number="monsterData.maxParam.attack" :has-skill-voice="hasSkillVoice" />
+        <tr-param type="recovery" v-model.number="monsterData.maxParam.recovery" :has-skill-voice="hasSkillVoice" />
         <tr class="thead-light">
           <th colspan="12">覚醒</th>
         </tr>
@@ -125,12 +126,13 @@
         </tr>
         <template v-if="monsterData.overLimit === 1">
           <tr class="thead-light">
-            <th colspan="8">限界突破時パラメータ</th>
-            <th colspan="4">+297時</th>
+            <th :colspan="hasSkillVoice ? 6 : 8">限界突破時パラメータ</th>
+            <th :colspan="hasSkillVoice ? 3 : 4">+297時</th>
+            <th v-if="hasSkillVoice" colspan="3"><img class="awakenIcon" alt="スキルボイス" src="image/awaken/63.png">+297時</th>
           </tr>
-          <tr-param type="hp" v-model.number="monsterData.overLimitParam.hp" />
-          <tr-param type="attack" v-model.number="monsterData.overLimitParam.attack" />
-          <tr-param type="recovery" v-model.number="monsterData.overLimitParam.recovery" />
+          <tr-param type="hp" v-model.number="monsterData.overLimitParam.hp" :has-skill-voice="hasSkillVoice" />
+          <tr-param type="attack" v-model.number="monsterData.overLimitParam.attack" :has-skill-voice="hasSkillVoice" />
+          <tr-param type="recovery" v-model.number="monsterData.overLimitParam.recovery" :has-skill-voice="hasSkillVoice" />
           <tr class="thead-light">
             <th colspan="12">超覚醒</th>
           </tr>
@@ -287,7 +289,10 @@ export default {
     isHistory: function () {
       return (this.$route.name === 'monsterHistoryEdit');
     },
-
+    /** 覚醒『スキルボイス』を持っているかどうか。 */
+    hasSkillVoice: function () {
+      return this.monsterData.awakens.includes(63);
+    },
     /** 超覚醒が 不明 かどうか */
     isUnknownSuperAwaken: function () {
       return this.monsterData.superAwakens.indexOf(null) !== -1;
@@ -384,3 +389,13 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+
+.awakenIcon {
+  $size: 1em;
+  width: $size;
+  height: $size;
+}
+
+</style>
