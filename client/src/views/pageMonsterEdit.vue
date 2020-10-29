@@ -5,21 +5,27 @@
     <p>※文字を入力するところで値が不明の場合は空欄にしておいてください。</p>
     <form onsubmit="return false;" @submit="submit">
       <table class="table table-bordered table-sm">
+        <tr class="thead-light">
+          <td colspan="6">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">No.</span>
+              </div>
+              <input type="number" class="form-control" id="inputNo" v-model.number="monsterData.no" required min="1" max="9999">
+            </div>
+          </td>
+          <td colspan="6">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="padding: 0.375rem; font-size: 80%;">★</span>
+              </div>
+              <input type="number" class="form-control" id="inputRare" v-model.number="monsterData.rare" min="1" max="99">
+            </div>
+          </td>
+        </tr>
         <tr>
           <td colspan="12">
-            <div class="form-row">
-              <div class="form-group col-md-4">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">No.</span>
-                  </div>
-                  <input type="number" class="form-control" id="inputNo" v-model.number="monsterData.no" required min="1" max="9999">
-                </div>
-              </div>
-              <div class="form-group col-md-8">
-                <input type="text" class="form-control" id="inputMonsterName" placeholder="モンスター名" v-model="monsterData.name" required minLength="1" maxLength="50">
-              </div>
-            </div>
+            <input type="text" class="form-control" id="inputMonsterName" placeholder="モンスター名" v-model="monsterData.name" required minLength="1" maxLength="50">
           </td>
         </tr>
         <tr class="thead-light">
@@ -31,6 +37,14 @@
           </td>
         </tr>
         <tr class="thead-light">
+          <th colspan="12">覚醒</th>
+        </tr>
+        <tr>
+          <td colspan="12">
+            <awaken-select use-unknown v-model="monsterData.awakens" />
+          </td>
+        </tr>
+        <tr class="thead-light">
           <th colspan="12">属性</th>
         </tr>
         <tr>
@@ -39,26 +53,17 @@
           </td>
         </tr>
         <tr class="thead-light">
-          <th colspan="4">レア</th>
-          <th colspan="4">コスト</th>
-          <th colspan="4">アシスト</th>
+          <th colspan="6">アシスト</th>
+          <th colspan="6">コスト</th>
         </tr>
         <tr>
-          <td colspan="4">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" style="padding: 0.375rem; font-size: 80%;">★</span>
-              </div>
-              <input type="number" class="form-control" id="inputRare" v-model.number="monsterData.rare" min="1" max="99">
-            </div>
-          </td>
-          <td colspan="4">
-            <input type="number" class="form-control" id="inputCost" v-model.number="monsterData.cost" min="0" max="999">
-          </td>
-          <td colspan="4">
+          <td colspan="6">
             <select class="custom-select" id="selectAssist" v-model.number="monsterData.assist">
               <option v-for="(type, key) in booleanTable" :value="key" :key="`assist${key}`" v-once>{{ type }}</option>
             </select>
+          </td>
+          <td colspan="6">
+            <input type="number" class="form-control" id="inputCost" v-model.number="monsterData.cost" min="0" max="999">
           </td>
         </tr>
         <tr class="thead-light">
@@ -91,14 +96,6 @@
         <tr-param type="attack" v-model.number="monsterData.maxParam.attack" :has-skill-voice="hasSkillVoice" />
         <tr-param type="recovery" v-model.number="monsterData.maxParam.recovery" :has-skill-voice="hasSkillVoice" />
         <tr class="thead-light">
-          <th colspan="12">覚醒</th>
-        </tr>
-        <tr>
-          <td colspan="12">
-            <awaken-select use-unknown v-model="monsterData.awakens" />
-          </td>
-        </tr>
-        <tr class="thead-light">
           <th colspan="12">スキル</th>
         </tr>
         <tr>
@@ -126,14 +123,6 @@
         </tr>
         <template v-if="monsterData.overLimit === 1">
           <tr class="thead-light">
-            <th :colspan="hasSkillVoice ? 6 : 8">限界突破時パラメータ</th>
-            <th :colspan="hasSkillVoice ? 3 : 4">+297時</th>
-            <th v-if="hasSkillVoice" colspan="3"><img class="awakenIcon" alt="スキルボイス" src="image/awaken/63.png">+297時</th>
-          </tr>
-          <tr-param type="hp" v-model.number="monsterData.overLimitParam.hp" :has-skill-voice="hasSkillVoice" />
-          <tr-param type="attack" v-model.number="monsterData.overLimitParam.attack" :has-skill-voice="hasSkillVoice" />
-          <tr-param type="recovery" v-model.number="monsterData.overLimitParam.recovery" :has-skill-voice="hasSkillVoice" />
-          <tr class="thead-light">
             <th colspan="12">超覚醒</th>
           </tr>
           <tr>
@@ -141,6 +130,14 @@
               <awaken-select use-unknown checkbox-style :select-length="10" v-model="monsterData.superAwakens" />
             </td>
           </tr>
+          <tr class="thead-light">
+            <th :colspan="hasSkillVoice ? 6 : 8">限界突破時パラメータ</th>
+            <th :colspan="hasSkillVoice ? 3 : 4">+297時</th>
+            <th v-if="hasSkillVoice" colspan="3"><img class="awakenIcon" alt="スキルボイス" src="image/awaken/63.png">+297時</th>
+          </tr>
+          <tr-param type="hp" v-model.number="monsterData.overLimitParam.hp" :has-skill-voice="hasSkillVoice" />
+          <tr-param type="attack" v-model.number="monsterData.overLimitParam.attack" :has-skill-voice="hasSkillVoice" />
+          <tr-param type="recovery" v-model.number="monsterData.overLimitParam.recovery" :has-skill-voice="hasSkillVoice" />
         </template>
         <tr class="thead-light">
           <th colspan="12">このモンスターへの進化形態</th>
