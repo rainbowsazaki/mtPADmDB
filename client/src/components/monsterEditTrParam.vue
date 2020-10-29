@@ -89,7 +89,7 @@ export default {
       if (this.value || this.value === 0) {
         this.nowValue = Number(this.value);
       } else {
-        this.nowValue = null;
+        if (this.nowValue !== '') { this.nowValue = null; }
       }
     }
   }
