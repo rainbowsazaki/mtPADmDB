@@ -69,8 +69,7 @@
         <tr class="thead-light">
           <th colspan="6">最大レベル</th>
           <th colspan="6">
-            <span class="d-inline-block">最大レベルに</span>
-            <span class="d-inline-block">必要な</span>
+            <span class="d-inline-block">最大レベル時</span>
             <span class="d-inline-block">経験値</span>
           </th>
         </tr>
