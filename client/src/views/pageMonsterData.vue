@@ -35,17 +35,17 @@
         <div class="col-md-6">
           <table class="table table-bordered table-sm">
             <tr class="thead-light">
-              <th colspan="2">アシスト</th>
+              <th :colspan="(canAddPlus && hasSkillVoice) ? 3 : 2">アシスト</th>
               <td colspan="2">{{ booleanTable[monsterData.assist] }}</td>
             </tr>
             
             <tr class="thead-light">
-              <th colspan="2">潜在覚醒枠の拡張</th>
+              <th :colspan="(canAddPlus && hasSkillVoice) ? 3 : 2">潜在覚醒枠の拡張</th>
               <td colspan="2">{{ (monsterData.canUnlockExtraSlot === 1) ? '○' : '×' }}</td>
             </tr>
-            <tr class="thead-light"><th colspan="4">振れる潜在キラー</th></tr>
+            <tr class="thead-light"><th :colspan="(canAddPlus && hasSkillVoice) ? 5 : 4">振れる潜在キラー</th></tr>
             <tr>
-              <td colspan="4">
+              <td :colspan="(canAddPlus && hasSkillVoice) ? 5 : 4">
                 <span v-if="monsterData.types[0] === null">不明</span>
                 <ul v-else-if="senzaiKillerNos.length" style="list-style: none; margin: 0px; padding: 0px;">
                   <li v-for="senzaiKillerType in senzaiKillerNos" style="display: inline-block" :key="`killer${senzaiKillerType}`">
@@ -56,16 +56,16 @@
               </td>
             </tr>
             <template v-if="hasMaxParam">
-              <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
-              <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.maxParam[paramType]" :key="paramType" />
-              <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) | addComma }}</td></tr>
+              <tr class="thead-light"><th colspan="2">レベル最大時</th><th v-if="canAddPlus">+297</th><th v-if="canAddPlus && hasSkillVoice"><img class="awakenIcon" alt="スキルボイス" src="image/awaken/63.png">+297</th><th>＋換算</th></tr>
+              <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :has-skill-voice="hasSkillVoice" :type="paramType" :value="monsterData.maxParam[paramType]" :key="paramType" />
+              <tr><td /><td v-if="canAddPlus" /><td v-if="canAddPlus && hasSkillVoice" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountParam.total.toFixed(1) | addComma }}</td></tr>
             </template>
             <tr v-else class="thead-light"><th colspan="4">レベル最大時パラメータ不明</th></tr>
             <template v-if="monsterData.overLimit === 1">
               <template v-if="hasOverLimitParam">
-                <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th>＋換算</th></tr>
-                <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :type="paramType" :value="monsterData.overLimitParam[paramType]" :key="`overlimit_${paramType}`" />
-                <tr><td /><td v-if="canAddPlus" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) | addComma }}</td></tr>
+                <tr class="thead-light"><th colspan="2">レベル110（限界突破）時</th><th v-if="canAddPlus">+297</th><th v-if="canAddPlus && hasSkillVoice"><img class="awakenIcon" alt="スキルボイス" src="image/awaken/63.png">+297</th><th>＋換算</th></tr>
+                <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :has-skill-voice="hasSkillVoice" :type="paramType" :value="monsterData.overLimitParam[paramType]" :key="`overlimit_${paramType}`" />
+                <tr><td /><td v-if="canAddPlus" /><td v-if="canAddPlus && hasSkillVoice" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) | addComma }}</td></tr>
               </template>
               <tr v-else class="thead-light"><th colspan="4">限界突破時パラメータ不明</th></tr>
             </template>
@@ -239,7 +239,10 @@ export default {
       }
       return Array.from(killerNoSet).sort((a, b) => a - b);
     },
-
+    /** 覚醒『スキルボイス』を持っているかどうか。 */
+    hasSkillVoice: function () {
+      return this.monsterData.awakens.includes(63);
+    },
     /** プラスが振れるキャラクターかどうかを返す。 */
     canAddPlus: function () {
       if (!this.monsterData) { return false; }
@@ -510,6 +513,12 @@ export default {
 
 .paramAlert {
   color: rgba(224, 0, 0, 0.8);
+}
+
+.awakenIcon {
+  $size: 1em;
+  width: $size;
+  height: $size;
 }
 
 .editButtons {
