@@ -317,6 +317,7 @@ export const constData = {
     75: { name: '木コンボ強化', description: '木ドロップで2コンボ以上すると、\n木属性の攻撃力がアップする', rate: 1.15 },
     76: { name: '光コンボ強化', description: '光ドロップで2コンボ以上すると、\n光属性の攻撃力がアップする', rate: 1.15 },
     77: { name: '闇コンボ強化', description: '闇ドロップで2コンボ以上すると、\n闇属性の攻撃力がアップする', rate: 1.15 },
+    78: { name: '十字消し攻撃', description: '自分と同じ属性のドロップ5個を十字型に消すと\n攻撃力がアップし、超暗闇目覚めを2ターン回復する', rate: null },
 
     null: { name: '不明', description: '' }
   },
