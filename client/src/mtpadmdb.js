@@ -312,11 +312,11 @@ export const constData = {
     70: { name: '毒耐性+', description: '毒攻撃を無効化する', probability: 1 },
     71: { name: 'お邪魔ドロップの加護', description: 'お邪魔ドロップが落ちてくるようになり、\nお邪魔ドロップを消すと攻撃力がアップする', rate: 2, },
     72: { name: '毒ドロップの加護', description: '毒ドロップが落ちてくるようになり、\n毒か猛毒ドロップを消すと攻撃力がアップする', rate: 2 },
-    73: { name: '火コンボ強化', description: '火ドロップで2コンボ以上すると、\n火属性の攻撃力がアップする', rate: null },
-    74: { name: '水コンボ強化', description: '水ドロップで2コンボ以上すると、\n水属性の攻撃力がアップする', rate: null },
-    75: { name: '木コンボ強化', description: '木ドロップで2コンボ以上すると、\n木属性の攻撃力がアップする', rate: null },
-    76: { name: '光コンボ強化', description: '光ドロップで2コンボ以上すると、\n光属性の攻撃力がアップする', rate: null },
-    77: { name: '闇コンボ強化', description: '闇ドロップで2コンボ以上すると、\n闇属性の攻撃力がアップする', rate: null },
+    73: { name: '火コンボ強化', description: '火ドロップで2コンボ以上すると、\n火属性の攻撃力がアップする', rate: 1.15 },
+    74: { name: '水コンボ強化', description: '水ドロップで2コンボ以上すると、\n水属性の攻撃力がアップする', rate: 1.15 },
+    75: { name: '木コンボ強化', description: '木ドロップで2コンボ以上すると、\n木属性の攻撃力がアップする', rate: 1.15 },
+    76: { name: '光コンボ強化', description: '光ドロップで2コンボ以上すると、\n光属性の攻撃力がアップする', rate: 1.15 },
+    77: { name: '闇コンボ強化', description: '闇ドロップで2コンボ以上すると、\n闇属性の攻撃力がアップする', rate: 1.15 },
 
     null: { name: '不明', description: '' }
   },
