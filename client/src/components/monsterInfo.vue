@@ -10,7 +10,7 @@
       </div>
     </div>
     <div
-      v-if="useFavorite" class="favorite"
+      v-if="useFavorite && $store.getters.isLogined" class="favorite"
       :class="{
         selected: $store.state.monsterFavorites[monsterData.no] === 1,
         evolution: $store.state.monsterFavorites[monsterData.no] === 2,

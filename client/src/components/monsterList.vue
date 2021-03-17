@@ -59,7 +59,7 @@
               {{ sortInfo[2] }}:{{ sortValueTable[data.no] === null ? '不明' : sortValueTable[data.no] }}
             </div>
           </router-link>
-          <div class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] === 1, evolution: $store.state.monsterFavorites[data.no] === 2, toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
+          <div v-if="$store.getters.isLogined" class="favIcon" :class="{ selected: $store.state.monsterFavorites[data.no] === 1, evolution: $store.state.monsterFavorites[data.no] === 2, toggled: favoriteToggled[data.no] }" @click.stop="flipMonsterFavorite(data.no);">
             ★
           </div>
         </div>

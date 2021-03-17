@@ -29,7 +29,7 @@
           <button class="btn btn-secondary btn-sm" type="button" @click="clearFilter">クリア</button>
           <button class="btn btn-primary btn-sm" type="button" @click="isVisibleFilter = false;">OK</button>
         </div>
-        <div class="row favoriteType">
+        <div v-if="$store.getters.isLogined" class="row favoriteType">
           <label class="col-4 col-form-label">お気に入り</label>
           <div class="col-8 col-form-label">
             <label>
