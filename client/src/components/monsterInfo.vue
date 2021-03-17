@@ -69,15 +69,20 @@
         <dt>HP:</dt>
         <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ nullToFumei(monsterData.maxParam.hp) | addComma }}</dd>
         <dd v-if="monsterData.overLimit" class="olAnim1">{{ nullToFumei(monsterData.overLimitParam.hp) | addComma }}</dd>
+        <dd v-if="monsterData.overLimit" class="olAnim2">{{ nullToFumei(superOverLimitParam.hp) | addComma }}</dd>
         <dt>攻撃:</dt>
         <dd :class="{ olAnim0: (monsterData.overLimit === 1) }">{{ nullToFumei(monsterData.maxParam.attack) | addComma }}</dd>
         <dd v-if="monsterData.overLimit" class="olAnim1">{{ nullToFumei(monsterData.overLimitParam.attack) | addComma }}</dd>
+        <dd v-if="monsterData.overLimit" class="olAnim2">{{ nullToFumei(superOverLimitParam.attack) | addComma }}</dd>
         <dt>回復:</dt>
         <dd :class="{ olAnim0: (monsterData.overLimit === 1), statusAlert: monsterData.maxParam.recovery < 0, negative9999: monsterData.maxParam.recovery <= -9999, negative10000: monsterData.maxParam.recovery <= -10000 }">
           {{ nullToFumei(monsterData.maxParam.recovery) | addComma }}
         </dd>
         <dd v-if="monsterData.overLimit" class="olAnim1" :class="{ statusAlert: monsterData.overLimitParam.recovery < 0, negative9999: monsterData.overLimitParam.recovery <= -9999, negative10000: monsterData.overLimitParam.recovery <= -10000 }">
           {{ nullToFumei(monsterData.overLimitParam.recovery) | addComma }}
+        </dd>
+        <dd v-if="monsterData.overLimit" class="olAnim2" :class="{ statusAlert: superOverLimitParam.recovery < 0, negative9999: superOverLimitParam.recovery <= -9999, negative10000: superOverLimitParam.recovery <= -10000 }">
+          {{ nullToFumei(superOverLimitParam.recovery) | addComma }}
         </dd>
       </dl>
       <div>
@@ -87,9 +92,11 @@
         <div class="levelInfo">
           <div :class="{ 'olAnim0 canOverLimit': (monsterData.overLimit === 1) }">最大Lv.{{ monsterData.maxLevel || '不明' }}</div>
           <div v-if="monsterData.overLimit" class="olAnim1 canOverLimit">限突Lv.110</div>
+          <div v-if="monsterData.overLimit" class="olAnim2 superOverLimit">超限突Lv.120</div>
           
           <div :class="{ olAnim0: (monsterData.overLimit === 1) }">経験値:{{ nullToFumei(monsterData.maxExp) | addComma }}</div>
           <div v-if="monsterData.overLimit" class="olAnim1">経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp + 50000000 | addComma }}</div>
+          <div v-if="monsterData.overLimit" class="olAnim2">経験値:{{ monsterData.maxExp === null ? '不明' : monsterData.maxExp + 250000000 | addComma }}</div>
         </div>
       </div>
 
@@ -216,7 +223,22 @@ export default {
         if (monsterData) { return monsterData; }
       }
       return null;
-    }
+    },
+    /** 超限界突破時のパラメータ */
+    superOverLimitParam: function () {
+      const baseParam = this.monsterData.maxParam;
+      const olParam = this.monsterData.overLimitParam;
+      const overLimitRate = {
+        hp: Math.round(olParam.hp / baseParam.hp * 20) / 20,
+        attack: Math.round(olParam.attack / baseParam.attack * 20) / 20,
+        recovery: Math.round(olParam.recovery / baseParam.recovery * 20) / 20
+      };
+      return {
+        hp: Math.round(baseParam.hp * (overLimitRate.hp + 0.1)),
+        attack: Math.round(baseParam.attack * (overLimitRate.attack + 0.05)),
+        recovery: Math.round(baseParam.recovery * (overLimitRate.recovery + 0.05))
+      };
+    },
   },
   watch: {
     monsterData: function () {
@@ -721,6 +743,9 @@ div.transformIconArea {
       .canOverLimit {
         color: #85bcfd;
       }
+      .superOverLimit {
+        color: #17f896;
+      }
     }
   }
 
@@ -819,11 +844,15 @@ div.transformIconArea {
   }
 
   .olAnim0 {
-    animation: paramBlink 9s ease 0s infinite normal none running;
+    animation: paramBlink 13.5s ease 0s infinite normal none running;
     height: 0;
   }
   .olAnim1 {
-    animation: paramBlink2 9s ease 0s infinite normal none running;
+    animation: paramBlink2 13.5s ease 0s infinite normal none running;
+    height: 0;
+  }
+  .olAnim2 {
+    animation: paramBlink3 13.5s ease 0s infinite normal none running;
   }
 
   @keyframes awakenCountBlink {
@@ -848,10 +877,10 @@ div.transformIconArea {
     0% {
       opacity: 1;
     }
-    47% {
+    31% {
       opacity: 1;
     }
-    50% {
+    33.3% {
       opacity: 0;
     }
     99% {
@@ -866,13 +895,34 @@ div.transformIconArea {
     0% {
       opacity: 0;
     }
-    49% {
+    32.3% {
       opacity: 0;
     }
-    50% {
+    33.3% {
       opacity: 1;
     }
-    97% {
+    64.4% {
+      opacity: 1;
+    }
+    66.7% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes paramBlink3 {
+    0% {
+      opacity: 0;
+    }
+    65.7% {
+      opacity: 0;
+    }
+    66.7% {
+      opacity: 1;
+    }
+    97.7% {
       opacity: 1;
     }
     100% {
