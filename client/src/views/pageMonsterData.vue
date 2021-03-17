@@ -66,8 +66,14 @@
                 <tr class="thead-light"><th colspan="2">Lv.110時</th><th v-if="canAddPlus">+297</th><th v-if="canAddPlus && hasSkillVoice"><img class="awakenIcon" alt="スキルボイス" src="image/awaken/63.png">+297</th><th>＋換算</th></tr>
                 <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :has-skill-voice="hasSkillVoice" :type="paramType" :value="monsterData.overLimitParam[paramType]" :key="`overlimit_${paramType}`" />
                 <tr><td /><td v-if="canAddPlus" /><td v-if="canAddPlus && hasSkillVoice" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountOverlimitParam.total.toFixed(1) | addComma }}</td></tr>
+                <tr class="thead-light"><th colspan="2">Lv.120時</th><th v-if="canAddPlus">+297</th><th v-if="canAddPlus && hasSkillVoice"><img class="awakenIcon" alt="スキルボイス" src="image/awaken/63.png">+297</th><th>＋換算</th></tr>
+                <tr-param v-for="paramType in ['hp', 'attack', 'recovery']" :is-visible297="canAddPlus" :has-skill-voice="hasSkillVoice" :type="paramType" :value="superOverLimitParam[paramType]" :key="`overlimit_${paramType}`" />
+                <tr><td /><td v-if="canAddPlus" /><td v-if="canAddPlus && hasSkillVoice" /><th class="text-right">＋合計</th><td class="text-right">{{ plusCountSuperOverLimitParam.total.toFixed(1) | addComma }}</td></tr>
               </template>
-              <tr v-else class="thead-light"><th colspan="4">Lv.110時パラメータ不明</th></tr>
+              <template v-else>
+                <tr class="thead-light"><th colspan="4">Lv.110時パラメータ不明</th></tr>
+                <tr class="thead-light"><th colspan="4">Lv.120時パラメータ不明</th></tr>
+              </template>
             </template>
           </table>
         </div>
@@ -271,6 +277,25 @@ export default {
     /** 限界突破時のパラメータのプラス換算値 */
     plusCountOverlimitParam: function () {
       return this.culcPlusCountParam(this.monsterData.overLimitParam);
+    },
+    /** 超限界突破時のパラメータ */
+    superOverLimitParam: function () {
+      const baseParam = this.monsterData.maxParam;
+      const olParam = this.monsterData.overLimitParam;
+      const overLimitRate = {
+        hp: Math.round(olParam.hp / baseParam.hp * 20) / 20,
+        attack: Math.round(olParam.attack / baseParam.attack * 20) / 20,
+        recovery: Math.round(olParam.recovery / baseParam.recovery * 20) / 20
+      };
+      return {
+        hp: Math.round(baseParam.hp * (overLimitRate.hp + 0.1)),
+        attack: Math.round(baseParam.attack * (overLimitRate.attack + 0.05)),
+        recovery: Math.round(baseParam.recovery * (overLimitRate.recovery + 0.05))
+      };
+    },
+    /** 超限界突破時のパラメータのプラス換算値。 */
+    plusCountSuperOverLimitParam: function () {
+      return this.culcPlusCountParam(this.superOverLimitParam);
     },
     /** 編集履歴の表示かどうか。 */
     isHistory: function () {
