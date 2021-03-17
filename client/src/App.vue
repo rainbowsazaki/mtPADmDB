@@ -10,10 +10,10 @@
           <li v-for="(navi, n) in navis" class="nav-item" @click="hideNavi" :key="`navi${n}`">
             <router-link class="nav-link" :class="{ active: $route.path === navi.to }" :to="navi.to">{{ navi.text }}</router-link>
           </li>
-          <li class="nav-item" @click="hideNavi">
+          <!-- <li class="nav-item" @click="hideNavi">
             <router-link v-if="this.$store.getters.isLogined" class="nav-link" :to="{ name: 'logout' }">ログアウト</router-link>
             <router-link v-else class="nav-link" :to="{ name: 'login' }">ログイン</router-link>
-          </li>
+          </li> -->
           <li v-if="this.$store.getters.isAdmin" class="nav-item" @click="hideNavi">
             <router-link class="nav-link" :to="{ name: 'admin' }">admin</router-link>
           </li>
