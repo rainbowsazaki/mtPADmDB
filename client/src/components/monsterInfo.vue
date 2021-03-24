@@ -228,17 +228,12 @@ export default {
     superOverLimitParam: function () {
       const baseParam = this.monsterData.maxParam;
       const olParam = this.monsterData.overLimitParam;
-      const overLimitRate = {
-        hp: Math.round(olParam.hp / baseParam.hp * 20) / 20,
-        attack: Math.round(olParam.attack / baseParam.attack * 20) / 20,
-        recovery: Math.round(olParam.recovery / baseParam.recovery * 20) / 20
-      };
       return {
-        hp: Math.round(baseParam.hp * (overLimitRate.hp + 0.1)),
-        attack: Math.round(baseParam.attack * (overLimitRate.attack + 0.05)),
-        recovery: Math.round(baseParam.recovery * (overLimitRate.recovery + 0.05))
+        hp: olParam.hp + Math.round(baseParam.hp * 0.1),
+        attack: olParam.attack + Math.round(baseParam.attack * 0.05),
+        recovery: olParam.recovery + Math.round(baseParam.recovery * 0.05)
       };
-    },
+    }
   },
   watch: {
     monsterData: function () {
