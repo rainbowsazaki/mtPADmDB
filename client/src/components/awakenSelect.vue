@@ -22,6 +22,8 @@
                   :no="selectedArray[i - 1]"
                   :class="{ shiftLeft: i - 1 >= lastRemoveIndex && selectedArray[i - 1], lastAdd: i - 1 === lastAddIndex }"
                   @click="removeAwaken(i - 1, $event);"
+                  @drop="drop($event, i - 1)"
+                  @dragover="dragover"
                 />
                 <img v-else>
               </span>
@@ -42,7 +44,7 @@
                   <td v-for="(m, j) in n" class="item" :key="`alTd_${j}`">
                     <input v-if="checkboxStyle" type="checkbox" v-model="selectedArray" :value="m" :id="`awaken_${m}`" @change="emitInput();">
                     <label :for="`awaken_${m}`">
-                      <awaken-icon :no="m" @click="addAwaken(m, $event);" />
+                      <awaken-icon :no="m" @click="addAwaken(m, $event);" @dragstart="dragStart($event, m)" draggable="true" />
                     </label>
                   </td>
                 </tr>
@@ -144,6 +146,25 @@ export default {
     this.updateFromValue();
   },
   methods: {
+    /** ドラッグ開始時のイベントハンドラ。 */
+    dragStart: function (event, m) {
+      if (!this.$store.getters.isAdmin) { return; }
+      event.dataTransfer.setData('text/plain', m);
+    },
+    /** 選択済み覚醒の上でドラッグしたときのイベントハンドラ。 */
+    dragover: function (event) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+    },
+    /** 選択済み覚醒の上でドロップしたときのイベントハンドラ。 */
+    drop: function (event, index) {
+      event.preventDefault();
+      console.log('drop', arguments);
+      const data = event.dataTransfer.getData('text/plain');
+      if (data !== null) {
+        this.replaseAwaken(index, Number(data), event);
+      }
+    },
     /** value プロパティの値で現在の値を更新する。 */
     updateFromValue: function () {
       // 末尾の 0（なし）と null は除いて処理する。
@@ -169,6 +190,14 @@ export default {
         this.lastAddIndex = this.selectedArray.length;
       }
       this.selectedArray.push(no);
+      this.emitInput();
+    },
+    /** 指定したインデックスの覚醒を置き換える。 */
+    replaseAwaken: function (index, no, event) {
+      if (event) { event.preventDefault(); }
+      if (this.selectedArray.length < index) { return this.addAwaken(no, event); }
+
+      this.selectedArray[index] = no;
       this.emitInput();
     },
     /** 選択中の覚醒から、指定したインデックスのものを削除する。 */
