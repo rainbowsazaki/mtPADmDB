@@ -19,6 +19,7 @@ const PageKiseki = () => import('./views/pageKiseki.vue');
 const PageNullCheck = () => import('./views/pageNullCheck.vue');
 const PageNoImageCheck = () => import('./views/pageNoImageCheck.vue');
 const PageSuperEvoCheck = () => import('./views/pageSuperEvoCheck.vue');
+const PageOverLimitParamCheck = () => import('./views/pageOverLimitParamCheck.vue');
 const PageAdmin = () => import('./views/pageAdmin.vue');
 const PageLogin = () => import('./views/pageLogin.vue');
 
@@ -264,6 +265,11 @@ export default new Router({
       path: '/superEvoCheck',
       name: 'superEvoCheck',
       component: PageSuperEvoCheck
+    },
+    {
+      path: '/overLimitParamCheck',
+      name: 'overLimitParamCheck',
+      component: PageOverLimitParamCheck
     },
     {
       path: '/admin',
